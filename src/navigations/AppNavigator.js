@@ -8,7 +8,7 @@ import { RegisterScreen } from "../screens/RegisterScreen";
 const Stack = createStackNavigator();
 
 const HomeNavigator = () => (
-  <Stack.Navigator headerMode="none">
+  <Stack.Navigator headerMode="none" initialRouteName="Login">
     <Stack.Screen name="Home" component={HomeScreen} />
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Register" component={RegisterScreen} />

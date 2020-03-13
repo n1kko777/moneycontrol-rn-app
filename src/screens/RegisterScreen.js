@@ -1,5 +1,4 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
 import {
   Divider,
   Icon,
@@ -8,6 +7,8 @@ import {
   TopNavigation,
   TopNavigationAction
 } from "@ui-kitten/components";
+
+import { ScreenTemplate } from "../components/ScreenTemplate";
 
 const BackIcon = style => <Icon {...style} name="arrow-back" />;
 
@@ -21,7 +22,7 @@ export const RegisterScreen = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <ScreenTemplate>
       <TopNavigation
         title="MyApp"
         alignment="center"
@@ -33,6 +34,6 @@ export const RegisterScreen = ({ navigation }) => {
       >
         <Text category="h1">Register</Text>
       </Layout>
-    </SafeAreaView>
+    </ScreenTemplate>
   );
 };

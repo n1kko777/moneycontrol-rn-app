@@ -1,38 +1,37 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
-import {
-  Divider,
-  Icon,
-  Layout,
-  Text,
-  TopNavigation,
-  TopNavigationAction
-} from "@ui-kitten/components";
+import { Layout, Button } from "@ui-kitten/components";
 
-const BackIcon = style => <Icon {...style} name="arrow-back" />;
+import { ScreenTemplate } from "../components/ScreenTemplate";
+
+import { THEME } from "../themes/themes";
 
 export const LoginScreen = ({ navigation }) => {
-  const navigateBack = () => {
-    navigation.goBack();
+  const navigateHome = () => {
+    navigation.navigate("Home");
   };
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
-  );
+  const navigateRegister = () => {
+    navigation.navigate("Register");
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation
-        title="MyApp"
-        alignment="center"
-        leftControl={BackAction()}
-      />
-      <Divider />
+    <ScreenTemplate>
       <Layout
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
       >
-        <Text category="h1">Login</Text>
+        <Button
+          style={{ marginVertical: 4, borderRadius: THEME.BUTTON_RADIUS }}
+          onPress={navigateHome}
+        >
+          Войти
+        </Button>
+        <Button
+          style={{ marginVertical: 4, borderRadius: THEME.BUTTON_RADIUS }}
+          onPress={navigateRegister}
+        >
+          Register Screen
+        </Button>
       </Layout>
-    </SafeAreaView>
+    </ScreenTemplate>
   );
 };

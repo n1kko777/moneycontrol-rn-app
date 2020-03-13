@@ -1,40 +1,28 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
 import { Button, Divider, Layout, TopNavigation } from "@ui-kitten/components";
 import { ThemeContext } from "../themes/theme-context";
+
+import { ScreenTemplate } from "../components/ScreenTemplate";
+
+import { THEME } from "../themes/themes";
 
 export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
 
-  const navigateLogin = () => {
-    navigation.navigate("Login");
-  };
-
-  const navigateRegister = () => {
-    navigation.navigate("Register");
-  };
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <ScreenTemplate>
       <TopNavigation title="MyApp" alignment="center" />
       <Divider />
       <Layout
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
       >
-        <Button style={{ marginVertical: 4 }} onPress={navigateLogin}>
-          Login Screen
-        </Button>
-        <Button style={{ marginVertical: 4 }} onPress={navigateRegister}>
-          Register Screen
-        </Button>
-
         <Button
-          style={{ marginVertical: 4 }}
+          style={{ marginVertical: 4, borderRadius: THEME.BUTTON_RADIUS }}
           onPress={themeContext.toggleTheme}
         >
           TOGGLE THEME
         </Button>
       </Layout>
-    </SafeAreaView>
+    </ScreenTemplate>
   );
 };
