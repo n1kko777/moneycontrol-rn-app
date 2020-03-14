@@ -11,18 +11,20 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <TopNavigation title="MyApp" alignment="center" />
-      <Divider />
-      <Layout
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-      >
-        <Button
-          style={{ marginVertical: 4, borderRadius: THEME.BUTTON_RADIUS }}
-          onPress={themeContext.toggleTheme}
+      <>
+        <TopNavigation title="MyApp" alignment="center" />
+        <Divider />
+        <Layout
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          TOGGLE THEME
-        </Button>
-      </Layout>
+          <Button
+            style={{ marginVertical: 4, borderRadius: THEME.BUTTON_RADIUS }}
+            onPress={themeContext.toggleTheme}
+          >
+            TOGGLE THEME
+          </Button>
+        </Layout>
+      </>
     </ScreenTemplate>
   );
 };
