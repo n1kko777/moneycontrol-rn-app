@@ -2,6 +2,7 @@ import React from "react";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { mapping, light, dark } from "@eva-design/eva";
+import { useColorScheme } from "react-native-appearance";
 
 import { default as appTheme } from "./src/themes/custom-theme.json";
 import { ThemeContext } from "./src/themes/theme-context";
@@ -11,7 +12,9 @@ import { AppNavigator } from "./src/navigations/AppNavigator";
 const themes = { light, dark };
 
 const App = () => {
-  const [theme, setTheme] = React.useState("light");
+  const colorScheme = useColorScheme();
+  const [theme, setTheme] = React.useState(colorScheme);
+
   const currentTheme = { ...themes[theme], ...appTheme };
 
   const toggleTheme = () => {

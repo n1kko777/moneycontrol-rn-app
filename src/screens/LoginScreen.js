@@ -86,7 +86,6 @@ export const LoginScreen = ({ navigation }) => {
                 borderRadius: THEME.BUTTON_RADIUS,
                 textDecorationLine: "underline"
               }}
-              status="info"
             >
               Забыли пароль?
             </Text>
@@ -98,7 +97,6 @@ export const LoginScreen = ({ navigation }) => {
                 borderRadius: THEME.BUTTON_RADIUS,
                 textDecorationLine: "underline"
               }}
-              status="info"
             >
               Зарегистрироваться
             </Text>
