@@ -20,8 +20,6 @@ export const authStart = () => {
 export const authSuccess = user => dispatch => {
   axios.defaults.headers.common["Authorization"] = user.key;
 
-  Alert.alert("Вход выполнен успешно!", user.key, [{ text: "Закрыть" }]);
-
   dispatch({
     type: AUTH_SUCCESS,
     payload: user
@@ -87,12 +85,11 @@ export const authFail = error => dispatch => {
   });
 };
 
-export const logout = () => {
-  localStorage.removeItem("user");
-  localStorage.removeItem("periodData");
+export const logout = navigation => {
   delete axios.defaults.headers.common["Authorization"];
 
-  Redirect("/");
+  navigation.navigate("Login");
+
   return {
     type: AUTH_LOGOUT
   };

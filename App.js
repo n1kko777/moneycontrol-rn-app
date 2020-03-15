@@ -2,6 +2,8 @@ import React from "react";
 import { Provider } from "react-redux";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import { AssetIconsPack } from "./src/themes/AssetIconsPack";
+
 import { mapping, light, dark } from "@eva-design/eva";
 import { useColorScheme } from "react-native-appearance";
 
@@ -26,7 +28,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <IconRegistry icons={EvaIconsPack} />
+      <IconRegistry icons={[EvaIconsPack, AssetIconsPack]} />
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <ApplicationProvider mapping={mapping} theme={currentTheme}>
           <AppNavigator />

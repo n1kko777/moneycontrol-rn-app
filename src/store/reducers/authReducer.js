@@ -10,6 +10,7 @@ import {
 const initialState = {
   user: {},
   isRegister: false,
+  isAuth: false,
   isRemindMe: true,
   error: null,
   loading: false
@@ -35,6 +36,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         user: action.payload,
         loading: false,
+        isAuth: true,
         error: null
       };
     case AUTH_FAIL:
@@ -42,11 +44,13 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        isAuth: false,
         error: action.payload
       };
     case AUTH_LOGOUT:
       return {
         ...state,
+        isAuth: false,
         user: {}
       };
     case REMIND_ME:

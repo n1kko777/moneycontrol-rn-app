@@ -19,9 +19,13 @@ import { authLogin } from "../store/actions/authAction";
 export const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-  const { user, loading } = state.auth;
+  const { user, isAuth, loading } = state.auth;
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  useEffect(() => {
+    isAuth === true && navigateSelectProfile();
+  }, [isAuth]);
 
   useEffect(() => {
     setEmail(user.email);
@@ -33,12 +37,12 @@ export const LoginScreen = ({ navigation }) => {
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
-  const onSubmit = () => {
-    dispatch(authLogin(email, password));
+  const onSubmit = async () => {
+    await dispatch(authLogin(email, password));
   };
 
-  const navigateHome = () => {
-    navigation.navigate("Home");
+  const navigateSelectProfile = () => {
+    navigation.navigate("SelectProfile");
   };
 
   const navigateRegister = () => {
