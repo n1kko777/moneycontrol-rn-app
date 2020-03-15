@@ -32,6 +32,7 @@ export const RegisterScreen = ({ navigation }) => {
       setFirstname("");
       setLastname("");
       setEmail("");
+      setPhone("");
       setPassword1("");
       setPassword2("");
       navigation.navigate("Login");
@@ -41,6 +42,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [firstname, setFirstname] = React.useState("");
   const [lastname, setLastname] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const [password1, setPassword1] = React.useState("");
   const [password2, setPassword2] = React.useState("");
   const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
@@ -57,7 +59,14 @@ export const RegisterScreen = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
-    const userData = { firstname, lastname, email, password1, password2 };
+    const userData = {
+      firstname,
+      lastname,
+      email,
+      phone,
+      password1,
+      password2
+    };
     await dispatch(authSignUp(userData));
   };
 
@@ -89,7 +98,7 @@ export const RegisterScreen = ({ navigation }) => {
         >
           <View
             style={{
-              width: "80%",
+              width: "85%",
               maxWidth: 720,
               manrginBottom: 25
             }}
@@ -114,6 +123,14 @@ export const RegisterScreen = ({ navigation }) => {
               autoCompleteType="email"
               keyboardType="email-address"
               onChangeText={setEmail}
+              style={{ marginVertical: 10 }}
+            />
+            <Input
+              value={phone}
+              placeholder="Телефон"
+              autoCompleteType="tel"
+              keyboardType="phone-pad"
+              onChangeText={setPhone}
               style={{ marginVertical: 10 }}
             />
             <Input
@@ -148,7 +165,7 @@ export const RegisterScreen = ({ navigation }) => {
 
             <Text
               style={{
-                alignSelf: "flex-end",
+                alignSelf: "center",
                 fontSize: 14,
                 textAlign: "center",
                 opacity: 0.7

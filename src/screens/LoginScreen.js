@@ -77,7 +77,7 @@ export const LoginScreen = ({ navigation }) => {
         </View>
         <View
           style={{
-            width: "80%",
+            width: "85%",
             maxWidth: 720,
             manrginBottom: 25
           }}

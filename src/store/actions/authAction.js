@@ -115,6 +115,7 @@ export const authSignUp = ({
   firstname,
   lastname,
   email,
+  phone,
   password1,
   password2
 }) => {
@@ -125,6 +126,7 @@ export const authSignUp = ({
         firstname,
         lastname,
         email,
+        phone,
         password1,
         password2
       })
