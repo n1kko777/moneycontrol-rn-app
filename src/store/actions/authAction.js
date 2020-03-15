@@ -18,7 +18,7 @@ export const authStart = () => {
 };
 
 export const authSuccess = user => dispatch => {
-  axios.defaults.headers.common["Authorization"] = user.key;
+  axios.defaults.headers.common["Authorization"] = "Token " + user.key;
 
   dispatch({
     type: AUTH_SUCCESS,

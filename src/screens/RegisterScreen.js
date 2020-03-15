@@ -61,8 +61,8 @@ export const RegisterScreen = ({ navigation }) => {
     await dispatch(authSignUp(userData));
   };
 
-  const showIconPassword = style => <Icon name="eye-outline" {...style} />;
-  const hideIconPassword = style => <Icon name="eye-off-outline" {...style} />;
+  const hideIconPassword = style => <Icon name="eye-outline" {...style} />;
+  const showIconPassword = style => <Icon name="eye-off-outline" {...style} />;
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -98,17 +98,20 @@ export const RegisterScreen = ({ navigation }) => {
               value={firstname}
               placeholder="Имя"
               onChangeText={setFirstname}
+              autoCompleteType="name"
               style={{ marginVertical: 10 }}
             />
             <Input
               value={lastname}
               placeholder="Фамилия"
+              autoCompleteType="name"
               onChangeText={setLastname}
               style={{ marginVertical: 10 }}
             />
             <Input
               value={email}
               placeholder="Почта"
+              autoCompleteType="email"
               keyboardType="email-address"
               onChangeText={setEmail}
               style={{ marginVertical: 10 }}
@@ -116,6 +119,7 @@ export const RegisterScreen = ({ navigation }) => {
             <Input
               value={password1}
               placeholder="Пароль"
+              autoCompleteType="password"
               icon={!isVisiblePassword1 ? showIconPassword : hideIconPassword}
               onIconPress={() => setIsVisiblePassword1(!isVisiblePassword1)}
               secureTextEntry={!isVisiblePassword1}
@@ -125,6 +129,7 @@ export const RegisterScreen = ({ navigation }) => {
             <Input
               value={password2}
               placeholder="Повторите пароль"
+              autoCompleteType="password"
               icon={!isVisiblePassword2 ? showIconPassword : hideIconPassword}
               onIconPress={() => setIsVisiblePassword2(!isVisiblePassword2)}
               secureTextEntry={!isVisiblePassword2}

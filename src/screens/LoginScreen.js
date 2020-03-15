@@ -24,7 +24,7 @@ export const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = React.useState("");
 
   useEffect(() => {
-    isAuth === true && navigateSelectProfile();
+    isAuth === true && navigateCompanyManager();
   }, [isAuth]);
 
   useEffect(() => {
@@ -32,8 +32,8 @@ export const LoginScreen = ({ navigation }) => {
     setPassword(user.password);
   }, [user.email]);
 
-  const showIconPassword = style => <Icon name="eye-outline" {...style} />;
-  const hideIconPassword = style => <Icon name="eye-off-outline" {...style} />;
+  const hideIconPassword = style => <Icon name="eye-outline" {...style} />;
+  const showIconPassword = style => <Icon name="eye-off-outline" {...style} />;
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
@@ -41,8 +41,8 @@ export const LoginScreen = ({ navigation }) => {
     await dispatch(authLogin(email, password));
   };
 
-  const navigateSelectProfile = () => {
-    navigation.navigate("SelectProfile");
+  const navigateCompanyManager = () => {
+    navigation.navigate("CompanyManager");
   };
 
   const navigateRegister = () => {
@@ -86,6 +86,7 @@ export const LoginScreen = ({ navigation }) => {
             value={email}
             placeholder="Почта"
             keyboardType="email-address"
+            autoCompleteType="email"
             onChangeText={setEmail}
             style={{ marginVertical: 10 }}
           />
@@ -95,6 +96,7 @@ export const LoginScreen = ({ navigation }) => {
             icon={!isVisiblePassword ? showIconPassword : hideIconPassword}
             onIconPress={() => setIsVisiblePassword(!isVisiblePassword)}
             secureTextEntry={!isVisiblePassword}
+            autoCompleteType="password"
             onChangeText={setPassword}
             style={{ marginVertical: 10 }}
           />
