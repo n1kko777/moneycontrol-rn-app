@@ -1,4 +1,5 @@
 import React from "react";
+import { Provider } from "react-redux";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { mapping, light, dark } from "@eva-design/eva";
@@ -8,6 +9,7 @@ import { default as appTheme } from "./src/themes/custom-theme.json";
 import { ThemeContext } from "./src/themes/theme-context";
 
 import { AppNavigator } from "./src/navigations/AppNavigator";
+import store from "./src/store";
 
 const themes = { light, dark };
 
@@ -23,14 +25,14 @@ const App = () => {
   };
 
   return (
-    <React.Fragment>
+    <Provider store={store}>
       <IconRegistry icons={EvaIconsPack} />
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <ApplicationProvider mapping={mapping} theme={currentTheme}>
           <AppNavigator />
         </ApplicationProvider>
       </ThemeContext.Provider>
-    </React.Fragment>
+    </Provider>
   );
 };
 

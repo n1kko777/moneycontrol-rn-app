@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TouchableOpacity, View, Image } from "react-native";
 import { Layout, Button, Text, Input, Icon } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
 
 import { THEME } from "../themes/themes";
+import Axios from "axios";
+import { url } from "../store/constants";
 
 export const LoginScreen = ({ navigation }) => {
   const showIconPassword = style => <Icon name="eye-outline" {...style} />;

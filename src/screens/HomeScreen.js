@@ -5,9 +5,13 @@ import { ThemeContext } from "../themes/theme-context";
 import { ScreenTemplate } from "../components/ScreenTemplate";
 
 import { THEME } from "../themes/themes";
+import { useSelector } from "react-redux";
 
 export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
+  const state = useSelector(state => state);
+  const { user } = state.auth;
+  console.log("user :", user);
 
   return (
     <ScreenTemplate>

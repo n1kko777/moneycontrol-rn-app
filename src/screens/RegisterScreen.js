@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { authSignUp } from "../store/actions/authAction";
+
 import {
   Divider,
   Icon,
@@ -7,49 +11,58 @@ import {
   TopNavigation,
   TopNavigationAction,
   Input,
+  Modal,
+  Spinner,
   Button
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { THEME } from "../themes/themes";
 
 const BackIcon = style => <Icon {...style} name="arrow-back" />;
 
 export const RegisterScreen = ({ navigation }) => {
-  const mobilevalidate = text => {
-    const reg = /^[0]?[789]\d{9}$/;
-    if (reg.test(text) === false) {
-      setIsPhoneValidate(false);
-      setPhone(text);
-    } else {
-      setIsPhoneValidate(true);
-      setPhone(text);
-    }
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
+  const { user, isRegister, loading, error } = state.auth;
 
-    console.log("isPhoneValidate :", isPhoneValidate);
-  };
+  useEffect(() => {
+    if (error === null && isRegister) {
+      setFirstname("");
+      setLastname("");
+      setEmail("");
+      setPassword1("");
+      setPassword2("");
+      navigation.navigate("Home");
+    }
+  }, [isRegister]);
+
+  const [firstname, setFirstname] = React.useState("Test");
+  const [lastname, setLastname] = React.useState("Test");
+  const [email, setEmail] = React.useState("Test@mail.ru");
+  const [password1, setPassword1] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
+  const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
+  const [isVisiblePassword2, setIsVisiblePassword2] = React.useState(false);
+
+  const renderModalElement = () => (
+    <Layout level="3" style={styles.modalContainer}>
+      <Spinner status="primary" />
+    </Layout>
+  );
 
   const navigateBack = () => {
     navigation.goBack();
   };
 
-  const navigatePhone = () => {
-    navigation.goBack();
+  const onSubmit = async () => {
+    const userData = { firstname, lastname, email, password1, password2 };
+    await dispatch(authSignUp(userData));
   };
 
   const showIconPassword = style => <Icon name="eye-outline" {...style} />;
   const hideIconPassword = style => <Icon name="eye-off-outline" {...style} />;
-
-  const [firstname, setFirstname] = React.useState("");
-  const [lastname, setLastname] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [isPhoneValidate, setIsPhoneValidate] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [password1, setPassword1] = React.useState("");
-  const [password2, setPassword2] = React.useState("");
-  const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
-  const [isVisiblePassword2, setIsVisiblePassword2] = React.useState(false);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -58,6 +71,9 @@ export const RegisterScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
+        <Modal backdropStyle={styles.backdrop} visible={loading}>
+          {renderModalElement()}
+        </Modal>
         <TopNavigation
           title="Регистрация"
           alignment="center"
@@ -91,13 +107,6 @@ export const RegisterScreen = ({ navigation }) => {
               style={{ marginVertical: 10 }}
             />
             <Input
-              value={phone}
-              placeholder="Телефон"
-              keyboardType="phone-pad"
-              onChangeText={mobilevalidate}
-              style={{ marginVertical: 10 }}
-            />
-            <Input
               value={email}
               placeholder="Почта"
               keyboardType="email-address"
@@ -127,7 +136,7 @@ export const RegisterScreen = ({ navigation }) => {
                 marginVertical: 25,
                 borderRadius: THEME.BUTTON_RADIUS
               }}
-              onPress={navigatePhone}
+              onPress={onSubmit}
             >
               Зарегистрироваться
             </Button>
@@ -149,3 +158,20 @@ export const RegisterScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    minHeight: 256,
+    padding: 16
+  },
+  modalContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 60,
+    borderRadius: 10,
+    padding: 16
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
+  }
+});
