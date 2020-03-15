@@ -9,7 +9,7 @@ import {
 } from "../types";
 
 import { url, endpointAPI } from "../constants";
-import { Alert } from "react-native";
+import { Alert, AsyncStorage } from "react-native";
 
 export const authStart = () => {
   return {
@@ -18,11 +18,9 @@ export const authStart = () => {
 };
 
 export const authSuccess = user => dispatch => {
-  axios.defaults.headers.common["Authorization"] =
-    "Token " + JSON.parse(localStorage.getItem("user")).token;
+  axios.defaults.headers.common["Authorization"] = user.key;
 
-  dispatch(getUser(user));
-  dispatch(getOperations());
+  Alert.alert("Вход выполнен успешно!", user.key, [{ text: "Закрыть" }]);
 
   dispatch({
     type: AUTH_SUCCESS,
@@ -30,9 +28,14 @@ export const authSuccess = user => dispatch => {
   });
 };
 export const registerSuccess = user => {
-  Alert.alert("Регистрация прошла успешно!", "", [{ text: "Закрыть" }], {
-    cancelable: false
-  });
+  Alert.alert(
+    "Регистрация прошла успешно!",
+    "Войдите в аккаунт.",
+    [{ text: "Закрыть" }],
+    {
+      cancelable: false
+    }
+  );
   console.log("Регистрация прошла успешно!");
 
   return {
@@ -56,7 +59,10 @@ export const authFail = error => dispatch => {
     );
 
     errorObject.title = `Код ошибки: ${error.response.status}`;
-    errorObject.message = `${keys.join(",")}: ${error.response.data[keys[0]]}`;
+    errorObject.message =
+      error.response.status === 404
+        ? `${error.response.data}`
+        : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
   } else if (error.request) {
     // The request was made but no response was received
     console.log("Не удалось соединиться с сервером. Повторите попытку позже.");
@@ -97,24 +103,11 @@ export const authLogin = (email, password, isRemindMe) => {
     dispatch(authStart());
 
     axios
-      .post(`${endpointAPI}/api-token-auth/login/`, {
+      .post(`${url}/rest-auth/login/`, {
         email: email,
         password: password
       })
       .then(res => {
-        if (isRemindMe) {
-          localStorage.setItem("user", JSON.stringify(res.data));
-        }
-        const periodData = JSON.parse(localStorage.getItem("periodData"));
-
-        if (periodData !== null) {
-          dispatch(
-            updatePeriod(periodData.period, moment(periodData.period_start))
-          );
-        } else {
-          dispatch(updatePeriod("Месяц", moment().startOf("month")));
-        }
-
         dispatch(authSuccess(res.data));
       })
       .catch(error => dispatch(authFail(error)));
@@ -139,8 +132,14 @@ export const authSignUp = ({
         password2
       })
       .then(res => {
-        const user = res.data;
-        dispatch(registerSuccess(user));
+        const authUser = {
+          token: res.data.key,
+          firstname,
+          lastname,
+          email,
+          password1
+        };
+        dispatch(registerSuccess(authUser));
       })
       .catch(async err => await dispatch(authFail(err)));
   };

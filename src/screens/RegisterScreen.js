@@ -25,7 +25,7 @@ const BackIcon = style => <Icon {...style} name="arrow-back" />;
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-  const { user, isRegister, loading, error } = state.auth;
+  const { isRegister, loading, error } = state.auth;
 
   useEffect(() => {
     if (error === null && isRegister) {
@@ -34,13 +34,13 @@ export const RegisterScreen = ({ navigation }) => {
       setEmail("");
       setPassword1("");
       setPassword2("");
-      navigation.navigate("Home");
+      navigation.navigate("Login");
     }
   }, [isRegister]);
 
-  const [firstname, setFirstname] = React.useState("Test");
-  const [lastname, setLastname] = React.useState("Test");
-  const [email, setEmail] = React.useState("Test@mail.ru");
+  const [firstname, setFirstname] = React.useState("");
+  const [lastname, setLastname] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password1, setPassword1] = React.useState("");
   const [password2, setPassword2] = React.useState("");
   const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);

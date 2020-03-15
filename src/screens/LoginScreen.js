@@ -1,20 +1,41 @@
 import React, { useEffect } from "react";
-import { TouchableOpacity, View, Image } from "react-native";
-import { Layout, Button, Text, Input, Icon } from "@ui-kitten/components";
+import { TouchableOpacity, View, Image, StyleSheet } from "react-native";
+import {
+  Layout,
+  Button,
+  Text,
+  Input,
+  Icon,
+  Spinner,
+  Modal
+} from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
 
 import { THEME } from "../themes/themes";
-import Axios from "axios";
-import { url } from "../store/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { authLogin } from "../store/actions/authAction";
 
 export const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
+  const { user, loading } = state.auth;
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  useEffect(() => {
+    setEmail(user.email);
+    setPassword(user.password);
+  }, [user.email]);
+
   const showIconPassword = style => <Icon name="eye-outline" {...style} />;
   const hideIconPassword = style => <Icon name="eye-off-outline" {...style} />;
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
+
+  const onSubmit = () => {
+    dispatch(authLogin(email, password));
+  };
 
   const navigateHome = () => {
     navigation.navigate("Home");
@@ -24,8 +45,17 @@ export const LoginScreen = ({ navigation }) => {
     navigation.navigate("Register");
   };
 
+  const renderModalElement = () => (
+    <Layout level="3" style={styles.modalContainer}>
+      <Spinner status="primary" />
+    </Layout>
+  );
+
   return (
     <ScreenTemplate>
+      <Modal backdropStyle={styles.backdrop} visible={loading}>
+        {renderModalElement()}
+      </Modal>
       <Layout
         style={{
           flex: 1,
@@ -69,7 +99,7 @@ export const LoginScreen = ({ navigation }) => {
               marginVertical: 25,
               borderRadius: THEME.BUTTON_RADIUS
             }}
-            onPress={navigateHome}
+            onPress={onSubmit}
           >
             Войти
           </Button>
@@ -100,3 +130,20 @@ export const LoginScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    minHeight: 256,
+    padding: 16
+  },
+  modalContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 60,
+    borderRadius: 10,
+    padding: 16
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
+  }
+});
