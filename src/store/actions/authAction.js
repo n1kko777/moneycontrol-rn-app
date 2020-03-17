@@ -17,8 +17,12 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = user => dispatch => {
-  axios.defaults.headers.common["Authorization"] = "Token " + user.key;
+export const authSuccess = user => async dispatch => {
+  try {
+    await AsyncStorage.setItem("AUTH_TOKEN", user.key);
+  } catch (error) {
+    dispatch(authFail(error));
+  }
 
   dispatch({
     type: AUTH_SUCCESS,
@@ -85,8 +89,12 @@ export const authFail = error => dispatch => {
   });
 };
 
-export const logout = navigation => {
-  delete axios.defaults.headers.common["Authorization"];
+export const logout = async navigation => {
+  try {
+    await AsyncStorage.removeItem("AUTH_TOKEN");
+  } catch (error) {
+    dispatch(authFail(error));
+  }
 
   navigation.navigate("Login");
 

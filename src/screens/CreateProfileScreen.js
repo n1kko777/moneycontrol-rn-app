@@ -11,6 +11,7 @@ import {
 } from "@ui-kitten/components";
 
 import { useDispatch } from "react-redux";
+import { getProfile } from "../store/actions/profileAction";
 import { logout } from "../store/actions/authAction";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
@@ -24,6 +25,10 @@ export const CreateProfileScreen = ({ navigation }) => {
   const [first_name, setFirstName] = React.useState("");
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
+
+  const onSubmit = () => {
+    dispatch(getProfile(navigation));
+  };
 
   const navigateLogout = () => {
     Alert.alert(
@@ -96,6 +101,7 @@ export const CreateProfileScreen = ({ navigation }) => {
                 marginVertical: 25,
                 borderRadius: THEME.BUTTON_RADIUS
               }}
+              onPress={onSubmit}
             >
               Создать профиль
             </Button>
