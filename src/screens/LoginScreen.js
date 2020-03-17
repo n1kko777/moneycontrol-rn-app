@@ -24,7 +24,7 @@ export const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = React.useState("");
 
   useEffect(() => {
-    isAuth === true && navigateCompanyManager();
+    isAuth === true && navigateCreateProfile();
   }, [isAuth]);
 
   useEffect(() => {
@@ -41,8 +41,8 @@ export const LoginScreen = ({ navigation }) => {
     await dispatch(authLogin(email, password));
   };
 
-  const navigateCompanyManager = () => {
-    navigation.navigate("CompanyManager");
+  const navigateCreateProfile = () => {
+    navigation.navigate("CreateProfile");
   };
 
   const navigateRegister = () => {
