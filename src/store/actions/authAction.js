@@ -112,10 +112,9 @@ export const authLogin = (email, password, isRemindMe) => {
 };
 
 export const authSignUp = ({
-  firstname,
-  lastname,
+  first_name,
+  last_name,
   email,
-  phone,
   password1,
   password2
 }) => {
@@ -123,18 +122,17 @@ export const authSignUp = ({
     dispatch(authStart());
     axios
       .post(`${url}/rest-auth/registration/`, {
-        firstname,
-        lastname,
+        first_name,
+        last_name,
         email,
-        phone,
         password1,
         password2
       })
       .then(res => {
         const authUser = {
           token: res.data.key,
-          firstname,
-          lastname,
+          first_name,
+          last_name,
           email,
           password1
         };

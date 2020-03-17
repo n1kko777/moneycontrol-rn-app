@@ -29,20 +29,18 @@ export const RegisterScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (error === null && isRegister) {
-      setFirstname("");
-      setLastname("");
+      setFirstName("");
+      setLastName("");
       setEmail("");
-      setPhone("");
       setPassword1("");
       setPassword2("");
       navigation.navigate("Login");
     }
   }, [isRegister]);
 
-  const [firstname, setFirstname] = React.useState("");
-  const [lastname, setLastname] = React.useState("");
+  const [first_name, setFirstName] = React.useState("");
+  const [last_name, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
   const [password1, setPassword1] = React.useState("");
   const [password2, setPassword2] = React.useState("");
   const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
@@ -60,10 +58,9 @@ export const RegisterScreen = ({ navigation }) => {
 
   const onSubmit = async () => {
     const userData = {
-      firstname,
-      lastname,
+      first_name,
+      last_name,
       email,
-      phone,
       password1,
       password2
     };
@@ -104,17 +101,17 @@ export const RegisterScreen = ({ navigation }) => {
             }}
           >
             <Input
-              value={firstname}
+              value={first_name}
               placeholder="Имя"
-              onChangeText={setFirstname}
+              onChangeText={setFirstName}
               autoCompleteType="name"
               style={{ marginVertical: 10 }}
             />
             <Input
-              value={lastname}
+              value={last_name}
               placeholder="Фамилия"
               autoCompleteType="name"
-              onChangeText={setLastname}
+              onChangeText={setLastName}
               style={{ marginVertical: 10 }}
             />
             <Input
@@ -123,14 +120,6 @@ export const RegisterScreen = ({ navigation }) => {
               autoCompleteType="email"
               keyboardType="email-address"
               onChangeText={setEmail}
-              style={{ marginVertical: 10 }}
-            />
-            <Input
-              value={phone}
-              placeholder="Телефон"
-              autoCompleteType="tel"
-              keyboardType="phone-pad"
-              onChangeText={setPhone}
               style={{ marginVertical: 10 }}
             />
             <Input
