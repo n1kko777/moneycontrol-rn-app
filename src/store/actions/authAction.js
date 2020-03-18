@@ -89,18 +89,15 @@ export const authFail = error => dispatch => {
   });
 };
 
-export const logout = async navigation => {
+export const logout = () => async dispatch => {
   try {
     await AsyncStorage.removeItem("AUTH_TOKEN");
   } catch (error) {
     dispatch(authFail(error));
   }
-
-  navigation.navigate("Login");
-
-  return {
+  dispatch({
     type: AUTH_LOGOUT
-  };
+  });
 };
 
 export const authLogin = (email, password, isRemindMe) => {

@@ -40,7 +40,6 @@ export const authReducer = (state = initialState, action) => {
         error: null
       };
     case AUTH_FAIL:
-      console.log("AUTH_FAIL : " + action.payload);
       return {
         ...state,
         loading: false,
@@ -48,6 +47,7 @@ export const authReducer = (state = initialState, action) => {
         error: action.payload
       };
     case AUTH_LOGOUT:
+      console.log("AUTH_LOGOUT :", AUTH_LOGOUT);
       return {
         ...state,
         isAuth: false,

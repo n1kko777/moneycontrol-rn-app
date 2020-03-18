@@ -23,6 +23,11 @@ export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [companyId, setCompanyId] = React.useState("");
 
+  const logoutHandler = async () => {
+    await dispatch(logout());
+    navigation.navigate("Login");
+  };
+
   const navigateLogout = () => {
     Alert.alert(
       "Выход",
@@ -32,7 +37,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
           text: "Отмена",
           style: "cancel"
         },
-        { text: "Выйти", onPress: () => dispatch(logout(navigation)) }
+        { text: "Выйти", onPress: logoutHandler }
       ],
       {
         cancelable: false

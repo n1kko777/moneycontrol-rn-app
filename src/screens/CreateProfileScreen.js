@@ -30,6 +30,11 @@ export const CreateProfileScreen = ({ navigation }) => {
     dispatch(getProfile(navigation));
   };
 
+  const logoutHandler = async () => {
+    await dispatch(logout());
+    navigation.navigate("Login");
+  };
+
   const navigateLogout = () => {
     Alert.alert(
       "Выход",
@@ -39,7 +44,7 @@ export const CreateProfileScreen = ({ navigation }) => {
           text: "Отмена",
           style: "cancel"
         },
-        { text: "Выйти", onPress: () => dispatch(logout(navigation)) }
+        { text: "Выйти", onPress: logoutHandler }
       ],
       {
         cancelable: false
