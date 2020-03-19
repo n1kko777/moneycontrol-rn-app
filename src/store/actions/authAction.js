@@ -21,14 +21,14 @@ export const authStart = () => {
 export const authSuccess = user => async dispatch => {
   try {
     await AsyncStorage.setItem("AUTH_TOKEN", user.key);
+
+    dispatch({
+      type: AUTH_SUCCESS,
+      payload: user
+    });
   } catch (error) {
     dispatch(authFail(error));
   }
-
-  dispatch({
-    type: AUTH_SUCCESS,
-    payload: user
-  });
 };
 export const registerSuccess = user => {
   Alert.alert(

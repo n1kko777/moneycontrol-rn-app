@@ -15,6 +15,7 @@ import { ScreenTemplate } from "../components/ScreenTemplate";
 import { THEME } from "../themes/themes";
 import { useDispatch, useSelector } from "react-redux";
 import { authLogin } from "../store/actions/authAction";
+import { getProfile } from "../store/actions/profileAction";
 
 export const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -31,14 +32,15 @@ export const LoginScreen = ({ navigation }) => {
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
   useEffect(() => {
-    console.log("profile :", profile);
-    isAuth &&
-      (Object.keys(profile).length !== 0
+    if (isAuth) {
+      dispatch(getProfile());
+      Object.keys(profile).length !== 0
         ? profile.company !== null
           ? navigateHome()
           : navigateCompanyManager()
-        : navigateCreateProfile());
-  }, [user, profile]);
+        : navigateCreateProfile();
+    }
+  }, [user]);
 
   const onSubmit = () => {
     dispatch(authLogin(email, password));
