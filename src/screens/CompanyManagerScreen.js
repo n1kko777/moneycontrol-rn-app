@@ -17,15 +17,15 @@ import { Alert } from "react-native";
 
 const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
 
-const AddIcon = style => <Icon {...style} name="plus-outline" />;
-
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const [companyName, setCompanyName] = React.useState("");
   const [companyId, setCompanyId] = React.useState("");
 
   const logoutHandler = async () => {
-    await dispatch(logout());
-    navigation.navigate("Login");
+    await dispatch(logout()).then(() => {
+      navigation.navigate("Login");
+    });
   };
 
   const navigateLogout = () => {
@@ -70,7 +70,13 @@ export const CompanyManagerScreen = ({ navigation }) => {
             marginHorizontal: 16
           }}
         >
-          <Button icon={AddIcon}>Создать компанию</Button>
+          <Input
+            placeholder="Название компании"
+            value={companyName}
+            onChangeText={setCompanyName}
+            style={{ marginBottom: 15 }}
+          />
+          <Button>Создать компанию</Button>
           <Text style={{ marginVertical: 20, alignSelf: "center" }}>или</Text>
           <Input
             placeholder="Идентификатор компании"
@@ -81,7 +87,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
             onChangeText={setCompanyId}
             style={{ marginBottom: 15 }}
           />
-          <Button>Присоединиться</Button>
+          <Button status="info">Присоединиться</Button>
         </Layout>
       </>
     </ScreenTemplate>
