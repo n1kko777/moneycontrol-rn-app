@@ -7,10 +7,12 @@ import {
   TopNavigation,
   TopNavigationAction,
   Input,
-  Button
+  Button,
+  Modal,
+  Spinner
 } from "@ui-kitten/components";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../store/actions/profileAction";
 import { logout } from "../store/actions/authAction";
 
@@ -21,14 +23,22 @@ const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const profileStore = useSelector(store => store.profile);
+  const { loading } = profileStore;
 
   const [first_name, setFirstName] = React.useState("");
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
-  const onSubmit = () => {
-    dispatch(getProfile(navigation));
+  const onSubmit = async () => {
+    await dispatch(getProfile(navigation));
   };
+
+  const renderModalElement = () => (
+    <Layout level="3" style={styles.modalContainer}>
+      <Spinner status="primary" />
+    </Layout>
+  );
 
   const logoutHandler = async () => {
     await dispatch(logout());
@@ -59,6 +69,9 @@ export const CreateProfileScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
+        <Modal backdropStyle={styles.backdrop} visible={loading}>
+          {renderModalElement()}
+        </Modal>
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"

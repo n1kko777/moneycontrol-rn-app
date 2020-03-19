@@ -12,13 +12,13 @@ import { url, endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get profile from server
-export const getProfile = navigation => async dispatch => {
-  setLoading();
+export const getProfile = () => async dispatch => {
+  await dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    axios
+    await axios
       .get(`${endpointAPI}/Profile/`, {
         headers: {
           "Content-Type": "application/json",
@@ -28,8 +28,6 @@ export const getProfile = navigation => async dispatch => {
       .then(res => {
         const profile = res.data;
 
-        console.log("profile :", profile);
-
         dispatch({
           type: GET_PROFILE,
           payload: profile
@@ -37,11 +35,10 @@ export const getProfile = navigation => async dispatch => {
       })
 
       .catch(error => {
-        dispatch(logout(navigation));
         dispatch(profileFail(error));
       });
   } catch (error) {
-    dispatch(authFail(error));
+    dispatch(profileFail(error));
   }
 };
 
@@ -89,8 +86,8 @@ export const profileFail = error => dispatch => {
 };
 
 // Set loading to true
-export const setLoading = () => {
-  return {
+export const setLoading = () => dispatch => {
+  dispatch({
     type: PROFILE_LOADING
-  };
+  });
 };

@@ -5,7 +5,8 @@ import {
   AUTH_SUCCESS,
   AUTH_FAIL,
   AUTH_LOGOUT,
-  REMIND_ME
+  REMIND_ME,
+  CLEAR_PROFILE
 } from "../types";
 
 import { url, endpointAPI } from "../constants";
@@ -101,10 +102,10 @@ export const logout = () => async dispatch => {
 };
 
 export const authLogin = (email, password, isRemindMe) => {
-  return dispatch => {
-    dispatch(authStart());
+  return async dispatch => {
+    await dispatch(authStart());
 
-    axios
+    await axios
       .post(`${url}/rest-auth/login/`, {
         email: email,
         password: password

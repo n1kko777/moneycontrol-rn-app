@@ -20,25 +20,30 @@ export const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
   const { user, isAuth, loading } = state.auth;
+  const { profile } = state.profile;
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
-  useEffect(() => {
-    isAuth === true && navigateCreateProfile();
-  }, [isAuth]);
-
-  useEffect(() => {
-    setEmail(user.email);
-    setPassword(user.password);
-  }, [user.email]);
 
   const hideIconPassword = style => <Icon name="eye-outline" {...style} />;
   const showIconPassword = style => <Icon name="eye-off-outline" {...style} />;
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
-  const onSubmit = async () => {
-    await dispatch(authLogin(email, password));
+  useEffect(() => {
+    console.log("profile :", profile);
+    isAuth &&
+      (Object.keys(profile).length !== 0
+        ? navigateCompanyManager()
+        : navigateCreateProfile());
+  }, [user, profile]);
+
+  const onSubmit = () => {
+    dispatch(authLogin(email, password));
+  };
+
+  const navigateCompanyManager = () => {
+    navigation.navigate("CompanyManager");
   };
 
   const navigateCreateProfile = () => {
