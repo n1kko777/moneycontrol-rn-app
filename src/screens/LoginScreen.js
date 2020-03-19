@@ -31,15 +31,20 @@ export const LoginScreen = ({ navigation }) => {
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
-  useEffect(() => {
+  const makeNavigation = async () => {
     if (isAuth) {
-      dispatch(getProfile());
-      Object.keys(profile).length !== 0
-        ? profile.company !== null
-          ? navigateHome()
-          : navigateCompanyManager()
-        : navigateCreateProfile();
+      await dispatch(getProfile()).then(() => {
+        Object.keys(profile).length !== 0
+          ? profile.company !== null
+            ? navigateHome()
+            : navigateCompanyManager()
+          : navigateCreateProfile();
+      });
     }
+  };
+
+  useEffect(() => {
+    makeNavigation();
   }, [user]);
 
   const onSubmit = () => {
