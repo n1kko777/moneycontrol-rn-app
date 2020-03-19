@@ -31,7 +31,7 @@ export const CreateProfileScreen = ({ navigation }) => {
   const [phone, setPhone] = React.useState("");
 
   useEffect(() => {
-    navigation.navigate("CompanyManager");
+    navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
   }, [loading, profile]);
 
   const onSubmit = async () => {

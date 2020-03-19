@@ -34,12 +34,18 @@ export const LoginScreen = ({ navigation }) => {
     console.log("profile :", profile);
     isAuth &&
       (Object.keys(profile).length !== 0
-        ? navigateCompanyManager()
+        ? profile.company !== null
+          ? navigateHome()
+          : navigateCompanyManager()
         : navigateCreateProfile());
   }, [user, profile]);
 
   const onSubmit = () => {
     dispatch(authLogin(email, password));
+  };
+
+  const navigateHome = () => {
+    navigation.navigate("Home");
   };
 
   const navigateCompanyManager = () => {
