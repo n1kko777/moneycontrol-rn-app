@@ -1,8 +1,8 @@
 import {
   GET_PROFILE,
-  UPDATE_PROFILE,
-  PROFILE_LOADING,
-  PROFILE_ERROR,
+  CREATE_PROFILE,
+  LOADING_PROFILE,
+  ERROR_PROFILE,
   CLEAR_PROFILE
 } from "../types";
 
@@ -16,14 +16,15 @@ export const profileReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case GET_PROFILE:
+      console.log("==========================");
       console.log("case GET_PROFILE:");
       return {
         ...state,
         profile: payload[0],
         loading: false
       };
-    case UPDATE_PROFILE:
-      console.log("case UPDATE_PROFILE:");
+    case CREATE_PROFILE:
+      console.log("case CREATE_PROFILE:");
       console.log("payloadProfile :", payload);
       return {
         ...state,
@@ -37,15 +38,15 @@ export const profileReducer = (state = initialState, action) => {
         profile: {},
         loading: false
       };
-    case PROFILE_LOADING:
-      console.log("case PROFILE_LOADING:");
+    case LOADING_PROFILE:
+      console.log("case LOADING_PROFILE:");
       return {
         ...state,
         loading: true
       };
 
-    case PROFILE_ERROR:
-      console.log("PROFILE_ERROR : " + payload);
+    case ERROR_PROFILE:
+      console.log("ERROR_PROFILE : " + payload);
       return {
         ...state,
         loading: false,

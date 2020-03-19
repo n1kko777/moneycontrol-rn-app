@@ -1,9 +1,9 @@
 import axios from "axios";
 import {
   GET_PROFILE,
-  UPDATE_PROFILE,
-  PROFILE_LOADING,
-  PROFILE_ERROR
+  CREATE_PROFILE,
+  LOADING_PROFILE,
+  ERROR_PROFILE
 } from "../types";
 
 import { logout } from "./authAction";
@@ -66,7 +66,7 @@ export const createProfile = profile => async dispatch => {
         const profile = res.data;
 
         dispatch({
-          type: UPDATE_PROFILE,
+          type: CREATE_PROFILE,
           payload: profile
         });
       })
@@ -117,7 +117,7 @@ export const profileFail = error => dispatch => {
   });
 
   dispatch({
-    type: PROFILE_ERROR,
+    type: ERROR_PROFILE,
     payload: error
   });
 };
@@ -125,6 +125,6 @@ export const profileFail = error => dispatch => {
 // Set loading to true
 export const setLoading = () => dispatch => {
   dispatch({
-    type: PROFILE_LOADING
+    type: LOADING_PROFILE
   });
 };

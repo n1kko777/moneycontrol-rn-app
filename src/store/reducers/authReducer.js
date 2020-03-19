@@ -27,6 +27,7 @@ export const authReducer = (state = initialState, action) => {
         error: null
       };
     case AUTH_START:
+      console.log("==========================");
       console.log("case AUTH_START:");
       return {
         ...state,

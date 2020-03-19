@@ -1,14 +1,25 @@
 // Auth
 export const REMIND_ME = "REMIND_ME";
 export const AUTH_START = "AUTH_START";
-export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_FAIL = "AUTH_FAIL";
 export const AUTH_LOGOUT = "AUTHLOGOUTT";
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 
 // Profile
 export const GET_PROFILE = "GET_PROFILE";
-export const CLEAR_PROFILE = "CLEAR_PROFILE";
+export const CREATE_PROFILE = "CREATE_PROFILE";
+export const DELETE_PROFILE = "DELETE_PROFILE";
 export const UPDATE_PROFILE = "UPDATE_PROFILE";
-export const PROFILE_LOADING = "PROFILE_LOADING";
-export const PROFILE_ERROR = "PROFILE_ERROR";
+export const CLEAR_PROFILE = "CLEAR_PROFILE";
+export const LOADING_PROFILE = "LOADING_PROFILE";
+export const ERROR_PROFILE = "ERROR_PROFILE";
+
+// Company
+export const GET_COMPANY = "GET_COMPANY";
+export const CREATE_COMPANY = "CREATE_COMPANY";
+export const DELETE_COMPANY = "DELETE_COMPANY";
+export const UPDATE_COMPANY = "UPDATE_COMPANY";
+export const CLEAR_COMPANY = "CLEAR_COMPANY";
+export const LOADING_COMPANY = "LOADING_COMPANY";
+export const ERROR_COMPANY = "ERROR_COMPANY";
