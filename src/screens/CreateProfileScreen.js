@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert, View, StyleSheet } from "react-native";
 import {
   Divider,
@@ -13,7 +13,7 @@ import {
 } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getProfile } from "../store/actions/profileAction";
+import { createProfile } from "../store/actions/profileAction";
 import { logout } from "../store/actions/authAction";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
@@ -24,14 +24,23 @@ const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const profileStore = useSelector(store => store.profile);
-  const { loading } = profileStore;
+  const { loading, profile } = profileStore;
 
   const [first_name, setFirstName] = React.useState("");
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
+  useEffect(() => {
+    navigation.navigate("CompanyManager");
+  }, [loading, profile]);
+
   const onSubmit = async () => {
-    await dispatch(getProfile(navigation));
+    const newProfile = {
+      first_name,
+      last_name,
+      phone
+    };
+    await dispatch(createProfile(newProfile));
   };
 
   const renderModalElement = () => (

@@ -22,6 +22,14 @@ export const profileReducer = (state = initialState, action) => {
         profile: payload[0],
         loading: false
       };
+    case UPDATE_PROFILE:
+      console.log("case UPDATE_PROFILE:");
+      console.log("payloadProfile :", payload);
+      return {
+        ...state,
+        profile: payload,
+        loading: false
+      };
     case CLEAR_PROFILE:
       console.log("case CLEAR_PROFILE:");
       return {

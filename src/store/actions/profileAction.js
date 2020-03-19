@@ -42,6 +42,43 @@ export const getProfile = () => async dispatch => {
   }
 };
 
+// Create profile from server
+export const createProfile = profile => async dispatch => {
+  await dispatch(setLoading());
+
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    await axios
+      .post(
+        `${endpointAPI}/Profile/`,
+        {
+          ...profile
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token
+          }
+        }
+      )
+      .then(res => {
+        const profile = res.data;
+
+        dispatch({
+          type: UPDATE_PROFILE,
+          payload: profile
+        });
+      })
+
+      .catch(error => {
+        dispatch(profileFail(error));
+      });
+  } catch (error) {
+    dispatch(profileFail(error));
+  }
+};
+
 export const profileFail = error => dispatch => {
   const errorObject = {};
   if (error.response) {
