@@ -31,7 +31,8 @@ export const CreateProfileScreen = ({ navigation }) => {
   const [phone, setPhone] = React.useState("");
 
   useEffect(() => {
-    navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
+    profile.hasOwnProperty("company") &&
+      navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
   }, [loading, profile]);
 
   const onSubmit = async () => {
@@ -50,8 +51,9 @@ export const CreateProfileScreen = ({ navigation }) => {
   );
 
   const logoutHandler = async () => {
-    await dispatch(logout());
-    navigation.navigate("Login");
+    await dispatch(logout()).then(() => {
+      navigation.navigate("Login");
+    });
   };
 
   const navigateLogout = () => {

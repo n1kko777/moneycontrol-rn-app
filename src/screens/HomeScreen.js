@@ -14,6 +14,7 @@ import { ScreenTemplate } from "../components/ScreenTemplate";
 import { THEME } from "../themes/themes";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/actions/authAction";
+import { Alert } from "react-native";
 
 const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
 
@@ -34,6 +35,23 @@ export const HomeScreen = ({ navigation }) => {
   const BackAction = () => (
     <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
   );
+
+  const navigateLogout = () => {
+    Alert.alert(
+      "Выход",
+      "Вы уверены что хотите выйти из учетной записи?",
+      [
+        {
+          text: "Отмена",
+          style: "cancel"
+        },
+        { text: "Выйти", onPress: logoutHandler }
+      ],
+      {
+        cancelable: false
+      }
+    );
+  };
 
   return (
     <ScreenTemplate>

@@ -1,9 +1,9 @@
 import axios from "axios";
 import {
-  GET_PROFILE,
-  CREATE_PROFILE,
-  LOADING_PROFILE,
-  ERROR_PROFILE
+  GET_COMPANY,
+  CREATE_COMPANY,
+  LOADING_COMPANY,
+  ERROR_COMPANY
 } from "../types";
 
 import { logout } from "./authAction";
@@ -11,39 +11,39 @@ import { logout } from "./authAction";
 import { url, endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
-// Get profile from server
-export const getProfile = () => async dispatch => {
+// Get company from server
+export const getCompany = () => async dispatch => {
   await dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     await axios
-      .get(`${endpointAPI}/Profile/`, {
+      .get(`${endpointAPI}/Company/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Token " + token
         }
       })
       .then(res => {
-        const profile = res.data;
+        const company = res.data;
 
         dispatch({
-          type: GET_PROFILE,
-          payload: profile
+          type: GET_COMPANY,
+          payload: company
         });
       })
 
       .catch(error => {
-        dispatch(profileFail(error));
+        dispatch(companyFail(error));
       });
   } catch (error) {
-    dispatch(profileFail(error));
+    dispatch(companyFail(error));
   }
 };
 
-// Create profile from server
-export const createProfile = profile => async dispatch => {
+// Create company from server
+export const createCompany = company => async dispatch => {
   await dispatch(setLoading());
 
   try {
@@ -51,9 +51,9 @@ export const createProfile = profile => async dispatch => {
 
     await axios
       .post(
-        `${endpointAPI}/Profile/`,
+        `${endpointAPI}/Company/`,
         {
-          ...profile
+          ...company
         },
         {
           headers: {
@@ -63,60 +63,23 @@ export const createProfile = profile => async dispatch => {
         }
       )
       .then(res => {
-        const profile = res.data;
+        const company = res.data;
 
         dispatch({
-          type: CREATE_PROFILE,
-          payload: profile
+          type: CREATE_COMPANY,
+          payload: company
         });
       })
 
       .catch(error => {
-        dispatch(profileFail(error));
+        dispatch(companyFail(error));
       });
   } catch (error) {
-    dispatch(profileFail(error));
+    dispatch(companyFail(error));
   }
 };
 
-// Update profile from server
-export const updateProfile = profile => async dispatch => {
-  await dispatch(setLoading());
-
-  try {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
-
-    await axios
-      .put(
-        `${endpointAPI}/Profile/`,
-        {
-          ...profile
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
-        }
-      )
-      .then(res => {
-        const profile = res.data;
-
-        dispatch({
-          type: UPDATE_PROFILE,
-          payload: profile
-        });
-      })
-
-      .catch(error => {
-        dispatch(profileFail(error));
-      });
-  } catch (error) {
-    dispatch(profileFail(error));
-  }
-};
-
-export const profileFail = error => dispatch => {
+export const companyFail = error => dispatch => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -154,7 +117,7 @@ export const profileFail = error => dispatch => {
   });
 
   dispatch({
-    type: ERROR_PROFILE,
+    type: ERROR_COMPANY,
     payload: error
   });
 };
@@ -162,6 +125,6 @@ export const profileFail = error => dispatch => {
 // Set loading to true
 export const setLoading = () => dispatch => {
   dispatch({
-    type: LOADING_PROFILE
+    type: LOADING_COMPANY
   });
 };

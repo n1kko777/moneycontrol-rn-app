@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authLogin } from "../store/actions/authAction";
 import { getProfile } from "../store/actions/profileAction";
 
-export const LoginScreen = ({ navigation }) => {
+export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
   const { user, isAuth, loading } = state.auth;
@@ -35,7 +35,7 @@ export const LoginScreen = ({ navigation }) => {
     if (isAuth) {
       await dispatch(getProfile()).then(() => {
         Object.keys(profile).length !== 0
-          ? profile.company !== null
+          ? profile.hasOwnProperty("company") && profile.company !== null
             ? navigateHome()
             : navigateCompanyManager()
           : navigateCreateProfile();

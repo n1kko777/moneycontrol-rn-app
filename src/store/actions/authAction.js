@@ -6,7 +6,8 @@ import {
   AUTH_FAIL,
   AUTH_LOGOUT,
   REMIND_ME,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
+  CLEAR_COMPANY
 } from "../types";
 
 import { url, endpointAPI } from "../constants";
@@ -96,6 +97,12 @@ export const logout = () => async dispatch => {
   } catch (error) {
     dispatch(authFail(error));
   }
+  dispatch({
+    type: CLEAR_PROFILE
+  });
+  dispatch({
+    type: CLEAR_COMPANY
+  });
   dispatch({
     type: AUTH_LOGOUT
   });

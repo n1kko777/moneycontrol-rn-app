@@ -11,7 +11,9 @@ import {
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createCompany } from "../store/actions/companyAction";
+import { updateProfile, getProfile } from "../store/actions/profileAction";
 import { logout } from "../store/actions/authAction";
 import { Alert } from "react-native";
 
@@ -19,6 +21,9 @@ const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const store = useSelector(store => store);
+  const { profile } = store;
+
   const [companyName, setCompanyName] = React.useState("");
   const [companyId, setCompanyId] = React.useState("");
 
@@ -49,6 +54,15 @@ export const CompanyManagerScreen = ({ navigation }) => {
     <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
   );
 
+  const createCompanyHandler = async () => {
+    const company = { company_name: companyName };
+    await dispatch(createCompany(company)).then(() => {
+      dispatch(getProfile()).then(() => {
+        profile.company !== null && navigation.navigate("Home");
+      });
+    });
+  };
+
   return (
     <ScreenTemplate>
       <>
@@ -76,7 +90,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
             onChangeText={setCompanyName}
             style={{ marginBottom: 15 }}
           />
-          <Button>Создать компанию</Button>
+          <Button onPress={createCompanyHandler}>Создать компанию</Button>
           <Text style={{ marginVertical: 20, alignSelf: "center" }}>или</Text>
           <Input
             placeholder="Идентификатор компании"
