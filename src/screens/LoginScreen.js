@@ -31,24 +31,21 @@ export const LoginScreen = ({ route, navigation }) => {
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
-  const makeNavigation = async () => {
-    if (isAuth) {
-      await dispatch(getProfile()).then(() => {
-        Object.keys(profile).length !== 0
-          ? profile.hasOwnProperty("company") && profile.company !== null
-            ? navigateHome()
-            : navigateCompanyManager()
-          : navigateCreateProfile();
-      });
-    }
-  };
-
   useEffect(() => {
-    makeNavigation();
-  }, [user]);
+    if (isAuth) {
+      console.log("LOGIN: profile :", profile);
+      profile !== undefined && profile.hasOwnProperty("company")
+        ? profile.company !== null
+          ? navigateHome()
+          : navigateCompanyManager()
+        : navigateCreateProfile();
+    }
+  }, [profile]);
 
-  const onSubmit = () => {
-    dispatch(authLogin(email, password));
+  const onSubmit = async () => {
+    await dispatch(authLogin(email, password)).then(() => {
+      dispatch(getProfile());
+    });
   };
 
   const navigateHome = () => {
@@ -102,6 +99,7 @@ export const LoginScreen = ({ route, navigation }) => {
         >
           <Input
             value={email}
+            autoCapitalize="none"
             placeholder="Почта"
             keyboardType="email-address"
             autoCompleteType="email"

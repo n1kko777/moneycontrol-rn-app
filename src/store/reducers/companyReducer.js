@@ -7,7 +7,7 @@ import {
 } from "../types";
 
 const initialState = {
-  COMPANY: {},
+  company: {},
   error: null,
   loading: false
 };
@@ -20,7 +20,7 @@ export const companyReducer = (state = initialState, action) => {
       console.log("case GET_COMPANY:");
       return {
         ...state,
-        company: payload[0],
+        company: payload,
         loading: false
       };
     case CREATE_COMPANY:

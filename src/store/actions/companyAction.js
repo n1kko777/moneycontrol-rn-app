@@ -6,14 +6,12 @@ import {
   ERROR_COMPANY
 } from "../types";
 
-import { logout } from "./authAction";
-
-import { url, endpointAPI } from "../constants";
+import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get company from server
 export const getCompany = () => async dispatch => {
-  await dispatch(setLoading());
+  dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
@@ -26,7 +24,7 @@ export const getCompany = () => async dispatch => {
         }
       })
       .then(res => {
-        const company = res.data;
+        const company = res.data[0];
 
         dispatch({
           type: GET_COMPANY,
@@ -44,7 +42,7 @@ export const getCompany = () => async dispatch => {
 
 // Create company from server
 export const createCompany = company => async dispatch => {
-  await dispatch(setLoading());
+  dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");

@@ -24,7 +24,9 @@ export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const state = useSelector(state => state);
   const { user } = state.auth;
-  console.log("user :", user);
+  const { profile } = state.profile;
+  console.log("HOME: profile :", profile);
+  console.log("HOME: user :", user);
 
   const logoutHandler = async () => {
     await dispatch(logout()).then(() => {

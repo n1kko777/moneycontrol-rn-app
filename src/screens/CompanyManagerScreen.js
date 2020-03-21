@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Layout,
   TopNavigation,
@@ -7,25 +7,35 @@ import {
   Icon,
   Text,
   Button,
-  Input
+  Input,
+  Modal,
+  Spinner
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { useDispatch, useSelector } from "react-redux";
-import { createCompany } from "../store/actions/companyAction";
+import { createCompany, getCompany } from "../store/actions/companyAction";
 import { updateProfile, getProfile } from "../store/actions/profileAction";
 import { logout } from "../store/actions/authAction";
-import { Alert } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 
 const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const store = useSelector(store => store);
-  const { profile } = store;
+  const { profile: profileStore, company: companyStore } = store;
+  const { profile, loading: profileLoading } = profileStore;
+  const { company, loading: companyLoading } = companyStore;
 
   const [companyName, setCompanyName] = React.useState("");
-  const [companyId, setCompanyId] = React.useState("");
+  const [companyId, setCompanyId] = React.useState(
+    "faee1dfe-e7f1-49a8-8424-dfc4e6190ef5"
+  );
+
+  useEffect(() => {
+    profile.company !== null && navigation.navigate("Home");
+  }, [company]);
 
   const logoutHandler = async () => {
     await dispatch(logout()).then(() => {
@@ -57,15 +67,31 @@ export const CompanyManagerScreen = ({ navigation }) => {
   const createCompanyHandler = async () => {
     const company = { company_name: companyName };
     await dispatch(createCompany(company)).then(() => {
-      dispatch(getProfile()).then(() => {
-        profile.company !== null && navigation.navigate("Home");
-      });
+      dispatch(getProfile());
     });
   };
+
+  const joinCompanyHandler = async () => {
+    const teamProfile = JSON.parse(JSON.stringify(profile));
+    teamProfile.company_identificator = companyId;
+    dispatch(updateProfile(teamProfile));
+  };
+
+  const renderModalElement = () => (
+    <Layout level="3" style={styles.modalContainer}>
+      <Spinner status="primary" />
+    </Layout>
+  );
 
   return (
     <ScreenTemplate>
       <>
+        <Modal
+          backdropStyle={styles.backdrop}
+          visible={profileLoading || companyLoading}
+        >
+          {renderModalElement()}
+        </Modal>
         <TopNavigation
           title="Управление компаниями"
           alignment="center"
@@ -101,9 +127,28 @@ export const CompanyManagerScreen = ({ navigation }) => {
             onChangeText={setCompanyId}
             style={{ marginBottom: 15 }}
           />
-          <Button status="info">Присоединиться</Button>
+          <Button onPress={joinCompanyHandler} status="info">
+            Присоединиться
+          </Button>
         </Layout>
       </>
     </ScreenTemplate>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    minHeight: 256,
+    padding: 16
+  },
+  modalContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 60,
+    borderRadius: 10,
+    padding: 16
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
+  }
+});

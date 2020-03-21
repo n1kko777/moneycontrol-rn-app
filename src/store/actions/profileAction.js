@@ -2,18 +2,17 @@ import axios from "axios";
 import {
   GET_PROFILE,
   CREATE_PROFILE,
+  UPDATE_PROFILE,
   LOADING_PROFILE,
   ERROR_PROFILE
 } from "../types";
 
-import { logout } from "./authAction";
-
-import { url, endpointAPI } from "../constants";
+import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get profile from server
 export const getProfile = () => async dispatch => {
-  await dispatch(setLoading());
+  dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
@@ -26,7 +25,7 @@ export const getProfile = () => async dispatch => {
         }
       })
       .then(res => {
-        const profile = res.data;
+        const profile = res.data[0];
 
         dispatch({
           type: GET_PROFILE,
@@ -44,7 +43,7 @@ export const getProfile = () => async dispatch => {
 
 // Create profile from server
 export const createProfile = profile => async dispatch => {
-  await dispatch(setLoading());
+  dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
@@ -81,14 +80,14 @@ export const createProfile = profile => async dispatch => {
 
 // Update profile from server
 export const updateProfile = profile => async dispatch => {
-  await dispatch(setLoading());
+  dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     await axios
       .put(
-        `${endpointAPI}/Profile/`,
+        `${endpointAPI}/Profile/${profile.id}/`,
         {
           ...profile
         },
@@ -133,7 +132,7 @@ export const profileFail = error => dispatch => {
     errorObject.title = `Код ошибки: ${error.response.status}`;
     errorObject.message =
       error.response.status === 404
-        ? `${error.response.data}`
+        ? `Не найдено`
         : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
   } else if (error.request) {
     // The request was made but no response was received

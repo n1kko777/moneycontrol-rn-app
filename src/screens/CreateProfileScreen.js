@@ -31,17 +31,18 @@ export const CreateProfileScreen = ({ navigation }) => {
   const [phone, setPhone] = React.useState("");
 
   useEffect(() => {
-    profile.hasOwnProperty("company") &&
+    profile !== undefined &&
+      profile.hasOwnProperty("company") &&
       navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
-  }, [loading, profile]);
+  }, [loading]);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     const newProfile = {
       first_name,
       last_name,
       phone
     };
-    await dispatch(createProfile(newProfile));
+    dispatch(createProfile(newProfile));
   };
 
   const renderModalElement = () => (

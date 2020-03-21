@@ -57,14 +57,15 @@ export const RegisterScreen = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
-    const userData = {
-      first_name,
-      last_name,
-      email,
-      password1,
-      password2
-    };
-    await dispatch(authSignUp(userData));
+    await dispatch(
+      authSignUp({
+        first_name,
+        last_name,
+        email,
+        password1,
+        password2
+      })
+    );
   };
 
   const hideIconPassword = style => <Icon name="eye-outline" {...style} />;
@@ -116,6 +117,7 @@ export const RegisterScreen = ({ navigation }) => {
             />
             <Input
               value={email}
+              autoCapitalize="none"
               placeholder="Почта"
               autoCompleteType="email"
               keyboardType="email-address"

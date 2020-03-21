@@ -10,13 +10,13 @@ import {
   CLEAR_COMPANY
 } from "../types";
 
-import { url, endpointAPI } from "../constants";
+import { url } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
-export const authStart = () => {
-  return {
+export const authStart = () => dispatch => {
+  dispatch({
     type: AUTH_START
-  };
+  });
 };
 
 export const authSuccess = user => async dispatch => {
@@ -31,7 +31,7 @@ export const authSuccess = user => async dispatch => {
     dispatch(authFail(error));
   }
 };
-export const registerSuccess = user => {
+export const registerSuccess = user => dispatch => {
   Alert.alert(
     "Регистрация прошла успешно!",
     "Войдите в аккаунт.",
@@ -42,10 +42,10 @@ export const registerSuccess = user => {
   );
   console.log("Регистрация прошла успешно!");
 
-  return {
+  dispatch({
     type: REGISTER_SUCCESS,
     payload: user
-  };
+  });
 };
 
 export const authFail = error => dispatch => {
@@ -108,20 +108,18 @@ export const logout = () => async dispatch => {
   });
 };
 
-export const authLogin = (email, password, isRemindMe) => {
-  return async dispatch => {
-    await dispatch(authStart());
+export const authLogin = (email, password, isRemindMe) => async dispatch => {
+  dispatch(authStart());
 
-    await axios
-      .post(`${url}/rest-auth/login/`, {
-        email: email,
-        password: password
-      })
-      .then(res => {
-        dispatch(authSuccess(res.data));
-      })
-      .catch(error => dispatch(authFail(error)));
-  };
+  await axios
+    .post(`${url}/rest-auth/login/`, {
+      email: email,
+      password: password
+    })
+    .then(async res => {
+      await dispatch(authSuccess(res.data));
+    })
+    .catch(async error => await dispatch(authFail(error)));
 };
 
 export const authSignUp = ({
@@ -130,29 +128,27 @@ export const authSignUp = ({
   email,
   password1,
   password2
-}) => {
-  return dispatch => {
-    dispatch(authStart());
-    axios
-      .post(`${url}/rest-auth/registration/`, {
+}) => async dispatch => {
+  dispatch(authStart());
+  await axios
+    .post(`${url}/rest-auth/registration/`, {
+      first_name,
+      last_name,
+      email,
+      password1,
+      password2
+    })
+    .then(res => {
+      const authUser = {
+        token: res.data.key,
         first_name,
         last_name,
         email,
-        password1,
-        password2
-      })
-      .then(res => {
-        const authUser = {
-          token: res.data.key,
-          first_name,
-          last_name,
-          email,
-          password1
-        };
-        dispatch(registerSuccess(authUser));
-      })
-      .catch(async err => await dispatch(authFail(err)));
-  };
+        password1
+      };
+      dispatch(registerSuccess(authUser));
+    })
+    .catch(err => dispatch(authFail(err)));
 };
 
 export const authCheckState = () => dispatch => {
