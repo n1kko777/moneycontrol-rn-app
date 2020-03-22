@@ -4,8 +4,11 @@ import {
   Icon,
   TopNavigation,
   TopNavigationAction,
-  useTheme
+  useTheme,
+  Modal,
+  Spinner
 } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
 import { ThemeContext } from "../themes/theme-context";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
@@ -14,6 +17,7 @@ import { MenuOptions } from "../components/MenuOptions";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../store/actions/companyAction";
+import { getAccount } from "../store/actions/accountAction";
 
 const ProfileIcon = style => <Icon {...style} name="person-outline" />;
 
@@ -28,22 +32,47 @@ export const HomeScreen = ({ navigation }) => {
   const kittenTheme = useTheme();
 
   const state = useSelector(state => state);
-  const { company } = state.company;
+  const { company, loading: companyLoading } = state.company;
+  const { account, loading: accountLoading } = state.account;
+
+  const [localLoading, setLocalLoading] = React.useState(
+    companyLoading || accountLoading
+  );
+
+  const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
 
   const getData = async () => {
     await dispatch(getCompany());
+    await dispatch(getAccount()).then(() => {
+      setTotalBalance(
+        parseFloat(
+          account.reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
+        )
+      );
+    });
   };
 
   useEffect(() => {
     getData();
   }, [dispatch]);
 
-  const renderMenuAction = () => <MenuOptions navigation={navigation} />;
+  const renderMenuAction = () => (
+    <MenuOptions navigation={navigation} getData={getData} />
+  );
 
   const renderProfileAction = () => <ProfileAction onPress={() => {}} />;
 
+  const renderModalElement = () => (
+    <Layout level="3" style={styles.modalContainer}>
+      <Spinner status="primary" />
+    </Layout>
+  );
+
   return (
     <ScreenTemplate>
+      <Modal backdropStyle={styles.backdrop} visible={localLoading}>
+        {renderModalElement()}
+      </Modal>
       <Layout
         style={{
           flex: 1,
@@ -60,7 +89,7 @@ export const HomeScreen = ({ navigation }) => {
           leftControl={renderProfileAction()}
           rightControls={renderMenuAction()}
         />
-        <BalanceComponent />
+        <BalanceComponent balance={totalBalance} />
         <Layout
           style={{
             flex: 1,
@@ -76,3 +105,20 @@ export const HomeScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    minHeight: 256,
+    padding: 16
+  },
+  modalContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 60,
+    borderRadius: 10,
+    padding: 16
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
+  }
+});

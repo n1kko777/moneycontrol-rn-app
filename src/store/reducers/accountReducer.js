@@ -7,7 +7,7 @@ import {
 } from "../types";
 
 const initialState = {
-  account: {},
+  account: [],
   error: null,
   loading: false
 };

@@ -25,3 +25,5 @@ export const showIconPassword = style => (
 );
 
 export const BackIcon = style => <Icon {...style} name="arrow-back" />;
+
+export const UpdateIcon = style => <Icon {...style} name="refresh-outline" />;

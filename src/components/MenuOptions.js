@@ -3,17 +3,27 @@ import { TopNavigationAction, OverflowMenu } from "@ui-kitten/components";
 import { Alert } from "react-native";
 
 import { ThemeContext } from "../themes/theme-context";
-import { MenuIcon, LogoutIcon, LightIcon, DarkIcon } from "../themes/icons";
+import {
+  MenuIcon,
+  LogoutIcon,
+  LightIcon,
+  DarkIcon,
+  UpdateIcon
+} from "../themes/icons";
 import { logout } from "../store/actions/authAction";
 import { useDispatch } from "react-redux";
 
-export const MenuOptions = ({ navigation }) => {
+export const MenuOptions = ({ navigation, getData }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
   const [menuVisible, setMenuVisible] = React.useState(false);
 
   const menuData = [
+    {
+      title: "Обновить",
+      icon: UpdateIcon
+    },
     {
       title: `${themeContext.theme === "light" ? "Темная" : "Светлая"} тема`,
       icon: themeContext.theme === "light" ? DarkIcon : LightIcon
@@ -37,9 +47,12 @@ export const MenuOptions = ({ navigation }) => {
   const onMenuItemSelect = index => {
     switch (index) {
       case 0:
-        themeContext.toggleTheme();
+        getData();
         break;
       case 1:
+        themeContext.toggleTheme();
+        break;
+      case 2:
         navigateLogout();
         break;
 
