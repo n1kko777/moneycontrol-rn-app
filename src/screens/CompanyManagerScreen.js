@@ -4,7 +4,6 @@ import {
   TopNavigation,
   TopNavigationAction,
   Divider,
-  Icon,
   Text,
   Button,
   Input,
@@ -14,17 +13,22 @@ import {
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { useDispatch, useSelector } from "react-redux";
-import { createCompany, getCompany } from "../store/actions/companyAction";
+import { createCompany } from "../store/actions/companyAction";
 import { updateProfile, getProfile } from "../store/actions/profileAction";
 import { logout } from "../store/actions/authAction";
 import { Alert, StyleSheet } from "react-native";
 
-const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
+import { LogoutIcon } from "../themes/icons";
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const store = useSelector(store => store);
-  const { profile: profileStore, company: companyStore } = store;
+  const {
+    profile: profileStore,
+    company: companyStore,
+    auth: authUserStore
+  } = store;
+  const { isAuth } = authUserStore;
   const { profile, loading: profileLoading } = profileStore;
   const { company, loading: companyLoading } = companyStore;
 
@@ -34,7 +38,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
   );
 
   useEffect(() => {
-    profile.company !== null && navigation.navigate("Home");
+    isAuth && profile.company !== null && navigation.navigate("Home");
   }, [company]);
 
   const logoutHandler = async () => {

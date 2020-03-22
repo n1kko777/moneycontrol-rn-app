@@ -5,7 +5,6 @@ import { authSignUp } from "../store/actions/authAction";
 
 import {
   Divider,
-  Icon,
   Layout,
   Text,
   TopNavigation,
@@ -19,8 +18,7 @@ import {
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { View, StyleSheet } from "react-native";
 import { THEME } from "../themes/themes";
-
-const BackIcon = style => <Icon {...style} name="arrow-back" />;
+import { BackIcon, hideIconPassword, showIconPassword } from "../themes/icons";
 
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -67,9 +65,6 @@ export const RegisterScreen = ({ navigation }) => {
       })
     );
   };
-
-  const hideIconPassword = style => <Icon name="eye-outline" {...style} />;
-  const showIconPassword = style => <Icon name="eye-off-outline" {...style} />;
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

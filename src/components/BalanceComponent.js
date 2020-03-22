@@ -1,19 +1,16 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
+import { Button, Text, useTheme } from "@ui-kitten/components";
 
 import { THEME } from "../themes/themes";
 import { ThemeContext } from "../themes/theme-context";
 
-const HideIconBalance = style => <Icon name="eye-outline" {...style} />;
-const ShowIconBalance = style => <Icon name="eye-off-outline" {...style} />;
-
-const IncreaseIcon = style => (
-  <Icon {...style} width={26} height={26} name="arrow-upward-outline" />
-);
-const DecreaseIcon = style => (
-  <Icon {...style} width={26} height={26} name="arrow-downward-outline" />
-);
+import {
+  HideIconBalance,
+  ShowIconBalance,
+  IncreaseIcon,
+  DecreaseIcon
+} from "../themes/icons";
 
 const shadowProperty = {
   shadowColor: "#000",

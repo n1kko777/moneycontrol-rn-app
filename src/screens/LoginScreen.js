@@ -5,7 +5,6 @@ import {
   Button,
   Text,
   Input,
-  Icon,
   Spinner,
   Modal
 } from "@ui-kitten/components";
@@ -13,6 +12,8 @@ import {
 import { ScreenTemplate } from "../components/ScreenTemplate";
 
 import { THEME } from "../themes/themes";
+import { hideIconPassword, showIconPassword } from "../themes/icons";
+
 import { useDispatch, useSelector } from "react-redux";
 import { authLogin } from "../store/actions/authAction";
 import { getProfile } from "../store/actions/profileAction";
@@ -20,20 +21,16 @@ import { getProfile } from "../store/actions/profileAction";
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-  const { user, isAuth, loading } = state.auth;
+  const { isAuth, loading } = state.auth;
   const { profile } = state.profile;
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const hideIconPassword = style => <Icon name="eye-outline" {...style} />;
-  const showIconPassword = style => <Icon name="eye-off-outline" {...style} />;
-
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
   useEffect(() => {
     if (isAuth) {
-      console.log("LOGIN: profile :", profile);
       profile !== undefined && profile.hasOwnProperty("company")
         ? profile.company !== null
           ? navigateHome()

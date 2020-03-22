@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Alert, View, StyleSheet } from "react-native";
 import {
   Divider,
-  Icon,
   Layout,
   TopNavigation,
   TopNavigationAction,
@@ -19,7 +18,7 @@ import { logout } from "../store/actions/authAction";
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { THEME } from "../themes/themes";
 
-const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
+import { LogoutIcon } from "../themes/icons";
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();

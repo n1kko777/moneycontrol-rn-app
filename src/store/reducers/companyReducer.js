@@ -24,7 +24,6 @@ export const companyReducer = (state = initialState, action) => {
       };
     case CREATE_COMPANY:
       console.log("case CREATE_COMPANY:");
-      console.log("payloadCOMPANY :", payload);
       return {
         ...state,
         company: payload,

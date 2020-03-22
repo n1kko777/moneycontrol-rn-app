@@ -97,14 +97,15 @@ export const logout = () => async dispatch => {
   } catch (error) {
     dispatch(authFail(error));
   }
+
+  dispatch({
+    type: AUTH_LOGOUT
+  });
   dispatch({
     type: CLEAR_PROFILE
   });
   dispatch({
     type: CLEAR_COMPANY
-  });
-  dispatch({
-    type: AUTH_LOGOUT
   });
 };
 

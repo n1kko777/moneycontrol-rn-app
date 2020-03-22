@@ -1,41 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Layout,
   Icon,
   TopNavigation,
   TopNavigationAction,
-  OverflowMenu,
   useTheme
 } from "@ui-kitten/components";
 import { ThemeContext } from "../themes/theme-context";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { BalanceComponent } from "../components/BalanceComponent";
+import { MenuOptions } from "../components/MenuOptions";
+
 import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../store/actions/companyAction";
-import { logout } from "../store/actions/authAction";
-import { Alert } from "react-native";
 
 const ProfileIcon = style => <Icon {...style} name="person-outline" />;
-
-const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
-
-const MenuIcon = style => <Icon {...style} name="more-vertical" />;
-
-const LightIcon = style => <Icon {...style} name="sun-outline" />;
-const DarkIcon = style => <Icon {...style} name="moon-outline" />;
 
 const ProfileAction = props => (
   <TopNavigationAction {...props} icon={ProfileIcon} />
 );
 
 export const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  // console.log("kittenTheme :", kittenTheme);
-
-  const dispatch = useDispatch();
   const state = useSelector(state => state);
   const { company } = state.company;
 
@@ -47,72 +38,7 @@ export const HomeScreen = ({ navigation }) => {
     getData();
   }, [dispatch]);
 
-  const logoutHandler = async () => {
-    await dispatch(logout()).then(() => {
-      navigation.navigate("Login");
-    });
-  };
-
-  const navigateLogout = () => {
-    Alert.alert(
-      "Выход",
-      "Вы уверены что хотите выйти из учетной записи?",
-      [
-        {
-          text: "Отмена",
-          style: "cancel"
-        },
-        { text: "Выйти", onPress: logoutHandler }
-      ],
-      {
-        cancelable: false
-      }
-    );
-  };
-
-  const [menuVisible, setMenuVisible] = React.useState(false);
-
-  const menuData = [
-    {
-      title: `${themeContext.theme === "light" ? "Темная" : "Светлая"} тема`,
-      icon: themeContext.theme === "light" ? DarkIcon : LightIcon
-    },
-    {
-      title: "Выйти",
-      icon: LogoutIcon
-    }
-  ];
-
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
-
-  const onMenuItemSelect = index => {
-    switch (index) {
-      case 0:
-        themeContext.toggleTheme();
-        break;
-      case 1:
-        navigateLogout();
-        break;
-
-      default:
-        break;
-    }
-
-    setMenuVisible(false);
-  };
-
-  const renderMenuAction = () => (
-    <OverflowMenu
-      visible={menuVisible}
-      data={menuData}
-      onSelect={onMenuItemSelect}
-      onBackdropPress={toggleMenu}
-    >
-      <TopNavigationAction icon={MenuIcon} onPress={toggleMenu} />
-    </OverflowMenu>
-  );
+  const renderMenuAction = () => <MenuOptions navigation={navigation} />;
 
   const renderProfileAction = () => <ProfileAction onPress={() => {}} />;
 
