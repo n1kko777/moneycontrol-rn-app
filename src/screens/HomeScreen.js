@@ -162,7 +162,7 @@ export const HomeScreen = ({ navigation }) => {
         }}
       >
         <TopNavigation
-          style={{ position: "relative", zIndex: 10 }}
+          style={{ position: "relative", zIndex: 10, elevation: 5 }}
           title={company.company_name}
           alignment="center"
           leftControl={renderProfileAction()}
