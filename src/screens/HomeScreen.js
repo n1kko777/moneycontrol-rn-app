@@ -8,8 +8,7 @@ import {
   TopNavigation,
   TopNavigationAction,
   OverflowMenu,
-  useTheme,
-  ListItem
+  useTheme
 } from "@ui-kitten/components";
 import { ThemeContext } from "../themes/theme-context";
 
@@ -42,6 +41,18 @@ const DecreaseIcon = style => (
 const ProfileAction = props => (
   <TopNavigationAction {...props} icon={ProfileIcon} />
 );
+
+const shadowProperty = {
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+
+  elevation: 5
+};
 
 export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -142,6 +153,7 @@ export const HomeScreen = ({ navigation }) => {
         }}
       >
         <TopNavigation
+          style={{ position: "relative", zIndex: 10 }}
           title={company.company_name}
           alignment="center"
           leftControl={renderProfileAction()}
@@ -274,15 +286,18 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20
+    borderBottomRightRadius: 20,
+    ...shadowProperty,
+    marginBottom: 10,
+    zIndex: 1
   },
   hideBalance: {
     minWidth: 50,
     height: 4
   },
   creaseItem: {
-    marginLeft: 20,
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
     flex: 1
   },
