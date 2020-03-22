@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../store/actions/companyAction";
 import { getAccount } from "../store/actions/accountAction";
 import { getTransaction } from "../store/actions/transactionAction";
+import { getAction } from "../store/actions/actionAction";
 
 const ProfileIcon = style => <Icon {...style} name="person-outline" />;
 
@@ -36,17 +37,28 @@ export const HomeScreen = ({ navigation }) => {
   const { company, loading: companyLoading } = state.company;
   const { accounts, loading: accountLoading } = state.account;
   const { transactions, loading: transactionLoading } = state.transaction;
+  const { actions, loading: actionLoading } = state.action;
 
   const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
   const [totalTransactions, setTotalTransactions] = React.useState(
     parseFloat(0)
   );
+  const [totalActions, setTotalActions] = React.useState(parseFloat(0));
 
   const getData = async () => {
     await dispatch(getCompany());
     await dispatch(getAccount());
     await dispatch(getTransaction());
+    await dispatch(getAction());
   };
+
+  useEffect(() => {
+    setTotalActions(
+      parseFloat(
+        actions.reduce((sum, nextAcc) => (sum += +nextAcc.action_amount), 0)
+      )
+    );
+  }, [actions]);
 
   useEffect(() => {
     setTotalTransactions(
@@ -110,6 +122,7 @@ export const HomeScreen = ({ navigation }) => {
         <BalanceComponent
           balance={totalBalance}
           transaction={totalTransactions}
+          action={totalActions}
         />
         <Layout
           style={{
