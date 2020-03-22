@@ -3,7 +3,8 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Platform
 } from "react-native";
 import { ThemeContext } from "../themes/theme-context";
 
@@ -23,6 +24,7 @@ export const ScreenTemplate = ({ children }) => {
         <SafeAreaView
           style={{
             flex: 1,
+            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
             backgroundColor:
               themeContext.theme === "light"
                 ? THEME.BACKGROUND_LIGHT
