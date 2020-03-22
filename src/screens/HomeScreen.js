@@ -26,7 +26,8 @@ const LogoutIcon = style => <Icon {...style} name="logout" pack="assets" />;
 
 const MenuIcon = style => <Icon {...style} name="more-vertical" />;
 
-const InfoIcon = style => <Icon {...style} name="info" />;
+const LightIcon = style => <Icon {...style} name="sun-outline" />;
+const DarkIcon = style => <Icon {...style} name="moon-outline" />;
 
 const HideIconBalance = style => <Icon name="eye-outline" {...style} />;
 const ShowIconBalance = style => <Icon name="eye-off-outline" {...style} />;
@@ -103,11 +104,11 @@ export const HomeScreen = ({ navigation }) => {
 
   const menuData = [
     {
-      title: "About",
-      icon: InfoIcon
+      title: `${themeContext.theme === "light" ? "Темная" : "Светлая"} тема`,
+      icon: themeContext.theme === "light" ? DarkIcon : LightIcon
     },
     {
-      title: "Logout",
+      title: "Выйти",
       icon: LogoutIcon
     }
   ];
@@ -117,8 +118,16 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   const onMenuItemSelect = index => {
-    if (index === 1) {
-      navigateLogout();
+    switch (index) {
+      case 0:
+        themeContext.toggleTheme();
+        break;
+      case 1:
+        navigateLogout();
+        break;
+
+      default:
+        break;
     }
 
     setMenuVisible(false);
@@ -268,14 +277,7 @@ export const HomeScreen = ({ navigation }) => {
             justifyContent: "center",
             alignItems: "center"
           }}
-        >
-          <Button
-            style={{ marginVertical: 4, borderRadius: THEME.BUTTON_RADIUS }}
-            onPress={themeContext.toggleTheme}
-          >
-            TOGGLE THEME
-          </Button>
-        </Layout>
+        ></Layout>
       </Layout>
     </ScreenTemplate>
   );
