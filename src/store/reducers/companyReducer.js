@@ -16,7 +16,6 @@ export const companyReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case GET_COMPANY:
-      console.log("==========================");
       console.log("case GET_COMPANY:");
       return {
         ...state,
@@ -39,6 +38,7 @@ export const companyReducer = (state = initialState, action) => {
         loading: false
       };
     case LOADING_COMPANY:
+      console.log("==========================");
       console.log("case LOADING_COMPANY:");
       return {
         ...state,
