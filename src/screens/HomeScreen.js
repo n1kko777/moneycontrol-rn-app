@@ -18,6 +18,7 @@ import { MenuOptions } from "../components/MenuOptions";
 import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../store/actions/companyAction";
 import { getAccount } from "../store/actions/accountAction";
+import { getTransaction } from "../store/actions/transactionAction";
 
 const ProfileIcon = style => <Icon {...style} name="person-outline" />;
 
@@ -33,24 +34,38 @@ export const HomeScreen = ({ navigation }) => {
 
   const state = useSelector(state => state);
   const { company, loading: companyLoading } = state.company;
-  const { account, loading: accountLoading } = state.account;
-
-  const [localLoading, setLocalLoading] = React.useState(
-    companyLoading || accountLoading
-  );
+  const { accounts, loading: accountLoading } = state.account;
+  const { transactions, loading: transactionLoading } = state.transaction;
 
   const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
+  const [totalTransactions, setTotalTransactions] = React.useState(
+    parseFloat(0)
+  );
 
   const getData = async () => {
     await dispatch(getCompany());
-    await dispatch(getAccount()).then(() => {
-      setTotalBalance(
-        parseFloat(
-          account.reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-        )
-      );
-    });
+    await dispatch(getAccount());
+    await dispatch(getTransaction());
   };
+
+  useEffect(() => {
+    setTotalTransactions(
+      parseFloat(
+        transactions.reduce(
+          (sum, nextAcc) => (sum += +nextAcc.transaction_amount),
+          0
+        )
+      )
+    );
+  }, [transactions]);
+
+  useEffect(() => {
+    setTotalBalance(
+      parseFloat(
+        accounts.reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
+      )
+    );
+  }, [accounts]);
 
   useEffect(() => {
     getData();
@@ -70,7 +85,10 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <Modal backdropStyle={styles.backdrop} visible={localLoading}>
+      <Modal
+        backdropStyle={styles.backdrop}
+        visible={companyLoading || accountLoading || transactionLoading}
+      >
         {renderModalElement()}
       </Modal>
       <Layout
@@ -89,7 +107,10 @@ export const HomeScreen = ({ navigation }) => {
           leftControl={renderProfileAction()}
           rightControls={renderMenuAction()}
         />
-        <BalanceComponent balance={totalBalance} />
+        <BalanceComponent
+          balance={totalBalance}
+          transaction={totalTransactions}
+        />
         <Layout
           style={{
             flex: 1,

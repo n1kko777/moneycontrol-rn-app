@@ -7,7 +7,7 @@ import {
 } from "../types";
 
 const initialState = {
-  account: [],
+  accounts: [],
   error: null,
   loading: false
 };
@@ -19,21 +19,21 @@ export const accountReducer = (state = initialState, action) => {
       console.log("case GET_ACCOUNT:");
       return {
         ...state,
-        account: payload,
+        accounts: payload,
         loading: false
       };
     case CREATE_ACCOUNT:
       console.log("case CREATE_ACCOUNT:");
       return {
         ...state,
-        account: payload,
+        accounts: payload,
         loading: false
       };
     case CLEAR_ACCOUNT:
       console.log("case CLEAR_ACCOUNT:");
       return {
         ...state,
-        account: {},
+        accounts: [],
         loading: false
       };
     case LOADING_ACCOUNT:

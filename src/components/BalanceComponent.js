@@ -24,7 +24,7 @@ const shadowProperty = {
   elevation: 5
 };
 
-export const BalanceComponent = ({ balance }) => {
+export const BalanceComponent = ({ balance, transaction }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -52,11 +52,15 @@ export const BalanceComponent = ({ balance }) => {
     if (parts.length > 1) {
       output += "." + parts[1];
     }
-    balance = output.slice(0, len + 4);
+    return output.slice(0, len + 4);
   };
 
   if (balance !== 0) {
-    splitToDigits(balance.toString().replace(/\s/g, ""));
+    balance = splitToDigits(balance.toString().replace(/\s/g, ""));
+  }
+
+  if (transaction !== 0) {
+    transaction = splitToDigits(transaction.toString().replace(/\s/g, ""));
   }
 
   const toggleVisibleBalance = () => {
@@ -147,7 +151,7 @@ export const BalanceComponent = ({ balance }) => {
                 }}
                 category="h5"
               >
-                0,00 ₽
+                {transaction} ₽
               </Text>
             ) : (
               <View
@@ -168,7 +172,7 @@ export const BalanceComponent = ({ balance }) => {
 
 const styles = StyleSheet.create({
   balanceContainer: {
-    paddingVertical: 10,
+    paddingBottom: 20,
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
