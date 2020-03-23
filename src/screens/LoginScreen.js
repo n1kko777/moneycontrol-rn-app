@@ -31,6 +31,12 @@ export const LoginScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (isAuth) {
+      dispatch(getProfile());
+    }
+  }, [isAuth]);
+
+  useEffect(() => {
+    if (isAuth) {
       profile !== undefined && profile.hasOwnProperty("company")
         ? profile.company !== null
           ? navigateHome()
@@ -40,9 +46,7 @@ export const LoginScreen = ({ route, navigation }) => {
   }, [profile]);
 
   const onSubmit = async () => {
-    await dispatch(authLogin(email, password)).then(() => {
-      dispatch(getProfile());
-    });
+    await dispatch(authLogin(email, password));
   };
 
   const navigateHome = () => {

@@ -33,9 +33,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
   const { company, loading: companyLoading } = companyStore;
 
   const [companyName, setCompanyName] = React.useState("");
-  const [companyId, setCompanyId] = React.useState(
-    "faee1dfe-e7f1-49a8-8424-dfc4e6190ef5"
-  );
+  const [companyId, setCompanyId] = React.useState("");
 
   useEffect(() => {
     isAuth && profile.company !== null && navigation.navigate("Home");

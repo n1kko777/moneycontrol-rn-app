@@ -56,6 +56,7 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuth: false,
+        isRegister: false,
         user: {}
       };
     case REMIND_ME:
