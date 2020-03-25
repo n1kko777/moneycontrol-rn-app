@@ -20,6 +20,7 @@ import { getCompany } from "../store/actions/companyAction";
 import { getAccount } from "../store/actions/accountAction";
 import { getTransaction } from "../store/actions/transactionAction";
 import { getAction } from "../store/actions/actionAction";
+import { getTransfer } from "../store/actions/transferAction";
 
 const ProfileIcon = style => <Icon {...style} name="person-outline" />;
 
@@ -38,6 +39,7 @@ export const HomeScreen = ({ navigation }) => {
   const { accounts, loading: accountLoading } = state.account;
   const { transactions, loading: transactionLoading } = state.transaction;
   const { actions, loading: actionLoading } = state.action;
+  const { transfer, loading: transferLoading } = state.transfer;
 
   const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
   const [totalTransactions, setTotalTransactions] = React.useState(
@@ -50,6 +52,7 @@ export const HomeScreen = ({ navigation }) => {
     await dispatch(getAccount());
     await dispatch(getTransaction());
     await dispatch(getAction());
+    await dispatch(getTransfer());
   };
 
   useEffect(() => {
@@ -99,7 +102,13 @@ export const HomeScreen = ({ navigation }) => {
     <ScreenTemplate>
       <Modal
         backdropStyle={styles.backdrop}
-        visible={companyLoading || accountLoading || transactionLoading}
+        visible={
+          companyLoading ||
+          accountLoading ||
+          transactionLoading ||
+          actionLoading ||
+          transferLoading
+        }
       >
         {renderModalElement()}
       </Modal>

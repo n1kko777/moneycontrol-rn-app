@@ -1,31 +1,31 @@
 import axios from "axios";
 import {
-  GET_ACTION,
-  CREATE_ACTION,
-  LOADING_ACTION,
-  ERROR_ACTION
+  GET_TRANSFER,
+  CREATE_TRANSFER,
+  LOADING_TRANSFER,
+  ERROR_TRANSFER
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
 
-// Get action from server
-export const getAction = () => async dispatch => {
+// Get transfer from server
+export const getTransfer = () => async dispatch => {
   dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     await axios
-      .get(`${endpointAPI}/Action/`, {
+      .get(`${endpointAPI}/Transfer/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Token " + token
         }
       })
       .then(res => {
-        const action = res.data.filter(elem =>
+        const transfer = res.data.filter(elem =>
           moment(elem.last_updated).isBetween(
             moment().startOf("month"),
             moment().endOf("month")
@@ -33,21 +33,21 @@ export const getAction = () => async dispatch => {
         );
 
         dispatch({
-          type: GET_ACTION,
-          payload: action
+          type: GET_TRANSFER,
+          payload: transfer
         });
       })
 
       .catch(error => {
-        dispatch(actionFail(error));
+        dispatch(transferFail(error));
       });
   } catch (error) {
-    dispatch(actionFail(error));
+    dispatch(transferFail(error));
   }
 };
 
-// Create action from server
-export const createAction = action => async dispatch => {
+// Create transfer from server
+export const createTransfer = transfer => async dispatch => {
   dispatch(setLoading());
 
   try {
@@ -55,9 +55,9 @@ export const createAction = action => async dispatch => {
 
     await axios
       .post(
-        `${endpointAPI}/Action/`,
+        `${endpointAPI}/Transfer/`,
         {
-          ...action
+          ...transfer
         },
         {
           headers: {
@@ -67,23 +67,27 @@ export const createAction = action => async dispatch => {
         }
       )
       .then(res => {
-        const action = res.data;
-
+        const transfer = res.data.filter(elem =>
+          moment(elem.last_updated).isBetween(
+            moment().startOf("month"),
+            moment().endOf("month")
+          )
+        );
         dispatch({
-          type: CREATE_ACTION,
-          payload: action
+          type: CREATE_TRANSFER,
+          payload: transfer
         });
       })
 
       .catch(error => {
-        dispatch(actionFail(error));
+        dispatch(transferFail(error));
       });
   } catch (error) {
-    dispatch(actionFail(error));
+    dispatch(transferFail(error));
   }
 };
 
-export const actionFail = error => dispatch => {
+export const transferFail = error => dispatch => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -121,7 +125,7 @@ export const actionFail = error => dispatch => {
   });
 
   dispatch({
-    type: ERROR_ACTION,
+    type: ERROR_TRANSFER,
     payload: error
   });
 };
@@ -129,6 +133,6 @@ export const actionFail = error => dispatch => {
 // Set loading to true
 export const setLoading = () => dispatch => {
   dispatch({
-    type: LOADING_ACTION
+    type: LOADING_TRANSFER
   });
 };
