@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { TouchableOpacity, View, Image, StyleSheet } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Image,
+  StyleSheet,
+  AsyncStorage
+} from "react-native";
 import {
   Layout,
   Button,
@@ -21,13 +27,30 @@ import { getProfile } from "../store/actions/profileAction";
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-  const { isAuth, loading } = state.auth;
-  const { profile } = state.profile;
+  const { isAuth, loading: authLoading } = state.auth;
+  const { profile, loading: profileLoading } = state.profile;
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
+
+  const checkLogIn = async () => {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    if (token !== null) {
+      await dispatch(getProfile()).then(() => {
+        profile !== undefined && profile.hasOwnProperty("company")
+          ? profile.company !== null
+            ? navigateHome()
+            : navigateCompanyManager()
+          : navigateCreateProfile();
+      });
+    }
+  };
+
+  useEffect(() => {
+    checkLogIn();
+  }, []);
 
   useEffect(() => {
     if (isAuth) {
@@ -73,7 +96,10 @@ export const LoginScreen = ({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <Modal backdropStyle={styles.backdrop} visible={loading}>
+      <Modal
+        backdropStyle={styles.backdrop}
+        visible={authLoading || profileLoading}
+      >
         {renderModalElement()}
       </Modal>
       <Layout
