@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 
 import { ThemeContext } from "../themes/theme-context";
 import {
-  MenuIcon,
+  MoreIconHorizontal,
   LogoutIcon,
   LightIcon,
   DarkIcon,
@@ -87,7 +87,7 @@ export const MenuOptions = ({ navigation, getData }) => {
       onSelect={onMenuItemSelect}
       onBackdropPress={toggleMenu}
     >
-      <TopNavigationAction icon={MenuIcon} onPress={toggleMenu} />
+      <TopNavigationAction icon={MoreIconHorizontal} onPress={toggleMenu} />
     </OverflowMenu>
   );
 };

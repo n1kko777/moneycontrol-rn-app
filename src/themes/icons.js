@@ -27,3 +27,13 @@ export const showIconPassword = style => (
 export const BackIcon = style => <Icon {...style} name="arrow-back" />;
 
 export const UpdateIcon = style => <Icon {...style} name="refresh-outline" />;
+
+export const HomeIcon = style => <Icon {...style} name="home-outline" />;
+export const OoperationIcon = style => <Icon {...style} name="list-outline" />;
+export const AddIcon = style => (
+  <Icon {...style} width={32} height={32} name="plus-outline" />
+);
+export const TeamIcon = style => <Icon {...style} name="people-outline" />;
+export const MoreIconHorizontal = style => (
+  <Icon {...style} name="more-horizontal-outline" />
+);
