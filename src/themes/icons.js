@@ -42,3 +42,5 @@ export const MoreIconHorizontal = style => (
 export const RightIcon = style => (
   <Icon {...style} name="chevron-right-outline" />
 );
+
+export const ProfileIcon = style => <Icon {...style} name="person-outline" />;

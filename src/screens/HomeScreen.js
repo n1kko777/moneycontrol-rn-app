@@ -1,19 +1,10 @@
 import React, { useEffect } from "react";
-import {
-  Layout,
-  Icon,
-  TopNavigation,
-  TopNavigationAction,
-  useTheme,
-  Modal,
-  Spinner
-} from "@ui-kitten/components";
+import { Layout, useTheme, Modal, Spinner } from "@ui-kitten/components";
 import { StyleSheet } from "react-native";
 import { ThemeContext } from "../themes/theme-context";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { BalanceComponent } from "../components/BalanceComponent";
-import { MenuOptions } from "../components/MenuOptions";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../store/actions/companyAction";
@@ -24,12 +15,7 @@ import { getTransfer } from "../store/actions/transferAction";
 
 import { getShortName } from "../getShortName";
 import { HomeList } from "../components/HomeList";
-
-const ProfileIcon = style => <Icon {...style} name="person-outline" />;
-
-const ProfileAction = props => (
-  <TopNavigationAction {...props} icon={ProfileIcon} />
-);
+import { Toolbar } from "../components/Toolbar";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -89,12 +75,6 @@ export const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     getData();
   }, [dispatch]);
-
-  const renderMenuAction = () => (
-    <MenuOptions navigation={navigation} getData={getData} />
-  );
-
-  const renderProfileAction = () => <ProfileAction onPress={() => {}} />;
 
   const renderModalElement = () => (
     <Layout level="3" style={styles.modalContainer}>
@@ -198,13 +178,12 @@ export const HomeScreen = ({ navigation }) => {
             ]
         }}
       >
-        <TopNavigation
-          style={{ position: "relative", zIndex: 10, elevation: 5 }}
+        <Toolbar
           title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
-          alignment="center"
-          leftControl={renderProfileAction()}
-          rightControls={renderMenuAction()}
+          navigation={navigation}
+          getData={getData}
         />
+
         <BalanceComponent
           balance={totalBalance}
           transaction={totalTransactions}
