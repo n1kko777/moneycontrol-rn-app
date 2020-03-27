@@ -103,6 +103,7 @@ export const HomeScreen = ({ navigation }) => {
   );
 
   const allOpprations = [];
+  const homeListData = [];
 
   if (company.profiles !== undefined) {
     transactions.length !== 0 &&
@@ -152,28 +153,27 @@ export const HomeScreen = ({ navigation }) => {
           balance: elem.transfer_amount
         }))
       );
+
+    accounts.length !== 0 &&
+      homeListData.push({
+        title: "Счета",
+        data: accounts
+          .filter(acc => acc.profile === profile.id)
+          .map(elem => ({
+            id: elem.id,
+            name: elem.account_name,
+            balance: elem.balance
+          }))
+      });
+
+    [...allOpprations].length !== 0 &&
+      homeListData.push({
+        title: "Последние операции",
+        data: allOpprations
+          .sort((a, b) => new Date(b.id) - new Date(a.id))
+          .filter((el, index) => index < 15)
+      });
   }
-
-  const homeListData = [];
-  accounts.length !== 0 &&
-    homeListData.push({
-      title: "Счета",
-      data: accounts
-        .filter(acc => acc.profile === profile.id)
-        .map(elem => ({
-          id: elem.id,
-          name: elem.account_name,
-          balance: elem.balance
-        }))
-    });
-
-  [...allOpprations].length !== 0 &&
-    homeListData.push({
-      title: "Последние операции",
-      data: allOpprations
-        .sort((a, b) => new Date(b.id) - new Date(a.id))
-        .filter((el, index) => index < 15)
-    });
 
   return (
     <ScreenTemplate>
@@ -200,7 +200,7 @@ export const HomeScreen = ({ navigation }) => {
       >
         <TopNavigation
           style={{ position: "relative", zIndex: 10, elevation: 5 }}
-          title={company.company_name}
+          title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
           alignment="center"
           leftControl={renderProfileAction()}
           rightControls={renderMenuAction()}
