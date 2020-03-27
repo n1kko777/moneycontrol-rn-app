@@ -1,8 +1,8 @@
 import React from "react";
 import { FlatList, View } from "react-native";
-import { Text } from "react-native-elements";
 
 import { HomeCard } from "../components/HomeCard";
+import { Text } from "@ui-kitten/components";
 
 export const HomeList = ({ navigation, dataList }) => {
   const keyExtractor = item => `${dataList.indexOf(item)}`;

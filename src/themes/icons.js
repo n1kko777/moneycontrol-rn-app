@@ -38,3 +38,7 @@ export const TeamIcon = style => <Icon {...style} name="people-outline" />;
 export const MoreIconHorizontal = style => (
   <Icon {...style} name="more-horizontal-outline" />
 );
+
+export const RightIcon = style => (
+  <Icon {...style} name="chevron-right-outline" />
+);

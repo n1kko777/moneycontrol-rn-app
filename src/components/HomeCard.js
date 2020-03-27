@@ -1,12 +1,18 @@
 import React from "react";
-import { Layout, Text, Button } from "@ui-kitten/components";
+import { Layout, Text, useTheme } from "@ui-kitten/components";
 import { View } from "react-native";
 
-import { AddSmallIcon } from "../themes/icons";
+import { RightIcon } from "../themes/icons";
 import { shadowProperty } from "../themes/themes";
 import { HomeCardItem } from "./HomeCardItem";
 
+import { ThemeContext } from "../themes/theme-context";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 export const HomeCard = ({ item }) => {
+  const themeContext = React.useContext(ThemeContext);
+  const kittenTheme = useTheme();
+
   return (
     <Layout
       style={{
@@ -19,19 +25,33 @@ export const HomeCard = ({ item }) => {
         ...shadowProperty
       }}
     >
-      <View
+      <TouchableOpacity
         style={{
           alignItems: "center",
           justifyContent: "space-between",
-          flexDirection: "row"
+          flexDirection: "row",
+          marginBottom: 20
         }}
       >
         <Text category="h5">{item.title}</Text>
-      </View>
+        <RightIcon
+          fill={
+            kittenTheme[
+              `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ]
+          }
+          style={{
+            width: 30,
+            height: 30
+          }}
+        />
+      </TouchableOpacity>
 
       <View>
         {item.data.map(elem => (
           <HomeCardItem
+            kittenTheme={kittenTheme}
+            themeContext={themeContext}
             key={elem.id}
             name={elem.name}
             amount={elem.balance}

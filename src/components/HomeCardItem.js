@@ -1,20 +1,21 @@
 import React from "react";
 import { splitToDigits } from "../splitToDigits";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Text, useTheme } from "@ui-kitten/components";
-import { ThemeContext } from "../themes/theme-context";
+import { Text } from "@ui-kitten/components";
 
-export const HomeCardItem = ({ name, amount, color }) => {
-  const themeContext = React.useContext(ThemeContext);
-  const kittenTheme = useTheme();
-
+export const HomeCardItem = ({
+  kittenTheme,
+  themeContext,
+  name,
+  amount,
+  color
+}) => {
   return (
     <TouchableOpacity
       style={{
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        marginTop: 8,
         paddingBottom: 5
       }}
     >
