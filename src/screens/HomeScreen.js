@@ -22,6 +22,8 @@ import { getTransaction } from "../store/actions/transactionAction";
 import { getAction } from "../store/actions/actionAction";
 import { getTransfer } from "../store/actions/transferAction";
 
+import { HomeList } from "../components/HomeList";
+
 const ProfileIcon = style => <Icon {...style} name="person-outline" />;
 
 const ProfileAction = props => (
@@ -35,6 +37,7 @@ export const HomeScreen = ({ navigation }) => {
   const kittenTheme = useTheme();
 
   const state = useSelector(state => state);
+  const { profile } = state.profile;
   const { company, loading: companyLoading } = state.company;
   const { accounts, loading: accountLoading } = state.account;
   const { transactions, loading: transactionLoading } = state.transaction;
@@ -139,11 +142,19 @@ export const HomeScreen = ({ navigation }) => {
             backgroundColor:
               kittenTheme[
                 `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-              ],
-            justifyContent: "center",
-            alignItems: "center"
+              ]
           }}
-        ></Layout>
+        >
+          <HomeList
+            dataList={[
+              {
+                title: "Счета",
+                data: accounts.filter(acc => acc.profile === profile.id)
+              }
+            ]}
+            onRefresh={getData}
+          />
+        </Layout>
       </Layout>
     </ScreenTemplate>
   );

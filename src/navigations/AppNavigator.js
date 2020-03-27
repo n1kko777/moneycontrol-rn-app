@@ -11,7 +11,13 @@ import { RootNavigator } from "./RootNavigator";
 const Stack = createStackNavigator();
 
 const HomeNavigator = () => (
-  <Stack.Navigator headerMode="none" initialRouteName="Login">
+  <Stack.Navigator
+    headerMode="none"
+    screenOptions={{
+      gestureEnabled: false
+    }}
+    initialRouteName="Login"
+  >
     <Stack.Screen name="Home" component={RootNavigator} />
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Register" component={RegisterScreen} />

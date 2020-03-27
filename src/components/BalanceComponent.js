@@ -2,8 +2,10 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, Text, useTheme } from "@ui-kitten/components";
 
-import { THEME } from "../themes/themes";
+import { THEME, shadowProperty } from "../themes/themes";
 import { ThemeContext } from "../themes/theme-context";
+
+import { splitToDigits } from "../splitToDigits.js";
 
 import {
   HideIconBalance,
@@ -12,48 +14,11 @@ import {
   DecreaseIcon
 } from "../themes/icons";
 
-const shadowProperty = {
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 2
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
-
-  elevation: 5
-};
-
 export const BalanceComponent = ({ balance, transaction, action }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
   const [isVisibleBalance, setIsVisibleBalance] = React.useState(true);
-
-  const splitToDigits = str => {
-    let parts = (str + "").split("."),
-      main = parts[0],
-      len = main.length,
-      output = "",
-      i = len - 1;
-
-    while (i >= 0) {
-      output = main.charAt(i) + output;
-      if ((len - i) % 3 === 0 && i > 0) {
-        output = " " + output;
-      }
-      --i;
-    }
-
-    if (parts[1]) {
-      parts[1] = parts[1].slice(0, 3);
-    }
-
-    if (parts.length > 1) {
-      output += "." + parts[1];
-    }
-    return output.slice(0, len + 4);
-  };
 
   if (balance !== 0) {
     balance = splitToDigits(balance.toString().replace(/\s/g, ""));
