@@ -1,6 +1,6 @@
 import React from "react";
 import { TopNavigationAction, OverflowMenu } from "@ui-kitten/components";
-import { Alert } from "react-native";
+import { Alert, AsyncStorage } from "react-native";
 
 import { ThemeContext } from "../themes/theme-context";
 import {

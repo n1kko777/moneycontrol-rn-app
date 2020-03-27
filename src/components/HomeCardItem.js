@@ -1,9 +1,13 @@
 import React from "react";
 import { splitToDigits } from "../splitToDigits";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Text } from "@ui-kitten/components";
+import { Text, useTheme } from "@ui-kitten/components";
+import { ThemeContext } from "../themes/theme-context";
 
-export const HomeCardItem = ({ name, amount }) => {
+export const HomeCardItem = ({ name, amount, color }) => {
+  const themeContext = React.useContext(ThemeContext);
+  const kittenTheme = useTheme();
+
   return (
     <TouchableOpacity
       style={{
@@ -14,10 +18,32 @@ export const HomeCardItem = ({ name, amount }) => {
         paddingBottom: 5
       }}
     >
-      <Text style={{ textDecorationLine: "underline" }} category="s1">
+      <Text
+        style={{
+          color:
+            kittenTheme[
+              color !== undefined
+                ? color
+                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ],
+          textDecorationLine: "underline"
+        }}
+        category="s1"
+      >
         {name}
       </Text>
-      <Text>{splitToDigits(amount.toString())}</Text>
+      <Text
+        style={{
+          color:
+            kittenTheme[
+              color !== undefined
+                ? color
+                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ]
+        }}
+      >
+        {splitToDigits(amount.toString())} ₽
+      </Text>
     </TouchableOpacity>
   );
 };

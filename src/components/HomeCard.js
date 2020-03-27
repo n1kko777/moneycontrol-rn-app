@@ -26,20 +26,16 @@ export const HomeCard = ({ item }) => {
           flexDirection: "row"
         }}
       >
-        <Text category="h4">{item.title}</Text>
-        <Button
-          style={{ marginRight: -8 }}
-          appearance="ghost"
-          icon={AddSmallIcon}
-        />
+        <Text category="h5">{item.title}</Text>
       </View>
 
       <View>
-        {item.data.map(account => (
+        {item.data.map(elem => (
           <HomeCardItem
-            key={account.id}
-            name={account.account_name}
-            amount={account.balance}
+            key={elem.id}
+            name={elem.name}
+            amount={elem.balance}
+            color={elem.style}
           />
         ))}
       </View>
