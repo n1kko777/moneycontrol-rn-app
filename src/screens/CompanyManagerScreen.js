@@ -6,9 +6,7 @@ import {
   Divider,
   Text,
   Button,
-  Input,
-  Modal,
-  Spinner
+  Input
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
@@ -16,9 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCompany } from "../store/actions/companyAction";
 import { updateProfile, getProfile } from "../store/actions/profileAction";
 import { logout } from "../store/actions/authAction";
-import { Alert, StyleSheet } from "react-native";
+import { Alert } from "react-native";
 
 import { LogoutIcon } from "../themes/icons";
+
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -79,21 +79,10 @@ export const CompanyManagerScreen = ({ navigation }) => {
     dispatch(updateProfile(teamProfile));
   };
 
-  const renderModalElement = () => (
-    <Layout level="3" style={styles.modalContainer}>
-      <Spinner status="primary" />
-    </Layout>
-  );
-
   return (
     <ScreenTemplate>
       <>
-        <Modal
-          backdropStyle={styles.backdrop}
-          visible={profileLoading || companyLoading}
-        >
-          {renderModalElement()}
-        </Modal>
+        <LoadingSpinner loading={profileLoading || companyLoading} />
         <TopNavigation
           title="Управление компаниями"
           alignment="center"
@@ -137,20 +126,3 @@ export const CompanyManagerScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    minHeight: 256,
-    padding: 16
-  },
-  modalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    borderRadius: 10,
-    padding: 16
-  },
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  }
-});

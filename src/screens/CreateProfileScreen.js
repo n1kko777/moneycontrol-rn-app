@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
-import { Alert, View, StyleSheet } from "react-native";
+import { Alert, View } from "react-native";
 import {
   Divider,
   Layout,
   TopNavigation,
   TopNavigationAction,
   Input,
-  Button,
-  Modal,
-  Spinner
+  Button
 } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +17,8 @@ import { ScreenTemplate } from "../components/ScreenTemplate";
 import { THEME } from "../themes/themes";
 
 import { LogoutIcon } from "../themes/icons";
+
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -43,12 +43,6 @@ export const CreateProfileScreen = ({ navigation }) => {
     };
     dispatch(createProfile(newProfile));
   };
-
-  const renderModalElement = () => (
-    <Layout level="3" style={styles.modalContainer}>
-      <Spinner status="primary" />
-    </Layout>
-  );
 
   const logoutHandler = async () => {
     await dispatch(logout()).then(() => {
@@ -80,9 +74,7 @@ export const CreateProfileScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
-        <Modal backdropStyle={styles.backdrop} visible={loading}>
-          {renderModalElement()}
-        </Modal>
+        <LoadingSpinner loading={loading} />
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"
@@ -140,20 +132,3 @@ export const CreateProfileScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    minHeight: 256,
-    padding: 16
-  },
-  modalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    borderRadius: 10,
-    padding: 16
-  },
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  }
-});

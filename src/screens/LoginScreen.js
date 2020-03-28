@@ -1,19 +1,6 @@
 import React, { useEffect } from "react";
-import {
-  TouchableOpacity,
-  View,
-  Image,
-  StyleSheet,
-  AsyncStorage
-} from "react-native";
-import {
-  Layout,
-  Button,
-  Text,
-  Input,
-  Spinner,
-  Modal
-} from "@ui-kitten/components";
+import { TouchableOpacity, View, Image, AsyncStorage } from "react-native";
+import { Layout, Button, Text, Input } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
 
@@ -23,6 +10,8 @@ import { hideIconPassword, showIconPassword } from "../themes/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { authLogin } from "../store/actions/authAction";
 import { getProfile } from "../store/actions/profileAction";
+
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -88,20 +77,9 @@ export const LoginScreen = ({ route, navigation }) => {
     navigation.navigate("Register");
   };
 
-  const renderModalElement = () => (
-    <Layout level="3" style={styles.modalContainer}>
-      <Spinner status="primary" />
-    </Layout>
-  );
-
   return (
     <ScreenTemplate>
-      <Modal
-        backdropStyle={styles.backdrop}
-        visible={authLoading || profileLoading}
-      >
-        {renderModalElement()}
-      </Modal>
+      <LoadingSpinner loading={authLoading || profileLoading} />
       <Layout
         style={{
           flex: 1,
@@ -179,20 +157,3 @@ export const LoginScreen = ({ route, navigation }) => {
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    minHeight: 256,
-    padding: 16
-  },
-  modalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    borderRadius: 10,
-    padding: 16
-  },
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  }
-});

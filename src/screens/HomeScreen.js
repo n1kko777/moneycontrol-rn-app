@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Layout, useTheme, Modal, Spinner } from "@ui-kitten/components";
-import { StyleSheet } from "react-native";
+import { Layout, useTheme } from "@ui-kitten/components";
 import { ThemeContext } from "../themes/theme-context";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
@@ -16,6 +15,8 @@ import { getTransfer } from "../store/actions/transferAction";
 import { getShortName } from "../getShortName";
 import { HomeList } from "../components/HomeList";
 import { Toolbar } from "../components/Toolbar";
+
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -75,12 +76,6 @@ export const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     getData();
   }, [dispatch]);
-
-  const renderModalElement = () => (
-    <Layout level="3" style={styles.modalContainer}>
-      <Spinner status="primary" />
-    </Layout>
-  );
 
   const allOpprations = [];
   const homeListData = [];
@@ -157,18 +152,15 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <Modal
-        backdropStyle={styles.backdrop}
-        visible={
+      <LoadingSpinner
+        loading={
           companyLoading ||
           accountLoading ||
           transactionLoading ||
           actionLoading ||
           transferLoading
         }
-      >
-        {renderModalElement()}
-      </Modal>
+      />
       <Layout
         style={{
           flex: 1,
@@ -204,20 +196,3 @@ export const HomeScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    minHeight: 256,
-    padding: 16
-  },
-  modalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    borderRadius: 10,
-    padding: 16
-  },
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  }
-});

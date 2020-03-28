@@ -11,7 +11,7 @@ const ProfileAction = props => (
   <TopNavigationAction {...props} icon={ProfileIcon} />
 );
 
-export const Toolbar = ({ title, navigation, getData }) => {
+export const Toolbar = ({ title, navigation, getData, style }) => {
   const renderMenuAction = () => (
     <MenuOptions navigation={navigation} getData={getData} />
   );
@@ -20,7 +20,13 @@ export const Toolbar = ({ title, navigation, getData }) => {
 
   return (
     <TopNavigation
-      style={{ position: "relative", zIndex: 10, elevation: 5 }}
+      style={{
+        ...style,
+        position: "relative",
+        zIndex: 10,
+        elevation: 5,
+        zIndex: 5
+      }}
       title={title}
       alignment="center"
       leftControl={renderProfileAction()}

@@ -10,15 +10,15 @@ import {
   TopNavigation,
   TopNavigationAction,
   Input,
-  Modal,
-  Spinner,
   Button
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { THEME } from "../themes/themes";
 import { BackIcon, hideIconPassword, showIconPassword } from "../themes/icons";
+
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -44,12 +44,6 @@ export const RegisterScreen = ({ navigation }) => {
   const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
   const [isVisiblePassword2, setIsVisiblePassword2] = React.useState(false);
 
-  const renderModalElement = () => (
-    <Layout level="3" style={styles.modalContainer}>
-      <Spinner status="primary" />
-    </Layout>
-  );
-
   const navigateBack = () => {
     navigation.goBack();
   };
@@ -73,9 +67,7 @@ export const RegisterScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
-        <Modal backdropStyle={styles.backdrop} visible={loading}>
-          {renderModalElement()}
-        </Modal>
+        <LoadingSpinner loading={loading} />
         <TopNavigation
           title="Регистрация"
           alignment="center"
@@ -166,20 +158,3 @@ export const RegisterScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    minHeight: 256,
-    padding: 16
-  },
-  modalContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    borderRadius: 10,
-    padding: 16
-  },
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  }
-});
