@@ -94,9 +94,9 @@ export const HomeScreen = ({ navigation }) => {
 
           return {
             id: elem.last_updated,
-            name: getShortName(
+            name: `${getShortName(
               `${currentProfile.first_name} ${currentProfile.last_name}`
-            ),
+            )}${currentProfile.is_admin ? " ⭐️" : ""}`,
             style: "color-danger-600",
             balance: elem.transaction_amount
           };
@@ -116,9 +116,9 @@ export const HomeScreen = ({ navigation }) => {
 
           return {
             id: elem.last_updated,
-            name: getShortName(
+            name: `${getShortName(
               `${currentProfile.first_name} ${currentProfile.last_name}`
-            ),
+            )}${currentProfile.is_admin ? " ⭐️" : ""}`,
             style: "color-success-600",
             balance: elem.action_amount
           };

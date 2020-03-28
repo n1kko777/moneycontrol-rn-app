@@ -1,7 +1,7 @@
 import React from "react";
 import { View, FlatList } from "react-native";
 import { Text, ListItem, Button, useTheme } from "@ui-kitten/components";
-import { ProfileIcon, DeleteIcon } from "../themes/icons";
+import { ProfileIcon, RightIcon } from "../themes/icons";
 import { THEME } from "../themes/themes";
 
 import { ThemeContext } from "../themes/theme-context";
@@ -14,15 +14,15 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
   const keyExtractor = item => item.id.toString();
 
   const renderItemAccessory = () => (
-    <DeleteIcon
+    <RightIcon
       fill={
         kittenTheme[
           `color-primary-${themeContext.theme === "light" ? 800 : 100}`
         ]
       }
       style={{
-        width: 20,
-        height: 20
+        width: 30,
+        height: 30
       }}
     />
   );
