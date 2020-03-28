@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, Text, useTheme } from "@ui-kitten/components";
 
-import { THEME, shadowProperty } from "../themes/themes";
+import { THEME } from "../themes/themes";
 import { ThemeContext } from "../themes/theme-context";
 
 import { splitToDigits } from "../splitToDigits.js";
@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    ...shadowProperty,
     marginBottom: 10,
     zIndex: 1
   },

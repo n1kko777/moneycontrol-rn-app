@@ -3,7 +3,6 @@ import { Layout, Text, useTheme } from "@ui-kitten/components";
 import { View } from "react-native";
 
 import { RightIcon } from "../themes/icons";
-import { shadowProperty } from "../themes/themes";
 import { HomeCardItem } from "./HomeCardItem";
 
 import { ThemeContext } from "../themes/theme-context";
@@ -21,8 +20,7 @@ export const HomeCard = ({ item }) => {
         marginTop: 15,
         marginBottom: 30,
         padding: 16,
-        paddingTop: 8,
-        ...shadowProperty
+        paddingTop: 8
       }}
     >
       <TouchableOpacity

@@ -83,38 +83,46 @@ export const HomeScreen = ({ navigation }) => {
   if (company.profiles !== undefined) {
     transactions.length !== 0 &&
       allOpprations.push(
-        ...transactions.map(elem => ({
-          id: elem.last_updated,
-          name: getShortName(
-            company.profiles
-              .find(
-                elProf =>
-                  accounts.find(acc => acc.id === elem.account).profile ==
-                  elProf.match(/(\d+)/)[0]
-              )
-              .split(" (")[0]
-          ),
-          style: "color-danger-600",
-          balance: elem.transaction_amount
-        }))
+        ...transactions.map(elem => {
+          const currentProfile = company.profiles.find(
+            cProf =>
+              cProf.accounts.find(
+                cProfAcc =>
+                  cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
+              ) !== undefined
+          );
+
+          return {
+            id: elem.last_updated,
+            name: getShortName(
+              `${currentProfile.first_name} ${currentProfile.last_name}`
+            ),
+            style: "color-danger-600",
+            balance: elem.transaction_amount
+          };
+        })
       );
 
     actions.length !== 0 &&
       allOpprations.push(
-        ...actions.map(elem => ({
-          id: elem.last_updated,
-          name: getShortName(
-            company.profiles
-              .find(
-                elProf =>
-                  accounts.find(acc => acc.id === elem.account).profile ==
-                  elProf.match(/(\d+)/)[0]
-              )
-              .split(" (")[0]
-          ),
-          style: "color-success-600",
-          balance: elem.action_amount
-        }))
+        ...actions.map(elem => {
+          const currentProfile = company.profiles.find(
+            cProf =>
+              cProf.accounts.find(
+                cProfAcc =>
+                  cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
+              ) !== undefined
+          );
+
+          return {
+            id: elem.last_updated,
+            name: getShortName(
+              `${currentProfile.first_name} ${currentProfile.last_name}`
+            ),
+            style: "color-success-600",
+            balance: elem.action_amount
+          };
+        })
       );
 
     transfer.length !== 0 &&

@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { getCompany } from "../store/actions/companyAction";
 import { useTheme, Layout } from "@ui-kitten/components";
 
 import { Toolbar } from "../components/Toolbar";
@@ -7,7 +8,9 @@ import { ScreenTemplate } from "../components/ScreenTemplate";
 import { ThemeContext } from "../themes/theme-context";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 
-export const TeamsScreen = () => {
+import { CompanyProfileList } from "../components/CompanyProfileList";
+
+export const TeamsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
@@ -16,12 +19,16 @@ export const TeamsScreen = () => {
   const state = useSelector(state => state);
   const { profile } = state.profile;
   const { company, loading: companyLoading } = state.company;
+
+  const companyProfileListData = company.profiles;
+
   return (
     <ScreenTemplate>
       <LoadingSpinner loading={companyLoading} />
       <Toolbar
+        navigation={navigation}
         title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
-        getData={() => {}}
+        getData={async () => await dispatch(getCompany())}
       />
       <Layout
         style={{
@@ -31,7 +38,12 @@ export const TeamsScreen = () => {
               `color-basic-${themeContext.theme === "light" ? 200 : 900}`
             ]
         }}
-      ></Layout>
+      >
+        <CompanyProfileList
+          dataList={companyProfileListData}
+          isAdmin={profile.is_admin}
+        />
+      </Layout>
     </ScreenTemplate>
   );
 };

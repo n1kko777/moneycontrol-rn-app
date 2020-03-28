@@ -44,3 +44,5 @@ export const RightIcon = style => (
 );
 
 export const ProfileIcon = style => <Icon {...style} name="person-outline" />;
+
+export const DeleteIcon = style => <Icon {...style} name="trash-outline" />;
