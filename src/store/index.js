@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
+import { apiReducer } from "./reducers/apiReducer";
 import { authReducer } from "./reducers/authReducer";
 import { profileReducer } from "./reducers/profileReducer";
 import { companyReducer } from "./reducers/companyReducer";
@@ -12,6 +13,7 @@ import { categoryReducer } from "./reducers/categoryReducer";
 import { tagReducer } from "./reducers/tagReducer";
 
 const rootReducer = combineReducers({
+  api: apiReducer,
   auth: authReducer,
   profile: profileReducer,
   company: companyReducer,

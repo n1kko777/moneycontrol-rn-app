@@ -1,3 +1,7 @@
+// Loader
+export const START_LOADER = "START_LOADER";
+export const END_LOADER = "END_LOADER";
+
 // Auth
 export const REMIND_ME = "REMIND_ME";
 export const AUTH_START = "AUTH_START";

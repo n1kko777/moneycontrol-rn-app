@@ -1,14 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getCompany } from "../store/actions/companyAction";
-import { getAccount } from "../store/actions/accountAction";
-import { getTransaction } from "../store/actions/transactionAction";
-import { getAction } from "../store/actions/actionAction";
-import { getTransfer } from "../store/actions/transferAction";
-import { getCategory } from "../store/actions/categoryAction";
-import { getTag } from "../store/actions/tagAction";
-
+import { getDataDispatcher } from "../store/actions/apiAction";
 import { Layout, useTheme } from "@ui-kitten/components";
 
 import { ThemeContext } from "../themes/theme-context";
@@ -20,8 +13,9 @@ import { BalanceComponent } from "../components/home/BalanceComponent";
 import { HomeList } from "../components/home/HomeList";
 import { Toolbar } from "../components/navigation/Toolbar";
 
-import { getShortName } from "../getShortName";
 import { ScrollView, View } from "react-native";
+
+import { prepareHomeData } from "../prepareHomeData";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -30,14 +24,16 @@ export const HomeScreen = ({ navigation }) => {
   const kittenTheme = useTheme();
 
   const state = useSelector(state => state);
-  const { profile } = state.profile;
-  const { company, loading: companyLoading } = state.company;
-  const { accounts, loading: accountLoading } = state.account;
-  const { transactions, loading: transactionLoading } = state.transaction;
-  const { actions, loading: actionLoading } = state.action;
-  const { transfer, loading: transferLoading } = state.transfer;
-  const { categories, loading: categoryLoading } = state.category;
-  const { tags, loading: tagLoading } = state.tag;
+
+  const { loader } = state.api;
+  const { profile, loading: profileLadoing } = state.profile;
+  const { company, loading: companyLadoing } = state.company;
+  const { accounts, loading: accountsLadoing } = state.account;
+  const { transactions, loading: transactionsLadoing } = state.transaction;
+  const { actions, loading: actionsLadoing } = state.action;
+  const { transfer, loading: transferLadoing } = state.transfer;
+  const { categories, loading: categoriesLadoing } = state.category;
+  const { tags, loading: tagsLadoing } = state.tag;
 
   const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
   const [totalTransactions, setTotalTransactions] = React.useState(
@@ -45,14 +41,8 @@ export const HomeScreen = ({ navigation }) => {
   );
   const [totalActions, setTotalActions] = React.useState(parseFloat(0));
 
-  const getData = async () => {
-    await dispatch(getCompany());
-    await dispatch(getAccount());
-    await dispatch(getTransaction());
-    await dispatch(getAction());
-    await dispatch(getTransfer());
-    await dispatch(getCategory());
-    await dispatch(getTag());
+  const getData = () => {
+    dispatch(getDataDispatcher());
   };
 
   useEffect(() => {
@@ -86,120 +76,20 @@ export const HomeScreen = ({ navigation }) => {
     getData();
   }, [dispatch]);
 
-  const allOpprations = [];
-  const homeListData = [];
-
-  if (company.profiles !== undefined) {
-    transactions.length !== 0 &&
-      allOpprations.push(
-        ...transactions.map(elem => {
-          const currentProfile = company.profiles.find(
-            cProf =>
-              cProf.accounts.find(
-                cProfAcc =>
-                  cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
-              ) !== undefined
-          );
-
-          return {
-            id: elem.last_updated,
-            name: `${getShortName(
-              `${currentProfile.first_name} ${currentProfile.last_name}`
-            )}${currentProfile.is_admin ? " ⭐️" : ""}`,
-            style: "color-danger-600",
-            balance: elem.transaction_amount
-          };
-        })
-      );
-
-    actions.length !== 0 &&
-      allOpprations.push(
-        ...actions.map(elem => {
-          const currentProfile = company.profiles.find(
-            cProf =>
-              cProf.accounts.find(
-                cProfAcc =>
-                  cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
-              ) !== undefined
-          );
-
-          return {
-            id: elem.last_updated,
-            name: `${getShortName(
-              `${currentProfile.first_name} ${currentProfile.last_name}`
-            )}${currentProfile.is_admin ? " ⭐️" : ""}`,
-            style: "color-success-600",
-            balance: elem.action_amount
-          };
-        })
-      );
-
-    transfer.length !== 0 &&
-      allOpprations.push(
-        ...transfer.map(elem => ({
-          id: elem.last_updated,
-          name:
-            getShortName(elem.from_profile.split(" (")[0]) +
-            " => " +
-            getShortName(elem.to_profile.split(" (")[0]),
-          balance: elem.transfer_amount
-        }))
-      );
-
-    accounts.length !== 0 &&
-      homeListData.push({
-        title: "Счета",
-        data: accounts
-          .filter(acc => acc.profile === profile.id)
-          .map(elem => ({
-            id: elem.id,
-            name: elem.account_name,
-            balance: elem.balance
-          }))
-      });
-
-    categories.length !== 0 &&
-      homeListData.push({
-        title: "Категории",
-        data: categories.map(elem => ({
-          id: elem.id,
-          name: elem.category_name,
-          balance: ""
-        }))
-      });
-
-    tags.length !== 0 &&
-      homeListData.push({
-        title: "Теги",
-        data: tags.map(elem => ({
-          id: elem.id,
-          name: elem.tag_name,
-          balance: ""
-        }))
-      });
-
-    [...allOpprations].length !== 0 &&
-      homeListData.push({
-        title: "Последние операции",
-        data: allOpprations
-          .sort((a, b) => new Date(b.id) - new Date(a.id))
-          .filter((el, index) => index < 15)
-      });
-  }
+  const homeListData = prepareHomeData(
+    profile,
+    company,
+    accounts,
+    transactions,
+    actions,
+    transfer,
+    categories,
+    tags
+  );
 
   return (
     <ScreenTemplate>
-      <LoadingSpinner
-        loading={
-          companyLoading ||
-          accountLoading ||
-          transactionLoading ||
-          actionLoading ||
-          transferLoading ||
-          categoryLoading ||
-          tagLoading
-        }
-      />
+      <LoadingSpinner loading={loader !== 0} />
       <Layout
         style={{
           backgroundColor:
