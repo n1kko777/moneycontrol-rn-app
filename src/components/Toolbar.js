@@ -23,9 +23,7 @@ export const Toolbar = ({ title, navigation, getData, style }) => {
       style={{
         ...style,
         position: "relative",
-        zIndex: 10,
-        elevation: 5,
-        zIndex: 5
+        zIndex: 10
       }}
       title={title}
       alignment="center"

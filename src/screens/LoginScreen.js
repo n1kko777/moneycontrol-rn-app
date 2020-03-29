@@ -8,7 +8,7 @@ import { THEME } from "../themes/themes";
 import { hideIconPassword, showIconPassword } from "../themes/icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import { authLogin } from "../store/actions/authAction";
+import { authLogin, logout } from "../store/actions/authAction";
 import { getProfile } from "../store/actions/profileAction";
 
 import { LoadingSpinner } from "../components/LoadingSpinner";
@@ -16,8 +16,12 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-  const { isAuth, loading: authLoading } = state.auth;
-  const { profile, loading: profileLoading } = state.profile;
+  const { isAuth, error: authError, loading: authLoading } = state.auth;
+  const {
+    profile,
+    error: profileError,
+    loading: profileLoading
+  } = state.profile;
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -27,13 +31,19 @@ export const LoginScreen = ({ route, navigation }) => {
   const checkLogIn = async () => {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
     if (token !== null) {
-      await dispatch(getProfile()).then(() => {
+      try {
+        await dispatch(getProfile());
+      } catch (error) {
+        await dispatch(logout());
+      }
+
+      if (authError === null && profileError === null) {
         profile !== undefined && profile.hasOwnProperty("company")
           ? profile.company !== null
             ? navigateHome()
             : navigateCompanyManager()
           : navigateCreateProfile();
-      });
+      }
     }
   };
 
