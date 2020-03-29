@@ -7,7 +7,11 @@ import {
   AUTH_LOGOUT,
   REMIND_ME,
   CLEAR_PROFILE,
-  CLEAR_COMPANY
+  CLEAR_COMPANY,
+  CLEAR_ACCOUNT,
+  CLEAR_TRANSACTION,
+  CLEAR_ACTION,
+  CLEAR_TRANSFER
 } from "../types";
 
 import { url } from "../constants";
@@ -93,7 +97,7 @@ export const authFail = error => dispatch => {
 
 export const logout = () => async dispatch => {
   try {
-    await AsyncStorage.removeItem("AUTH_TOKEN");
+    await AsyncStorage.clear();
   } catch (error) {
     dispatch(authFail(error));
   }
@@ -101,11 +105,24 @@ export const logout = () => async dispatch => {
   dispatch({
     type: AUTH_LOGOUT
   });
+
   dispatch({
     type: CLEAR_PROFILE
   });
   dispatch({
     type: CLEAR_COMPANY
+  });
+  dispatch({
+    type: CLEAR_ACCOUNT
+  });
+  dispatch({
+    type: CLEAR_TRANSACTION
+  });
+  dispatch({
+    type: CLEAR_ACTION
+  });
+  dispatch({
+    type: CLEAR_TRANSFER
   });
 };
 
