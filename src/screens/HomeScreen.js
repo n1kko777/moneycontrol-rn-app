@@ -1,9 +1,4 @@
 import React, { useEffect } from "react";
-import { Layout, useTheme } from "@ui-kitten/components";
-import { ThemeContext } from "../themes/theme-context";
-
-import { ScreenTemplate } from "../components/ScreenTemplate";
-import { BalanceComponent } from "../components/BalanceComponent";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../store/actions/companyAction";
@@ -12,11 +7,19 @@ import { getTransaction } from "../store/actions/transactionAction";
 import { getAction } from "../store/actions/actionAction";
 import { getTransfer } from "../store/actions/transferAction";
 
-import { getShortName } from "../getShortName";
-import { HomeList } from "../components/HomeList";
-import { Toolbar } from "../components/Toolbar";
+import { Animated } from "react-native";
+import { Layout, useTheme } from "@ui-kitten/components";
 
+import { ThemeContext } from "../themes/theme-context";
+
+import { ScreenTemplate } from "../components/ScreenTemplate";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+
+import { BalanceComponent } from "../components/home/BalanceComponent";
+import { HomeList } from "../components/home/HomeList";
+import { Toolbar } from "../components/navigation/Toolbar";
+
+import { getShortName } from "../getShortName";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -183,12 +186,13 @@ export const HomeScreen = ({ navigation }) => {
           navigation={navigation}
           getData={getData}
         />
-
-        <BalanceComponent
-          balance={totalBalance}
-          transaction={totalTransactions}
-          action={totalActions}
-        />
+        <Animated.View>
+          <BalanceComponent
+            balance={totalBalance}
+            transaction={totalTransactions}
+            action={totalActions}
+          />
+        </Animated.View>
         <Layout
           style={{
             flex: 1,

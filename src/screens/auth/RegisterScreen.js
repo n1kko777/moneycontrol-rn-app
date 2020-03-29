@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { authSignUp } from "../../store/actions/authAction";
 
 import {
-  Divider,
   Layout,
   Text,
   TopNavigation,
@@ -77,7 +76,6 @@ export const RegisterScreen = ({ navigation }) => {
           alignment="center"
           leftControl={BackAction()}
         />
-        <Divider />
         <Layout
           style={{
             flex: 1,

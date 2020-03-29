@@ -1,11 +1,12 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../../store/actions/companyAction";
-import { useTheme, Layout } from "@ui-kitten/components";
 
-import { Toolbar } from "../../components/Toolbar";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { useTheme, Layout } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
+
+import { Toolbar } from "../../components/navigation/Toolbar";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";

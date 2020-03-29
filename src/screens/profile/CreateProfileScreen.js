@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Alert, View } from "react-native";
 import {
-  Divider,
   Layout,
   TopNavigation,
   TopNavigationAction,
@@ -80,7 +79,6 @@ export const CreateProfileScreen = ({ navigation }) => {
           alignment="center"
           leftControl={BackAction()}
         />
-        <Divider />
         <Layout
           style={{
             flex: 1,

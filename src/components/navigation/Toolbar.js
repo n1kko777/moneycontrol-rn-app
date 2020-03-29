@@ -4,7 +4,7 @@ import {
   TopNavigationAction,
   Icon
 } from "@ui-kitten/components";
-import { MenuOptions } from "./MenuOptions";
+import { TopMenuOptions } from "./TopMenuOptions";
 import { ProfileIcon } from "../../themes/icons";
 
 const ProfileAction = props => (
@@ -13,7 +13,7 @@ const ProfileAction = props => (
 
 export const Toolbar = ({ title, navigation, getData, style }) => {
   const renderMenuAction = () => (
-    <MenuOptions navigation={navigation} getData={getData} />
+    <TopMenuOptions navigation={navigation} getData={getData} />
   );
 
   const renderProfileAction = () => <ProfileAction onPress={() => {}} />;

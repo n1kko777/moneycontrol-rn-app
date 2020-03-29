@@ -29,7 +29,7 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
 
   const renderItemIcon = style => <ProfileIcon {...style} />;
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <ListItem
       title={`${getShortName(item.first_name + " " + item.last_name)} ${
         item.is_admin ? "⭐️" : ""
@@ -38,13 +38,18 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
       icon={renderItemIcon}
       accessory={isAdmin && renderItemAccessory}
       style={{
-        paddingVertical: 15
+        paddingVertical: 15,
+        borderTopLeftRadius: index === 0 ? 10 : 0,
+        borderTopRightRadius: index === 0 ? 10 : 0,
+        borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
+        borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0
       }}
     />
   );
 
   return (
     <FlatList
+      style={{ marginHorizontal: 8, marginTop: 15 }}
       ListFooterComponent={
         <View style={{ marginHorizontal: 16, marginTop: 30 }}>
           {isAdmin && (

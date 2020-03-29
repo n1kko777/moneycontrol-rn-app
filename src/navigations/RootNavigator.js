@@ -6,7 +6,7 @@ import { OperationsScreen } from "../screens/OperationsScreen";
 import { TeamsScreen } from "../screens/company/TeamsScreen";
 import { MenuScreen } from "../screens/MenuScreen";
 
-import { BottomTabBar } from "../components/BottomTabBar";
+import { BottomTabBar } from "../components/navigation/BottomTabBar";
 
 const BottomTab = createBottomTabNavigator();
 

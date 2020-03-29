@@ -1,7 +1,7 @@
 import React from "react";
 import { FlatList, View } from "react-native";
 
-import { HomeCard } from "../components/HomeCard";
+import { HomeCard } from "./HomeCard";
 import { Text } from "@ui-kitten/components";
 
 export const HomeList = ({ navigation, dataList }) => {

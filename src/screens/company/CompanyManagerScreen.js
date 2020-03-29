@@ -3,7 +3,6 @@ import {
   Layout,
   TopNavigation,
   TopNavigationAction,
-  Divider,
   Text,
   Button,
   Input
@@ -88,7 +87,6 @@ export const CompanyManagerScreen = ({ navigation }) => {
           alignment="center"
           leftControl={BackAction()}
         />
-        <Divider />
         <Layout
           style={{
             alignSelf: "center",
