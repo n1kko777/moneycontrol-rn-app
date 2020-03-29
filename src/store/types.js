@@ -68,3 +68,12 @@ export const UPDATE_CATEGORY = "UPDATE_CATEGORY";
 export const CLEAR_CATEGORY = "CLEAR_CATEGORY";
 export const LOADING_CATEGORY = "LOADING_CATEGORY";
 export const ERROR_CATEGORY = "ERROR_CATEGORY";
+
+// Tag
+export const GET_TAG = "GET_TAG";
+export const CREATE_TAG = "CREATE_TAG";
+export const DELETE_TAG = "DELETE_TAG";
+export const UPDATE_TAG = "UPDATE_TAG";
+export const CLEAR_TAG = "CLEAR_TAG";
+export const LOADING_TAG = "LOADING_TAG";
+export const ERROR_TAG = "ERROR_TAG";

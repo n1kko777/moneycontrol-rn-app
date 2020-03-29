@@ -12,8 +12,8 @@ const initialState = {
   loading: false
 };
 
-export const categoryReducer = (state = initialState, category) => {
-  const { type, payload } = category;
+export const categoryReducer = (state = initialState, action) => {
+  const { type, payload } = action;
   switch (type) {
     case GET_CATEGORY:
       console.log("case GET_CATEGORY:");

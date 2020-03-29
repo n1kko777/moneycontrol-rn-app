@@ -9,6 +9,7 @@ import { transactionReducer } from "./reducers/transactionReducer";
 import { actionReducer } from "./reducers/actionReducer";
 import { transferReducer } from "./reducers/transferReducer";
 import { categoryReducer } from "./reducers/categoryReducer";
+import { tagReducer } from "./reducers/tagReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   transaction: transactionReducer,
   action: actionReducer,
   transfer: transferReducer,
-  category: categoryReducer
+  category: categoryReducer,
+  tag: tagReducer
 });
 
 export default createStore(rootReducer, applyMiddleware(thunk));
