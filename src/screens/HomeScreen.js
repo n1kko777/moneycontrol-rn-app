@@ -6,6 +6,7 @@ import { getAccount } from "../store/actions/accountAction";
 import { getTransaction } from "../store/actions/transactionAction";
 import { getAction } from "../store/actions/actionAction";
 import { getTransfer } from "../store/actions/transferAction";
+import { getCategory } from "../store/actions/categoryAction";
 
 import { Layout, useTheme } from "@ui-kitten/components";
 
@@ -34,6 +35,7 @@ export const HomeScreen = ({ navigation }) => {
   const { transactions, loading: transactionLoading } = state.transaction;
   const { actions, loading: actionLoading } = state.action;
   const { transfer, loading: transferLoading } = state.transfer;
+  const { categories, loading: categoryLoading } = state.category;
 
   const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
   const [totalTransactions, setTotalTransactions] = React.useState(
@@ -47,6 +49,7 @@ export const HomeScreen = ({ navigation }) => {
     await dispatch(getTransaction());
     await dispatch(getAction());
     await dispatch(getTransfer());
+    await dispatch(getCategory());
   };
 
   useEffect(() => {
@@ -152,10 +155,15 @@ export const HomeScreen = ({ navigation }) => {
           }))
       });
 
-    homeListData.push({
-      title: "Категории",
-      data: []
-    });
+    categories.length !== 0 &&
+      homeListData.push({
+        title: "Категории",
+        data: categories.map(elem => ({
+          id: elem.id,
+          name: elem.category_name,
+          balance: ""
+        }))
+      });
 
     homeListData.push({
       title: "Теги",
@@ -179,7 +187,8 @@ export const HomeScreen = ({ navigation }) => {
           accountLoading ||
           transactionLoading ||
           actionLoading ||
-          transferLoading
+          transferLoading ||
+          categoryLoading
         }
       />
       <Layout

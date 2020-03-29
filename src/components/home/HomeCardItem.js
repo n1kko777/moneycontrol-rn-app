@@ -43,7 +43,7 @@ export const HomeCardItem = ({
             ]
         }}
       >
-        {splitToDigits(amount.toString())} ₽
+        {amount !== "" && splitToDigits(amount.toString()) + " ₽"}
       </Text>
     </TouchableOpacity>
   );
