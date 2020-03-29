@@ -1,24 +1,22 @@
 import React from "react";
-import { FlatList, View } from "react-native";
+import { View } from "react-native";
 
 import { HomeCard } from "./HomeCard";
 import { Text } from "@ui-kitten/components";
 
 export const HomeList = ({ navigation, dataList }) => {
-  const keyExtractor = item => `${dataList.indexOf(item)}`;
-
-  const renderItem = ({ item }) => (
-    <HomeCard item={item} navigation={navigation} />
-  );
-
   return (
-    <FlatList
-      ListFooterComponent={<View></View>}
-      ListFooterComponentStyle={{ paddingBottom: 30 }}
-      keyExtractor={keyExtractor}
-      data={dataList}
-      renderItem={renderItem}
-      ListEmptyComponent={
+    <View style={{ flex: 1, paddingBottom: 30 }}>
+      {dataList.length !== 0 ? (
+        dataList.map((item, index) => (
+          <HomeCard
+            style={{ borderRadius: 10, marginHorizontal: 8, marginBottom: 20 }}
+            key={index}
+            item={item}
+            navigation={navigation}
+          />
+        ))
+      ) : (
         <Text
           style={{
             textAlign: "center",
@@ -27,7 +25,7 @@ export const HomeList = ({ navigation, dataList }) => {
         >
           Нет записей
         </Text>
-      }
-    />
+      )}
+    </View>
   );
 };

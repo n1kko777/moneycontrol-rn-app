@@ -7,7 +7,6 @@ import { getTransaction } from "../store/actions/transactionAction";
 import { getAction } from "../store/actions/actionAction";
 import { getTransfer } from "../store/actions/transferAction";
 
-import { Animated } from "react-native";
 import { Layout, useTheme } from "@ui-kitten/components";
 
 import { ThemeContext } from "../themes/theme-context";
@@ -20,6 +19,7 @@ import { HomeList } from "../components/home/HomeList";
 import { Toolbar } from "../components/navigation/Toolbar";
 
 import { getShortName } from "../getShortName";
+import { ScrollView, View } from "react-native";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -152,6 +152,16 @@ export const HomeScreen = ({ navigation }) => {
           }))
       });
 
+    homeListData.push({
+      title: "Категории",
+      data: []
+    });
+
+    homeListData.push({
+      title: "Теги",
+      data: []
+    });
+
     [...allOpprations].length !== 0 &&
       homeListData.push({
         title: "Последние операции",
@@ -174,7 +184,6 @@ export const HomeScreen = ({ navigation }) => {
       />
       <Layout
         style={{
-          flex: 1,
           backgroundColor:
             kittenTheme[
               `color-basic-${themeContext.theme === "light" ? 200 : 900}`
@@ -186,25 +195,26 @@ export const HomeScreen = ({ navigation }) => {
           navigation={navigation}
           getData={getData}
         />
-        <Animated.View>
+      </Layout>
+      <ScrollView
+        style={{
+          flex: 1,
+          backgroundColor:
+            kittenTheme[
+              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
+            ]
+        }}
+      >
+        <View onStartShouldSetResponder={() => true}>
           <BalanceComponent
             balance={totalBalance}
             transaction={totalTransactions}
             action={totalActions}
           />
-        </Animated.View>
-        <Layout
-          style={{
-            flex: 1,
-            backgroundColor:
-              kittenTheme[
-                `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-              ]
-          }}
-        >
+
           <HomeList dataList={homeListData} onRefresh={getData} />
-        </Layout>
-      </Layout>
+        </View>
+      </ScrollView>
     </ScreenTemplate>
   );
 };
