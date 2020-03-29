@@ -1,5 +1,5 @@
 import React from "react";
-import { splitToDigits } from "../splitToDigits";
+import { splitToDigits } from "../../splitToDigits";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Text } from "@ui-kitten/components";
 

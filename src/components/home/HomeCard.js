@@ -2,10 +2,10 @@ import React from "react";
 import { Layout, Text, useTheme } from "@ui-kitten/components";
 import { View } from "react-native";
 
-import { RightIcon } from "../themes/icons";
+import { RightIcon } from "../../themes/icons";
 import { HomeCardItem } from "./HomeCardItem";
 
-import { ThemeContext } from "../themes/theme-context";
+import { ThemeContext } from "../../themes/theme-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const HomeCard = ({ item }) => {

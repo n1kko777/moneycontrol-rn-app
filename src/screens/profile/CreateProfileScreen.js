@@ -10,15 +10,15 @@ import {
 } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { createProfile } from "../store/actions/profileAction";
-import { logout } from "../store/actions/authAction";
+import { createProfile } from "../../store/actions/profileAction";
+import { logout } from "../../store/actions/authAction";
 
-import { ScreenTemplate } from "../components/ScreenTemplate";
-import { THEME } from "../themes/themes";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { THEME } from "../../themes/themes";
 
-import { LogoutIcon } from "../themes/icons";
+import { LogoutIcon } from "../../themes/icons";
 
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();

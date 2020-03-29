@@ -5,7 +5,7 @@ import {
   Icon
 } from "@ui-kitten/components";
 import { MenuOptions } from "./MenuOptions";
-import { ProfileIcon } from "../themes/icons";
+import { ProfileIcon } from "../../themes/icons";
 
 const ProfileAction = props => (
   <TopNavigationAction {...props} icon={ProfileIcon} />

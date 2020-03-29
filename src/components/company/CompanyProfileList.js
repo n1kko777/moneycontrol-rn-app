@@ -1,11 +1,11 @@
 import React from "react";
 import { View, FlatList } from "react-native";
 import { Text, ListItem, Button, useTheme } from "@ui-kitten/components";
-import { ProfileIcon, RightIcon } from "../themes/icons";
-import { THEME } from "../themes/themes";
+import { ProfileIcon, RightIcon } from "../../themes/icons";
+import { THEME } from "../../themes/themes";
 
-import { ThemeContext } from "../themes/theme-context";
-import { getShortName } from "../getShortName";
+import { ThemeContext } from "../../themes/theme-context";
+import { getShortName } from "../../getShortName";
 
 export const CompanyProfileList = ({ dataList, isAdmin }) => {
   const themeContext = React.useContext(ThemeContext);

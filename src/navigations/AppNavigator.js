@@ -1,10 +1,10 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { LoginScreen } from "../screens/LoginScreen";
-import { RegisterScreen } from "../screens/RegisterScreen";
-import { CreateProfileScreen } from "../screens/CreateProfileScreen";
-import { CompanyManagerScreen } from "../screens/CompanyManagerScreen";
+import { LoginScreen } from "../screens/auth/LoginScreen";
+import { RegisterScreen } from "../screens/auth/RegisterScreen";
+import { CreateProfileScreen } from "../screens/profile/CreateProfileScreen";
+import { CompanyManagerScreen } from "../screens/company/CompanyManagerScreen";
 
 import { RootNavigator } from "./RootNavigator";
 

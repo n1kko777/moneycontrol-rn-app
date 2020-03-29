@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { authSignUp } from "../store/actions/authAction";
+import { authSignUp } from "../../store/actions/authAction";
 
 import {
   Divider,
@@ -13,12 +13,16 @@ import {
   Button
 } from "@ui-kitten/components";
 
-import { ScreenTemplate } from "../components/ScreenTemplate";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { View } from "react-native";
-import { THEME } from "../themes/themes";
-import { BackIcon, hideIconPassword, showIconPassword } from "../themes/icons";
+import { THEME } from "../../themes/themes";
+import {
+  BackIcon,
+  hideIconPassword,
+  showIconPassword
+} from "../../themes/icons";
 
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();

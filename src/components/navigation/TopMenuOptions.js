@@ -2,18 +2,18 @@ import React from "react";
 import { TopNavigationAction, OverflowMenu } from "@ui-kitten/components";
 import { Alert, AsyncStorage } from "react-native";
 
-import { ThemeContext } from "../themes/theme-context";
+import { ThemeContext } from "../../themes/theme-context";
 import {
   MoreIconHorizontal,
   LogoutIcon,
   LightIcon,
   DarkIcon,
   UpdateIcon
-} from "../themes/icons";
-import { logout } from "../store/actions/authAction";
+} from "../../themes/icons";
+import { logout } from "../../store/actions/authAction";
 import { useDispatch } from "react-redux";
 
-export const MenuOptions = ({ navigation, getData }) => {
+export const TopMenuOptions = ({ navigation, getData }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);

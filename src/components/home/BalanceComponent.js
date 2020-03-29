@@ -2,17 +2,17 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, Text, useTheme } from "@ui-kitten/components";
 
-import { THEME } from "../themes/themes";
-import { ThemeContext } from "../themes/theme-context";
+import { THEME } from "../../themes/themes";
+import { ThemeContext } from "../../themes/theme-context";
 
-import { splitToDigits } from "../splitToDigits.js";
+import { splitToDigits } from "../../splitToDigits.js";
 
 import {
   HideIconBalance,
   ShowIconBalance,
   IncreaseIcon,
   DecreaseIcon
-} from "../themes/icons";
+} from "../../themes/icons";
 
 export const BalanceComponent = ({ balance, transaction, action }) => {
   const themeContext = React.useContext(ThemeContext);

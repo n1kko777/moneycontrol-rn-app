@@ -7,15 +7,15 @@ import {
   useTheme
 } from "@ui-kitten/components";
 
-import { THEME } from "../themes/themes";
+import { THEME } from "../../themes/themes";
 import {
   HomeIcon,
   OoperationIcon,
   AddIcon,
   TeamIcon,
   MoreIconHorizontal
-} from "../themes/icons";
-import { ThemeContext } from "../themes/theme-context";
+} from "../../themes/icons";
+import { ThemeContext } from "../../themes/theme-context";
 
 export const BottomTabBar = ({ navigation, state }) => {
   const themeContext = React.useContext(ThemeContext);

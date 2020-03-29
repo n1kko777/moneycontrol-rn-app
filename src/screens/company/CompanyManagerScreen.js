@@ -9,16 +9,16 @@ import {
   Input
 } from "@ui-kitten/components";
 
-import { ScreenTemplate } from "../components/ScreenTemplate";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { useDispatch, useSelector } from "react-redux";
-import { createCompany } from "../store/actions/companyAction";
-import { updateProfile, getProfile } from "../store/actions/profileAction";
-import { logout } from "../store/actions/authAction";
+import { createCompany } from "../../store/actions/companyAction";
+import { updateProfile, getProfile } from "../../store/actions/profileAction";
+import { logout } from "../../store/actions/authAction";
 import { Alert } from "react-native";
 
-import { LogoutIcon } from "../themes/icons";
+import { LogoutIcon } from "../../themes/icons";
 
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();

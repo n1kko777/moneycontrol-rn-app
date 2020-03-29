@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 import { TouchableOpacity, View, Image, AsyncStorage } from "react-native";
 import { Layout, Button, Text, Input } from "@ui-kitten/components";
 
-import { ScreenTemplate } from "../components/ScreenTemplate";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
 
-import { THEME } from "../themes/themes";
-import { hideIconPassword, showIconPassword } from "../themes/icons";
+import { THEME } from "../../themes/themes";
+import { hideIconPassword, showIconPassword } from "../../themes/icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import { authLogin, logout } from "../store/actions/authAction";
-import { getProfile } from "../store/actions/profileAction";
+import { authLogin, logout } from "../../store/actions/authAction";
+import { getProfile } from "../../store/actions/profileAction";
 
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
