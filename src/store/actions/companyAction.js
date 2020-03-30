@@ -16,7 +16,7 @@ export const getCompany = () => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .get(`${endpointAPI}/Company/`, {
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export const createCompany = company => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .post(
         `${endpointAPI}/Company/`,
         {

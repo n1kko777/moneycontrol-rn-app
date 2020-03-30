@@ -17,7 +17,7 @@ export const getProfile = () => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .get(`${endpointAPI}/Profile/`, {
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const createProfile = profile => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .post(
         `${endpointAPI}/Profile/`,
         {
@@ -85,7 +85,7 @@ export const updateProfile = profile => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .put(
         `${endpointAPI}/Profile/${profile.id}/`,
         {

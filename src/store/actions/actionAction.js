@@ -17,7 +17,7 @@ export const getAction = () => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .get(`${endpointAPI}/Action/`, {
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export const createAction = action => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .post(
         `${endpointAPI}/Action/`,
         {

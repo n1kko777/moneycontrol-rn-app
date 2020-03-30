@@ -11,7 +11,7 @@ export const getTag = () => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .get(`${endpointAPI}/Tag/`, {
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export const createTag = tag => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .post(
         `${endpointAPI}/Tag/`,
         {

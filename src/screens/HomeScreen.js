@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getDataDispatcher } from "../store/actions/apiAction";
+import {
+  getDataDispatcher,
+  startLoader,
+  endLoader
+} from "../store/actions/apiAction";
 import { Layout, useTheme } from "@ui-kitten/components";
 
 import { ThemeContext } from "../themes/theme-context";
 
-import { ScreenTemplate } from "../components/ScreenTemplate";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ScreenTemplate } from "../components/ScreenTemplate";
 
 import { BalanceComponent } from "../components/home/BalanceComponent";
 import { HomeList } from "../components/home/HomeList";
@@ -25,15 +29,14 @@ export const HomeScreen = ({ navigation }) => {
 
   const state = useSelector(state => state);
 
-  const { loader } = state.api;
-  const { profile, loading: profileLadoing } = state.profile;
-  const { company, loading: companyLadoing } = state.company;
-  const { accounts, loading: accountsLadoing } = state.account;
-  const { transactions, loading: transactionsLadoing } = state.transaction;
-  const { actions, loading: actionsLadoing } = state.action;
-  const { transfer, loading: transferLadoing } = state.transfer;
-  const { categories, loading: categoriesLadoing } = state.category;
-  const { tags, loading: tagsLadoing } = state.tag;
+  const { profile } = state.profile;
+  const { company } = state.company;
+  const { accounts } = state.account;
+  const { transactions } = state.transaction;
+  const { actions } = state.action;
+  const { transfer } = state.transfer;
+  const { categories } = state.category;
+  const { tags } = state.tag;
 
   const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
   const [totalTransactions, setTotalTransactions] = React.useState(
@@ -41,8 +44,13 @@ export const HomeScreen = ({ navigation }) => {
   );
   const [totalActions, setTotalActions] = React.useState(parseFloat(0));
 
-  const getData = () => {
-    dispatch(getDataDispatcher());
+  const [loader, setLoader] = React.useState(false);
+
+  const getData = async () => {
+    dispatch(startLoader());
+    await dispatch(getDataDispatcher()).then(() => {
+      dispatch(endLoader());
+    });
   };
 
   useEffect(() => {
@@ -89,7 +97,8 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <LoadingSpinner loading={loader !== 0} />
+      {loader && <LoadingSpinner />}
+
       <Layout
         style={{
           backgroundColor:

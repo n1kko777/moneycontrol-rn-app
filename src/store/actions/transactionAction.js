@@ -18,7 +18,7 @@ export const getTransaction = () => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .get(`${endpointAPI}/Transaction/`, {
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const createTransaction = transaction => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .post(
         `${endpointAPI}/Transaction/`,
         {

@@ -17,7 +17,7 @@ export const getTransfer = () => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .get(`${endpointAPI}/Transfer/`, {
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export const createTransfer = transfer => async dispatch => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    await axios
+    return await axios
       .post(
         `${endpointAPI}/Transfer/`,
         {

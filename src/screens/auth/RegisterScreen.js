@@ -23,10 +23,14 @@ import {
 
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 
+import { startLoader, endLoader } from "../../store/actions/apiAction";
+
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-  const { isRegister, loading, error } = state.auth;
+  const { isRegister, error } = state.auth;
+
+  const [loader, setLoader] = React.useState(false);
 
   useEffect(() => {
     if (error === null && isRegister) {
@@ -52,6 +56,7 @@ export const RegisterScreen = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
+    dispatch(startLoader());
     await dispatch(
       authSignUp({
         first_name,
@@ -61,6 +66,7 @@ export const RegisterScreen = ({ navigation }) => {
         password2
       })
     );
+    dispatch(endLoader());
   };
 
   const BackAction = () => (
@@ -70,7 +76,7 @@ export const RegisterScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
-        <LoadingSpinner loading={loading} />
+        {loader && <LoadingSpinner />}
         <TopNavigation
           title="Регистрация"
           alignment="center"

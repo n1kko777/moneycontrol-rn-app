@@ -11,6 +11,8 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 
+import { startLoader, endLoader } from "../../store/actions/apiAction";
+
 export const TeamsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
@@ -19,17 +21,25 @@ export const TeamsScreen = ({ navigation }) => {
 
   const state = useSelector(state => state);
   const { profile } = state.profile;
-  const { company, loading: companyLoading } = state.company;
+  const { company } = state.company;
 
   const companyProfileListData = company.profiles;
 
+  const [loader, setLoader] = React.useState(false);
+
+  const getDataHandler = async () => {
+    dispatch(startLoader());
+    await dispatch(getCompany());
+    dispatch(endLoader());
+  };
+
   return (
     <ScreenTemplate>
-      <LoadingSpinner loading={companyLoading} />
+      {loader && <LoadingSpinner />}
       <Toolbar
         navigation={navigation}
         title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
-        getData={async () => await dispatch(getCompany())}
+        getData={getDataHandler}
       />
       <Layout
         style={{

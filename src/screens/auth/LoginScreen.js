@@ -13,15 +13,15 @@ import { getProfile } from "../../store/actions/profileAction";
 
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 
+import { startLoader, endLoader } from ".././../store/actions/apiAction";
+
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
   const { isAuth, error: authError, loading: authLoading } = state.auth;
-  const {
-    profile,
-    error: profileError,
-    loading: profileLoading
-  } = state.profile;
+  const { profile, error: profileError } = state.profile;
+
+  const [loader, setLoader] = React.useState(false);
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -29,6 +29,7 @@ export const LoginScreen = ({ route, navigation }) => {
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
   const checkLogIn = async () => {
+    dispatch(startLoader());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
     if (token !== null) {
       try {
@@ -45,6 +46,15 @@ export const LoginScreen = ({ route, navigation }) => {
           : navigateCreateProfile();
       }
     }
+    dispatch(endLoader());
+  };
+
+  const isAuthHandler = async () => {
+    if (isAuth) {
+      dispatch(startLoader());
+      await dispatch(getProfile());
+      dispatch(endLoader());
+    }
   };
 
   useEffect(() => {
@@ -52,9 +62,7 @@ export const LoginScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (isAuth) {
-      dispatch(getProfile());
-    }
+    isAuthHandler();
   }, [isAuth]);
 
   useEffect(() => {
@@ -68,7 +76,9 @@ export const LoginScreen = ({ route, navigation }) => {
   }, [profile]);
 
   const onSubmit = async () => {
+    dispatch(startLoader());
     await dispatch(authLogin(email, password));
+    dispatch(endLoader());
   };
 
   const navigateHome = () => {
@@ -89,7 +99,7 @@ export const LoginScreen = ({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <LoadingSpinner loading={authLoading || profileLoading} />
+      {loader && <LoadingSpinner />}
       <Layout
         style={{
           flex: 1,

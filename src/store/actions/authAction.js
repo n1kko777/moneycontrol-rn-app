@@ -11,7 +11,9 @@ import {
   CLEAR_ACCOUNT,
   CLEAR_TRANSACTION,
   CLEAR_ACTION,
-  CLEAR_TRANSFER
+  CLEAR_TRANSFER,
+  CLEAR_CATEGORY,
+  CLEAR_TAG
 } from "../types";
 
 import { url } from "../constants";
@@ -124,12 +126,18 @@ export const logout = () => async dispatch => {
   dispatch({
     type: CLEAR_TRANSFER
   });
+  dispatch({
+    type: CLEAR_CATEGORY
+  });
+  dispatch({
+    type: CLEAR_TAG
+  });
 };
 
 export const authLogin = (email, password, isRemindMe) => async dispatch => {
   dispatch(authStart());
 
-  await axios
+  return await axios
     .post(`${url}/rest-auth/login/`, {
       email: email,
       password: password
@@ -148,7 +156,7 @@ export const authSignUp = ({
   password2
 }) => async dispatch => {
   dispatch(authStart());
-  await axios
+  return await axios
     .post(`${url}/rest-auth/registration/`, {
       first_name,
       last_name,
@@ -167,22 +175,4 @@ export const authSignUp = ({
       dispatch(registerSuccess(authUser));
     })
     .catch(err => dispatch(authFail(err)));
-};
-
-export const authCheckState = () => dispatch => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const periodData = JSON.parse(localStorage.getItem("periodData"));
-
-  if (user === null) {
-    dispatch(logout());
-  } else {
-    dispatch(authSuccess(user));
-    if (periodData !== null) {
-      dispatch(
-        updatePeriod(periodData.period, moment(periodData.period_start))
-      );
-    } else {
-      dispatch(updatePeriod("Месяц", moment().startOf("month")));
-    }
-  }
 };

@@ -18,6 +18,7 @@ import { THEME } from "../../themes/themes";
 import { LogoutIcon } from "../../themes/icons";
 
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -28,23 +29,29 @@ export const CreateProfileScreen = ({ navigation }) => {
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
+  const [loader, setLoader] = React.useState(false);
+
   useEffect(() => {
     profile !== undefined &&
       profile.hasOwnProperty("company") &&
       navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
   }, [loading]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    dispatch(startLoader());
     const newProfile = {
       first_name,
       last_name,
       phone
     };
-    dispatch(createProfile(newProfile));
+    await dispatch(createProfile(newProfile));
+    dispatch(endLoader());
   };
 
   const logoutHandler = async () => {
+    dispatch(startLoader());
     await dispatch(logout()).then(() => {
+      dispatch(endLoader());
       navigation.navigate("Login");
     });
   };
@@ -73,7 +80,7 @@ export const CreateProfileScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
-        <LoadingSpinner loading={loading} />
+        {loader && <LoadingSpinner />}
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"

@@ -18,6 +18,7 @@ import { Alert } from "react-native";
 import { LogoutIcon } from "../../themes/icons";
 
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -27,18 +28,23 @@ export const CompanyManagerScreen = ({ navigation }) => {
     company: companyStore,
     auth: authUserStore
   } = store;
+
   const { isAuth } = authUserStore;
-  const { profile, loading: profileLoading } = profileStore;
-  const { company, loading: companyLoading } = companyStore;
+  const { profile } = profileStore;
+  const { company } = companyStore;
+
+  const [loader, setLoader] = React.useState(false);
 
   const [companyName, setCompanyName] = React.useState("");
   const [companyId, setCompanyId] = React.useState("");
 
   useEffect(() => {
+    dispatch(endLoader());
     isAuth && profile.company !== null && navigation.navigate("Home");
   }, [company]);
 
   const logoutHandler = async () => {
+    dispatch(endLoader());
     await dispatch(logout()).then(() => {
       navigation.navigate("Login");
     });
@@ -66,22 +72,26 @@ export const CompanyManagerScreen = ({ navigation }) => {
   );
 
   const createCompanyHandler = async () => {
+    dispatch(startLoader());
     const company = { company_name: companyName };
     await dispatch(createCompany(company)).then(() => {
       dispatch(getProfile());
     });
+    dispatch(endLoader());
   };
 
   const joinCompanyHandler = async () => {
+    dispatch(startLoader());
     const teamProfile = JSON.parse(JSON.stringify(profile));
     teamProfile.company_identificator = companyId;
-    dispatch(updateProfile(teamProfile));
+    await dispatch(updateProfile(teamProfile));
+    dispatch(endLoader());
   };
 
   return (
     <ScreenTemplate>
       <>
-        <LoadingSpinner loading={profileLoading || companyLoading} />
+        {loader && <LoadingSpinner />}
         <TopNavigation
           title="Управление компаниями"
           alignment="center"
