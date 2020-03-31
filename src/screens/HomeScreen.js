@@ -20,6 +20,7 @@ import { Toolbar } from "../components/navigation/Toolbar";
 import { ScrollView, View } from "react-native";
 
 import { prepareHomeData } from "../prepareHomeData";
+import { CustomDatePicker } from "../components/CustomDatePicker";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -128,6 +129,8 @@ export const HomeScreen = ({ navigation }) => {
             transaction={totalTransactions}
             action={totalActions}
           />
+
+          <CustomDatePicker />
 
           <HomeList dataList={homeListData} onRefresh={getData} />
         </View>

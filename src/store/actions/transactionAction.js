@@ -1,5 +1,4 @@
 import axios from "axios";
-import moment from "moment";
 
 import {
   GET_TRANSACTION,
@@ -26,12 +25,7 @@ export const getTransaction = () => async dispatch => {
         }
       })
       .then(res => {
-        const transaction = res.data.filter(elem =>
-          moment(elem.last_updated).isBetween(
-            moment().startOf("month"),
-            moment().endOf("month")
-          )
-        );
+        const transaction = res.data;
 
         dispatch({
           type: GET_TRANSACTION,

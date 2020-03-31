@@ -54,22 +54,3 @@ const styles = StyleSheet.create({
     textAlign: "center"
   }
 });
-
-// <View
-//   style={{
-//
-//   }}
-// >
-//   <Layout
-//     level="3"
-//     style={{
-//       justifyContent: "center",
-//       alignItems: "center",
-//       width: 60,
-//       borderRadius: 10,
-//       padding: 16
-//     }}
-//   >
-//
-//   </Layout>
-// </View>

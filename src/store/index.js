@@ -11,6 +11,7 @@ import { actionReducer } from "./reducers/actionReducer";
 import { transferReducer } from "./reducers/transferReducer";
 import { categoryReducer } from "./reducers/categoryReducer";
 import { tagReducer } from "./reducers/tagReducer";
+import { calendarReducer } from "./reducers/calendarReducer";
 
 const rootReducer = combineReducers({
   api: apiReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   action: actionReducer,
   transfer: transferReducer,
   category: categoryReducer,
-  tag: tagReducer
+  tag: tagReducer,
+  calendar: calendarReducer
 });
 
 export default createStore(rootReducer, applyMiddleware(thunk));

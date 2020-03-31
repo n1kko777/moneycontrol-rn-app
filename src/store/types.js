@@ -81,3 +81,7 @@ export const UPDATE_TAG = "UPDATE_TAG";
 export const CLEAR_TAG = "CLEAR_TAG";
 export const LOADING_TAG = "LOADING_TAG";
 export const ERROR_TAG = "ERROR_TAG";
+
+// Calendar
+export const SET_CALENDAR = "SET_CALENDAR";
+export const CLEAR_CALENDAR = "CLEAR_CALENDAR";

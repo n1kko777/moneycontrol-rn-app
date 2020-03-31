@@ -8,7 +8,6 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
-import moment from "moment";
 
 // Get action from server
 export const getAction = () => async dispatch => {
@@ -25,12 +24,7 @@ export const getAction = () => async dispatch => {
         }
       })
       .then(res => {
-        const action = res.data.filter(elem =>
-          moment(elem.last_updated).isBetween(
-            moment().startOf("month"),
-            moment().endOf("month")
-          )
-        );
+        const action = res.data;
 
         dispatch({
           type: GET_ACTION,

@@ -8,7 +8,6 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
-import moment from "moment";
 
 // Get transfer from server
 export const getTransfer = () => async dispatch => {
@@ -25,12 +24,7 @@ export const getTransfer = () => async dispatch => {
         }
       })
       .then(res => {
-        const transfer = res.data.filter(elem =>
-          moment(elem.last_updated).isBetween(
-            moment().startOf("month"),
-            moment().endOf("month")
-          )
-        );
+        const transfer = res.data;
 
         dispatch({
           type: GET_TRANSFER,
@@ -67,12 +61,7 @@ export const createTransfer = transfer => async dispatch => {
         }
       )
       .then(res => {
-        const transfer = res.data.filter(elem =>
-          moment(elem.last_updated).isBetween(
-            moment().startOf("month"),
-            moment().endOf("month")
-          )
-        );
+        const transfer = res.data;
         dispatch({
           type: CREATE_TRANSFER,
           payload: transfer
