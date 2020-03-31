@@ -21,6 +21,8 @@ import { ScrollView, View } from "react-native";
 import { prepareHomeData } from "../prepareHomeData";
 import { CustomDatePicker } from "../components/CustomDatePicker";
 
+import { filterArrayByDate } from "../filterArrayByDate";
+
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
@@ -29,6 +31,7 @@ export const HomeScreen = ({ navigation }) => {
 
   const state = useSelector(state => state);
 
+  const { startDate, endDate } = state.calendar;
   const { profile } = state.profile;
   const { company } = state.company;
   const { accounts } = state.account;
@@ -54,21 +57,24 @@ export const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     setTotalActions(
       parseFloat(
-        actions.reduce((sum, nextAcc) => (sum += +nextAcc.action_amount), 0)
+        filterArrayByDate(actions, startDate, endDate).reduce(
+          (sum, nextAcc) => (sum += +nextAcc.action_amount),
+          0
+        )
       )
     );
-  }, [actions]);
+  }, [actions, startDate]);
 
   useEffect(() => {
     setTotalTransactions(
       parseFloat(
-        transactions.reduce(
+        filterArrayByDate(transactions, startDate, endDate).reduce(
           (sum, nextAcc) => (sum += +nextAcc.transaction_amount),
           0
         )
       )
     );
-  }, [transactions]);
+  }, [transactions, startDate]);
 
   useEffect(() => {
     setTotalBalance(
@@ -76,7 +82,7 @@ export const HomeScreen = ({ navigation }) => {
         accounts.reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
       )
     );
-  }, [accounts]);
+  }, [accounts, startDate]);
 
   useEffect(() => {
     getData();
@@ -86,9 +92,9 @@ export const HomeScreen = ({ navigation }) => {
     profile,
     company,
     accounts,
-    transactions,
-    actions,
-    transfer,
+    filterArrayByDate(transactions, startDate, endDate),
+    filterArrayByDate(actions, startDate, endDate),
+    filterArrayByDate(transfer, startDate, endDate),
     categories,
     tags
   );
