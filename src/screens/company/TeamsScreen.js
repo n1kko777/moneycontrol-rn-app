@@ -7,7 +7,6 @@ import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 

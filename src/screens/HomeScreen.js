@@ -10,7 +10,6 @@ import { Layout, useTheme } from "@ui-kitten/components";
 
 import { ThemeContext } from "../themes/theme-context";
 
-import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ScreenTemplate } from "../components/ScreenTemplate";
 
 import { BalanceComponent } from "../components/home/BalanceComponent";

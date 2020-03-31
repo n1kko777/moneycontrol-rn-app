@@ -17,7 +17,6 @@ import { Alert } from "react-native";
 
 import { LogoutIcon } from "../../themes/icons";
 
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const CompanyManagerScreen = ({ navigation }) => {

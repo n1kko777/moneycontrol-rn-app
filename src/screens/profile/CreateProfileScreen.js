@@ -17,7 +17,6 @@ import { THEME } from "../../themes/themes";
 
 import { LogoutIcon } from "../../themes/icons";
 
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const CreateProfileScreen = ({ navigation }) => {

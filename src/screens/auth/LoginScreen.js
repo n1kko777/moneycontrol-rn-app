@@ -11,8 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { authLogin, logout } from "../../store/actions/authAction";
 import { getProfile } from "../../store/actions/profileAction";
 
-import { LoadingSpinner } from "../../components/LoadingSpinner";
-
 import { startLoader, endLoader } from ".././../store/actions/apiAction";
 
 export const LoginScreen = ({ route, navigation }) => {
