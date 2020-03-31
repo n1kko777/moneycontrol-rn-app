@@ -21,8 +21,6 @@ export const LoginScreen = ({ route, navigation }) => {
   const { isAuth, error: authError, loading: authLoading } = state.auth;
   const { profile, error: profileError } = state.profile;
 
-  const [loader, setLoader] = React.useState(false);
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -99,7 +97,6 @@ export const LoginScreen = ({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      {loader && <LoadingSpinner />}
       <Layout
         style={{
           flex: 1,

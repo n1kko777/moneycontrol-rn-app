@@ -30,8 +30,6 @@ export const RegisterScreen = ({ navigation }) => {
   const state = useSelector(state => state);
   const { isRegister, error } = state.auth;
 
-  const [loader, setLoader] = React.useState(false);
-
   useEffect(() => {
     if (error === null && isRegister) {
       setFirstName("");
@@ -76,7 +74,6 @@ export const RegisterScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
-        {loader && <LoadingSpinner />}
         <TopNavigation
           title="Регистрация"
           alignment="center"

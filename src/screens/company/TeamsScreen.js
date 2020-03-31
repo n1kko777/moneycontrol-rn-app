@@ -25,8 +25,6 @@ export const TeamsScreen = ({ navigation }) => {
 
   const companyProfileListData = company.profiles;
 
-  const [loader, setLoader] = React.useState(false);
-
   const getDataHandler = async () => {
     dispatch(startLoader());
     await dispatch(getCompany());
@@ -35,7 +33,6 @@ export const TeamsScreen = ({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      {loader && <LoadingSpinner />}
       <Toolbar
         navigation={navigation}
         title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}

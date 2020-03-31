@@ -33,8 +33,6 @@ export const CompanyManagerScreen = ({ navigation }) => {
   const { profile } = profileStore;
   const { company } = companyStore;
 
-  const [loader, setLoader] = React.useState(false);
-
   const [companyName, setCompanyName] = React.useState("");
   const [companyId, setCompanyId] = React.useState("");
 
@@ -91,7 +89,6 @@ export const CompanyManagerScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
-        {loader && <LoadingSpinner />}
         <TopNavigation
           title="Управление компаниями"
           alignment="center"

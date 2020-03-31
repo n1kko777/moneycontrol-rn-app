@@ -29,8 +29,6 @@ export const CreateProfileScreen = ({ navigation }) => {
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
-  const [loader, setLoader] = React.useState(false);
-
   useEffect(() => {
     profile !== undefined &&
       profile.hasOwnProperty("company") &&
@@ -80,7 +78,6 @@ export const CreateProfileScreen = ({ navigation }) => {
   return (
     <ScreenTemplate>
       <>
-        {loader && <LoadingSpinner />}
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"

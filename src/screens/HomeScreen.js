@@ -45,8 +45,6 @@ export const HomeScreen = ({ navigation }) => {
   );
   const [totalActions, setTotalActions] = React.useState(parseFloat(0));
 
-  const [loader, setLoader] = React.useState(false);
-
   const getData = async () => {
     dispatch(startLoader());
     await dispatch(getDataDispatcher()).then(() => {
@@ -98,8 +96,6 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      {loader && <LoadingSpinner />}
-
       <Layout
         style={{
           backgroundColor:
