@@ -50,3 +50,5 @@ export const DeleteIcon = style => <Icon {...style} name="trash-outline" />;
 export const CalendarIcon = style => (
   <Icon {...style} name="calendar-outline" />
 );
+
+export const ExchangeIcon = style => <Icon {...style} name="flip-2-outline" />;

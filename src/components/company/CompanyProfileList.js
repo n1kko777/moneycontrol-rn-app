@@ -1,8 +1,7 @@
 import React from "react";
 import { View, FlatList } from "react-native";
-import { Text, ListItem, Button, useTheme } from "@ui-kitten/components";
+import { ListItem, useTheme } from "@ui-kitten/components";
 import { ProfileIcon, RightIcon } from "../../themes/icons";
-import { THEME } from "../../themes/themes";
 
 import { ThemeContext } from "../../themes/theme-context";
 import { getShortName } from "../../getShortName";
@@ -34,7 +33,13 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
       title={`${getShortName(item.first_name + " " + item.last_name)} ${
         item.is_admin ? "⭐️" : ""
       }`}
+      titleStyle={{
+        fontSize: 16
+      }}
       description={`${item.accounts.join(",")}`}
+      descriptionStyle={{
+        fontSize: 14
+      }}
       icon={renderItemIcon}
       accessory={isAdmin && renderItemAccessory}
       style={{
@@ -50,20 +55,6 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
   return (
     <FlatList
       style={{ marginHorizontal: 8, marginTop: 15 }}
-      ListFooterComponent={
-        <View style={{ marginHorizontal: 16, marginTop: 30 }}>
-          {isAdmin && (
-            <Button
-              style={{
-                borderRadius: THEME.BUTTON_RADIUS
-              }}
-              status="info"
-            >
-              Добавить сотрудника
-            </Button>
-          )}
-        </View>
-      }
       ListFooterComponentStyle={{ paddingBottom: 30 }}
       keyExtractor={keyExtractor}
       data={dataList}

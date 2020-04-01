@@ -131,9 +131,15 @@ export const HomeScreen = ({ navigation }) => {
             action={totalActions}
           />
 
-          <CustomDatePicker />
+          <View style={{ height: 30, marginVertical: 10 }}>
+            <CustomDatePicker />
+          </View>
 
-          <HomeList dataList={homeListData} onRefresh={getData} />
+          <HomeList
+            navigation={navigation}
+            dataList={homeListData}
+            onRefresh={getData}
+          />
         </View>
       </ScrollView>
     </ScreenTemplate>

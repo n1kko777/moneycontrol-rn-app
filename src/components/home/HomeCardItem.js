@@ -21,6 +21,7 @@ export const HomeCardItem = ({
     >
       <Text
         style={{
+          fontSize: 16,
           color:
             kittenTheme[
               color !== undefined
@@ -35,6 +36,7 @@ export const HomeCardItem = ({
       </Text>
       <Text
         style={{
+          fontSize: 16,
           color:
             kittenTheme[
               color !== undefined

@@ -8,9 +8,13 @@ import { HomeCardItem } from "./HomeCardItem";
 import { ThemeContext } from "../../themes/theme-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const HomeCard = ({ item }) => {
+export const HomeCard = ({ item, navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
+
+  const titleNavigationHandler = () => {
+    navigation.navigate(item.navigate);
+  };
 
   return (
     <Layout
@@ -30,6 +34,7 @@ export const HomeCard = ({ item }) => {
           flexDirection: "row",
           marginBottom: 20
         }}
+        onPress={titleNavigationHandler}
       >
         <Text category="h5">{item.title}</Text>
         <RightIcon

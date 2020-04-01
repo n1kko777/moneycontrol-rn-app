@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getCompany } from "../../store/actions/companyAction";
 
-import { useTheme, Layout } from "@ui-kitten/components";
+import { useTheme, Layout, Button } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -11,6 +11,8 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { View } from "react-native";
+import { THEME } from "../../themes/themes";
 
 export const TeamsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -46,10 +48,28 @@ export const TeamsScreen = ({ navigation }) => {
             ]
         }}
       >
-        <CompanyProfileList
-          dataList={companyProfileListData}
-          isAdmin={profile.is_admin}
-        />
+        <View style={{ height: profile.is_admin ? 60 : 0, marginVertical: 20 }}>
+          {profile.is_admin && (
+            <Button
+              style={{
+                alignSelf: "center",
+                paddingHorizontal: 20,
+                borderRadius: THEME.BUTTON_RADIUS
+              }}
+              status="info"
+            >
+              Добавить сотрудника
+            </Button>
+          )}
+        </View>
+        <Layout
+          style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
+        >
+          <CompanyProfileList
+            dataList={companyProfileListData}
+            isAdmin={profile.is_admin}
+          />
+        </Layout>
       </Layout>
     </ScreenTemplate>
   );
