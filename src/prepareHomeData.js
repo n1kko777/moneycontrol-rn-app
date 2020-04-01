@@ -76,7 +76,7 @@ export const prepareHomeData = (
         data: accounts
           .filter(acc => acc.profile === profile.id)
           .map(elem => ({
-            id: elem.id,
+            id: elem.last_updated,
             name: elem.account_name,
             balance: elem.balance
           }))
@@ -86,7 +86,7 @@ export const prepareHomeData = (
       homeListData.push({
         title: "Категории",
         data: categories.map(elem => ({
-          id: elem.id,
+          id: elem.last_updated,
           name: elem.category_name,
           balance: ""
         }))
@@ -96,7 +96,7 @@ export const prepareHomeData = (
       homeListData.push({
         title: "Теги",
         data: tags.map(elem => ({
-          id: elem.id,
+          id: elem.last_updated,
           name: elem.tag_name,
           balance: ""
         }))
