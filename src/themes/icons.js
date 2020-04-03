@@ -52,3 +52,10 @@ export const CalendarIcon = style => (
 );
 
 export const ExchangeIcon = style => <Icon {...style} name="flip-2-outline" />;
+
+export const TrendingUpIcon = style => (
+  <Icon {...style} name="trending-up-outline" />
+);
+export const TrendingDownIcon = style => (
+  <Icon {...style} name="trending-down-outline" />
+);
