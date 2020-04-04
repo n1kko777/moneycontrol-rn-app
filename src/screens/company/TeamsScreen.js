@@ -37,7 +37,7 @@ export const TeamsScreen = ({ navigation }) => {
             ]
         }}
       >
-        <View style={{ height: profile.is_admin ? 60 : 0, marginVertical: 20 }}>
+        <View style={{ height: profile.is_admin ? 40 : 0, marginVertical: 20 }}>
           {profile.is_admin && (
             <Button
               style={{

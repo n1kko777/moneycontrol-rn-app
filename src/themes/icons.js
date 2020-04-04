@@ -59,3 +59,8 @@ export const TrendingUpIcon = style => (
 export const TrendingDownIcon = style => (
   <Icon {...style} name="trending-down-outline" />
 );
+
+export const ChartIcon = style => <Icon {...style} name="pie-chart-outline" />;
+export const CardIcon = style => <Icon {...style} name="credit-card-outline" />;
+export const CategoryIcon = style => <Icon {...style} name="archive-outline" />;
+export const TagIcon = style => <Icon {...style} name="hash-outline" />;
