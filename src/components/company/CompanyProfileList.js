@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { ListItem, useTheme } from "@ui-kitten/components";
 import { ProfileIcon, RightIcon } from "../../themes/icons";
 

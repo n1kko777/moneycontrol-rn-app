@@ -12,7 +12,6 @@ import { useColorScheme } from "react-native-appearance";
 
 import { AppNavigator } from "../navigations/AppNavigator";
 import { LoadingSpinner } from "../components/LoadingSpinner";
-import { View } from "react-native";
 
 const themes = { light, dark };
 

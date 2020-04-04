@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
-import {
-  getDataDispatcher,
-  startLoader,
-  endLoader
-} from "../store/actions/apiAction";
+import { useSelector } from "react-redux";
+
 import { Layout, useTheme } from "@ui-kitten/components";
 
 import { ThemeContext } from "../themes/theme-context";
@@ -24,8 +20,6 @@ import { CustomDatePicker } from "../components/CustomDatePicker";
 import { filterArrayByDate } from "../filterArrayByDate";
 
 export const HomeScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -46,13 +40,6 @@ export const HomeScreen = ({ navigation }) => {
     parseFloat(0)
   );
   const [totalActions, setTotalActions] = React.useState(parseFloat(0));
-
-  const getData = async () => {
-    dispatch(startLoader());
-    await dispatch(getDataDispatcher()).then(() => {
-      dispatch(endLoader());
-    });
-  };
 
   useEffect(() => {
     setTotalActions(
@@ -84,10 +71,6 @@ export const HomeScreen = ({ navigation }) => {
     );
   }, [accounts, startDate]);
 
-  useEffect(() => {
-    getData();
-  }, [dispatch]);
-
   const homeListData = prepareHomeData(
     profile,
     company,
@@ -112,7 +95,6 @@ export const HomeScreen = ({ navigation }) => {
         <Toolbar
           title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
           navigation={navigation}
-          getData={getData}
         />
       </Layout>
       <ScrollView
@@ -135,11 +117,7 @@ export const HomeScreen = ({ navigation }) => {
             <CustomDatePicker />
           </View>
 
-          <HomeList
-            navigation={navigation}
-            dataList={homeListData}
-            onRefresh={getData}
-          />
+          <HomeList navigation={navigation} dataList={homeListData} />
         </View>
       </ScrollView>
     </ScreenTemplate>

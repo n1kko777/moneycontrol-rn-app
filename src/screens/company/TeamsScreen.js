@@ -1,6 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getCompany } from "../../store/actions/companyAction";
+import { useSelector } from "react-redux";
 
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
@@ -10,13 +9,10 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 
 export const TeamsScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -26,18 +22,11 @@ export const TeamsScreen = ({ navigation }) => {
 
   const companyProfileListData = company.profiles;
 
-  const getDataHandler = async () => {
-    dispatch(startLoader());
-    await dispatch(getCompany());
-    dispatch(endLoader());
-  };
-
   return (
     <ScreenTemplate>
       <Toolbar
         navigation={navigation}
         title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
-        getData={getDataHandler}
       />
       <Layout
         style={{

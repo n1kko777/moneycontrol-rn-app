@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  TopNavigation,
-  TopNavigationAction,
-  Icon
-} from "@ui-kitten/components";
+import { TopNavigation, TopNavigationAction } from "@ui-kitten/components";
 import { TopMenuOptions } from "./TopMenuOptions";
 import { ProfileIcon } from "../../themes/icons";
 
@@ -11,10 +7,8 @@ const ProfileAction = props => (
   <TopNavigationAction {...props} icon={ProfileIcon} />
 );
 
-export const Toolbar = ({ title, navigation, getData, style }) => {
-  const renderMenuAction = () => (
-    <TopMenuOptions navigation={navigation} getData={getData} />
-  );
+export const Toolbar = ({ title, navigation, style }) => {
+  const renderMenuAction = () => <TopMenuOptions navigation={navigation} />;
 
   const renderProfileAction = () => <ProfileAction onPress={() => {}} />;
 

@@ -1,16 +1,11 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { useTheme, Layout, Text } from "@ui-kitten/components";
+import { useTheme, Layout } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { getTransaction } from "../../store/actions/transactionAction";
-import { getAction } from "../../store/actions/actionAction";
-import { getTransfer } from "../../store/actions/transferAction";
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 
 import { OperationList } from "../../components/operation/OperationList";
@@ -20,8 +15,6 @@ import { filterArrayByDate } from "../../filterArrayByDate";
 import { prepareOperationData } from "../../prepareOperationData";
 
 export const OperationsScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -39,17 +32,6 @@ export const OperationsScreen = ({ navigation }) => {
   const { categories } = state.category;
   const { tags } = state.tag;
 
-  const getDataHandler = async () => {
-    dispatch(startLoader());
-    await Promise.all([
-      dispatch(getTransaction()),
-      dispatch(getAction()),
-      dispatch(getTransfer())
-    ]);
-
-    dispatch(endLoader());
-  };
-
   const operationListData = prepareOperationData(
     company,
     filterArrayByDate(transactions, startDate, endDate),
@@ -62,7 +44,6 @@ export const OperationsScreen = ({ navigation }) => {
       <Toolbar
         navigation={navigation}
         title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
-        getData={getDataHandler}
       />
       <Layout
         style={{
