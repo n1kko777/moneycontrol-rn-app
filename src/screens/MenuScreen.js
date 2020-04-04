@@ -3,11 +3,13 @@ import { View } from "react-native";
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 
 import {
-  ChartIcon,
   TeamIcon,
   CardIcon,
   CategoryIcon,
-  TagIcon
+  TagIcon,
+  OperationIcon,
+  OoperationIcon,
+  ProfileIcon
 } from "../themes/icons";
 import { THEME } from "../themes/themes";
 import { ThemeContext } from "../themes/theme-context";
@@ -21,6 +23,11 @@ export const MenuScreen = ({ navigation }) => {
   const kittenTheme = useTheme();
 
   const menuListData = [
+    {
+      title: "Профиль",
+      navLink: () => navigation.navigate("Profile"),
+      icon: ProfileIcon
+    },
     {
       title: "Команда",
       navLink: () => navigation.navigate("Team"),
@@ -40,6 +47,11 @@ export const MenuScreen = ({ navigation }) => {
       title: "Теги",
       navLink: () => navigation.navigate("Tag"),
       icon: TagIcon
+    },
+    {
+      title: "Операции",
+      navLink: () => navigation.navigate("Operation"),
+      icon: OoperationIcon
     }
   ];
 
@@ -62,7 +74,6 @@ export const MenuScreen = ({ navigation }) => {
               paddingHorizontal: 20,
               borderRadius: THEME.BUTTON_RADIUS
             }}
-            icon={ChartIcon}
             status="info"
           >
             Сформировать отчет

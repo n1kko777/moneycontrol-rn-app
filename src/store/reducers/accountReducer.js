@@ -3,7 +3,8 @@ import {
   CREATE_ACCOUNT,
   LOADING_ACCOUNT,
   ERROR_ACCOUNT,
-  CLEAR_ACCOUNT
+  CLEAR_ACCOUNT,
+  DELETE_ACCOUNT
 } from "../types";
 
 const initialState = {
@@ -27,6 +28,13 @@ export const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         accounts: payload,
+        loading: false
+      };
+    case DELETE_ACCOUNT:
+      console.log("case DELETE_ACCOUNT:");
+      return {
+        ...state,
+        accounts: state.accounts.filter(account => account.id !== payload.id),
         loading: false
       };
     case CLEAR_ACCOUNT:

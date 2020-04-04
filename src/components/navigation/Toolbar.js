@@ -3,14 +3,20 @@ import { TopNavigation, TopNavigationAction } from "@ui-kitten/components";
 import { TopMenuOptions } from "./TopMenuOptions";
 import { ProfileIcon } from "../../themes/icons";
 
-const ProfileAction = props => (
-  <TopNavigationAction {...props} icon={ProfileIcon} />
-);
-
-export const Toolbar = ({ title, navigation, style }) => {
+export const Toolbar = ({
+  title,
+  navigation,
+  style,
+  TargetIcon = ProfileIcon,
+  onTarget = () => {}
+}) => {
   const renderMenuAction = () => <TopMenuOptions navigation={navigation} />;
 
-  const renderProfileAction = () => <ProfileAction onPress={() => {}} />;
+  const ProfileAction = props => (
+    <TopNavigationAction {...props} icon={TargetIcon} />
+  );
+
+  const renderProfileAction = () => <ProfileAction onPress={onTarget} />;
 
   return (
     <TopNavigation

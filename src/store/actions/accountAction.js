@@ -3,7 +3,8 @@ import {
   GET_ACCOUNT,
   CREATE_ACCOUNT,
   LOADING_ACCOUNT,
-  ERROR_ACCOUNT
+  ERROR_ACCOUNT,
+  DELETE_ACCOUNT
 } from "../types";
 
 import { endpointAPI } from "../constants";
@@ -66,6 +67,42 @@ export const createAccount = account => async dispatch => {
         dispatch({
           type: CREATE_ACCOUNT,
           payload: account
+        });
+      })
+
+      .catch(error => {
+        dispatch(accountFail(error));
+      });
+  } catch (error) {
+    dispatch(accountFail(error));
+  }
+};
+
+// Delete account from server
+export const hideAccount = account => async dispatch => {
+  dispatch(setLoading());
+
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    return await axios
+      .put(
+        `${endpointAPI}/Account/${account.id}/`,
+        {
+          ...account
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token
+          }
+        }
+      )
+      .then(res => {
+        const hiddenAccount = res.data;
+        dispatch({
+          type: DELETE_ACCOUNT,
+          payload: hiddenAccount
         });
       })
 
