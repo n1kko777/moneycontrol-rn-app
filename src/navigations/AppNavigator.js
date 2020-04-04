@@ -14,7 +14,8 @@ const HomeNavigator = () => (
   <Stack.Navigator
     headerMode="none"
     screenOptions={{
-      gestureEnabled: false
+      gestureEnabled: false,
+      headerLeft: null
     }}
     initialRouteName="Login"
   >

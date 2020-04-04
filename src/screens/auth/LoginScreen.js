@@ -27,7 +27,7 @@ export const LoginScreen = ({ route, navigation }) => {
   const checkLogIn = async () => {
     dispatch(startLoader());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
-    if (token !== null) {
+    if (token !== null && authError === null) {
       try {
         await dispatch(getProfile());
       } catch (error) {
@@ -46,7 +46,7 @@ export const LoginScreen = ({ route, navigation }) => {
   };
 
   const isAuthHandler = async () => {
-    if (isAuth) {
+    if (isAuth && authError === null) {
       dispatch(startLoader());
       await dispatch(getProfile());
       dispatch(endLoader());

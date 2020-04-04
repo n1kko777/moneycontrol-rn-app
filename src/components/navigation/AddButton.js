@@ -10,6 +10,10 @@ import {
   TrendingDownIcon,
   ExchangeIcon
 } from "../../themes/icons";
+import {
+  TouchableHighlight,
+  TouchableOpacity
+} from "react-native-gesture-handler";
 
 export const AddButton = ({ kittenTheme }) => {
   const mode = new Animated.Value(0);
@@ -20,7 +24,7 @@ export const AddButton = ({ kittenTheme }) => {
     Animated.sequence([
       Animated.timing(mode, {
         toValue: mode._value === 0 ? 1 : 0,
-        duration: 200
+        duration: 150
       })
     ]).start();
   };
@@ -33,32 +37,32 @@ export const AddButton = ({ kittenTheme }) => {
 
   const earnX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -94]
+    outputRange: [0, -89]
   });
 
   const earnY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [-35, -100]
+    outputRange: [-30, -100]
   });
 
   const exchangeX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 0]
+    outputRange: [0, 5]
   });
 
   const exchangeY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [-35, -150]
+    outputRange: [-30, -150]
   });
 
   const spendX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 94]
+    outputRange: [0, 89]
   });
 
   const spendY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [-35, -100]
+    outputRange: [-30, -100]
   });
 
   const rotation = mode.interpolate({
@@ -81,12 +85,14 @@ export const AddButton = ({ kittenTheme }) => {
           alignItems: "center"
         }}
       >
-        <Button
-          status="success"
-          style={styles.secondaryButton}
-          icon={TrendingUpIcon}
-          onPress={navigateHandlePress}
-        />
+        <TouchableOpacity onPress={navigateHandlePress}>
+          <Button
+            status="success"
+            style={styles.secondaryButton}
+            icon={TrendingUpIcon}
+          />
+        </TouchableOpacity>
+
         <Animated.View
           style={{
             opacity
@@ -105,12 +111,14 @@ export const AddButton = ({ kittenTheme }) => {
           alignItems: "center"
         }}
       >
-        <Button
-          status="info"
-          style={styles.secondaryButton}
-          icon={ExchangeIcon}
-          onPress={navigateHandlePress}
-        />
+        <TouchableOpacity onPress={navigateHandlePress}>
+          <Button
+            status="info"
+            style={styles.secondaryButton}
+            icon={ExchangeIcon}
+          />
+        </TouchableOpacity>
+
         <Animated.View
           style={{
             opacity
@@ -129,12 +137,13 @@ export const AddButton = ({ kittenTheme }) => {
           alignItems: "center"
         }}
       >
-        <Button
-          status="danger"
-          style={styles.secondaryButton}
-          icon={TrendingDownIcon}
-          onPress={navigateHandlePress}
-        />
+        <TouchableOpacity onPress={navigateHandlePress}>
+          <Button
+            style={styles.secondaryButton}
+            status="danger"
+            icon={TrendingDownIcon}
+          />
+        </TouchableOpacity>
         <Animated.View
           style={{
             opacity
@@ -151,16 +160,14 @@ export const AddButton = ({ kittenTheme }) => {
           ...styles.button,
           backgroundColor: kittenTheme["color-info-500"]
         }}
+        size="giant"
         icon={() => (
           <Animated.View
             style={{
               transform: [{ rotate: rotation }]
             }}
           >
-            <AddIcon
-              style={{ marginTop: -6, marginLeft: -6, width: 24, height: 24 }}
-              fill="#fff"
-            />
+            <AddIcon style={{ marginTop: -4, marginLeft: -4 }} fill="#fff" />
           </Animated.View>
         )}
       />
@@ -175,13 +182,15 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    marginTop: -40
+    marginTop: -35,
+    zIndex: 2
   },
   secondaryButton: {
     alignItems: "center",
     justifyContent: "center",
     width: 48,
     height: 48,
-    borderRadius: 24
+    borderRadius: 24,
+    zIndex: 1
   }
 });
