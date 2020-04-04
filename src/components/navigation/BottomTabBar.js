@@ -3,7 +3,8 @@ import { SafeAreaView } from "react-native";
 import {
   BottomNavigation,
   BottomNavigationTab,
-  useTheme
+  useTheme,
+  Divider
 } from "@ui-kitten/components";
 import {
   HomeIcon,
@@ -32,6 +33,7 @@ export const BottomTabBar = ({ navigation, state }) => {
           ]
       }}
     >
+      <Divider />
       <BottomNavigation
         appearance="noIndicator"
         selectedIndex={state.index}

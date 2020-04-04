@@ -2,22 +2,22 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout, Text } from "@ui-kitten/components";
-import { ThemeContext } from "../themes/theme-context";
+import { ThemeContext } from "../../themes/theme-context";
 
-import { Toolbar } from "../components/navigation/Toolbar";
-import { ScreenTemplate } from "../components/ScreenTemplate";
+import { Toolbar } from "../../components/navigation/Toolbar";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
 
-import { startLoader, endLoader } from "../store/actions/apiAction";
-import { getTransaction } from "../store/actions/transactionAction";
-import { getAction } from "../store/actions/actionAction";
-import { getTransfer } from "../store/actions/transferAction";
-import { CustomDatePicker } from "../components/CustomDatePicker";
+import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { getTransaction } from "../../store/actions/transactionAction";
+import { getAction } from "../../store/actions/actionAction";
+import { getTransfer } from "../../store/actions/transferAction";
+import { CustomDatePicker } from "../../components/CustomDatePicker";
 
-import { OperationList } from "../components/operation/OperationList";
+import { OperationList } from "../../components/operation/OperationList";
 import { View } from "react-native";
 
-import { filterArrayByDate } from "../filterArrayByDate";
-import { prepareOperationData } from "../prepareOperationData";
+import { filterArrayByDate } from "../../filterArrayByDate";
+import { prepareOperationData } from "../../prepareOperationData";
 
 export const OperationsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
