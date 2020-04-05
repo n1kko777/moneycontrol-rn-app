@@ -4,13 +4,13 @@ import {
   LOADING_ACCOUNT,
   ERROR_ACCOUNT,
   CLEAR_ACCOUNT,
-  DELETE_ACCOUNT
+  DELETE_ACCOUNT,
 } from "../types";
 
 const initialState = {
   accounts: [],
   error: null,
-  loading: false
+  loading: false,
 };
 
 export const accountReducer = (state = initialState, action) => {
@@ -21,35 +21,40 @@ export const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         accounts: payload,
-        loading: false
+        loading: false,
+        error: null,
       };
     case CREATE_ACCOUNT:
       console.log("case CREATE_ACCOUNT:");
       return {
         ...state,
-        accounts: payload,
-        loading: false
+        accounts: [...state.accounts, payload],
+        loading: false,
+        error: null,
       };
     case DELETE_ACCOUNT:
       console.log("case DELETE_ACCOUNT:");
       return {
         ...state,
-        accounts: state.accounts.filter(account => account.id !== payload.id),
-        loading: false
+        accounts: state.accounts.filter((account) => account.id !== payload.id),
+        loading: false,
+        error: null,
       };
     case CLEAR_ACCOUNT:
       console.log("case CLEAR_ACCOUNT:");
       return {
         ...state,
         accounts: [],
-        loading: false
+        loading: false,
+        error: null,
       };
     case LOADING_ACCOUNT:
       console.log("==========================");
       console.log("case LOADING_ACCOUNT:");
       return {
         ...state,
-        loading: true
+        loading: true,
+        error: null,
       };
 
     case ERROR_ACCOUNT:
@@ -57,7 +62,7 @@ export const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: payload
+        error: payload,
       };
     default:
       return state;

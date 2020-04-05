@@ -8,6 +8,7 @@ import { CompanyManagerScreen } from "../screens/company/CompanyManagerScreen";
 
 import { RootNavigator } from "./RootNavigator";
 import { AccountScreen } from "../screens/account/AccountScreen";
+import { CreateAccountScreen } from "../screens/account/CreateAccountScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,7 +17,7 @@ const HomeNavigator = () => (
     headerMode="none"
     screenOptions={{
       gestureEnabled: false,
-      headerLeft: null
+      headerLeft: null,
     }}
     initialRouteName="Login"
   >
@@ -26,6 +27,7 @@ const HomeNavigator = () => (
     <Stack.Screen name="CreateProfile" component={CreateProfileScreen} />
     <Stack.Screen name="CompanyManager" component={CompanyManagerScreen} />
     <Stack.Screen name="Account" component={AccountScreen} />
+    <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
   </Stack.Navigator>
 );
 

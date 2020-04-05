@@ -28,7 +28,7 @@ export const AccountScreen = ({ navigation }) => {
           backgroundColor:
             kittenTheme[
               `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ]
+            ],
         }}
       >
         <View style={{ marginVertical: 20 }}>
@@ -36,9 +36,10 @@ export const AccountScreen = ({ navigation }) => {
             style={{
               alignSelf: "center",
               paddingHorizontal: 20,
-              borderRadius: THEME.BUTTON_RADIUS
+              borderRadius: THEME.BUTTON_RADIUS,
             }}
             status="info"
+            onPress={() => navigation.navigate("CreateAccount")}
           >
             Добавить счет
           </Button>

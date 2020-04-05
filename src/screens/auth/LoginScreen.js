@@ -12,10 +12,11 @@ import { authLogin, logout } from "../../store/actions/authAction";
 import { getProfile } from "../../store/actions/profileAction";
 
 import { startLoader, endLoader } from ".././../store/actions/apiAction";
+import { Keyboard } from "react-native";
 
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
   const { isAuth, error: authError, loading: authLoading } = state.auth;
   const { profile, error: profileError } = state.profile;
 
@@ -73,6 +74,7 @@ export const LoginScreen = ({ route, navigation }) => {
 
   const onSubmit = async () => {
     dispatch(startLoader());
+    Keyboard.dismiss();
     await dispatch(authLogin(email, password));
     dispatch(endLoader());
   };
@@ -99,14 +101,14 @@ export const LoginScreen = ({ route, navigation }) => {
         style={{
           flex: 1,
           justifyContent: "flex-start",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <View style={{ marginBottom: 50, marginTop: 70 }}>
           <Image
             style={{ width: 120, height: 120 }}
             source={{
-              uri: "https://studwallet.herokuapp.com/static/logo192.png"
+              uri: "https://studwallet.herokuapp.com/static/logo192.png",
             }}
           />
         </View>
@@ -114,7 +116,7 @@ export const LoginScreen = ({ route, navigation }) => {
           style={{
             width: "85%",
             maxWidth: 720,
-            manrginBottom: 25
+            manrginBottom: 25,
           }}
         >
           <Input
@@ -139,7 +141,7 @@ export const LoginScreen = ({ route, navigation }) => {
           <Button
             style={{
               marginVertical: 25,
-              borderRadius: THEME.BUTTON_RADIUS
+              borderRadius: THEME.BUTTON_RADIUS,
             }}
             onPress={onSubmit}
           >
@@ -151,7 +153,7 @@ export const LoginScreen = ({ route, navigation }) => {
             style={{
               marginVertical: 7,
               borderRadius: THEME.BUTTON_RADIUS,
-              textDecorationLine: "underline"
+              textDecorationLine: "underline",
             }}
           >
             Забыли пароль?
@@ -162,7 +164,7 @@ export const LoginScreen = ({ route, navigation }) => {
             style={{
               marginVertical: 7,
               borderRadius: THEME.BUTTON_RADIUS,
-              textDecorationLine: "underline"
+              textDecorationLine: "underline",
             }}
           >
             Зарегистрироваться
