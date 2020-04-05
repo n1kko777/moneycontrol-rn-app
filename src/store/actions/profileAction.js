@@ -4,14 +4,14 @@ import {
   CREATE_PROFILE,
   UPDATE_PROFILE,
   LOADING_PROFILE,
-  ERROR_PROFILE
+  ERROR_PROFILE,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get profile from server
-export const getProfile = () => async dispatch => {
+export const getProfile = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -21,19 +21,19 @@ export const getProfile = () => async dispatch => {
       .get(`${endpointAPI}/Profile/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const profile = res.data[0];
 
         dispatch({
           type: GET_PROFILE,
-          payload: profile
+          payload: profile,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(profileFail(error));
       });
   } catch (error) {
@@ -42,7 +42,7 @@ export const getProfile = () => async dispatch => {
 };
 
 // Create profile from server
-export const createProfile = profile => async dispatch => {
+export const createProfile = (profile) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -52,25 +52,25 @@ export const createProfile = profile => async dispatch => {
       .post(
         `${endpointAPI}/Profile/`,
         {
-          ...profile
+          ...profile,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const profile = res.data;
 
         dispatch({
           type: CREATE_PROFILE,
-          payload: profile
+          payload: profile,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(profileFail(error));
       });
   } catch (error) {
@@ -79,7 +79,7 @@ export const createProfile = profile => async dispatch => {
 };
 
 // Update profile from server
-export const updateProfile = profile => async dispatch => {
+export const updateProfile = (profile) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -89,25 +89,25 @@ export const updateProfile = profile => async dispatch => {
       .put(
         `${endpointAPI}/Profile/${profile.id}/`,
         {
-          ...profile
+          ...profile,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const profile = res.data;
 
         dispatch({
           type: UPDATE_PROFILE,
-          payload: profile
+          payload: profile,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(profileFail(error));
       });
   } catch (error) {
@@ -115,7 +115,7 @@ export const updateProfile = profile => async dispatch => {
   }
 };
 
-export const profileFail = error => dispatch => {
+export const profileFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -149,18 +149,18 @@ export const profileFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_PROFILE,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_PROFILE
+    type: LOADING_PROFILE,
   });
 };

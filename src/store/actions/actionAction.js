@@ -3,14 +3,14 @@ import {
   GET_ACTION,
   CREATE_ACTION,
   LOADING_ACTION,
-  ERROR_ACTION
+  ERROR_ACTION,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get action from server
-export const getAction = () => async dispatch => {
+export const getAction = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -20,19 +20,19 @@ export const getAction = () => async dispatch => {
       .get(`${endpointAPI}/Action/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
-        const action = res.data;
+      .then((res) => {
+        const action = res.data.filter((elem) => elem.is_active);
 
         dispatch({
           type: GET_ACTION,
-          payload: action
+          payload: action,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(actionFail(error));
       });
   } catch (error) {
@@ -41,7 +41,7 @@ export const getAction = () => async dispatch => {
 };
 
 // Create action from server
-export const createAction = action => async dispatch => {
+export const createAction = (action) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -51,25 +51,25 @@ export const createAction = action => async dispatch => {
       .post(
         `${endpointAPI}/Action/`,
         {
-          ...action
+          ...action,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const action = res.data;
 
         dispatch({
           type: CREATE_ACTION,
-          payload: action
+          payload: action,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(actionFail(error));
       });
   } catch (error) {
@@ -77,7 +77,7 @@ export const createAction = action => async dispatch => {
   }
 };
 
-export const actionFail = error => dispatch => {
+export const actionFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -111,18 +111,18 @@ export const actionFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_ACTION,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_ACTION
+    type: LOADING_ACTION,
   });
 };

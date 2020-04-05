@@ -4,14 +4,14 @@ import {
   CREATE_ACCOUNT,
   LOADING_ACCOUNT,
   ERROR_ACCOUNT,
-  DELETE_ACCOUNT
+  DELETE_ACCOUNT,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get account from server
-export const getAccount = () => async dispatch => {
+export const getAccount = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -21,19 +21,19 @@ export const getAccount = () => async dispatch => {
       .get(`${endpointAPI}/Account/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
-        const account = res.data;
+      .then((res) => {
+        const account = res.data.filter((elem) => elem.is_active);
 
         dispatch({
           type: GET_ACCOUNT,
-          payload: account
+          payload: account,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(accountFail(error));
       });
   } catch (error) {
@@ -42,7 +42,7 @@ export const getAccount = () => async dispatch => {
 };
 
 // Create account from server
-export const createAccount = account => async dispatch => {
+export const createAccount = (account) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -52,25 +52,25 @@ export const createAccount = account => async dispatch => {
       .post(
         `${endpointAPI}/Account/`,
         {
-          ...account
+          ...account,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const account = res.data;
 
         dispatch({
           type: CREATE_ACCOUNT,
-          payload: account
+          payload: account,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(accountFail(error));
       });
   } catch (error) {
@@ -79,7 +79,7 @@ export const createAccount = account => async dispatch => {
 };
 
 // Delete account from server
-export const hideAccount = account => async dispatch => {
+export const hideAccount = (account) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -89,24 +89,24 @@ export const hideAccount = account => async dispatch => {
       .put(
         `${endpointAPI}/Account/${account.id}/`,
         {
-          ...account
+          ...account,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const hiddenAccount = res.data;
         dispatch({
           type: DELETE_ACCOUNT,
-          payload: hiddenAccount
+          payload: hiddenAccount,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(accountFail(error));
       });
   } catch (error) {
@@ -114,7 +114,7 @@ export const hideAccount = account => async dispatch => {
   }
 };
 
-export const accountFail = error => dispatch => {
+export const accountFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -148,18 +148,18 @@ export const accountFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_ACCOUNT,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_ACCOUNT
+    type: LOADING_ACCOUNT,
   });
 };

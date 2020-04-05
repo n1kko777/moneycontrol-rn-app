@@ -3,14 +3,14 @@ import {
   GET_TRANSFER,
   CREATE_TRANSFER,
   LOADING_TRANSFER,
-  ERROR_TRANSFER
+  ERROR_TRANSFER,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get transfer from server
-export const getTransfer = () => async dispatch => {
+export const getTransfer = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -20,19 +20,19 @@ export const getTransfer = () => async dispatch => {
       .get(`${endpointAPI}/Transfer/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
-        const transfer = res.data;
+      .then((res) => {
+        const transfer = res.data.filter((elem) => elem.is_active);
 
         dispatch({
           type: GET_TRANSFER,
-          payload: transfer
+          payload: transfer,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(transferFail(error));
       });
   } catch (error) {
@@ -41,7 +41,7 @@ export const getTransfer = () => async dispatch => {
 };
 
 // Create transfer from server
-export const createTransfer = transfer => async dispatch => {
+export const createTransfer = (transfer) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -51,24 +51,24 @@ export const createTransfer = transfer => async dispatch => {
       .post(
         `${endpointAPI}/Transfer/`,
         {
-          ...transfer
+          ...transfer,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const transfer = res.data;
         dispatch({
           type: CREATE_TRANSFER,
-          payload: transfer
+          payload: transfer,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(transferFail(error));
       });
   } catch (error) {
@@ -76,7 +76,7 @@ export const createTransfer = transfer => async dispatch => {
   }
 };
 
-export const transferFail = error => dispatch => {
+export const transferFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -110,18 +110,18 @@ export const transferFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_TRANSFER,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_TRANSFER
+    type: LOADING_TRANSFER,
   });
 };

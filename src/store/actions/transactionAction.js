@@ -4,14 +4,14 @@ import {
   GET_TRANSACTION,
   CREATE_TRANSACTION,
   LOADING_TRANSACTION,
-  ERROR_TRANSACTION
+  ERROR_TRANSACTION,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get transaction from server
-export const getTransaction = () => async dispatch => {
+export const getTransaction = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -21,19 +21,19 @@ export const getTransaction = () => async dispatch => {
       .get(`${endpointAPI}/Transaction/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
-        const transaction = res.data;
+      .then((res) => {
+        const transaction = res.data.filter((elem) => elem.is_active);
 
         dispatch({
           type: GET_TRANSACTION,
-          payload: transaction
+          payload: transaction,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(transactionFail(error));
       });
   } catch (error) {
@@ -42,7 +42,7 @@ export const getTransaction = () => async dispatch => {
 };
 
 // Create transaction from server
-export const createTransaction = transaction => async dispatch => {
+export const createTransaction = (transaction) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -52,25 +52,25 @@ export const createTransaction = transaction => async dispatch => {
       .post(
         `${endpointAPI}/Transaction/`,
         {
-          ...transaction
+          ...transaction,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const transaction = res.data;
 
         dispatch({
           type: CREATE_TRANSACTION,
-          payload: transaction
+          payload: transaction,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(transactionFail(error));
       });
   } catch (error) {
@@ -78,7 +78,7 @@ export const createTransaction = transaction => async dispatch => {
   }
 };
 
-export const transactionFail = error => dispatch => {
+export const transactionFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -112,18 +112,18 @@ export const transactionFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_TRANSACTION,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_TRANSACTION
+    type: LOADING_TRANSACTION,
   });
 };

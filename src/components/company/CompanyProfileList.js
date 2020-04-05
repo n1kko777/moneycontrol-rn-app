@@ -10,7 +10,7 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const keyExtractor = item => item.id.toString();
+  const keyExtractor = (item) => item.id.toString();
 
   const renderItemAccessory = () => (
     <RightIcon
@@ -21,12 +21,12 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
       }
       style={{
         width: 30,
-        height: 30
+        height: 30,
       }}
     />
   );
 
-  const renderItemIcon = style => <ProfileIcon {...style} />;
+  const renderItemIcon = (style) => <ProfileIcon {...style} />;
 
   const renderItem = ({ item, index }) => (
     <ListItem
@@ -34,11 +34,11 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
         item.is_admin ? "⭐️" : ""
       }`}
       titleStyle={{
-        fontSize: 16
+        fontSize: 16,
       }}
-      description={`${item.accounts.join(",")}`}
+      description={`${item.accounts.filter((elem) => elem !== "").join(",")}`}
       descriptionStyle={{
-        fontSize: 14
+        fontSize: 14,
       }}
       icon={renderItemIcon}
       accessory={isAdmin && renderItemAccessory}
@@ -47,7 +47,7 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
         borderTopLeftRadius: index === 0 ? 10 : 0,
         borderTopRightRadius: index === 0 ? 10 : 0,
         borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
-        borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0
+        borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
       }}
     />
   );

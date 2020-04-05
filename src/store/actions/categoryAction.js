@@ -3,14 +3,14 @@ import {
   GET_CATEGORY,
   CREATE_CATEGORY,
   LOADING_CATEGORY,
-  ERROR_CATEGORY
+  ERROR_CATEGORY,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get category from server
-export const getCategory = () => async dispatch => {
+export const getCategory = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -20,19 +20,19 @@ export const getCategory = () => async dispatch => {
       .get(`${endpointAPI}/Category/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
-        const category = res.data;
+      .then((res) => {
+        const category = res.data.filter((elem) => elem.is_active);
 
         dispatch({
           type: GET_CATEGORY,
-          payload: category
+          payload: category,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(categoryFail(error));
       });
   } catch (error) {
@@ -41,7 +41,7 @@ export const getCategory = () => async dispatch => {
 };
 
 // Create category from server
-export const createCategory = category => async dispatch => {
+export const createCategory = (category) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -51,25 +51,25 @@ export const createCategory = category => async dispatch => {
       .post(
         `${endpointAPI}/Category/`,
         {
-          ...category
+          ...category,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const category = res.data;
 
         dispatch({
           type: CREATE_CATEGORY,
-          payload: category
+          payload: category,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(categoryFail(error));
       });
   } catch (error) {
@@ -77,7 +77,7 @@ export const createCategory = category => async dispatch => {
   }
 };
 
-export const categoryFail = error => dispatch => {
+export const categoryFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -111,18 +111,18 @@ export const categoryFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_CATEGORY,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_CATEGORY
+    type: LOADING_CATEGORY,
   });
 };

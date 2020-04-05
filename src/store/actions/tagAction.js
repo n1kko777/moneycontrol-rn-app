@@ -5,7 +5,7 @@ import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get tag from server
-export const getTag = () => async dispatch => {
+export const getTag = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -15,19 +15,19 @@ export const getTag = () => async dispatch => {
       .get(`${endpointAPI}/Tag/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
-        const tag = res.data;
+      .then((res) => {
+        const tag = res.data.filter((elem) => elem.is_active);
 
         dispatch({
           type: GET_TAG,
-          payload: tag
+          payload: tag,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(tagFail(error));
       });
   } catch (error) {
@@ -36,7 +36,7 @@ export const getTag = () => async dispatch => {
 };
 
 // Create tag from server
-export const createTag = tag => async dispatch => {
+export const createTag = (tag) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -46,25 +46,25 @@ export const createTag = tag => async dispatch => {
       .post(
         `${endpointAPI}/Tag/`,
         {
-          ...tag
+          ...tag,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const tag = res.data;
 
         dispatch({
           type: CREATE_TAG,
-          payload: tag
+          payload: tag,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(tagFail(error));
       });
   } catch (error) {
@@ -72,7 +72,7 @@ export const createTag = tag => async dispatch => {
   }
 };
 
-export const tagFail = error => dispatch => {
+export const tagFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -106,18 +106,18 @@ export const tagFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_TAG,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_TAG
+    type: LOADING_TAG,
   });
 };
