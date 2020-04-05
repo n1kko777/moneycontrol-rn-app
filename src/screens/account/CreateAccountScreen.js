@@ -8,6 +8,7 @@ import {
   TopNavigationAction,
   Input,
   Button,
+  Text,
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
@@ -35,18 +36,20 @@ export const CreateAccountScreen = ({ navigation }) => {
   const onSubmit = async () => {
     Keyboard.dismiss();
     dispatch(startLoader());
+
     await dispatch(
       createAccount({
         account_name,
         balance,
       })
-    ).then(() => {
-      if (accountError === null) {
-        setAccountName("");
-        setBalance("");
-        navigateBack();
-      }
-    });
+    );
+
+    if (accountError === null) {
+      setAccountName("");
+      setBalance("");
+      navigateBack();
+    }
+
     dispatch(endLoader());
   };
 

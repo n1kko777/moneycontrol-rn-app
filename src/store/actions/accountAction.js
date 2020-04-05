@@ -14,104 +14,104 @@ import { Alert, AsyncStorage } from "react-native";
 export const getAccount = () => async (dispatch) => {
   dispatch(setLoading());
 
-  try {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
-      .get(`${endpointAPI}/Account/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      })
-      .then((res) => {
-        const account = res.data.filter((elem) => elem.is_active);
+  return await axios
+    .get(`${endpointAPI}/Account/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
+      },
+    })
+    .then((res) => {
+      const account = res.data.filter((elem) => elem.is_active);
 
-        dispatch({
-          type: GET_ACCOUNT,
-          payload: account,
-        });
-      })
-
-      .catch((error) => {
-        dispatch(accountFail(error));
+      dispatch({
+        type: GET_ACCOUNT,
+        payload: account,
       });
-  } catch (error) {
-    dispatch(accountFail(error));
-  }
+    })
+
+    .catch((error) => {
+      dispatch(accountFail(error));
+    });
 };
 
 // Create account from server
 export const createAccount = (account) => async (dispatch) => {
   dispatch(setLoading());
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  try {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
-
-    return await axios
-      .post(
-        `${endpointAPI}/Account/`,
-        {
-          ...account,
+  return await axios
+    .post(
+      `${endpointAPI}/Account/`,
+      {
+        ...account,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + token,
-          },
-        }
-      )
-      .then((res) => {
-        const account = res.data;
+      }
+    )
+    .then((res) => {
+      const account = res.data;
 
-        dispatch({
-          type: CREATE_ACCOUNT,
-          payload: account,
-        });
-      })
-
-      .catch((error) => {
-        dispatch(accountFail(error));
+      dispatch({
+        type: CREATE_ACCOUNT,
+        payload: account,
       });
-  } catch (error) {
-    dispatch(accountFail(error));
-  }
+    })
+
+    .catch((error) => {
+      dispatch(accountFail(error));
+    });
 };
 
 // Delete account from server
 export const hideAccount = (account) => async (dispatch) => {
+  if (account.balance > 0) {
+    dispatch(
+      accountFail({
+        custom: {
+          title: "Баланс счета больше нуля!!",
+          message: "Пожалуйста, переведи средства на другой счет.",
+        },
+      })
+    );
+
+    return;
+  }
+
   dispatch(setLoading());
 
-  try {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
-      .put(
-        `${endpointAPI}/Account/${account.id}/`,
-        {
-          ...account,
+  return await axios
+    .put(
+      `${endpointAPI}/Account/${account.id}/`,
+      {
+        ...account,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + token,
-          },
-        }
-      )
-      .then((res) => {
-        const hiddenAccount = res.data;
-        dispatch({
-          type: DELETE_ACCOUNT,
-          payload: hiddenAccount,
-        });
-      })
-
-      .catch((error) => {
-        dispatch(accountFail(error));
+      }
+    )
+    .then((res) => {
+      const hiddenAccount = res.data;
+      dispatch({
+        type: DELETE_ACCOUNT,
+        payload: hiddenAccount,
       });
-  } catch (error) {
-    dispatch(accountFail(error));
-  }
+    })
+
+    .catch((error) => {
+      dispatch(accountFail(error));
+    });
 };
 
 export const accountFail = (error) => (dispatch) => {
@@ -139,6 +139,12 @@ export const accountFail = (error) => (dispatch) => {
 
     errorObject.title = `Не удалось соединиться с сервером`;
     errorObject.message = `Повторите попытку позже`;
+  } else if (error.custom) {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Что-то пошло не так... Повторите попытку позже.");
+
+    errorObject.title = error.custom.title;
+    errorObject.message = error.custom.message;
   } else {
     // Something happened in setting up the request that triggered an Error
     console.log("Что-то пошло не так... Повторите попытку позже.");
