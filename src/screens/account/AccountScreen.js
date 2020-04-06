@@ -47,7 +47,7 @@ export const AccountScreen = ({ navigation }) => {
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          <AccountList />
+          <AccountList navigation={navigation} />
         </Layout>
       </Layout>
     </ScreenTemplate>

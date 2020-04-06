@@ -14,13 +14,13 @@ import { hideAccount } from "../../store/actions/accountAction";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 
-export const AccountListItem = ({ item, index, dataList }) => {
+export const AccountListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const renderIconItem = style => <CardIcon {...style} />;
+  const renderIconItem = (style) => <CardIcon {...style} />;
   const renderItemAccessory = ({ balance, style }) => (
     <Text
       style={{
@@ -30,7 +30,7 @@ export const AccountListItem = ({ item, index, dataList }) => {
             style !== undefined
               ? style
               : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ]
+          ],
       }}
     >
       {balance !== "" && splitToDigits(balance.toString()) + " ₽"}
@@ -44,7 +44,7 @@ export const AccountListItem = ({ item, index, dataList }) => {
       [
         {
           text: "Отмена",
-          style: "cancel"
+          style: "cancel",
         },
         {
           text: "Удалить",
@@ -55,11 +55,11 @@ export const AccountListItem = ({ item, index, dataList }) => {
             await dispatch(hideAccount(hideItem)).then(() => {
               dispatch(endLoader());
             });
-          }
-        }
+          },
+        },
       ],
       {
-        cancelable: false
+        cancelable: false,
       }
     );
   };
@@ -68,15 +68,22 @@ export const AccountListItem = ({ item, index, dataList }) => {
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
   );
 
+  const updateHandler = () => {
+    navigation.navigate("UpdateAccount", {
+      account: item,
+    });
+  };
+
   return (
     <Swipeable overshootRight={false} renderRightActions={RightAction}>
       <ListItem
+        onPress={updateHandler}
         title={`${item.account_name}`}
         titleStyle={{
-          fontSize: 16
+          fontSize: 16,
         }}
         descriptionStyle={{
-          fontSize: 14
+          fontSize: 14,
         }}
         icon={renderIconItem}
         accessory={() => renderItemAccessory(item)}
@@ -85,7 +92,7 @@ export const AccountListItem = ({ item, index, dataList }) => {
           borderTopLeftRadius: index === 0 ? 10 : 0,
           borderTopRightRadius: index === 0 ? 10 : 0,
           borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
-          borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0
+          borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
         }}
       />
     </Swipeable>

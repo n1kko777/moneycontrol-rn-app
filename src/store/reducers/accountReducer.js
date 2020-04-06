@@ -5,6 +5,7 @@ import {
   ERROR_ACCOUNT,
   CLEAR_ACCOUNT,
   DELETE_ACCOUNT,
+  UPDATE_ACCOUNT,
 } from "../types";
 
 const initialState = {
@@ -29,6 +30,16 @@ export const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         accounts: [...state.accounts, payload],
+        loading: false,
+        error: null,
+      };
+    case UPDATE_ACCOUNT:
+      console.log("case UPDATE_ACCOUNT:");
+      return {
+        ...state,
+        accounts: state.accounts.map((account) =>
+          account.id === payload.id ? payload : account
+        ),
         loading: false,
         error: null,
       };

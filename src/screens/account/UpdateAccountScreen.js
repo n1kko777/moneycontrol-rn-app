@@ -16,15 +16,17 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { createAccount } from "../../store/actions/accountAction";
+import { updateAccount } from "../../store/actions/accountAction";
 import { Keyboard } from "react-native";
 
-export const CreateAccountScreen = ({ navigation }) => {
+export const UpdateAccountScreen = ({ route, navigation }) => {
+  const { account } = route.params;
+
   const dispatch = useDispatch();
   const { error: accountError } = useSelector((store) => store.account);
 
-  const [account_name, setAccountName] = React.useState("");
-  const [balance, setBalance] = React.useState("");
+  const [account_name, setAccountName] = React.useState(account.account_name);
+  const [balance, setBalance] = React.useState(account.balance);
 
   const navigateBack = () => {
     navigation.goBack();
@@ -36,18 +38,16 @@ export const CreateAccountScreen = ({ navigation }) => {
 
     try {
       await dispatch(
-        createAccount({
+        updateAccount(account.id, {
           account_name,
           balance,
         })
       );
-
-      if (accountError === null) {
-        setAccountName("");
-        setBalance("");
-        navigateBack();
-      }
     } catch (error) {}
+
+    if (accountError === null) {
+      navigateBack();
+    }
 
     dispatch(endLoader());
   };
@@ -60,7 +60,7 @@ export const CreateAccountScreen = ({ navigation }) => {
     <ScreenTemplate>
       <>
         <TopNavigation
-          title="Создание счета"
+          title="Обновление счета"
           alignment="center"
           leftControl={BackAction()}
         />
@@ -99,7 +99,7 @@ export const CreateAccountScreen = ({ navigation }) => {
               }}
               onPress={onSubmit}
             >
-              Создать
+              Обновить
             </Button>
           </View>
         </Layout>

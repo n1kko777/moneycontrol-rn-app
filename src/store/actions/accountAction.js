@@ -5,6 +5,7 @@ import {
   LOADING_ACCOUNT,
   ERROR_ACCOUNT,
   DELETE_ACCOUNT,
+  UPDATE_ACCOUNT,
 } from "../types";
 
 import { endpointAPI } from "../constants";
@@ -61,6 +62,38 @@ export const createAccount = (account) => async (dispatch) => {
       dispatch({
         type: CREATE_ACCOUNT,
         payload: account,
+      });
+    })
+
+    .catch((error) => {
+      dispatch(accountFail(error));
+    });
+};
+
+// Create account from server
+export const updateAccount = (id, account) => async (dispatch) => {
+  dispatch(setLoading());
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+  return await axios
+    .put(
+      `${endpointAPI}/Account/${id}/`,
+      {
+        ...account,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      }
+    )
+    .then((res) => {
+      const updatedAccount = res.data;
+
+      dispatch({
+        type: UPDATE_ACCOUNT,
+        payload: updatedAccount,
       });
     })
 
@@ -131,6 +164,10 @@ export const accountFail = (error) => (dispatch) => {
     errorObject.title = `Код ошибки: ${error.response.status}`;
     errorObject.message =
       error.response.status === 404
+        ? `${error.response.data}`
+        : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
+    errorObject.message =
+      error.response.status === 405
         ? `${error.response.data}`
         : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
   } else if (error.request) {
