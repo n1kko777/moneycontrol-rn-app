@@ -10,9 +10,9 @@ export const OperationList = ({ dataList, categories, tags }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const keyExtractor = item => item.id.toString();
+  const keyExtractor = (item) => item.id.toString();
 
-  const renderIconItem = style =>
+  const renderIconItem = (style) =>
     style !== undefined ? (
       style.search("danger") === -1 ? (
         <IncreaseIcon
@@ -45,7 +45,7 @@ export const OperationList = ({ dataList, categories, tags }) => {
             style !== undefined
               ? style
               : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ]
+          ],
       }}
     >
       {balance !== "" && splitToDigits(balance.toString()) + " ₽"}
@@ -56,20 +56,25 @@ export const OperationList = ({ dataList, categories, tags }) => {
     <ListItem
       title={`${item.name}${
         item.category !== undefined
-          ? " (" +
-            categories.find(cat => cat.id == item.category).category_name +
-            ")"
+          ? " (" + categories.find((cat) => cat.id == item.category) !==
+            undefined
+            ? categories.find((cat) => cat.id == item.category).category_name
+            : "Удалено" + ")"
           : ""
       }`}
       titleStyle={{
-        fontSize: 16
+        fontSize: 16,
       }}
       description={
         item.tags !== undefined &&
-        `${item.tags.map(elTag => tags.find(tag => tag.id == elTag).tag_name)}`
+        `${item.tags.map((elTag) =>
+          tags.find((tag) => tag.id == elTag) !== undefined
+            ? tags.find((tag) => tag.id == elTag).tag_name
+            : "Удалено"
+        )}`
       }
       descriptionStyle={{
-        fontSize: 14
+        fontSize: 14,
       }}
       icon={() => renderIconItem(item.style)}
       accessory={() => renderItemAccessory(item)}
@@ -78,7 +83,7 @@ export const OperationList = ({ dataList, categories, tags }) => {
         borderTopLeftRadius: index === 0 ? 10 : 0,
         borderTopRightRadius: index === 0 ? 10 : 0,
         borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
-        borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0
+        borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
       }}
     />
   );
@@ -87,7 +92,7 @@ export const OperationList = ({ dataList, categories, tags }) => {
     <FlatList
       style={{
         marginHorizontal: 8,
-        marginTop: 15
+        marginTop: 15,
       }}
       ListFooterComponent={
         <View style={{ marginHorizontal: 16, marginTop: 30 }}></View>

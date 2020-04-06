@@ -2,16 +2,16 @@ import React from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
-import { CategoryListItem } from "./CategoryListItem";
+import { TagListItem } from "./TagListItem";
 
-export const CategoryList = ({ navigation }) => {
-  const { categories } = useSelector((state) => state.category);
-  const dataList = categories;
+export const TagList = ({ navigation }) => {
+  const { tags } = useSelector((state) => state.tag);
+  const dataList = tags;
 
   const keyExtractor = (item) => item.id.toString();
 
   const renderItem = ({ item, index }) => (
-    <CategoryListItem
+    <TagListItem
       navigation={navigation}
       item={item}
       index={index}
