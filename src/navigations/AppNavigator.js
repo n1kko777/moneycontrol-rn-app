@@ -10,6 +10,9 @@ import { RootNavigator } from "./RootNavigator";
 import { AccountScreen } from "../screens/account/AccountScreen";
 import { CreateAccountScreen } from "../screens/account/CreateAccountScreen";
 import { UpdateAccountScreen } from "../screens/account/UpdateAccountScreen";
+import { CategoryScreen } from "../screens/category/CategoryScreen";
+import { CreateCategoryScreen } from "../screens/category/CreateCategoryScreen";
+import { UpdateCategoryScreen } from "../screens/category/UpdateCategoryScreen";
 
 const Stack = createStackNavigator();
 
@@ -30,6 +33,9 @@ const HomeNavigator = () => (
     <Stack.Screen name="Account" component={AccountScreen} />
     <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
     <Stack.Screen name="UpdateAccount" component={UpdateAccountScreen} />
+    <Stack.Screen name="Category" component={CategoryScreen} />
+    <Stack.Screen name="CreateCategory" component={CreateCategoryScreen} />
+    <Stack.Screen name="UpdateCategory" component={UpdateCategoryScreen} />
   </Stack.Navigator>
 );
 

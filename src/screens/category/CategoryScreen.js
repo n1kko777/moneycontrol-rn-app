@@ -6,11 +6,11 @@ import { THEME } from "../../themes/themes";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
-import { AccountList } from "../../components/account/AccountList";
+import { CategoryList } from "../../components/category/CategoryList";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { BackIcon } from "../../themes/icons";
 
-export const AccountScreen = ({ navigation }) => {
+export const CategoryScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -18,7 +18,7 @@ export const AccountScreen = ({ navigation }) => {
     <ScreenTemplate>
       <Toolbar
         navigation={navigation}
-        title="Счета"
+        title="Категории"
         TargetIcon={BackIcon}
         onTarget={() => navigation.navigate("Home")}
       />
@@ -39,15 +39,15 @@ export const AccountScreen = ({ navigation }) => {
               borderRadius: THEME.BUTTON_RADIUS,
             }}
             status="info"
-            onPress={() => navigation.navigate("CreateAccount")}
+            onPress={() => navigation.navigate("CreateCategory")}
           >
-            Добавить счет
+            Добавить категорию
           </Button>
         </View>
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          <AccountList navigation={navigation} />
+          <CategoryList navigation={navigation} />
         </Layout>
       </Layout>
     </ScreenTemplate>
