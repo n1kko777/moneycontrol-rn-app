@@ -11,55 +11,65 @@ export const prepareOperationData = (
   if (company.profiles !== undefined) {
     transactions.length !== 0 &&
       allOpprations.push(
-        ...transactions.map(elem => {
+        ...transactions.map((elem) => {
           const currentProfile = company.profiles.find(
-            cProf =>
-              cProf.accounts.find(
-                cProfAcc =>
-                  cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
-              ) !== undefined
+            (cProf) =>
+              cProf.accounts
+                .filter((elem) => elem !== "")
+                .find(
+                  (cProfAcc) =>
+                    cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
+                ) !== undefined
           );
 
           return {
             id: elem.last_updated,
-            name: `${getShortName(
-              `${currentProfile.first_name} ${currentProfile.last_name}`
-            )}${currentProfile.is_admin ? " ⭐️" : ""}`,
+            name:
+              currentProfile !== undefined
+                ? `${getShortName(
+                    `${currentProfile.first_name} ${currentProfile.last_name}`
+                  )}${currentProfile.is_admin ? " ⭐️" : ""}`
+                : "Удалено",
             style: "color-danger-600",
             balance: elem.transaction_amount,
             tags: elem.tags,
-            category: elem.category
+            category: elem.category,
           };
         })
       );
 
     actions.length !== 0 &&
       allOpprations.push(
-        ...actions.map(elem => {
+        ...actions.map((elem) => {
           const currentProfile = company.profiles.find(
-            cProf =>
-              cProf.accounts.find(
-                cProfAcc =>
-                  cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
-              ) !== undefined
+            (cProf) =>
+              cProf.accounts
+                .filter((elem) => elem !== "")
+                .find(
+                  (cProfAcc) =>
+                    cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
+                ) !== undefined
           );
 
           return {
             id: elem.last_updated,
-            name: `${getShortName(
-              `${currentProfile.first_name} ${currentProfile.last_name}`
-            )}${currentProfile.is_admin ? " ⭐️" : ""}`,
+            name:
+              currentProfile !== undefined
+                ? `${getShortName(
+                    `${currentProfile.first_name} ${currentProfile.last_name}`
+                  )}${currentProfile.is_admin ? " ⭐️" : ""}`
+                : "Удалено",
             style: "color-success-600",
             balance: elem.action_amount,
             tags: elem.tags,
-            category: elem.category
+            category: elem.category,
           };
         })
       );
 
     transfer.length !== 0 &&
       allOpprations.push(
-        ...transfer.map(elem => ({
+        ...transfer.map((elem) => ({
           id: elem.last_updated,
           name:
             getShortName(elem.from_profile.split(" (")[0]) +
@@ -67,7 +77,7 @@ export const prepareOperationData = (
             getShortName(elem.to_profile.split(" (")[0]),
           balance: elem.transfer_amount,
           tags: elem.tags,
-          category: elem.category
+          category: elem.category,
         }))
       );
   }
