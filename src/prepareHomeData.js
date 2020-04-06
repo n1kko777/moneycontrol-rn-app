@@ -34,7 +34,7 @@ export const prepareHomeData = (
                 ? `${getShortName(
                     `${currentProfile.first_name} ${currentProfile.last_name}`
                   )}${currentProfile.is_admin ? " ⭐️" : ""}`
-                : "Удалено",
+                : "Счет удален ",
             style: "color-danger-600",
             balance: elem.transaction_amount,
           };
@@ -61,7 +61,7 @@ export const prepareHomeData = (
                 ? `${getShortName(
                     `${currentProfile.first_name} ${currentProfile.last_name}`
                   )}${currentProfile.is_admin ? " ⭐️" : ""}`
-                : "Удалено",
+                : "Счет удален ",
             style: "color-success-600",
             balance: elem.action_amount,
           };

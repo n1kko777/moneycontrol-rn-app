@@ -29,7 +29,7 @@ export const prepareOperationData = (
                 ? `${getShortName(
                     `${currentProfile.first_name} ${currentProfile.last_name}`
                   )}${currentProfile.is_admin ? " ⭐️" : ""}`
-                : "Удалено",
+                : "Счет удален ",
             style: "color-danger-600",
             balance: elem.transaction_amount,
             tags: elem.tags,
@@ -58,7 +58,7 @@ export const prepareOperationData = (
                 ? `${getShortName(
                     `${currentProfile.first_name} ${currentProfile.last_name}`
                   )}${currentProfile.is_admin ? " ⭐️" : ""}`
-                : "Удалено",
+                : "Счет удален ",
             style: "color-success-600",
             balance: elem.action_amount,
             tags: elem.tags,
