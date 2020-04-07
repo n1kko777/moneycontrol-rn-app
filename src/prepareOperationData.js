@@ -12,31 +12,35 @@ export const prepareOperationData = (
     transactions.length !== 0 &&
       allOpprations.push(
         ...transactions.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name: getShortName(elem.profile_name.split("(pk=")[0]),
           style: "color-danger-600",
           balance: elem.transaction_amount,
           tags: elem.tags,
           category: elem.category,
+          id: elem.id,
+          type: "transaction",
         }))
       );
 
     actions.length !== 0 &&
       allOpprations.push(
         ...actions.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name: getShortName(elem.profile_name.split("(pk=")[0]),
           style: "color-success-600",
           balance: elem.action_amount,
           tags: elem.tags,
           category: elem.category,
+          id: elem.id,
+          type: "action",
         }))
       );
 
     transfer.length !== 0 &&
       allOpprations.push(
         ...transfer.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name:
             getShortName(elem.from_profile.split(" (")[0]) +
             " => " +
@@ -44,6 +48,8 @@ export const prepareOperationData = (
           balance: elem.transfer_amount,
           tags: elem.tags,
           category: elem.category,
+          id: elem.id,
+          type: "transfer",
         }))
       );
   }

@@ -1,41 +1,60 @@
 import React from "react";
-import { Text, ListItem, useTheme } from "@ui-kitten/components";
-import { ExchangeIcon, IncreaseIcon, DecreaseIcon } from "../../themes/icons";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+
+import { Text, ListItem, useTheme, Button } from "@ui-kitten/components";
+import {
+  ExchangeIcon,
+  IncreaseIcon,
+  DecreaseIcon,
+  DeleteIcon,
+} from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Alert } from "react-native";
+import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const OperationListItem = ({ item, index, dataList }) => {
+  const dispatch = useDispatch();
+
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
   const { categories } = useSelector((store) => store.category);
   const { tags } = useSelector((store) => store.tag);
 
-  const renderIconItem = (style) =>
-    style !== undefined ? (
-      style.search("danger") === -1 ? (
-        <IncreaseIcon
-          style={{ width: 20, height: 20 }}
-          fill={kittenTheme[style]}
-        />
-      ) : (
-        <DecreaseIcon
-          style={{ width: 20, height: 20 }}
-          fill={kittenTheme[style]}
-        />
-      )
-    ) : (
-      <ExchangeIcon
-        style={{ width: 20, height: 20 }}
-        fill={
-          kittenTheme[
-            `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ]
-        }
-      />
-    );
+  const renderIconItem = (style) => {
+    switch (item.type) {
+      case "action":
+        return (
+          <IncreaseIcon
+            style={{ width: 20, height: 20 }}
+            fill={kittenTheme[style]}
+          />
+        );
+
+      case "transaction":
+        return (
+          <DecreaseIcon
+            style={{ width: 20, height: 20 }}
+            fill={kittenTheme[style]}
+          />
+        );
+
+      case "transfer":
+        return (
+          <ExchangeIcon
+            style={{ width: 20, height: 20 }}
+            fill={
+              kittenTheme[
+                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              ]
+            }
+          />
+        );
+    }
+  };
 
   const renderItemAccessory = ({ balance, style }) => (
     <Text
@@ -53,40 +72,93 @@ export const OperationListItem = ({ item, index, dataList }) => {
     </Text>
   );
 
-  return (
-    <ListItem
-      title={`${item.name}${
-        item.category !== undefined
-          ? " (" +
-            (categories.find((cat) => cat.id == item.category) !== undefined
-              ? categories.find((cat) => cat.id == item.category).category_name
-              : "Удалено") +
-            ")"
-          : ""
-      }`}
-      titleStyle={{
-        fontSize: 16,
-      }}
-      description={
-        item.tags !== undefined &&
-        `${item.tags.map((elTag) =>
-          tags.find((tag) => tag.id == elTag) !== undefined
-            ? `#${tags.find((tag) => tag.id == elTag).tag_name}`
-            : "Удалено"
-        )}`
+  const deleteHandler = () => {
+    Alert.alert(
+      "Удаление категории",
+      `Вы уверены что хотите удалить операцию?`,
+      [
+        {
+          text: "Отмена",
+          style: "cancel",
+        },
+        {
+          text: "Удалить",
+          onPress: async () => {
+            dispatch(startLoader());
+
+            try {
+              switch (item.type) {
+                case "action":
+                  console.log("action");
+                  break;
+
+                case "transaction":
+                  console.log("transaction");
+                  break;
+
+                case "transfer":
+                  console.log("transfer");
+                  break;
+              }
+            } catch (error) {}
+
+            // const hideItem = item;
+            // hideItem.is_active = false;
+            // await dispatch(hideCategory(hideItem)).then(() => {
+
+            // });
+
+            dispatch(endLoader());
+          },
+        },
+      ],
+      {
+        cancelable: false,
       }
-      descriptionStyle={{
-        fontSize: 14,
-      }}
-      icon={() => renderIconItem(item.style)}
-      accessory={() => renderItemAccessory(item)}
-      style={{
-        paddingVertical: 15,
-        borderTopLeftRadius: index === 0 ? 10 : 0,
-        borderTopRightRadius: index === 0 ? 10 : 0,
-        borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
-        borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
-      }}
-    />
+    );
+  };
+
+  const RightAction = () => (
+    <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
+  );
+
+  return (
+    <Swipeable overshootRight={false} renderRightActions={RightAction}>
+      <ListItem
+        title={`${item.name}${
+          item.category !== undefined
+            ? " (" +
+              (categories.find((cat) => cat.id == item.category) !== undefined
+                ? categories.find((cat) => cat.id == item.category)
+                    .category_name
+                : "Удалено") +
+              ")"
+            : ""
+        }`}
+        titleStyle={{
+          fontSize: 16,
+        }}
+        description={
+          item.tags !== undefined &&
+          `${item.tags.map((elTag) =>
+            tags.find((tag) => tag.id == elTag) !== undefined
+              ? `#${tags.find((tag) => tag.id == elTag).tag_name}`
+              : "Удалено"
+          )}`
+        }
+        descriptionStyle={{
+          fontSize: 14,
+        }}
+        icon={() => renderIconItem(item.style)}
+        accessory={() => renderItemAccessory(item)}
+        style={{
+          paddingVertical: 15,
+          borderTopLeftRadius: index === 0 ? 10 : 0,
+          borderTopRightRadius: index === 0 ? 10 : 0,
+          borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
+          borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
+        }}
+      />
+    </Swipeable>
   );
 };

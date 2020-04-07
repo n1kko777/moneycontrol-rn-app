@@ -24,7 +24,7 @@ export const HomeCard = ({ item, navigation }) => {
         marginTop: 15,
         marginBottom: 30,
         padding: 16,
-        paddingTop: 8
+        paddingTop: 8,
       }}
     >
       <TouchableOpacity
@@ -32,7 +32,7 @@ export const HomeCard = ({ item, navigation }) => {
           alignItems: "center",
           justifyContent: "space-between",
           flexDirection: "row",
-          marginBottom: 20
+          marginBottom: 20,
         }}
         onPress={titleNavigationHandler}
       >
@@ -45,17 +45,17 @@ export const HomeCard = ({ item, navigation }) => {
           }
           style={{
             width: 30,
-            height: 30
+            height: 30,
           }}
         />
       </TouchableOpacity>
 
       <View>
-        {item.data.map(elem => (
+        {item.data.map((elem) => (
           <HomeCardItem
             kittenTheme={kittenTheme}
             themeContext={themeContext}
-            key={elem.id}
+            key={elem.key}
             name={elem.name}
             amount={elem.balance}
             color={elem.style}

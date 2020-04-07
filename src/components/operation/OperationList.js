@@ -3,7 +3,7 @@ import { View, FlatList } from "react-native";
 import { OperationListItem } from "./OperationListItem";
 
 export const OperationList = ({ dataList }) => {
-  const keyExtractor = (item) => item.id.toString();
+  const keyExtractor = (item) => item.key.toString();
 
   const renderItem = ({ item, index }) => (
     <OperationListItem item={item} index={index} dataList={dataList} />

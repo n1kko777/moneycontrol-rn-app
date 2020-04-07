@@ -17,32 +17,38 @@ export const prepareHomeData = (
     transactions.length !== 0 &&
       allOpprations.push(
         ...transactions.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name: getShortName(elem.profile_name.split("(pk=")[0]),
           style: "color-danger-600",
           balance: elem.transaction_amount,
+          id: elem.id,
+          type: "transaction",
         }))
       );
 
     actions.length !== 0 &&
       allOpprations.push(
         ...actions.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name: getShortName(elem.profile_name.split("(pk=")[0]),
           style: "color-success-600",
           balance: elem.action_amount,
+          id: elem.id,
+          type: "action",
         }))
       );
 
     transfer.length !== 0 &&
       allOpprations.push(
         ...transfer.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name:
             getShortName(elem.from_profile.split(" (")[0]) +
             " => " +
             getShortName(elem.to_profile.split(" (")[0]),
           balance: elem.transfer_amount,
+          id: elem.id,
+          type: "transfer",
         }))
       );
 
@@ -53,7 +59,7 @@ export const prepareHomeData = (
         data: accounts
           .filter((acc) => acc.profile === profile.id)
           .map((elem) => ({
-            id: elem.last_updated,
+            key: elem.last_updated,
             name: elem.account_name,
             balance: elem.balance,
           })),
@@ -64,7 +70,7 @@ export const prepareHomeData = (
         navigate: "Category",
         title: "Категории",
         data: categories.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name: elem.category_name,
           balance: "",
         })),
@@ -75,7 +81,7 @@ export const prepareHomeData = (
         navigate: "Tag",
         title: "Теги",
         data: tags.map((elem) => ({
-          id: elem.last_updated,
+          key: elem.last_updated,
           name: elem.tag_name,
           balance: "",
         })),
