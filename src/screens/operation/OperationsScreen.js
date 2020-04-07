@@ -18,7 +18,7 @@ export const OperationsScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
 
   const { startDate, endDate } = state.calendar;
 
@@ -28,9 +28,6 @@ export const OperationsScreen = ({ navigation }) => {
   const { transactions } = state.transaction;
   const { actions } = state.action;
   const { transfer } = state.transfer;
-
-  const { categories } = state.category;
-  const { tags } = state.tag;
 
   const operationListData = prepareOperationData(
     company,
@@ -51,7 +48,7 @@ export const OperationsScreen = ({ navigation }) => {
           backgroundColor:
             kittenTheme[
               `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ]
+            ],
         }}
       >
         <View style={{ height: 30, marginVertical: 20 }}>
@@ -60,11 +57,7 @@ export const OperationsScreen = ({ navigation }) => {
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          <OperationList
-            categories={categories}
-            tags={tags}
-            dataList={operationListData}
-          />
+          <OperationList dataList={operationListData} />
         </Layout>
       </Layout>
     </ScreenTemplate>

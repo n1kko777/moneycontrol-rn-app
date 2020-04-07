@@ -11,60 +11,26 @@ export const prepareOperationData = (
   if (company.profiles !== undefined) {
     transactions.length !== 0 &&
       allOpprations.push(
-        ...transactions.map((elem) => {
-          const currentProfile = company.profiles.find(
-            (cProf) =>
-              cProf.accounts
-                .filter((elem) => elem !== "")
-                .find(
-                  (cProfAcc) =>
-                    cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
-                ) !== undefined
-          );
-
-          return {
-            id: elem.last_updated,
-            name:
-              currentProfile !== undefined
-                ? `${getShortName(
-                    `${currentProfile.first_name} ${currentProfile.last_name}`
-                  )}${currentProfile.is_admin ? " ⭐️" : ""}`
-                : "Счет удален ",
-            style: "color-danger-600",
-            balance: elem.transaction_amount,
-            tags: elem.tags,
-            category: elem.category,
-          };
-        })
+        ...transactions.map((elem) => ({
+          id: elem.last_updated,
+          name: getShortName(elem.profile_name.split("(pk=")[0]),
+          style: "color-danger-600",
+          balance: elem.transaction_amount,
+          tags: elem.tags,
+          category: elem.category,
+        }))
       );
 
     actions.length !== 0 &&
       allOpprations.push(
-        ...actions.map((elem) => {
-          const currentProfile = company.profiles.find(
-            (cProf) =>
-              cProf.accounts
-                .filter((elem) => elem !== "")
-                .find(
-                  (cProfAcc) =>
-                    cProfAcc.split("pk=")[1].match(/(\d+)/)[0] == elem.account
-                ) !== undefined
-          );
-
-          return {
-            id: elem.last_updated,
-            name:
-              currentProfile !== undefined
-                ? `${getShortName(
-                    `${currentProfile.first_name} ${currentProfile.last_name}`
-                  )}${currentProfile.is_admin ? " ⭐️" : ""}`
-                : "Счет удален ",
-            style: "color-success-600",
-            balance: elem.action_amount,
-            tags: elem.tags,
-            category: elem.category,
-          };
-        })
+        ...actions.map((elem) => ({
+          id: elem.last_updated,
+          name: getShortName(elem.profile_name.split("(pk=")[0]),
+          style: "color-success-600",
+          balance: elem.action_amount,
+          tags: elem.tags,
+          category: elem.category,
+        }))
       );
 
     transfer.length !== 0 &&
