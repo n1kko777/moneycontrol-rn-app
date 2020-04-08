@@ -25,7 +25,7 @@ export const getTransaction = () => async (dispatch) => {
       },
     })
     .then((res) => {
-      const transaction = res.data.filter((elem) => elem.is_active);
+      const transaction = res.data;
 
       dispatch({
         type: GET_TRANSACTION,
@@ -109,23 +109,16 @@ export const hideTransaction = (transaction) => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .put(
-      `${endpointAPI}/Transaction/${transaction.id}/`,
-      {
-        ...transaction,
+    .delete(`${endpointAPI}/Transaction/${transaction}/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
-    .then((res) => {
-      const hiddenTransaction = res.data;
+    })
+    .then(() => {
       dispatch({
         type: DELETE_TRANSACTION,
-        payload: hiddenTransaction,
+        payload: transaction,
       });
     })
 

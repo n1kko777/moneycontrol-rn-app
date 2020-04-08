@@ -1,6 +1,7 @@
 import React from "react";
 import { View, FlatList } from "react-native";
 import { OperationListItem } from "./OperationListItem";
+import { Text } from "@ui-kitten/components";
 
 export const OperationList = ({ dataList }) => {
   const keyExtractor = (item) => item.key.toString();
@@ -22,6 +23,9 @@ export const OperationList = ({ dataList }) => {
       keyExtractor={keyExtractor}
       data={dataList}
       renderItem={renderItem}
+      ListEmptyComponent={
+        <Text style={{ alignSelf: "center" }}>Операции не найдены.</Text>
+      }
     />
   );
 };

@@ -47,7 +47,7 @@ export const actionReducer = (state = initialState, action) => {
       console.log("case DELETE_ACTION:");
       return {
         ...state,
-        actions: state.actions.filter((action) => action.id !== payload.id),
+        actions: state.actions.filter((action) => action.id !== payload),
         loading: false,
         error: null,
       };

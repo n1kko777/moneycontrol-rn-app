@@ -48,7 +48,7 @@ export const transactionReducer = (state = initialState, action) => {
       return {
         ...state,
         transactions: state.transactions.filter(
-          (transaction) => transaction.id !== payload.id
+          (transaction) => transaction.id !== payload
         ),
         loading: false,
         error: null,

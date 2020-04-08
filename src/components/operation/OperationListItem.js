@@ -16,6 +16,8 @@ import { Alert } from "react-native";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { hideAction } from "../../store/actions/actionAction";
 import { hideTransaction } from "../../store/actions/transactionAction";
+import { hideTransfer } from "../../store/actions/transferAction";
+import { View } from "react-native";
 
 export const OperationListItem = ({ item, index, dataList }) => {
   const dispatch = useDispatch();
@@ -23,8 +25,7 @@ export const OperationListItem = ({ item, index, dataList }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const { transactions } = useSelector((store) => store.transaction);
-  const { actions } = useSelector((store) => store.action);
+  const { profile } = useSelector((store) => store.profile);
   const { categories } = useSelector((store) => store.category);
   const { tags } = useSelector((store) => store.tag);
 
@@ -89,33 +90,22 @@ export const OperationListItem = ({ item, index, dataList }) => {
           text: "Удалить",
           onPress: async () => {
             dispatch(startLoader());
-            let hideItem = null;
 
             try {
               switch (item.type) {
                 case "action":
-                  hideItem = actions.find((elem) => elem.id == item.id);
-                  hideItem.is_active = false;
-                  await dispatch(hideAction(hideItem));
+                  await dispatch(hideAction(item.id));
                   break;
 
                 case "transaction":
-                  hideItem = transactions.find((elem) => elem.id == item.id);
-                  hideItem.is_active = false;
-                  await dispatch(hideTransaction(hideItem));
+                  await dispatch(hideTransaction(item.id));
                   break;
 
                 case "transfer":
-                  console.log("transfer");
+                  await dispatch(hideTransfer(item.id));
                   break;
               }
             } catch (error) {}
-
-            // const hideItem = item;
-            // hideItem.is_active = false;
-            // await dispatch(hideCategory(hideItem)).then(() => {
-
-            // });
 
             dispatch(endLoader());
           },
@@ -131,8 +121,17 @@ export const OperationListItem = ({ item, index, dataList }) => {
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
   );
 
+  const WrapperComponent = ({ children }) =>
+    profile.is_admin ? (
+      <Swipeable overshootRight={false} renderRightActions={RightAction}>
+        {children}
+      </Swipeable>
+    ) : (
+      <View>{children}</View>
+    );
+
   return (
-    <Swipeable overshootRight={false} renderRightActions={RightAction}>
+    <WrapperComponent>
       <ListItem
         title={`${item.name}${
           item.category !== undefined
@@ -168,6 +167,6 @@ export const OperationListItem = ({ item, index, dataList }) => {
           borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
         }}
       />
-    </Swipeable>
+    </WrapperComponent>
   );
 };

@@ -25,7 +25,7 @@ export const getAction = () => async (dispatch) => {
       },
     })
     .then((res) => {
-      const action = res.data.filter((elem) => elem.is_active);
+      const action = res.data;
 
       dispatch({
         type: GET_ACTION,
@@ -109,23 +109,16 @@ export const hideAction = (action) => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .put(
-      `${endpointAPI}/Action/${action.id}/`,
-      {
-        ...action,
+    .delete(`${endpointAPI}/Action/${action}/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
-    .then((res) => {
-      const hiddenAction = res.data;
+    })
+    .then(() => {
       dispatch({
         type: DELETE_ACTION,
-        payload: hiddenAction,
+        payload: action,
       });
     })
 
