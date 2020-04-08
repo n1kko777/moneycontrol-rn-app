@@ -1,10 +1,11 @@
 import axios from "axios";
-
 import {
   GET_TRANSACTION,
   CREATE_TRANSACTION,
   LOADING_TRANSACTION,
   ERROR_TRANSACTION,
+  DELETE_TRANSACTION,
+  UPDATE_TRANSACTION,
 } from "../types";
 
 import { endpointAPI } from "../constants";
@@ -14,68 +15,123 @@ import { Alert, AsyncStorage } from "react-native";
 export const getTransaction = () => async (dispatch) => {
   dispatch(setLoading());
 
-  try {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
-      .get(`${endpointAPI}/Transaction/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      })
-      .then((res) => {
-        const transaction = res.data.filter((elem) => elem.is_active);
+  return await axios
+    .get(`${endpointAPI}/Transaction/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
+      },
+    })
+    .then((res) => {
+      const transaction = res.data.filter((elem) => elem.is_active);
 
-        dispatch({
-          type: GET_TRANSACTION,
-          payload: transaction,
-        });
-      })
-
-      .catch((error) => {
-        dispatch(transactionFail(error));
+      dispatch({
+        type: GET_TRANSACTION,
+        payload: transaction,
       });
-  } catch (error) {
-    dispatch(transactionFail(error));
-  }
+    })
+
+    .catch((error) => {
+      dispatch(transactionFail(error));
+    });
 };
 
 // Create transaction from server
 export const createTransaction = (transaction) => async (dispatch) => {
   dispatch(setLoading());
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  try {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
-
-    return await axios
-      .post(
-        `${endpointAPI}/Transaction/`,
-        {
-          ...transaction,
+  return await axios
+    .post(
+      `${endpointAPI}/Transaction/`,
+      {
+        ...transaction,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + token,
-          },
-        }
-      )
-      .then((res) => {
-        const transaction = res.data;
+      }
+    )
+    .then((res) => {
+      const transaction = res.data;
 
-        dispatch({
-          type: CREATE_TRANSACTION,
-          payload: transaction,
-        });
-      })
-
-      .catch((error) => {
-        dispatch(transactionFail(error));
+      dispatch({
+        type: CREATE_TRANSACTION,
+        payload: transaction,
       });
-  } catch (error) {
-    dispatch(transactionFail(error));
-  }
+    })
+
+    .catch((error) => {
+      dispatch(transactionFail(error));
+    });
+};
+
+// Create transaction from server
+export const updateTransaction = (id, transaction) => async (dispatch) => {
+  dispatch(setLoading());
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+  return await axios
+    .put(
+      `${endpointAPI}/Transaction/${id}/`,
+      {
+        ...transaction,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      }
+    )
+    .then((res) => {
+      const updatedTransaction = res.data;
+
+      dispatch({
+        type: UPDATE_TRANSACTION,
+        payload: updatedTransaction,
+      });
+    })
+
+    .catch((error) => {
+      dispatch(transactionFail(error));
+    });
+};
+
+// Delete transaction from server
+export const hideTransaction = (transaction) => async (dispatch) => {
+  dispatch(setLoading());
+
+  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+  return await axios
+    .put(
+      `${endpointAPI}/Transaction/${transaction.id}/`,
+      {
+        ...transaction,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      }
+    )
+    .then((res) => {
+      const hiddenTransaction = res.data;
+      dispatch({
+        type: DELETE_TRANSACTION,
+        payload: hiddenTransaction,
+      });
+    })
+
+    .catch((error) => {
+      dispatch(transactionFail(error));
+    });
 };
 
 export const transactionFail = (error) => (dispatch) => {
@@ -97,12 +153,22 @@ export const transactionFail = (error) => (dispatch) => {
       error.response.status === 404
         ? `${error.response.data}`
         : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
+    errorObject.message =
+      error.response.status === 405
+        ? `${error.response.data}`
+        : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
   } else if (error.request) {
     // The request was made but no response was received
     console.log("Не удалось соединиться с сервером. Повторите попытку позже.");
 
     errorObject.title = `Не удалось соединиться с сервером`;
     errorObject.message = `Повторите попытку позже`;
+  } else if (error.custom) {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Что-то пошло не так... Повторите попытку позже.");
+
+    errorObject.title = error.custom.title;
+    errorObject.message = error.custom.message;
   } else {
     // Something happened in setting up the request that triggered an Error
     console.log("Что-то пошло не так... Повторите попытку позже.");

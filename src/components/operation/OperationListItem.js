@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "react-native";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { hideAction } from "../../store/actions/actionAction";
+import { hideTransaction } from "../../store/actions/transactionAction";
 
 export const OperationListItem = ({ item, index, dataList }) => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ export const OperationListItem = ({ item, index, dataList }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const { transactions } = useSelector((store) => store.transaction);
   const { actions } = useSelector((store) => store.action);
   const { categories } = useSelector((store) => store.category);
   const { tags } = useSelector((store) => store.tag);
@@ -87,17 +89,20 @@ export const OperationListItem = ({ item, index, dataList }) => {
           text: "Удалить",
           onPress: async () => {
             dispatch(startLoader());
+            let hideItem = null;
 
             try {
               switch (item.type) {
                 case "action":
-                  const hideItem = actions.find((elem) => elem.id == item.id);
+                  hideItem = actions.find((elem) => elem.id == item.id);
                   hideItem.is_active = false;
                   await dispatch(hideAction(hideItem));
                   break;
 
                 case "transaction":
-                  console.log("transaction");
+                  hideItem = transactions.find((elem) => elem.id == item.id);
+                  hideItem.is_active = false;
+                  await dispatch(hideTransaction(hideItem));
                   break;
 
                 case "transfer":
