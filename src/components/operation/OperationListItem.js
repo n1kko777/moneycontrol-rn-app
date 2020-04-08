@@ -14,6 +14,7 @@ import { splitToDigits } from "../../splitToDigits";
 import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "react-native";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { hideAction } from "../../store/actions/actionAction";
 
 export const OperationListItem = ({ item, index, dataList }) => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export const OperationListItem = ({ item, index, dataList }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const { actions } = useSelector((store) => store.action);
   const { categories } = useSelector((store) => store.category);
   const { tags } = useSelector((store) => store.tag);
 
@@ -89,7 +91,9 @@ export const OperationListItem = ({ item, index, dataList }) => {
             try {
               switch (item.type) {
                 case "action":
-                  console.log("action");
+                  const hideItem = actions.find((elem) => elem.id == item.id);
+                  hideItem.is_active = false;
+                  await dispatch(hideAction(hideItem));
                   break;
 
                 case "transaction":
