@@ -8,11 +8,13 @@ export const Toolbar = ({
   navigation,
   style,
   TargetIcon = ProfileIcon,
-  onTarget = () => {}
+  onTarget = () => {
+    navigation.navigate("Profile");
+  },
 }) => {
   const renderMenuAction = () => <TopMenuOptions navigation={navigation} />;
 
-  const ProfileAction = props => (
+  const ProfileAction = (props) => (
     <TopNavigationAction {...props} icon={TargetIcon} />
   );
 
@@ -23,7 +25,7 @@ export const Toolbar = ({
       style={{
         ...style,
         position: "relative",
-        zIndex: 10
+        zIndex: 10,
       }}
       title={title}
       alignment="center"
