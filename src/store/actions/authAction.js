@@ -13,48 +13,48 @@ import {
   CLEAR_ACTION,
   CLEAR_TRANSFER,
   CLEAR_CATEGORY,
-  CLEAR_TAG
+  CLEAR_TAG,
 } from "../types";
 
 import { url } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
-export const authStart = () => dispatch => {
+export const authStart = () => (dispatch) => {
   dispatch({
-    type: AUTH_START
+    type: AUTH_START,
   });
 };
 
-export const authSuccess = user => async dispatch => {
+export const authSuccess = (user) => async (dispatch) => {
   try {
     await AsyncStorage.setItem("AUTH_TOKEN", user.key);
 
     dispatch({
       type: AUTH_SUCCESS,
-      payload: user
+      payload: user,
     });
   } catch (error) {
     dispatch(authFail(error));
   }
 };
-export const registerSuccess = user => dispatch => {
+export const registerSuccess = (user) => (dispatch) => {
   Alert.alert(
     "Регистрация прошла успешно!",
     "Войдите в аккаунт.",
     [{ text: "Закрыть" }],
     {
-      cancelable: false
+      cancelable: false,
     }
   );
   console.log("Регистрация прошла успешно!");
 
   dispatch({
     type: REGISTER_SUCCESS,
-    payload: user
+    payload: user,
   });
 };
 
-export const authFail = error => dispatch => {
+export const authFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -88,16 +88,16 @@ export const authFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: AUTH_FAIL,
-    payload: error
+    payload: error,
   });
 };
 
-export const logout = () => async dispatch => {
+export const logout = () => async (dispatch) => {
   try {
     await AsyncStorage.clear();
   } catch (error) {
@@ -105,47 +105,47 @@ export const logout = () => async dispatch => {
   }
 
   dispatch({
-    type: AUTH_LOGOUT
+    type: AUTH_LOGOUT,
   });
 
   dispatch({
-    type: CLEAR_PROFILE
+    type: CLEAR_PROFILE,
   });
   dispatch({
-    type: CLEAR_COMPANY
+    type: CLEAR_COMPANY,
   });
   dispatch({
-    type: CLEAR_ACCOUNT
+    type: CLEAR_ACCOUNT,
   });
   dispatch({
-    type: CLEAR_TRANSACTION
+    type: CLEAR_TRANSACTION,
   });
   dispatch({
-    type: CLEAR_ACTION
+    type: CLEAR_ACTION,
   });
   dispatch({
-    type: CLEAR_TRANSFER
+    type: CLEAR_TRANSFER,
   });
   dispatch({
-    type: CLEAR_CATEGORY
+    type: CLEAR_CATEGORY,
   });
   dispatch({
-    type: CLEAR_TAG
+    type: CLEAR_TAG,
   });
 };
 
-export const authLogin = (email, password, isRemindMe) => async dispatch => {
+export const authLogin = (email, password, isRemindMe) => async (dispatch) => {
   dispatch(authStart());
 
   return await axios
     .post(`${url}/rest-auth/login/`, {
       email: email,
-      password: password
+      password: password,
     })
-    .then(async res => {
+    .then(async (res) => {
       await dispatch(authSuccess(res.data));
     })
-    .catch(async error => await dispatch(authFail(error)));
+    .catch(async (error) => await dispatch(authFail(error)));
 };
 
 export const authSignUp = ({
@@ -153,8 +153,8 @@ export const authSignUp = ({
   last_name,
   email,
   password1,
-  password2
-}) => async dispatch => {
+  password2,
+}) => async (dispatch) => {
   dispatch(authStart());
   return await axios
     .post(`${url}/rest-auth/registration/`, {
@@ -162,17 +162,17 @@ export const authSignUp = ({
       last_name,
       email,
       password1,
-      password2
+      password2,
     })
-    .then(res => {
+    .then((res) => {
       const authUser = {
         token: res.data.key,
         first_name,
         last_name,
         email,
-        password1
+        password1,
       };
       dispatch(registerSuccess(authUser));
     })
-    .catch(err => dispatch(authFail(err)));
+    .catch((err) => dispatch(authFail(err)));
 };

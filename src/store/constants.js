@@ -1,4 +1,4 @@
-let localhost = "https://moneycontrol-app-api.herokuapp.com";
+let localhost = "http://95.213.224.10";
 
 const apiURL = "/api/v1";
 

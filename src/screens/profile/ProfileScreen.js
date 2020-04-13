@@ -17,6 +17,7 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { AvatarPicker } from "../../components/profile/AvatarPicker";
 
 export const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export const ProfileScreen = ({ navigation }) => {
   const [first_name, setFirstName] = React.useState(profile.first_name);
   const [last_name, setLastName] = React.useState(profile.last_name);
   const [phone, setPhone] = React.useState(profile.phone);
+  const [imageUrl, setImageUrl] = React.useState(profile.image);
 
   const [isEdit, setIsEdit] = React.useState(false);
 
@@ -34,6 +36,7 @@ export const ProfileScreen = ({ navigation }) => {
       dispatch(startLoader());
       const newProfile = {
         id: profile.id,
+        image: imageUrl,
         first_name,
         last_name,
         phone,
@@ -69,6 +72,13 @@ export const ProfileScreen = ({ navigation }) => {
             alignItems: "center",
           }}
         >
+          <View style={{ height: 200 }}>
+            <AvatarPicker
+              isEdit={isEdit}
+              imageUrl={imageUrl}
+              setImageUrl={setImageUrl}
+            />
+          </View>
           <View
             style={{
               width: "85%",

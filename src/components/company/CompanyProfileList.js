@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList } from "react-native";
-import { ListItem, useTheme } from "@ui-kitten/components";
+import { ListItem, useTheme, Avatar } from "@ui-kitten/components";
 import { ProfileIcon, RightIcon } from "../../themes/icons";
 
 import { ThemeContext } from "../../themes/theme-context";
@@ -26,7 +26,17 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
     />
   );
 
-  const renderItemIcon = (style) => <ProfileIcon {...style} />;
+  const renderItemIcon = (item, style) =>
+    item.image !== null ? (
+      // <Avatar source={{ uri: item.image }} />
+      <Avatar
+        source={{
+          uri: item.image,
+        }}
+      />
+    ) : (
+      <ProfileIcon {...style} />
+    );
 
   const renderItem = ({ item, index }) => (
     <ListItem
@@ -40,7 +50,7 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
       descriptionStyle={{
         fontSize: 14,
       }}
-      icon={renderItemIcon}
+      icon={(style) => renderItemIcon(item, style)}
       accessory={isAdmin && renderItemAccessory}
       style={{
         paddingVertical: 15,
