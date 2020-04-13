@@ -18,7 +18,7 @@ export const getAction = () => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .get(`${endpointAPI}/Action/`, {
+    .get(`${endpointAPI}/action/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Token " + token,
@@ -45,7 +45,7 @@ export const createAction = (action) => async (dispatch) => {
 
   return await axios
     .post(
-      `${endpointAPI}/Action/`,
+      `${endpointAPI}/action/`,
       {
         ...action,
       },
@@ -77,7 +77,7 @@ export const updateAction = (id, action) => async (dispatch) => {
 
   return await axios
     .put(
-      `${endpointAPI}/Action/${id}/`,
+      `${endpointAPI}/action/${id}/`,
       {
         ...action,
       },
@@ -109,7 +109,7 @@ export const hideAction = (action) => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .delete(`${endpointAPI}/Action/${action}/`, {
+    .delete(`${endpointAPI}/action/${action}/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Token " + token,

@@ -3,36 +3,36 @@ import {
   GET_COMPANY,
   CREATE_COMPANY,
   LOADING_COMPANY,
-  ERROR_COMPANY
+  ERROR_COMPANY,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 
 // Get company from server
-export const getCompany = () => async dispatch => {
+export const getCompany = () => async (dispatch) => {
   dispatch(setLoading());
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return await axios
-      .get(`${endpointAPI}/Company/`, {
+      .get(`${endpointAPI}/company/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token
-        }
+          Authorization: "Token " + token,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const company = res.data[0];
 
         dispatch({
           type: GET_COMPANY,
-          payload: company
+          payload: company,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(companyFail(error));
       });
   } catch (error) {
@@ -41,7 +41,7 @@ export const getCompany = () => async dispatch => {
 };
 
 // Create company from server
-export const createCompany = company => async dispatch => {
+export const createCompany = (company) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -49,27 +49,27 @@ export const createCompany = company => async dispatch => {
 
     return await axios
       .post(
-        `${endpointAPI}/Company/`,
+        `${endpointAPI}/company/`,
         {
-          ...company
+          ...company,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token
-          }
+            Authorization: "Token " + token,
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         const company = res.data;
 
         dispatch({
           type: CREATE_COMPANY,
-          payload: company
+          payload: company,
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         dispatch(companyFail(error));
       });
   } catch (error) {
@@ -77,7 +77,7 @@ export const createCompany = company => async dispatch => {
   }
 };
 
-export const companyFail = error => dispatch => {
+export const companyFail = (error) => (dispatch) => {
   const errorObject = {};
   if (error.response) {
     // The request was made and the server responded with a status code
@@ -111,18 +111,18 @@ export const companyFail = error => dispatch => {
   }
 
   Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false
+    cancelable: false,
   });
 
   dispatch({
     type: ERROR_COMPANY,
-    payload: error
+    payload: error,
   });
 };
 
 // Set loading to true
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING_COMPANY
+    type: LOADING_COMPANY,
   });
 };

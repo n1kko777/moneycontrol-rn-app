@@ -18,7 +18,7 @@ export const getCategory = () => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .get(`${endpointAPI}/Category/`, {
+    .get(`${endpointAPI}/category/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Token " + token,
@@ -45,7 +45,7 @@ export const createCategory = (category) => async (dispatch) => {
 
   return await axios
     .post(
-      `${endpointAPI}/Category/`,
+      `${endpointAPI}/category/`,
       {
         ...category,
       },
@@ -77,7 +77,7 @@ export const updateCategory = (id, category) => async (dispatch) => {
 
   return await axios
     .put(
-      `${endpointAPI}/Category/${id}/`,
+      `${endpointAPI}/category/${id}/`,
       {
         ...category,
       },
@@ -110,7 +110,7 @@ export const hideCategory = (category) => async (dispatch) => {
 
   return await axios
     .put(
-      `${endpointAPI}/Category/${category.id}/`,
+      `${endpointAPI}/category/${category.id}/`,
       {
         ...category,
       },

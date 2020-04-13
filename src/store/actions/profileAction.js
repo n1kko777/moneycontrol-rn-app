@@ -18,7 +18,7 @@ export const getProfile = () => async (dispatch) => {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return await axios
-      .get(`${endpointAPI}/Profile/`, {
+      .get(`${endpointAPI}/profile/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Token " + token,
@@ -50,7 +50,7 @@ export const createProfile = (profile) => async (dispatch) => {
 
     return await axios
       .post(
-        `${endpointAPI}/Profile/`,
+        `${endpointAPI}/profile/`,
         {
           ...profile,
         },
@@ -82,18 +82,23 @@ export const createProfile = (profile) => async (dispatch) => {
 export const updateProfile = (profile) => async (dispatch) => {
   dispatch(setLoading());
 
+  console.log("profile :", profile);
+
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return await axios
       .put(
-        `${endpointAPI}/Profile/${profile.id}/`,
+        `${endpointAPI}/profile/${profile.id}/`,
         {
           ...profile,
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              profile.image !== null
+                ? "multipart/form-data"
+                : "application/json",
             Authorization: "Token " + token,
           },
         }

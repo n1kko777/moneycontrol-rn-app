@@ -18,7 +18,7 @@ export const getAccount = () => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .get(`${endpointAPI}/Account/`, {
+    .get(`${endpointAPI}/account/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Token " + token,
@@ -45,7 +45,7 @@ export const createAccount = (account) => async (dispatch) => {
 
   return await axios
     .post(
-      `${endpointAPI}/Account/`,
+      `${endpointAPI}/account/`,
       {
         ...account,
       },
@@ -77,7 +77,7 @@ export const updateAccount = (id, account) => async (dispatch) => {
 
   return await axios
     .put(
-      `${endpointAPI}/Account/${id}/`,
+      `${endpointAPI}/account/${id}/`,
       {
         ...account,
       },
@@ -123,7 +123,7 @@ export const hideAccount = (account) => async (dispatch) => {
 
   return await axios
     .put(
-      `${endpointAPI}/Account/${account.id}/`,
+      `${endpointAPI}/account/${account.id}/`,
       {
         ...account,
       },

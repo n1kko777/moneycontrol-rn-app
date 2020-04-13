@@ -18,7 +18,7 @@ export const getTag = () => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .get(`${endpointAPI}/Tag/`, {
+    .get(`${endpointAPI}/tag/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Token " + token,
@@ -45,7 +45,7 @@ export const createTag = (tag) => async (dispatch) => {
 
   return await axios
     .post(
-      `${endpointAPI}/Tag/`,
+      `${endpointAPI}/tag/`,
       {
         ...tag,
       },
@@ -77,7 +77,7 @@ export const updateTag = (id, tag) => async (dispatch) => {
 
   return await axios
     .put(
-      `${endpointAPI}/Tag/${id}/`,
+      `${endpointAPI}/tag/${id}/`,
       {
         ...tag,
       },
@@ -110,7 +110,7 @@ export const hideTag = (tag) => async (dispatch) => {
 
   return await axios
     .put(
-      `${endpointAPI}/Tag/${tag.id}/`,
+      `${endpointAPI}/tag/${tag.id}/`,
       {
         ...tag,
       },

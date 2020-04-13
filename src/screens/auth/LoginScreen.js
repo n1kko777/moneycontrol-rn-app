@@ -47,6 +47,7 @@ export const LoginScreen = ({ route, navigation }) => {
   };
 
   const isAuthHandler = async () => {
+    console.log(isAuth, authError);
     if (isAuth && authError === null) {
       dispatch(startLoader());
       await dispatch(getProfile());
@@ -54,29 +55,41 @@ export const LoginScreen = ({ route, navigation }) => {
     }
   };
 
-  useEffect(() => {
-    checkLogIn();
-  }, []);
+  // useEffect(() => {
+  //   checkLogIn();
+  // }, []);
 
-  useEffect(() => {
-    isAuthHandler();
-  }, [isAuth]);
+  // useEffect(() => {
+  //   isAuthHandler();
+  // }, [isAuth]);
 
-  useEffect(() => {
-    if (isAuth) {
-      profile !== undefined && profile.hasOwnProperty("company")
-        ? profile.company !== null
-          ? navigateHome()
-          : navigateCompanyManager()
-        : navigateCreateProfile();
-    }
-  }, [profile]);
+  // useEffect(() => {
+  // if (isAuth) {
+  //   profile !== undefined && profile.hasOwnProperty("company")
+  //     ? profile.company !== null
+  //       ? navigateHome()
+  //       : navigateCompanyManager()
+  //     : navigateCreateProfile();
+  // }
+  // }, [profile]);
 
   const onSubmit = async () => {
-    dispatch(startLoader());
     Keyboard.dismiss();
-    await dispatch(authLogin(email, password));
-    dispatch(endLoader());
+    try {
+      dispatch(startLoader());
+      await dispatch(authLogin(email, password));
+      dispatch(endLoader());
+
+      await isAuthHandler();
+
+      if (isAuth) {
+        profile !== undefined && profile.hasOwnProperty("company")
+          ? profile.company !== null
+            ? navigateHome()
+            : navigateCompanyManager()
+          : navigateCreateProfile();
+      }
+    } catch (error) {}
   };
 
   const navigateHome = () => {
