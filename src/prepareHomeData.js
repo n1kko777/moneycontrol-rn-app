@@ -57,7 +57,7 @@ export const prepareHomeData = (
         navigate: "Account",
         title: "Счета",
         data: accounts
-          .filter((acc) => acc.profile === profile.id)
+          .filter((acc) => profile !== null && acc.profile === profile.id)
           .map((elem) => ({
             key: elem.last_updated,
             name: elem.account_name,

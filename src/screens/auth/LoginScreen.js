@@ -8,7 +8,7 @@ import { THEME } from "../../themes/themes";
 import { hideIconPassword, showIconPassword } from "../../themes/icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import { authLogin, logout } from "../../store/actions/authAction";
+import { authLogin } from "../../store/actions/authAction";
 import { getProfile } from "../../store/actions/profileAction";
 
 import { startLoader, endLoader } from ".././../store/actions/apiAction";
@@ -17,8 +17,8 @@ import { Keyboard } from "react-native";
 export const LoginScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { isAuth, error: authError, loading: authLoading } = state.auth;
-  const { profile, error: profileError } = state.profile;
+  const { isAuth } = state.auth;
+  const { profile } = state.profile;
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -41,7 +41,7 @@ export const LoginScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (profile !== null) {
-      profile.length !== 0 && profile.hasOwnProperty("company")
+      profile.hasOwnProperty("company")
         ? profile.company !== null
           ? navigateHome()
           : navigateCompanyManager()

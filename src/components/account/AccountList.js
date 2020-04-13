@@ -7,7 +7,9 @@ import { AccountListItem } from "./AccountListItem";
 export const AccountList = ({ navigation }) => {
   const { profile } = useSelector((state) => state.profile);
   const { accounts } = useSelector((state) => state.account);
-  const dataList = accounts.filter((acc) => acc.profile == profile.id);
+  const dataList = accounts.filter(
+    (acc) => profile !== null && acc.profile == profile.id
+  );
 
   const keyExtractor = (item) => item.id.toString();
 

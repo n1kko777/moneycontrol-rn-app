@@ -9,7 +9,7 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 
-import { View } from "react-native";
+import { View, Clipboard, Alert } from "react-native";
 import { THEME } from "../../themes/themes";
 
 export const TeamsScreen = ({ navigation }) => {
@@ -21,6 +21,19 @@ export const TeamsScreen = ({ navigation }) => {
   const { company } = state.company;
 
   const companyProfileListData = company.profiles;
+
+  const inviteToTeam = async () => {
+    await Clipboard.setString(company.company_id);
+
+    Alert.alert(
+      "Идентификатор скопирован",
+      "Отправьте код сотруднику.",
+      [{ text: "OK" }],
+      {
+        cancelable: false,
+      }
+    );
+  };
 
   return (
     <ScreenTemplate>
@@ -39,9 +52,15 @@ export const TeamsScreen = ({ navigation }) => {
             ],
         }}
       >
-        <View style={{ height: profile.is_admin ? 40 : 0, marginVertical: 20 }}>
-          {profile.is_admin && (
+        <View
+          style={{
+            height: profile !== null && profile.is_admin ? 45 : 0,
+            marginVertical: 20,
+          }}
+        >
+          {profile !== null && profile.is_admin && (
             <Button
+              onPress={inviteToTeam}
               style={{
                 alignSelf: "center",
                 paddingHorizontal: 20,
@@ -58,7 +77,7 @@ export const TeamsScreen = ({ navigation }) => {
         >
           <CompanyProfileList
             dataList={companyProfileListData}
-            isAdmin={profile.is_admin}
+            isAdmin={profile !== null && profile.is_admin}
           />
         </Layout>
       </Layout>
