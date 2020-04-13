@@ -5,7 +5,6 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 
 export const AvatarPicker = ({ isEdit, imageUrl, setImageUrl }) => {
-  console.log(imageUrl);
   const getPermissionAsync = async () => {
     if (Constants.platform.ios) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -32,8 +31,6 @@ export const AvatarPicker = ({ isEdit, imageUrl, setImageUrl }) => {
       if (!result.cancelled) {
         setImageUrl(result.uri);
       }
-
-      console.log(result);
     } catch (E) {
       console.log(E);
     }

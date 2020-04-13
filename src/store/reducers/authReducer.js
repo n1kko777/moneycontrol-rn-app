@@ -4,7 +4,7 @@ import {
   AUTH_LOGOUT,
   AUTH_START,
   AUTH_SUCCESS,
-  REMIND_ME
+  REMIND_ME,
 } from "../types";
 
 const initialState = {
@@ -13,7 +13,7 @@ const initialState = {
   isAuth: false,
   isRemindMe: true,
   error: null,
-  loading: false
+  loading: false,
 };
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -24,7 +24,7 @@ export const authReducer = (state = initialState, action) => {
         user: action.payload,
         isRegister: action.payload.token !== null,
         loading: false,
-        error: null
+        error: null,
       };
     case AUTH_START:
       console.log("==========================");
@@ -32,7 +32,8 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         error: null,
-        loading: true
+        isAuth: false,
+        loading: true,
       };
     case AUTH_SUCCESS:
       console.log("case AUTH_SUCCESS:");
@@ -41,7 +42,7 @@ export const authReducer = (state = initialState, action) => {
         user: action.payload,
         loading: false,
         isAuth: true,
-        error: null
+        error: null,
       };
     case AUTH_FAIL:
       console.log("case AUTH_FAIL:");
@@ -49,7 +50,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         isAuth: false,
-        error: action.payload
+        error: action.payload,
       };
     case AUTH_LOGOUT:
       console.log("case AUTH_LOGOUT:");
@@ -57,12 +58,12 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         isAuth: false,
         isRegister: false,
-        user: {}
+        user: {},
       };
     case REMIND_ME:
       return {
         ...state,
-        isRemindMe: action.payload
+        isRemindMe: action.payload,
       };
 
     default:

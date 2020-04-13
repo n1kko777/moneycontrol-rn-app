@@ -40,7 +40,9 @@ export const OperationsScreen = ({ navigation }) => {
     <ScreenTemplate>
       <Toolbar
         navigation={navigation}
-        title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
+        title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
+          company.company_name
+        }`}
       />
       <Layout
         style={{

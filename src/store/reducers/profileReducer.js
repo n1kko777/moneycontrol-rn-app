@@ -4,13 +4,13 @@ import {
   UPDATE_PROFILE,
   LOADING_PROFILE,
   ERROR_PROFILE,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
 } from "../types";
 
 const initialState = {
-  profile: {},
+  profile: null,
   error: null,
-  loading: false
+  loading: false,
 };
 
 export const profileReducer = (state = initialState, action) => {
@@ -21,7 +21,7 @@ export const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         profile: payload,
-        loading: false
+        loading: false,
       };
     case CREATE_PROFILE:
       console.log("case CREATE_PROFILE:");
@@ -29,28 +29,29 @@ export const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         profile: payload,
-        loading: false
+        loading: false,
       };
     case UPDATE_PROFILE:
       console.log("case UPDATE_PROFILE:");
       return {
         ...state,
         profile: payload,
-        loading: false
+        loading: false,
       };
     case CLEAR_PROFILE:
       console.log("case CLEAR_PROFILE:");
       return {
         ...state,
-        profile: {},
-        loading: false
+        profile: null,
+        error: null,
+        loading: false,
       };
     case LOADING_PROFILE:
       console.log("==========================");
       console.log("case LOADING_PROFILE:");
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case ERROR_PROFILE:
@@ -58,7 +59,7 @@ export const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: payload
+        error: payload,
       };
     default:
       return state;

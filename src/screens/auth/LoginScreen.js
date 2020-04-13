@@ -25,71 +25,34 @@ export const LoginScreen = ({ route, navigation }) => {
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
-  const checkLogIn = async () => {
-    dispatch(startLoader());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
-    if (token !== null && authError === null) {
-      try {
-        await dispatch(getProfile());
-      } catch (error) {
-        await dispatch(logout());
-      }
-
-      if (authError === null && profileError === null) {
-        profile !== undefined && profile.hasOwnProperty("company")
-          ? profile.company !== null
-            ? navigateHome()
-            : navigateCompanyManager()
-          : navigateCreateProfile();
-      }
-    }
-    dispatch(endLoader());
-  };
-
   const isAuthHandler = async () => {
-    console.log(isAuth, authError);
-    if (isAuth && authError === null) {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    if (token !== null) {
       dispatch(startLoader());
       await dispatch(getProfile());
       dispatch(endLoader());
     }
   };
 
-  // useEffect(() => {
-  //   checkLogIn();
-  // }, []);
+  useEffect(() => {
+    Keyboard.dismiss();
+    isAuthHandler();
+  }, [dispatch, isAuth]);
 
-  // useEffect(() => {
-  //   isAuthHandler();
-  // }, [isAuth]);
-
-  // useEffect(() => {
-  // if (isAuth) {
-  //   profile !== undefined && profile.hasOwnProperty("company")
-  //     ? profile.company !== null
-  //       ? navigateHome()
-  //       : navigateCompanyManager()
-  //     : navigateCreateProfile();
-  // }
-  // }, [profile]);
+  useEffect(() => {
+    if (profile !== null) {
+      profile.length !== 0 && profile.hasOwnProperty("company")
+        ? profile.company !== null
+          ? navigateHome()
+          : navigateCompanyManager()
+        : navigateCreateProfile();
+    }
+  }, [profile]);
 
   const onSubmit = async () => {
-    Keyboard.dismiss();
-    try {
-      dispatch(startLoader());
-      await dispatch(authLogin(email, password));
-      dispatch(endLoader());
-
-      await isAuthHandler();
-
-      if (isAuth) {
-        profile !== undefined && profile.hasOwnProperty("company")
-          ? profile.company !== null
-            ? navigateHome()
-            : navigateCompanyManager()
-          : navigateCreateProfile();
-      }
-    } catch (error) {}
+    dispatch(startLoader());
+    await dispatch(authLogin(email, password));
+    dispatch(endLoader());
   };
 
   const navigateHome = () => {

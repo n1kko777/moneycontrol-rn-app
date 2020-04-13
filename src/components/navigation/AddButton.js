@@ -8,11 +8,11 @@ import {
   AddIcon,
   TrendingUpIcon,
   TrendingDownIcon,
-  ExchangeIcon
+  ExchangeIcon,
 } from "../../themes/icons";
 import {
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native-gesture-handler";
 
 export const AddButton = ({ kittenTheme }) => {
@@ -24,55 +24,53 @@ export const AddButton = ({ kittenTheme }) => {
     Animated.sequence([
       Animated.timing(mode, {
         toValue: mode._value === 0 ? 1 : 0,
-        duration: 150
-      })
+        duration: 150,
+      }),
     ]).start();
   };
 
   const navigateHandlePress = () => {
     handlePress();
-
-    console.log("navigate");
   };
 
   const earnX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -89]
+    outputRange: [0, -89],
   });
 
   const earnY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [-30, -100]
+    outputRange: [-30, -100],
   });
 
   const exchangeX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 5]
+    outputRange: [0, 5],
   });
 
   const exchangeY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [-30, -150]
+    outputRange: [-30, -150],
   });
 
   const spendX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 89]
+    outputRange: [0, 89],
   });
 
   const spendY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [-30, -100]
+    outputRange: [-30, -100],
   });
 
   const rotation = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "45deg"]
+    outputRange: ["0deg", "45deg"],
   });
 
   const opacity = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 1]
+    outputRange: [0, 1],
   });
 
   return (
@@ -82,7 +80,7 @@ export const AddButton = ({ kittenTheme }) => {
           position: "absolute",
           left: earnX,
           top: earnY,
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <TouchableOpacity onPress={navigateHandlePress}>
@@ -95,7 +93,7 @@ export const AddButton = ({ kittenTheme }) => {
 
         <Animated.View
           style={{
-            opacity
+            opacity,
           }}
         >
           <Text style={{ marginTop: 5 }} category="c1">
@@ -108,7 +106,7 @@ export const AddButton = ({ kittenTheme }) => {
           position: "absolute",
           left: exchangeX,
           top: exchangeY,
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <TouchableOpacity onPress={navigateHandlePress}>
@@ -121,7 +119,7 @@ export const AddButton = ({ kittenTheme }) => {
 
         <Animated.View
           style={{
-            opacity
+            opacity,
           }}
         >
           <Text style={{ marginTop: 5 }} category="c1">
@@ -134,7 +132,7 @@ export const AddButton = ({ kittenTheme }) => {
           position: "absolute",
           left: spendX,
           top: spendY,
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <TouchableOpacity onPress={navigateHandlePress}>
@@ -146,7 +144,7 @@ export const AddButton = ({ kittenTheme }) => {
         </TouchableOpacity>
         <Animated.View
           style={{
-            opacity
+            opacity,
           }}
         >
           <Text style={{ marginTop: 5 }} category="c1">
@@ -158,13 +156,13 @@ export const AddButton = ({ kittenTheme }) => {
         onPress={handlePress}
         style={{
           ...styles.button,
-          backgroundColor: kittenTheme["color-info-500"]
+          backgroundColor: kittenTheme["color-info-500"],
         }}
         size="giant"
         icon={() => (
           <Animated.View
             style={{
-              transform: [{ rotate: rotation }]
+              transform: [{ rotate: rotation }],
             }}
           >
             <AddIcon style={{ marginTop: -4, marginLeft: -4 }} fill="#fff" />
@@ -183,7 +181,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     marginTop: -35,
-    zIndex: 2
+    zIndex: 2,
   },
   secondaryButton: {
     alignItems: "center",
@@ -191,6 +189,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    zIndex: 1
-  }
+    zIndex: 1,
+  },
 });

@@ -25,7 +25,7 @@ export const getProfile = () => async (dispatch) => {
         },
       })
       .then((res) => {
-        const profile = res.data[0];
+        const profile = res.data.length === 0 ? null : res.data[0];
 
         dispatch({
           type: GET_PROFILE,
@@ -81,8 +81,6 @@ export const createProfile = (profile) => async (dispatch) => {
 // Update profile from server
 export const updateProfile = (profile) => async (dispatch) => {
   dispatch(setLoading());
-
-  console.log("profile :", profile);
 
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");

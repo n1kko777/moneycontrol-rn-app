@@ -23,7 +23,7 @@ export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
 
   const { startDate, endDate } = state.calendar;
   const { profile } = state.profile;
@@ -89,11 +89,13 @@ export const HomeScreen = ({ navigation }) => {
           backgroundColor:
             kittenTheme[
               `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ]
+            ],
         }}
       >
         <Toolbar
-          title={`${profile.is_admin ? "⭐️ " : ""}${company.company_name}`}
+          title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
+            company.company_name
+          }`}
           navigation={navigation}
         />
       </Layout>
@@ -103,7 +105,7 @@ export const HomeScreen = ({ navigation }) => {
           backgroundColor:
             kittenTheme[
               `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ]
+            ],
         }}
       >
         <View onStartShouldSetResponder={() => true}>
