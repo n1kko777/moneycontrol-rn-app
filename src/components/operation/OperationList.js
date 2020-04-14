@@ -4,7 +4,7 @@ import { OperationListItem } from "./OperationListItem";
 import { Text } from "@ui-kitten/components";
 
 export const OperationList = ({ dataList }) => {
-  const keyExtractor = (item) => item.key.toString();
+  const keyExtractor = (item) => `${item.key}_${item.key}`;
 
   const renderItem = ({ item, index }) => (
     <OperationListItem item={item} index={index} dataList={dataList} />

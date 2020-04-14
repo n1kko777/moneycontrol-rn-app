@@ -41,9 +41,11 @@ export const getTransaction = () => async (dispatch) => {
 // Create transaction from server
 export const createTransaction = (transaction) => async (dispatch) => {
   dispatch(setLoading());
+
+  console.log(transaction);
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
+  await axios
     .post(
       `${endpointAPI}/transaction/`,
       {
@@ -64,7 +66,6 @@ export const createTransaction = (transaction) => async (dispatch) => {
         payload: transaction,
       });
     })
-
     .catch((error) => {
       dispatch(transactionFail(error));
     });

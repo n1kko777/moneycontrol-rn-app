@@ -29,7 +29,7 @@ export const transactionReducer = (state = initialState, action) => {
       console.log("case CREATE_TRANSACTION:");
       return {
         ...state,
-        transactions: [...state.transactions, payload],
+        transactions: [payload, ...state.transactions],
         loading: false,
         error: null,
       };

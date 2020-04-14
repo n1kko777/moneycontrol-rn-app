@@ -10,12 +10,9 @@ import {
   TrendingDownIcon,
   ExchangeIcon,
 } from "../../themes/icons";
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const AddButton = ({ kittenTheme }) => {
+export const AddButton = ({ kittenTheme, navigation }) => {
   const mode = new Animated.Value(0);
 
   const handlePress = () => {
@@ -29,8 +26,10 @@ export const AddButton = ({ kittenTheme }) => {
     ]).start();
   };
 
-  const navigateHandlePress = () => {
+  const navigateHandlePress = (navRoute = null) => {
     handlePress();
+
+    navRoute !== null && navigation.navigate(navRoute);
   };
 
   const earnX = mode.interpolate({
@@ -83,7 +82,7 @@ export const AddButton = ({ kittenTheme }) => {
           alignItems: "center",
         }}
       >
-        <TouchableOpacity onPress={navigateHandlePress}>
+        <TouchableOpacity onPress={() => navigateHandlePress("CreateEarn")}>
           <Button
             status="success"
             style={styles.secondaryButton}
@@ -109,7 +108,7 @@ export const AddButton = ({ kittenTheme }) => {
           alignItems: "center",
         }}
       >
-        <TouchableOpacity onPress={navigateHandlePress}>
+        <TouchableOpacity onPress={() => navigateHandlePress("CreateTransfer")}>
           <Button
             status="info"
             style={styles.secondaryButton}
@@ -135,7 +134,7 @@ export const AddButton = ({ kittenTheme }) => {
           alignItems: "center",
         }}
       >
-        <TouchableOpacity onPress={navigateHandlePress}>
+        <TouchableOpacity onPress={() => navigateHandlePress("CreateSpend")}>
           <Button
             style={styles.secondaryButton}
             status="danger"

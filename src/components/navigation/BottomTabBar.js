@@ -4,13 +4,13 @@ import {
   BottomNavigation,
   BottomNavigationTab,
   useTheme,
-  Divider
+  Divider,
 } from "@ui-kitten/components";
 import {
   HomeIcon,
   OoperationIcon,
   TeamIcon,
-  MoreIconHorizontal
+  MoreIconHorizontal,
 } from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 
@@ -20,7 +20,7 @@ export const BottomTabBar = ({ navigation, state }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onSelect = index => {
+  const onSelect = (index) => {
     navigation.navigate(state.routeNames[index]);
   };
 
@@ -30,7 +30,7 @@ export const BottomTabBar = ({ navigation, state }) => {
         backgroundColor:
           kittenTheme[
             `color-basic-${themeContext.theme === "light" ? 100 : 800}`
-          ]
+          ],
       }}
     >
       <Divider />
@@ -41,7 +41,7 @@ export const BottomTabBar = ({ navigation, state }) => {
       >
         <BottomNavigationTab icon={HomeIcon} title="Главная" />
         <BottomNavigationTab icon={OoperationIcon} title="Операции" />
-        <AddButton kittenTheme={kittenTheme} />
+        <AddButton kittenTheme={kittenTheme} navigation={navigation} />
         <BottomNavigationTab icon={TeamIcon} title="Команда" />
         <BottomNavigationTab icon={MoreIconHorizontal} title="Еще" />
       </BottomNavigation>

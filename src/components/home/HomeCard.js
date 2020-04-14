@@ -55,7 +55,7 @@ export const HomeCard = ({ item, navigation }) => {
           <HomeCardItem
             kittenTheme={kittenTheme}
             themeContext={themeContext}
-            key={elem.key}
+            key={`${elem.key}_${elem.key}`}
             name={elem.name}
             amount={elem.balance}
             color={elem.style}
