@@ -82,7 +82,7 @@ export const CreateSpendScreen = ({ navigation }) => {
         transaction_amount,
         account:
           selectedAccountOption !== null &&
-          categoriesData[selectedAccountOption].id,
+          accountData[selectedAccountOption].id,
         category:
           selectedCategoryOption !== null &&
           categoriesData[selectedCategoryOption].id,

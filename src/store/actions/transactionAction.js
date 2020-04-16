@@ -41,8 +41,6 @@ export const getTransaction = () => async (dispatch) => {
 // Create transaction from server
 export const createTransaction = (transaction) => async (dispatch) => {
   dispatch(setLoading());
-
-  console.log(transaction);
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   await axios

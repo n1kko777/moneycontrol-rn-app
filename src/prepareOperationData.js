@@ -1,4 +1,5 @@
 import { getShortName } from "./getShortName";
+import moment from "moment";
 
 export const prepareOperationData = (
   company,
@@ -55,6 +56,6 @@ export const prepareOperationData = (
   }
 
   return allOpprations
-    .sort((a, b) => new Date(b.id) - new Date(a.id))
+    .sort((a, b) => new Date(b.key) - new Date(a.key))
     .filter((el, index) => index < 15);
 };
