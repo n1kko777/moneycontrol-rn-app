@@ -1,5 +1,4 @@
 import { getShortName } from "./getShortName";
-import moment from "moment";
 
 export const prepareOperationData = (
   company,
