@@ -15,9 +15,16 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 export const TagListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
 
+  const swipeableRow = React.createRef();
+
+  const close = () => {
+    swipeableRow.current.close();
+  };
+
   const renderIconItem = (style) => <TagIcon {...style} />;
 
   const deleteHandler = () => {
+    close();
     Alert.alert(
       "Удаление тега",
       `Вы уверены что хотите удалить тег ${item.tag_name}?`,
@@ -55,7 +62,11 @@ export const TagListItem = ({ item, index, dataList, navigation }) => {
   };
 
   return (
-    <Swipeable overshootRight={false} renderRightActions={RightAction}>
+    <Swipeable
+      ref={swipeableRow}
+      overshootRight={false}
+      renderRightActions={RightAction}
+    >
       <ListItem
         onPress={updateHandler}
         title={`${item.tag_name}`}

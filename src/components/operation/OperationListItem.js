@@ -7,6 +7,7 @@ import {
   IncreaseIcon,
   DecreaseIcon,
   DeleteIcon,
+  CopyIcon,
 } from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 
@@ -17,10 +18,15 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { hideAction } from "../../store/actions/actionAction";
 import { hideTransaction } from "../../store/actions/transactionAction";
 import { hideTransfer } from "../../store/actions/transferAction";
-import { View } from "react-native";
 
-export const OperationListItem = ({ item, index, dataList }) => {
+export const OperationListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
+
+  const swipeableRow = React.createRef();
+
+  const close = () => {
+    swipeableRow.current.close();
+  };
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -78,6 +84,7 @@ export const OperationListItem = ({ item, index, dataList }) => {
   );
 
   const deleteHandler = () => {
+    close();
     Alert.alert(
       "Удаление категории",
       `Вы уверены что хотите удалить операцию?`,
@@ -117,18 +124,37 @@ export const OperationListItem = ({ item, index, dataList }) => {
     );
   };
 
+  const copyHandler = () => {
+    close();
+    switch (item.type) {
+      case "transaction":
+        navigation.navigate("CreateSpend", item);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const LeftAction = () => (
+    <Button onPress={copyHandler} icon={CopyIcon} status="info" />
+  );
+
   const RightAction = () => (
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
   );
 
-  const WrapperComponent = ({ children }) =>
-    profile.is_admin ? (
-      <Swipeable overshootRight={false} renderRightActions={RightAction}>
-        {children}
-      </Swipeable>
-    ) : (
-      <View>{children}</View>
-    );
+  const WrapperComponent = ({ children }) => (
+    <Swipeable
+      ref={swipeableRow}
+      overshootLeft={false}
+      renderLeftActions={LeftAction}
+      overshootRight={false}
+      renderRightActions={profile !== null && profile.is_admin && RightAction}
+    >
+      {children}
+    </Swipeable>
+  );
 
   return (
     <WrapperComponent>

@@ -15,9 +15,17 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 export const CategoryListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
 
+  const swipeableRow = React.createRef();
+
+  const close = () => {
+    swipeableRow.current.close();
+  };
+
   const renderIconItem = (style) => <CategoryIcon {...style} />;
 
   const deleteHandler = () => {
+    close();
+
     Alert.alert(
       "Удаление категории",
       `Вы уверены что хотите удалить категорию ${item.category_name}?`,
@@ -55,7 +63,11 @@ export const CategoryListItem = ({ item, index, dataList, navigation }) => {
   };
 
   return (
-    <Swipeable overshootRight={false} renderRightActions={RightAction}>
+    <Swipeable
+      ref={swipeableRow}
+      overshootRight={false}
+      renderRightActions={RightAction}
+    >
       <ListItem
         onPress={updateHandler}
         title={`${item.category_name}`}

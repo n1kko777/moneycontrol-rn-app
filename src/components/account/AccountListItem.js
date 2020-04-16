@@ -20,6 +20,12 @@ export const AccountListItem = ({ item, index, dataList, navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const swipeableRow = React.createRef();
+
+  const close = () => {
+    swipeableRow.current.close();
+  };
+
   const renderIconItem = (style) => <CardIcon {...style} />;
   const renderItemAccessory = ({ balance, style }) => (
     <Text
@@ -38,6 +44,7 @@ export const AccountListItem = ({ item, index, dataList, navigation }) => {
   );
 
   const deleteHandler = () => {
+    close();
     Alert.alert(
       "Удаление счета",
       `Вы уверены что хотите удалить счет ${item.account_name}?`,
@@ -75,7 +82,11 @@ export const AccountListItem = ({ item, index, dataList, navigation }) => {
   };
 
   return (
-    <Swipeable overshootRight={false} renderRightActions={RightAction}>
+    <Swipeable
+      ref={swipeableRow}
+      overshootRight={false}
+      renderRightActions={RightAction}
+    >
       <ListItem
         onPress={updateHandler}
         title={`${item.account_name}`}

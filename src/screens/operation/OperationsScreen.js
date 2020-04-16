@@ -59,7 +59,7 @@ export const OperationsScreen = ({ navigation }) => {
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          <OperationList dataList={operationListData} />
+          <OperationList dataList={operationListData} navigation={navigation} />
         </Layout>
       </Layout>
     </ScreenTemplate>
