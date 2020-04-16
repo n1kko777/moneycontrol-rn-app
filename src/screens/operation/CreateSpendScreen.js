@@ -22,7 +22,9 @@ import { Keyboard } from "react-native";
 import { splitToDigits } from "../../splitToDigits";
 import { createTransaction } from "../../store/actions/transactionAction";
 
-export const CreateSpendScreen = ({ navigation }) => {
+export const CreateSpendScreen = ({ route, navigation }) => {
+  const prevItem = route.params;
+
   const dispatch = useDispatch();
 
   const { profile } = useSelector((store) => store.profile);
@@ -55,14 +57,24 @@ export const CreateSpendScreen = ({ navigation }) => {
     id: elem.id,
   }));
 
-  const [transaction_amount, setTransactionAmount] = React.useState("");
+  const [transaction_amount, setTransactionAmount] = React.useState(
+    prevItem !== undefined ? prevItem.balance : ""
+  );
   const [selectedAccountOption, setSelectedAccountOption] = React.useState(
-    null
+    prevItem !== undefined
+      ? accountData.findIndex((elem) => elem.id == prevItem.account)
+      : null
   );
   const [selectedCategoryOption, setSelectedCategoryOption] = React.useState(
-    null
+    prevItem !== undefined
+      ? categoriesData.findIndex((elem) => elem.id == prevItem.category)
+      : null
   );
-  const [selectedTagOption, setSelectedTagOption] = React.useState([]);
+  const [selectedTagOption, setSelectedTagOption] = React.useState(
+    prevItem !== undefined
+      ? tagData.filter((elem) => prevItem.tags.includes(elem.id))
+      : []
+  );
 
   // Validate
   const isNotAmountEmpty = transaction_amount > 0;

@@ -19,6 +19,7 @@ export const prepareOperationData = (
           tags: elem.tags,
           category: elem.category,
           id: elem.id,
+          account: elem.account,
           type: "transaction",
         }))
       );
@@ -33,6 +34,7 @@ export const prepareOperationData = (
           tags: elem.tags,
           category: elem.category,
           id: elem.id,
+          account: elem.account,
           type: "action",
         }))
       );
@@ -49,6 +51,8 @@ export const prepareOperationData = (
           tags: elem.tags,
           category: elem.category,
           id: elem.id,
+          from_account: elem.from_account,
+          to_account: elem.to_account,
           type: "transfer",
         }))
       );

@@ -22,6 +22,7 @@ export const prepareHomeData = (
           style: "color-danger-600",
           balance: elem.transaction_amount,
           id: elem.id,
+          account: elem.account,
           type: "transaction",
         }))
       );
@@ -34,6 +35,7 @@ export const prepareHomeData = (
           style: "color-success-600",
           balance: elem.action_amount,
           id: elem.id,
+          account: elem.account,
           type: "action",
         }))
       );
@@ -47,6 +49,8 @@ export const prepareHomeData = (
             " => " +
             getShortName(elem.to_profile.split(" (")[0]),
           balance: elem.transfer_amount,
+          from_account: elem.from_account,
+          to_account: elem.to_account,
           id: elem.id,
           type: "transfer",
         }))
