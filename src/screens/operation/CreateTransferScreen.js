@@ -47,11 +47,13 @@ export const CreateTransferScreen = ({ route, navigation }) => {
 
   const { error: transferError } = useSelector((store) => store.transfer);
 
-  const fromAccountData = accounts.map((elem, index) => ({
-    index,
-    text: `${elem.account_name} (${splitToDigits(elem.balance)} ₽)`,
-    id: elem.id,
-  }));
+  const fromAccountData = accounts
+    .filter((elem) => elem.profile == profile.id)
+    .map((elem, index) => ({
+      index,
+      text: `${elem.account_name} (${splitToDigits(elem.balance)} ₽)`,
+      id: elem.id,
+    }));
 
   const [transfer_amount, setTransferAmount] = React.useState(
     prevItem !== undefined ? prevItem.balance : ""
