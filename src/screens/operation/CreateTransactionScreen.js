@@ -22,7 +22,7 @@ import { Keyboard } from "react-native";
 import { splitToDigits } from "../../splitToDigits";
 import { createTransaction } from "../../store/actions/transactionAction";
 
-export const CreateSpendScreen = ({ route, navigation }) => {
+export const CreateTransactionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
 
   const dispatch = useDispatch();

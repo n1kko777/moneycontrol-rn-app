@@ -128,7 +128,7 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
     close();
     switch (item.type) {
       case "transaction":
-        navigation.navigate("CreateSpend", item);
+        navigation.navigate("CreateTransaction", item);
         break;
 
       default:
