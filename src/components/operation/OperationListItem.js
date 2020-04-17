@@ -133,6 +133,16 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
       case "action":
         navigation.navigate("CreateAction", item);
         break;
+      case "transfer":
+        if (!item.name.split("=>")[0].split(" ").includes(profile.last_name)) {
+          Alert.alert(
+            "Невозможно скопировать",
+            `Вы не являетесь собственником операции.`
+          );
+        } else {
+          navigation.navigate("CreateTransfer", item);
+        }
+        break;
 
       default:
         break;
