@@ -70,38 +70,6 @@ export const createAction = (action) => async (dispatch) => {
     });
 };
 
-// Create action from server
-export const updateAction = (id, action) => async (dispatch) => {
-  dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
-
-  return await axios
-    .put(
-      `${endpointAPI}/action/${id}/`,
-      {
-        ...action,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
-    .then((res) => {
-      const updatedAction = res.data;
-
-      dispatch({
-        type: UPDATE_ACTION,
-        payload: updatedAction,
-      });
-    })
-
-    .catch((error) => {
-      dispatch(actionFail(error));
-    });
-};
-
 // Delete action from server
 export const hideAction = (action) => async (dispatch) => {
   dispatch(setLoading());

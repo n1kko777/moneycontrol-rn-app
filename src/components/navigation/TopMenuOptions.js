@@ -8,14 +8,14 @@ import {
   LogoutIcon,
   LightIcon,
   DarkIcon,
-  UpdateIcon
+  UpdateIcon,
 } from "../../themes/icons";
 import { logout } from "../../store/actions/authAction";
 import { useDispatch } from "react-redux";
 import {
   startLoader,
   getDataDispatcher,
-  endLoader
+  endLoader,
 } from "../../store/actions/apiAction";
 
 export const TopMenuOptions = ({ navigation }) => {
@@ -38,16 +38,16 @@ export const TopMenuOptions = ({ navigation }) => {
   const menuData = [
     {
       title: "Обновить",
-      icon: UpdateIcon
+      icon: UpdateIcon,
     },
     {
       title: `${themeContext.theme === "light" ? "Темная" : "Светлая"} тема`,
-      icon: themeContext.theme === "light" ? DarkIcon : LightIcon
+      icon: themeContext.theme === "light" ? DarkIcon : LightIcon,
     },
     {
       title: "Выйти",
-      icon: LogoutIcon
-    }
+      icon: LogoutIcon,
+    },
   ];
 
   const logoutHandler = async () => {
@@ -60,7 +60,7 @@ export const TopMenuOptions = ({ navigation }) => {
     setMenuVisible(!menuVisible);
   };
 
-  const onMenuItemSelect = index => {
+  const onMenuItemSelect = (index) => {
     switch (index) {
       case 0:
         getData();
@@ -86,12 +86,12 @@ export const TopMenuOptions = ({ navigation }) => {
       [
         {
           text: "Отмена",
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Выйти", onPress: logoutHandler }
+        { text: "Выйти", onPress: logoutHandler },
       ],
       {
-        cancelable: false
+        cancelable: false,
       }
     );
   };

@@ -70,38 +70,6 @@ export const createTransfer = (transfer) => async (dispatch) => {
     });
 };
 
-// Create transfer from server
-export const updateTransfer = (id, transfer) => async (dispatch) => {
-  dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
-
-  return await axios
-    .put(
-      `${endpointAPI}/transfer/${id}/`,
-      {
-        ...transfer,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
-    .then((res) => {
-      const updatedTransfer = res.data;
-
-      dispatch({
-        type: UPDATE_TRANSFER,
-        payload: updatedTransfer,
-      });
-    })
-
-    .catch((error) => {
-      dispatch(transferFail(error));
-    });
-};
-
 // Delete transfer from server
 export const hideTransfer = (transfer) => async (dispatch) => {
   dispatch(setLoading());

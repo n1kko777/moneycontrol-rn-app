@@ -69,38 +69,6 @@ export const createTransaction = (transaction) => async (dispatch) => {
     });
 };
 
-// Create transaction from server
-export const updateTransaction = (id, transaction) => async (dispatch) => {
-  dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
-
-  return await axios
-    .put(
-      `${endpointAPI}/transaction/${id}/`,
-      {
-        ...transaction,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
-    .then((res) => {
-      const updatedTransaction = res.data;
-
-      dispatch({
-        type: UPDATE_TRANSACTION,
-        payload: updatedTransaction,
-      });
-    })
-
-    .catch((error) => {
-      dispatch(transactionFail(error));
-    });
-};
-
 // Delete transaction from server
 export const hideTransaction = (transaction) => async (dispatch) => {
   dispatch(setLoading());

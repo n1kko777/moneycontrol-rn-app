@@ -35,7 +35,6 @@ export const LoginScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    Keyboard.dismiss();
     isAuthHandler();
   }, [dispatch, isAuth]);
 
@@ -56,18 +55,22 @@ export const LoginScreen = ({ route, navigation }) => {
   };
 
   const navigateHome = () => {
+    Keyboard.dismiss();
     navigation.navigate("Home");
   };
 
   const navigateCompanyManager = () => {
+    Keyboard.dismiss();
     navigation.navigate("CompanyManager");
   };
 
   const navigateCreateProfile = () => {
+    Keyboard.dismiss();
     navigation.navigate("CreateProfile");
   };
 
   const navigateRegister = () => {
+    Keyboard.dismiss();
     navigation.navigate("Register");
   };
 

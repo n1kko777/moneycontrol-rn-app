@@ -5,7 +5,6 @@ import {
   ERROR_TRANSFER,
   CLEAR_TRANSFER,
   DELETE_TRANSFER,
-  UPDATE_TRANSFER,
 } from "../types";
 
 const initialState = {
@@ -30,16 +29,6 @@ export const transferReducer = (state = initialState, action) => {
       return {
         ...state,
         transfer: [...state.transfer, payload],
-        loading: false,
-        error: null,
-      };
-    case UPDATE_TRANSFER:
-      console.log("case UPDATE_TRANSFER:");
-      return {
-        ...state,
-        transfer: state.transfer.map((transfer) =>
-          transfer.id === payload.id ? payload : transfer
-        ),
         loading: false,
         error: null,
       };

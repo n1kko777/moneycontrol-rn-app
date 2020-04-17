@@ -5,7 +5,6 @@ import {
   ERROR_ACTION,
   CLEAR_ACTION,
   DELETE_ACTION,
-  UPDATE_ACTION,
 } from "../types";
 
 const initialState = {
@@ -29,17 +28,7 @@ export const actionReducer = (state = initialState, action) => {
       console.log("case CREATE_ACTION:");
       return {
         ...state,
-        actions: [...state.actions, payload],
-        loading: false,
-        error: null,
-      };
-    case UPDATE_ACTION:
-      console.log("case UPDATE_ACTION:");
-      return {
-        ...state,
-        actions: state.actions.map((action) =>
-          action.id === payload.id ? payload : action
-        ),
+        actions: [payload, ...state.actions],
         loading: false,
         error: null,
       };

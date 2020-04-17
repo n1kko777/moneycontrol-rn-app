@@ -82,7 +82,7 @@ export const AddButton = ({ kittenTheme, navigation }) => {
           alignItems: "center",
         }}
       >
-        <TouchableOpacity onPress={() => navigateHandlePress("CreateEarn")}>
+        <TouchableOpacity onPress={() => navigateHandlePress("CreateAction")}>
           <Button
             status="success"
             style={styles.secondaryButton}

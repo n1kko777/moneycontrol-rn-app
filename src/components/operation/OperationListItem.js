@@ -130,6 +130,9 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
       case "transaction":
         navigation.navigate("CreateTransaction", item);
         break;
+      case "action":
+        navigation.navigate("CreateAction", item);
+        break;
 
       default:
         break;

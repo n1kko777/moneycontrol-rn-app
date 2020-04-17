@@ -20,6 +20,7 @@ import { CreateTagScreen } from "../screens/tag/CreateTagScreen";
 import { UpdateTagScreen } from "../screens/tag/UpdateTagScreen";
 
 import { CreateTransactionScreen } from "../screens/operation/CreateTransactionScreen";
+import { CreateActionScreen } from "../screens/operation/CreateActionScreen";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,7 @@ const HomeNavigator = () => (
       name="CreateTransaction"
       component={CreateTransactionScreen}
     />
+    <Stack.Screen name="CreateAction" component={CreateActionScreen} />
     <Stack.Screen name="Profile" component={ProfileScreen} />
     <Stack.Screen name="Account" component={AccountScreen} />
     <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
