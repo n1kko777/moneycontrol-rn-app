@@ -29,7 +29,7 @@ export const accountReducer = (state = initialState, action) => {
       console.log("case CREATE_ACCOUNT:");
       return {
         ...state,
-        accounts: [...state.accounts, payload],
+        accounts: [payload, ...state.accounts],
         loading: false,
         error: null,
       };

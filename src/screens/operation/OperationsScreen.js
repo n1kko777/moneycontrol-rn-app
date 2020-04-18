@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
@@ -14,7 +14,14 @@ import { View } from "react-native";
 import { filterArrayByDate } from "../../filterArrayByDate";
 import { prepareOperationData } from "../../prepareOperationData";
 
+import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { getAction } from "../../store/actions/actionAction";
+import { getTransfer } from "../../store/actions/transferAction";
+import { getTransaction } from "../../store/actions/transactionAction";
+
 export const OperationsScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -35,6 +42,16 @@ export const OperationsScreen = ({ navigation }) => {
     filterArrayByDate(actions, startDate, endDate),
     filterArrayByDate(transfer, startDate, endDate)
   );
+
+  const onOperationRefresh = async () => {
+    dispatch(startLoader());
+    await Promise.all([
+      dispatch(getAction()),
+      dispatch(getTransfer()),
+      dispatch(getTransaction()),
+    ]);
+    dispatch(endLoader());
+  };
 
   return (
     <ScreenTemplate>
@@ -59,7 +76,11 @@ export const OperationsScreen = ({ navigation }) => {
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          <OperationList dataList={operationListData} navigation={navigation} />
+          <OperationList
+            onOperationRefresh={onOperationRefresh}
+            dataList={operationListData}
+            navigation={navigation}
+          />
         </Layout>
       </Layout>
     </ScreenTemplate>

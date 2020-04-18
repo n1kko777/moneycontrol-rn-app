@@ -4,7 +4,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 
 import {
@@ -12,7 +12,7 @@ import {
   RangeCalendar,
   Button,
   NativeDateService,
-  Text
+  Text,
 } from "@ui-kitten/components";
 
 import { displayDate } from "../dispayDate";
@@ -31,8 +31,8 @@ const i18n = {
       "Четверг",
       "Пятница",
       "Суббота",
-      "Воскресенье"
-    ]
+      "Воскресенье",
+    ],
   },
   monthNames: {
     short: [
@@ -47,7 +47,7 @@ const i18n = {
       "Сент",
       "Окт",
       "Нояб",
-      "Дек"
+      "Дек",
     ],
     long: [
       "января",
@@ -61,16 +61,16 @@ const i18n = {
       "сентября",
       "октября",
       "ноября",
-      "декабря"
-    ]
-  }
+      "декабря",
+    ],
+  },
 };
 
 const dateService = new NativeDateService("ru", { i18n });
 
 export const CustomDatePicker = () => {
   const dispatch = useDispatch();
-  const { startDate, endDate } = useSelector(store => store.calendar);
+  const { startDate, endDate } = useSelector((store) => store.calendar);
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -78,17 +78,17 @@ export const CustomDatePicker = () => {
 
   const [range, setRange] = React.useState({
     startDate: null,
-    endDate: null
+    endDate: null,
   });
 
   React.useEffect(() => {
     setRange({
       startDate,
-      endDate
+      endDate,
     });
   }, [startDate]);
 
-  const clearRangeHandler = range => {
+  const clearRangeHandler = (range) => {
     dispatch(clearCalendar());
     setModalVisible(false);
   };
@@ -116,7 +116,7 @@ export const CustomDatePicker = () => {
               backgroundColor:
                 kittenTheme[
                   `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-                ]
+                ],
             }}
           >
             <TouchableWithoutFeedback>
@@ -129,7 +129,7 @@ export const CustomDatePicker = () => {
                 <View
                   style={{
                     marginTop: 20,
-                    flexDirection: "row"
+                    flexDirection: "row",
                   }}
                 >
                   <Button
@@ -161,17 +161,17 @@ export const CustomDatePicker = () => {
           }
           style={{
             width: 22,
-            height: 22
+            height: 22,
           }}
         />
         <Text
           style={{
             marginTop: 1,
-            marginLeft: 8
+            marginLeft: 8,
           }}
           category="p1"
         >
-          {`${displayDate(startDate)} -> ${displayDate(
+          {`${displayDate(startDate)} – ${displayDate(
             endDate !== null ? endDate : startDate
           )}`}
         </Text>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.4)"
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
   modalView: {
     margin: 20,
@@ -195,25 +195,25 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
   },
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });

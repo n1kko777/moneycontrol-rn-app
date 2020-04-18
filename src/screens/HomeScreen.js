@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { Layout, useTheme } from "@ui-kitten/components";
 
@@ -12,14 +12,22 @@ import { BalanceComponent } from "../components/home/BalanceComponent";
 import { HomeList } from "../components/home/HomeList";
 import { Toolbar } from "../components/navigation/Toolbar";
 
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, RefreshControl } from "react-native";
 
 import { prepareHomeData } from "../prepareHomeData";
 import { CustomDatePicker } from "../components/CustomDatePicker";
 
 import { filterArrayByDate } from "../filterArrayByDate";
 
+import {
+  getDataDispatcher,
+  startLoader,
+  endLoader,
+} from "../store/actions/apiAction";
+
 export const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -82,6 +90,16 @@ export const HomeScreen = ({ navigation }) => {
     tags
   );
 
+  const refreshData = async () => {
+    dispatch(startLoader());
+    await dispatch(getDataDispatcher());
+    dispatch(endLoader());
+  };
+
+  React.useEffect(() => {
+    refreshData();
+  }, []);
+
   return (
     <ScreenTemplate>
       <Layout
@@ -100,6 +118,13 @@ export const HomeScreen = ({ navigation }) => {
         />
       </Layout>
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={refreshData}
+            tintColor="transparent"
+          />
+        }
         style={{
           flex: 1,
           backgroundColor:

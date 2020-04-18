@@ -28,10 +28,6 @@ export const TopMenuOptions = ({ navigation }) => {
     });
   };
 
-  React.useEffect(() => {
-    getData();
-  }, []);
-
   const themeContext = React.useContext(ThemeContext);
   const [menuVisible, setMenuVisible] = React.useState(false);
 

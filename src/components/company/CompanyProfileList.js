@@ -1,12 +1,12 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { ListItem, useTheme, Avatar } from "@ui-kitten/components";
 import { ProfileIcon, RightIcon } from "../../themes/icons";
 
 import { ThemeContext } from "../../themes/theme-context";
 import { getShortName } from "../../getShortName";
 
-export const CompanyProfileList = ({ dataList, isAdmin }) => {
+export const CompanyProfileList = ({ dataList, isAdmin, onCompanyRefresh }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -76,6 +76,13 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
 
   return (
     <FlatList
+      refreshControl={
+        <RefreshControl
+          refreshing={false}
+          onRefresh={onCompanyRefresh}
+          tintColor="transparent"
+        />
+      }
       style={{ marginHorizontal: 8, marginTop: 15 }}
       ListFooterComponentStyle={{ paddingBottom: 30 }}
       keyExtractor={keyExtractor}

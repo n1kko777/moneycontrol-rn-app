@@ -29,7 +29,7 @@ export const tagReducer = (state = initialState, action) => {
       console.log("case CREATE_TAG:");
       return {
         ...state,
-        tags: [...state.tags, payload],
+        tags: [payload, ...state.tags],
         loading: false,
         error: null,
       };

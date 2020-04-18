@@ -29,7 +29,7 @@ export const categoryReducer = (state = initialState, action) => {
       console.log("case CREATE_CATEGORY:");
       return {
         ...state,
-        categories: [...state.categories, payload],
+        categories: [payload, ...state.categories],
         loading: false,
         error: null,
       };

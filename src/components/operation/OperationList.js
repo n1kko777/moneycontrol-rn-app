@@ -1,9 +1,9 @@
 import React from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import { OperationListItem } from "./OperationListItem";
 import { Text } from "@ui-kitten/components";
 
-export const OperationList = ({ dataList, navigation }) => {
+export const OperationList = ({ dataList, navigation, onOperationRefresh }) => {
   const keyExtractor = (item) => `${item.key}_${item.key}`;
 
   const renderItem = ({ item, index }) => (
@@ -17,6 +17,13 @@ export const OperationList = ({ dataList, navigation }) => {
 
   return (
     <FlatList
+      refreshControl={
+        <RefreshControl
+          refreshing={false}
+          onRefresh={onOperationRefresh}
+          tintColor="transparent"
+        />
+      }
       style={{
         marginHorizontal: 8,
         marginTop: 15,

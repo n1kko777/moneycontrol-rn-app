@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
@@ -11,8 +11,11 @@ import { CompanyProfileList } from "../../components/company/CompanyProfileList"
 
 import { View, Clipboard, Alert } from "react-native";
 import { THEME } from "../../themes/themes";
+import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { getCompany } from "../../store/actions/companyAction";
 
 export const TeamsScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -21,6 +24,12 @@ export const TeamsScreen = ({ navigation }) => {
   const { company } = state.company;
 
   const companyProfileListData = company.profiles;
+
+  const onCompanyRefresh = async () => {
+    dispatch(startLoader());
+    await dispatch(getCompany());
+    dispatch(endLoader());
+  };
 
   const inviteToTeam = async () => {
     await Clipboard.setString(company.company_id);
@@ -76,6 +85,7 @@ export const TeamsScreen = ({ navigation }) => {
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
           <CompanyProfileList
+            onCompanyRefresh={onCompanyRefresh}
             dataList={companyProfileListData}
             isAdmin={profile !== null && profile.is_admin}
           />
