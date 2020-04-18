@@ -37,14 +37,26 @@ export const ProfileScreen = ({ navigation }) => {
   const onSubmit = async () => {
     if (isEdit) {
       dispatch(startLoader());
-      const newProfile = {
-        id: profile.id,
-        image: imageUrl,
-        first_name,
-        last_name,
-        phone,
-      };
-      await dispatch(updateProfile(newProfile));
+      // const newProfile = {
+      //   id: profile.id,
+      //   image: imageUrl,
+      //   first_name,
+      //   last_name,
+      //   phone,
+      // };
+
+      let data = new FormData();
+      data.append("image", {
+        uri: imageUrl,
+        type: "image/jpeg",
+        name: `filename_${profile.id}.jpg`,
+      });
+      data.append("id", profile.id);
+      data.append("first_name", first_name);
+      data.append("last_name", last_name);
+      data.append("phone", phone);
+
+      await dispatch(updateImageProfile(data, profile.id));
       dispatch(endLoader());
       setIsEdit(false);
     } else {
