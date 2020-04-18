@@ -9,7 +9,7 @@ import {
   TagIcon,
   OperationIcon,
   OoperationIcon,
-  ProfileIcon
+  ProfileIcon,
 } from "../themes/icons";
 import { THEME } from "../themes/themes";
 import { ThemeContext } from "../themes/theme-context";
@@ -26,34 +26,38 @@ export const MenuScreen = ({ navigation }) => {
     {
       title: "Профиль",
       navLink: () => navigation.navigate("Profile"),
-      icon: ProfileIcon
+      icon: ProfileIcon,
     },
     {
       title: "Команда",
       navLink: () => navigation.navigate("Team"),
-      icon: TeamIcon
+      icon: TeamIcon,
     },
     {
       title: "Счета",
       navLink: () => navigation.navigate("Account"),
-      icon: CardIcon
+      icon: CardIcon,
     },
     {
       title: "Категории",
       navLink: () => navigation.navigate("Category"),
-      icon: CategoryIcon
+      icon: CategoryIcon,
     },
     {
       title: "Теги",
       navLink: () => navigation.navigate("Tag"),
-      icon: TagIcon
+      icon: TagIcon,
     },
     {
       title: "Операции",
       navLink: () => navigation.navigate("Operation"),
-      icon: OoperationIcon
-    }
+      icon: OoperationIcon,
+    },
   ];
+
+  const navigateToReport = () => {
+    navigation.navigate("Report");
+  };
 
   return (
     <ScreenTemplate>
@@ -64,7 +68,7 @@ export const MenuScreen = ({ navigation }) => {
           backgroundColor:
             kittenTheme[
               `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ]
+            ],
         }}
       >
         <View style={{ marginVertical: 20 }}>
@@ -72,9 +76,10 @@ export const MenuScreen = ({ navigation }) => {
             style={{
               alignSelf: "center",
               paddingHorizontal: 20,
-              borderRadius: THEME.BUTTON_RADIUS
+              borderRadius: THEME.BUTTON_RADIUS,
             }}
             status="info"
+            onPress={navigateToReport}
           >
             Сформировать отчет
           </Button>
