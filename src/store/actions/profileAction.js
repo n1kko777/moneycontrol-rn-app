@@ -93,10 +93,44 @@ export const updateProfile = (profile) => async (dispatch) => {
         },
         {
           headers: {
-            "Content-Type":
-              profile.image !== null
-                ? "multipart/form-data"
-                : "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const profile = res.data;
+
+        dispatch({
+          type: UPDATE_PROFILE,
+          payload: profile,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(profileFail(error));
+      });
+  } catch (error) {
+    dispatch(profileFail(error));
+  }
+};
+
+// Update IMAGE profile from server
+export const updateImageProfile = (profile) => async (dispatch) => {
+  dispatch(setLoading());
+
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    return await axios
+      .put(
+        `${endpointAPI}/profile/${profile.id}/`,
+        {
+          ...profile,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
             Authorization: "Token " + token,
           },
         }

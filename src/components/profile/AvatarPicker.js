@@ -46,7 +46,7 @@ export const AvatarPicker = ({ isEdit, imageUrl, setImageUrl }) => {
               }
             : require("../../../assets/icon.png")
         }
-        style={{ width: 150, height: 150 }}
+        style={{ width: 150, height: 150, borderRadius: 75 }}
       />
       {isEdit && <Button title="Выбрать аватар" onPress={_pickImage} />}
     </View>

@@ -26,17 +26,29 @@ export const CompanyProfileList = ({ dataList, isAdmin }) => {
     />
   );
 
-  const renderItemIcon = (item, style) => <ProfileIcon {...style} />;
-  // item.image !== null ? (
-  //   // <Avatar source={{ uri: item.image }} />
-  //   <Avatar
-  //     source={{
-  //       uri: item.image,
-  //     }}
-  //   />
-  // ) : (
-  //   <ProfileIcon {...style} />
-  // );
+  const renderItemIcon = (item, style) => {
+    delete style.tintColor;
+    return item.image !== null ? (
+      <Avatar
+        style={{
+          ...style,
+          width: 30,
+          height: 30,
+        }}
+        source={{
+          uri: item.image,
+        }}
+      />
+    ) : (
+      <ProfileIcon
+        style={{
+          ...style,
+          width: 30,
+          height: 30,
+        }}
+      />
+    );
+  };
 
   const renderItem = ({ item, index }) => (
     <ListItem
