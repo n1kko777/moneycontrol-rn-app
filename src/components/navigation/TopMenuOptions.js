@@ -47,9 +47,8 @@ export const TopMenuOptions = ({ navigation }) => {
   ];
 
   const logoutHandler = async () => {
-    await dispatch(logout()).then(() => {
-      navigation.navigate("Login");
-    });
+    await navigation.navigate("Login");
+    dispatch(logout());
   };
 
   const toggleMenu = () => {

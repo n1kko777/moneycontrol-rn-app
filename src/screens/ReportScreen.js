@@ -1,25 +1,66 @@
 import React from "react";
-import { useTheme, Layout, Button, Text } from "@ui-kitten/components";
+import { useTheme } from "@ui-kitten/components";
 
 import { ThemeContext } from "../themes/theme-context";
 
 import { Toolbar } from "../components/navigation/Toolbar";
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { BackIcon } from "../themes/icons";
-import { View, Dimensions } from "react-native";
+import { View, ScrollView, RefreshControl } from "react-native";
+
+import { useSelector, useDispatch } from "react-redux";
 
 import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
+  getDataDispatcher,
+  startLoader,
+  endLoader,
+} from "../store/actions/apiAction";
+
+import { ReportFilter } from "../components/report/ReportFilter";
+import { ChartTransaction } from "../components/report/ChartTransaction";
+
+import moment from "moment";
 
 export const ReportScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
+
+  const store = useSelector((state) => state);
+  const { transactions } = store.transaction;
+
+  const transPeriod = transactions
+    .filter((oper) => moment(oper.last_updated).year() === moment().year())
+    .reduce(
+      (months, prevOper) =>
+        months.includes(moment().month(prevOper.last_updated).format("MMM"))
+          ? months
+          : [...months, moment().month(prevOper.last_updated).format("MMM")],
+      []
+    );
+
+  const chartTransactions = {
+    title: "Расходы",
+    labels: transPeriod,
+    data: transPeriod.map((month) =>
+      transactions
+        .filter((oper) => moment(oper.last_updated).year() === moment().year())
+        .filter(
+          (oper) =>
+            moment(oper.last_updated).month() ==
+            moment().month(month).format("M") - 1
+        )
+    ),
+    totalAmount: transactions
+      .filter((oper) => moment(oper.last_updated).year() === moment().year())
+      .reduce((oper, prev) => (oper += +prev.transaction_amount), 0),
+  };
+
+  const refreshData = async () => {
+    dispatch(startLoader());
+    await dispatch(getDataDispatcher());
+    dispatch(endLoader());
+  };
 
   return (
     <ScreenTemplate>
@@ -28,8 +69,16 @@ export const ReportScreen = ({ navigation }) => {
         title="Отчет"
         TargetIcon={BackIcon}
         onTarget={() => navigation.navigate("Home")}
+        isMenu={false}
       />
-      <Layout
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={refreshData}
+            tintColor="transparent"
+          />
+        }
         style={{
           flex: 1,
           backgroundColor:
@@ -38,53 +87,15 @@ export const ReportScreen = ({ navigation }) => {
             ],
         }}
       >
-        <View>
-          <Text>Bezier Line Chart</Text>
-          <LineChart
-            data={{
-              labels: ["January", "February", "March", "April", "May", "June"],
-              datasets: [
-                {
-                  data: [
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                  ],
-                },
-              ],
-            }}
-            width={Dimensions.get("window").width} // from react-native
-            height={220}
-            yAxisLabel="$"
-            yAxisSuffix="k"
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#fb8c00",
-              backgroundGradientTo: "#ffa726",
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
+        <View onStartShouldSetResponder={() => true}>
+          <ReportFilter kittenTheme={kittenTheme} themeContext={themeContext} />
+          <ChartTransaction
+            kittenTheme={kittenTheme}
+            themeContext={themeContext}
+            transactions={chartTransactions}
           />
         </View>
-      </Layout>
+      </ScrollView>
     </ScreenTemplate>
   );
 };

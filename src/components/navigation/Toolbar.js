@@ -11,6 +11,7 @@ export const Toolbar = ({
   onTarget = () => {
     navigation.navigate("Profile");
   },
+  isMenu = true,
 }) => {
   const renderMenuAction = () => <TopMenuOptions navigation={navigation} />;
 
@@ -30,7 +31,7 @@ export const Toolbar = ({
       title={title}
       alignment="center"
       leftControl={renderProfileAction()}
-      rightControls={renderMenuAction()}
+      rightControls={isMenu && renderMenuAction()}
     />
   );
 };
