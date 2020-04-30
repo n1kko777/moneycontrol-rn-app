@@ -80,3 +80,7 @@ export const CategoryIcon = (style) => (
 export const TagIcon = (style) => <Icon {...style} name="hash-outline" />;
 
 export const CopyIcon = (style) => <Icon {...style} name="copy-outline" />;
+
+export const PriceIcon = (style) => (
+  <Icon {...style} name="credit-card-outline" />
+);
