@@ -40,13 +40,14 @@ export const ReportScreen = ({ navigation }) => {
     (months, nextOper) =>
       months
         .map((elem) => elem.short)
-        .includes(moment().month(nextOper.last_updated).format("MMM"))
+        .includes(moment(nextOper.last_updated).format("MMM"))
         ? months
         : [
             ...months,
             {
-              short: moment().month(nextOper.last_updated).format("MMM"),
-              normal: moment().month(nextOper.last_updated).format("MMMM"),
+              short: moment(nextOper.last_updated).format("MMM"),
+              normal: moment(nextOper.last_updated).format("MMMM"),
+              month: moment(nextOper.last_updated).format("M"),
             },
           ],
     []
@@ -56,10 +57,11 @@ export const ReportScreen = ({ navigation }) => {
     index,
     text: elem.normal,
     shortText: elem.short,
+    month: elem.month,
   }));
 
   const [selectedPeriodOption, setSelectedPeriodOption] = React.useState([
-    periodData.find((elem) => elem.text == moment().format("MMMM")),
+    ...periodData,
   ]);
 
   const transMonth = transYear.filter((oper) =>

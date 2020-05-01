@@ -2,11 +2,11 @@ import { SET_CALENDAR, CLEAR_CALENDAR } from "../types";
 
 const date = new Date();
 const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
 const initialState = {
   startDate: firstDay,
-  endDate: lastDay
+  endDate: lastDay,
 };
 
 export const calendarReducer = (state = initialState, action) => {
@@ -16,13 +16,13 @@ export const calendarReducer = (state = initialState, action) => {
       return {
         ...state,
         startDate: payload.startDate,
-        endDate: payload.endDate
+        endDate: payload.endDate,
       };
     case CLEAR_CALENDAR:
       return {
         ...state,
         startDate: firstDay,
-        endDate: lastDay
+        endDate: lastDay,
       };
 
     default:

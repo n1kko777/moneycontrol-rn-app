@@ -37,17 +37,21 @@ export const ChartTransaction = ({
       <LineChart
         data={{
           labels: transactions.labels,
-          datasets:
-            transactions !== undefined && transactions.data.length !== 0
-              ? transactions.data.map((oper) => ({
-                  data: [
-                    oper.reduce(
-                      (sum, next) => sum + parseInt(next.transaction_amount),
-                      0
-                    ) / 1000,
-                  ],
-                }))
-              : [{ data: [0] }],
+          datasets: [
+            {
+              data:
+                transactions !== undefined && transactions.data.length !== 0
+                  ? transactions.data.map(
+                      (oper) =>
+                        oper.reduce(
+                          (sum, next) =>
+                            sum + parseInt(next.transaction_amount),
+                          0
+                        ) / 1000
+                    )
+                  : [0],
+            },
+          ],
         }}
         yAxisSuffix="т."
         width={screenWidth} // from react-native
