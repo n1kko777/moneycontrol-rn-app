@@ -41,8 +41,12 @@ export const CompanyProfileList = ({ dataList, isAdmin, onCompanyRefresh }) => {
       />
     ) : (
       <ProfileIcon
+        fill={
+          kittenTheme[
+            `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+          ]
+        }
         style={{
-          ...style,
           width: 30,
           height: 30,
         }}
