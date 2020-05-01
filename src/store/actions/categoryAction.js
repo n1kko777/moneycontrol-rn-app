@@ -10,6 +10,7 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get category from server
 export const getCategory = () => async (dispatch) => {
@@ -58,6 +59,10 @@ export const createCategory = (category) => async (dispatch) => {
     )
     .then((res) => {
       const category = res.data;
+
+      if (category["last_updated"] == undefined) {
+        category["last_updated"] = moment();
+      }
 
       dispatch({
         type: CREATE_CATEGORY,

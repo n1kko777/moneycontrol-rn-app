@@ -10,6 +10,7 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get transaction from server
 export const getTransaction = () => async (dispatch) => {
@@ -58,6 +59,10 @@ export const createTransaction = (transaction) => async (dispatch) => {
     )
     .then((res) => {
       const transaction = res.data;
+
+      if (transaction["last_updated"] == undefined) {
+        transaction["last_updated"] = moment();
+      }
 
       dispatch({
         type: CREATE_TRANSACTION,

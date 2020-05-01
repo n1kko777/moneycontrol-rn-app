@@ -10,6 +10,7 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get account from server
 export const getAccount = () => async (dispatch) => {
@@ -59,6 +60,10 @@ export const createAccount = (account) => async (dispatch) => {
     .then((res) => {
       const account = res.data;
 
+      if (account["last_updated"] == undefined) {
+        account["last_updated"] = moment();
+      }
+
       dispatch({
         type: CREATE_ACCOUNT,
         payload: account,
@@ -90,6 +95,10 @@ export const updateAccount = (id, account) => async (dispatch) => {
     )
     .then((res) => {
       const updatedAccount = res.data;
+
+      if (updatedAccount["last_updated"] == undefined) {
+        updatedAccount["last_updated"] = moment();
+      }
 
       dispatch({
         type: UPDATE_ACCOUNT,

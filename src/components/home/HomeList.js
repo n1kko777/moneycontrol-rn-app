@@ -20,7 +20,7 @@ export const HomeList = ({ navigation, dataList }) => {
         <Text
           style={{
             textAlign: "center",
-            marginTop: 30
+            marginTop: 30,
           }}
         >
           Нет записей

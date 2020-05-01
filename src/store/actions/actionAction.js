@@ -5,11 +5,11 @@ import {
   LOADING_ACTION,
   ERROR_ACTION,
   DELETE_ACTION,
-  UPDATE_ACTION,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get action from server
 export const getAction = () => async (dispatch) => {
@@ -58,6 +58,10 @@ export const createAction = (action) => async (dispatch) => {
     )
     .then((res) => {
       const action = res.data;
+
+      if (action["last_updated"] == undefined) {
+        action["last_updated"] = moment();
+      }
 
       dispatch({
         type: CREATE_ACTION,

@@ -10,6 +10,7 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get tag from server
 export const getTag = () => async (dispatch) => {
@@ -59,6 +60,10 @@ export const createTag = (tag) => async (dispatch) => {
     .then((res) => {
       const tag = res.data;
 
+      if (tag["last_updated"] == undefined) {
+        tag["last_updated"] = moment();
+      }
+
       dispatch({
         type: CREATE_TAG,
         payload: tag,
@@ -90,6 +95,10 @@ export const updateTag = (id, tag) => async (dispatch) => {
     )
     .then((res) => {
       const updatedTag = res.data;
+
+      if (updatedTag["last_updated"] == undefined) {
+        updatedTag["last_updated"] = moment();
+      }
 
       dispatch({
         type: UPDATE_TAG,

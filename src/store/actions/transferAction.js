@@ -10,6 +10,7 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get transfer from server
 export const getTransfer = () => async (dispatch) => {
@@ -58,6 +59,10 @@ export const createTransfer = (transfer) => async (dispatch) => {
     )
     .then((res) => {
       const transfer = res.data;
+
+      if (transfer["last_updated"] == undefined) {
+        transfer["last_updated"] = moment();
+      }
 
       dispatch({
         type: CREATE_TRANSFER,

@@ -9,6 +9,7 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get profile from server
 export const getProfile = () => async (dispatch) => {
@@ -101,6 +102,10 @@ export const updateProfile = (profile) => async (dispatch) => {
       .then((res) => {
         const profile = res.data;
 
+        if (profile["last_updated"] == undefined) {
+          profile["last_updated"] = moment();
+        }
+
         dispatch({
           type: UPDATE_PROFILE,
           payload: profile,
@@ -131,6 +136,10 @@ export const updateImageProfile = (profile, id) => async (dispatch) => {
       })
       .then((res) => {
         const profile = res.data;
+
+        if (profile["last_updated"] == undefined) {
+          profile["last_updated"] = moment();
+        }
 
         dispatch({
           type: UPDATE_PROFILE,

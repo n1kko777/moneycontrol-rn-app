@@ -8,6 +8,7 @@ import {
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
+import moment from "moment";
 
 // Get company from server
 export const getCompany = () => async (dispatch) => {
@@ -62,6 +63,10 @@ export const createCompany = (company) => async (dispatch) => {
       )
       .then((res) => {
         const company = res.data;
+
+        if (company["last_updated"] == undefined) {
+          company["last_updated"] = moment();
+        }
 
         dispatch({
           type: CREATE_COMPANY,
