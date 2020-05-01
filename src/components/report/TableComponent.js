@@ -30,12 +30,16 @@ export const TableComponent = ({ colorTheme, tableData, accountData }) => {
                 (arV) =>
                   arV.account == elem.account &&
                   arV.month == moment(elem.last_updated).format("MMM")
-              ).sum += +elem.transaction_amount;
+              ).sum += elem.transaction_amount
+                ? +elem.transaction_amount
+                : +elem.action_amount;
             } else {
               arr.push({
                 account: elem.account,
                 month: moment(elem.last_updated).format("MMM"),
-                sum: +elem.transaction_amount,
+                sum: +elem.transaction_amount
+                  ? +elem.transaction_amount
+                  : +elem.action_amount,
               });
             }
           });

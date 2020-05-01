@@ -19,7 +19,7 @@ import {
 } from "../store/actions/apiAction";
 
 import { ReportFilter } from "../components/report/ReportFilter";
-import { ChartTransaction } from "../components/report/ChartTransaction";
+import { ChartCompany } from "../components/report/ChartCompany";
 
 import moment from "moment";
 
@@ -31,8 +31,13 @@ export const ReportScreen = ({ navigation }) => {
   const store = useSelector((state) => state);
 
   const { transactions } = store.transaction;
+  const { actions } = store.action;
 
   const transYear = transactions.filter(
+    (oper) => moment(oper.last_updated).year() === moment().year()
+  );
+
+  const actsYear = actions.filter(
     (oper) => moment(oper.last_updated).year() === moment().year()
   );
 
@@ -53,7 +58,32 @@ export const ReportScreen = ({ navigation }) => {
     []
   );
 
-  const periodData = transPeriod.map((elem, index) => ({
+  const actsPeriod = actsYear.reduce(
+    (months, nextOper) =>
+      months
+        .map((elem) => elem.short)
+        .includes(moment(nextOper.last_updated).format("MMM"))
+        ? months
+        : [
+            ...months,
+            {
+              short: moment(nextOper.last_updated).format("MMM"),
+              normal: moment(nextOper.last_updated).format("MMMM"),
+              month: moment(nextOper.last_updated).format("M"),
+            },
+          ],
+    []
+  );
+
+  const totalPeriod = [...transPeriod, ...actsPeriod].reduce(
+    (months, nex) =>
+      months.map((elem) => elem.short).includes(nex.short)
+        ? months
+        : [...months, nex],
+    []
+  );
+
+  const periodData = totalPeriod.map((elem, index) => ({
     index,
     text: elem.normal,
     shortText: elem.short,
@@ -69,6 +99,14 @@ export const ReportScreen = ({ navigation }) => {
       .map((el) => el.text)
       .includes(moment(oper.last_updated).format("MMMM"))
   );
+
+  const actsMonth = actsYear.filter((oper) =>
+    selectedPeriodOption
+      .map((el) => el.text)
+      .includes(moment(oper.last_updated).format("MMMM"))
+  );
+
+  const totalMonth = [...transMonth, ...actsMonth];
 
   const { profile } = useSelector((store) => store.profile);
   const { company } = useSelector((store) => store.company);
@@ -113,7 +151,7 @@ export const ReportScreen = ({ navigation }) => {
   const { categories } = useSelector((store) => store.category);
 
   const categoryData = categories
-    .filter((elem) => transMonth.map((trs) => trs.category).includes(elem.id))
+    .filter((elem) => totalMonth.map((trs) => trs.category).includes(elem.id))
     .map((elem, index) => ({
       index,
       text: elem.category_name,
@@ -131,7 +169,7 @@ export const ReportScreen = ({ navigation }) => {
       [].concat
         .apply(
           [],
-          transMonth.map((trs) => trs.tags)
+          totalMonth.map((trs) => trs.tags)
         )
         .reduce(
           (arr, next) => (arr.some((el) => el == next) ? arr : [...arr, next]),
@@ -170,6 +208,7 @@ export const ReportScreen = ({ navigation }) => {
   const chartTransactions = {
     title: "Команда",
     subtitle: "Расходы",
+    color: "danger",
     labels: selectedPeriodOption.map((elem) => elem.shortText),
     data:
       selectedPeriodOption.length !== 0
@@ -240,6 +279,84 @@ export const ReportScreen = ({ navigation }) => {
                     : oper
                 )
                 .reduce((oper, prev) => (oper += +prev.transaction_amount), 0)
+            )
+            .reduce((sum, next) => sum + next, 0)
+        : 0,
+  };
+
+  const chartActions = {
+    subtitle: "Доходы",
+    color: "success",
+    labels: selectedPeriodOption.map((elem) => elem.shortText),
+    data:
+      selectedPeriodOption.length !== 0
+        ? selectedPeriodOption
+            .map((elem) => elem.shortText)
+            .map((month) =>
+              actsMonth
+                .filter(
+                  (oper) =>
+                    moment(oper.last_updated).month() ==
+                    moment().month(month).format("M") - 1
+                )
+                .filter((oper) =>
+                  selectedAccountOption
+                    .map((ac) => ac.id)
+                    .includes(oper.account)
+                )
+                .filter((oper) =>
+                  selectedCategoryOption.length !== 0
+                    ? selectedCategoryOption
+                        .map((ac) => ac.id)
+                        .includes(oper.category)
+                    : oper
+                )
+                .filter((oper) =>
+                  selectedTagOption.length !== 0
+                    ? [].concat
+                        .apply(
+                          [],
+                          selectedTagOption.map((trs) => trs.id)
+                        )
+                        .some((selTag) => oper.tags.includes(selTag))
+                    : oper
+                )
+            )
+        : [],
+    totalAmount:
+      selectedPeriodOption.length !== 0
+        ? selectedPeriodOption
+            .map((elem) => elem.shortText)
+            .map((month) =>
+              actsMonth
+                .filter(
+                  (oper) =>
+                    moment(oper.last_updated).month() ==
+                    moment().month(month).format("M") - 1
+                )
+                .filter((oper) =>
+                  selectedAccountOption
+                    .map((ac) => ac.id)
+                    .includes(oper.account)
+                )
+                .filter((oper) =>
+                  selectedCategoryOption.length !== 0
+                    ? selectedCategoryOption
+                        .map((ac) => ac.id)
+                        .includes(oper.category)
+                    : oper
+                )
+                .filter((oper) =>
+                  selectedTagOption.length !== 0
+                    ? [].concat
+                        .apply(
+                          [],
+                          selectedTagOption.map((trs) => trs.id)
+                        )
+                        .some((selTag) => oper.tags.includes(selTag))
+                    : oper
+                )
+                .reduce((oper, prev) => (oper += +prev.action_amount), 0)
             )
             .reduce((sum, next) => sum + next, 0)
         : 0,
@@ -337,10 +454,16 @@ export const ReportScreen = ({ navigation }) => {
             onSelectTag={onSelectTag}
             onReset={onReset}
           />
-          <ChartTransaction
+          <ChartCompany
             kittenTheme={kittenTheme}
             themeContext={themeContext}
             transactions={chartTransactions}
+            accountData={selectedAccountOption}
+          />
+          <ChartCompany
+            kittenTheme={kittenTheme}
+            themeContext={themeContext}
+            transactions={chartActions}
             accountData={selectedAccountOption}
           />
         </View>

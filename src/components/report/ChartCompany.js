@@ -7,7 +7,7 @@ import { splitToDigits } from "../../splitToDigits";
 
 const screenWidth = Dimensions.get("window").width - 32;
 
-export const ChartTransaction = ({
+export const ChartCompany = ({
   themeContext,
   kittenTheme,
   transactions,
@@ -45,7 +45,12 @@ export const ChartTransaction = ({
                       (oper) =>
                         oper.reduce(
                           (sum, next) =>
-                            sum + parseInt(next.transaction_amount),
+                            sum +
+                            parseInt(
+                              next.transaction_amount
+                                ? next.transaction_amount
+                                : next.action_amount
+                            ),
                           0
                         ) / 1000
                     )
@@ -58,8 +63,9 @@ export const ChartTransaction = ({
         height={220}
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
-          backgroundGradientFrom: kittenTheme[`color-danger-700`],
-          backgroundGradientTo: kittenTheme[`color-danger-700`],
+          backgroundGradientFrom:
+            kittenTheme[`color-${transactions.color}-700`],
+          backgroundGradientTo: kittenTheme[`color-${transactions.color}-700`],
           decimalPlaces: 1, // optional, defaults
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
