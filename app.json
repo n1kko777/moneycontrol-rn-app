@@ -1,30 +1,42 @@
 {
-  "expo": {
-    "name": "moneycontrol-rn-app",
-    "slug": "moneycontrol-rn-app",
-    "privacy": "public",
-    "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
+    "expo": {
+        "name": "Money Control",
+        "slug": "moneycontrol-rn-app",
+        "description": "Money Control – мобильные приложения для автоматизации профессиональной деятельности, существенно облегчают и автоматизируют экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
+        "privacy": "public",
+        "sdkVersion": "36.0.0",
+        "platforms": [
+            "ios",
+            "android"
+        ],
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/logo.png",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.n1kko777dev.moneycontrol",
+            "buildNumber": "1.0.0"
+        },
+        "android": {
+            "package": "com.n1kko777dev.moneycontrol",
+            "versionCode": 1,
+            "permissions": [
+                "CAMERA",
+                "READ_CONTACTS",
+                "WRITE_EXTERNAL_STORAGE",
+                "VIBRATE"
+            ]
+        }
     }
-  }
 }
