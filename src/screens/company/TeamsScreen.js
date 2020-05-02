@@ -13,6 +13,7 @@ import { View, Clipboard, Alert } from "react-native";
 import { THEME } from "../../themes/themes";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { getCompany } from "../../store/actions/companyAction";
+import { logout } from "../../store/actions/authAction";
 
 export const TeamsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export const TeamsScreen = ({ navigation }) => {
   const { profile } = state.profile;
   const { company } = state.company;
 
-  const companyProfileListData = company.profiles;
+  const companyProfileListData = company !== undefined ? company.profiles : [];
 
   const onCompanyRefresh = async () => {
     dispatch(startLoader());
@@ -44,14 +45,23 @@ export const TeamsScreen = ({ navigation }) => {
     );
   };
 
+  React.useEffect(() => {
+    if (company === undefined) {
+      navigation.navigate("Login");
+      dispatch(logout());
+    }
+  }, [company]);
+
   return (
     <ScreenTemplate>
-      <Toolbar
-        navigation={navigation}
-        title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
-          company.company_name
-        }`}
-      />
+      {company !== undefined && (
+        <Toolbar
+          navigation={navigation}
+          title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
+            company.company_name
+          }`}
+        />
+      )}
       <Layout
         style={{
           flex: 1,

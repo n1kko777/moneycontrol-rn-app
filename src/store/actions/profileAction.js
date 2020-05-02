@@ -26,7 +26,12 @@ export const getProfile = () => async (dispatch) => {
         },
       })
       .then((res) => {
-        const profile = res.data.length === 0 ? {} : res.data[0];
+        const profile =
+          res.data.length === 0
+            ? {}
+            : res.data.length > 1
+            ? res.data.find((elem) => elem.is_admin)
+            : res.data[0];
 
         dispatch({
           type: GET_PROFILE,

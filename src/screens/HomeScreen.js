@@ -24,6 +24,7 @@ import {
   startLoader,
   endLoader,
 } from "../store/actions/apiAction";
+import { logout } from "../store/actions/authAction";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -100,6 +101,13 @@ export const HomeScreen = ({ navigation }) => {
     refreshData();
   }, []);
 
+  React.useEffect(() => {
+    if (company === undefined) {
+      navigation.navigate("Login");
+      dispatch(logout());
+    }
+  }, [company]);
+
   return (
     <ScreenTemplate>
       <Layout
@@ -110,12 +118,14 @@ export const HomeScreen = ({ navigation }) => {
             ],
         }}
       >
-        <Toolbar
-          title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
-            company.company_name
-          }`}
-          navigation={navigation}
-        />
+        {company !== undefined && (
+          <Toolbar
+            title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
+              company.company_name
+            }`}
+            navigation={navigation}
+          />
+        )}
       </Layout>
       <ScrollView
         refreshControl={

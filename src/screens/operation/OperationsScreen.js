@@ -18,6 +18,7 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { getAction } from "../../store/actions/actionAction";
 import { getTransfer } from "../../store/actions/transferAction";
 import { getTransaction } from "../../store/actions/transactionAction";
+import { logout } from "../../store/actions/authAction";
 
 export const OperationsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -53,14 +54,22 @@ export const OperationsScreen = ({ navigation }) => {
     dispatch(endLoader());
   };
 
+  React.useEffect(() => {
+    if (company === undefined) {
+      navigation.navigate("Login");
+      dispatch(logout());
+    }
+  }, [company]);
   return (
     <ScreenTemplate>
-      <Toolbar
-        navigation={navigation}
-        title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
-          company.company_name
-        }`}
-      />
+      {company !== undefined && (
+        <Toolbar
+          navigation={navigation}
+          title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
+            company.company_name
+          }`}
+        />
+      )}
       <Layout
         style={{
           flex: 1,

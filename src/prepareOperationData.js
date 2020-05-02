@@ -8,7 +8,7 @@ export const prepareOperationData = (
 ) => {
   const allOpprations = [];
 
-  if (company.profiles !== undefined) {
+  if (company !== undefined) {
     transactions.length !== 0 &&
       allOpprations.push(
         ...transactions.map((elem) => ({

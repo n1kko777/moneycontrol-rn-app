@@ -14,7 +14,7 @@ export const prepareHomeData = (
   const allOpprations = [];
   const homeListData = [];
 
-  if (company.profiles !== undefined) {
+  if (company !== undefined) {
     transactions.length !== 0 &&
       allOpprations.push(
         ...transactions.map((elem) => ({
