@@ -9,10 +9,7 @@ import {
 } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateProfile,
-  updateImageProfile,
-} from "../../store/actions/profileAction";
+import { updateImageProfile } from "../../store/actions/profileAction";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { THEME } from "../../themes/themes";
@@ -37,13 +34,6 @@ export const ProfileScreen = ({ navigation }) => {
   const onSubmit = async () => {
     if (isEdit) {
       dispatch(startLoader());
-      // const newProfile = {
-      //   id: profile.id,
-      //   image: imageUrl,
-      //   first_name,
-      //   last_name,
-      //   phone,
-      // };
 
       let data = new FormData();
       data.append("image", {

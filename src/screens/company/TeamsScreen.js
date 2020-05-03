@@ -24,7 +24,10 @@ export const TeamsScreen = ({ navigation }) => {
   const { profile } = state.profile;
   const { company } = state.company;
 
-  const companyProfileListData = company !== undefined ? company.profiles : [];
+  const companyProfileListData =
+    company !== undefined
+      ? company.profiles.sort((a, b) => b.is_admin > a.is_admin)
+      : [];
 
   const onCompanyRefresh = async () => {
     dispatch(startLoader());
@@ -97,7 +100,6 @@ export const TeamsScreen = ({ navigation }) => {
           <CompanyProfileList
             onCompanyRefresh={onCompanyRefresh}
             dataList={companyProfileListData}
-            isAdmin={profile !== null && profile.is_admin}
           />
         </Layout>
       </Layout>

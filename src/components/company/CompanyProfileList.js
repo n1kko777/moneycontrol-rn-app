@@ -6,25 +6,11 @@ import { ProfileIcon, RightIcon } from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 import { getShortName } from "../../getShortName";
 
-export const CompanyProfileList = ({ dataList, isAdmin, onCompanyRefresh }) => {
+export const CompanyProfileList = ({ dataList, onCompanyRefresh }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
   const keyExtractor = (item) => item.id.toString();
-
-  const renderItemAccessory = () => (
-    <RightIcon
-      fill={
-        kittenTheme[
-          `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-        ]
-      }
-      style={{
-        width: 30,
-        height: 30,
-      }}
-    />
-  );
 
   const renderItemIcon = (item, style) => {
     delete style.tintColor;
@@ -67,7 +53,6 @@ export const CompanyProfileList = ({ dataList, isAdmin, onCompanyRefresh }) => {
         fontSize: 14,
       }}
       icon={(style) => renderItemIcon(item, style)}
-      accessory={isAdmin && renderItemAccessory}
       style={{
         paddingVertical: 15,
         borderTopLeftRadius: index === 0 ? 10 : 0,
