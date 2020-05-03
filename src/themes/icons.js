@@ -84,3 +84,8 @@ export const CopyIcon = (style) => <Icon {...style} name="copy-outline" />;
 export const PriceIcon = (style) => (
   <Icon {...style} name="credit-card-outline" />
 );
+
+export const FilterIcon = (style) => <Icon {...style} name="funnel-outline" />;
+export const ActiveFilterIcon = (style) => (
+  <Icon {...style} name="funnel" fill="#3366FF" />
+);

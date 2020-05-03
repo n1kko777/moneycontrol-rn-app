@@ -53,12 +53,11 @@ export const HomeCard = ({ item, navigation }) => {
       <View>
         {item.data.map((elem) => (
           <HomeCardItem
+            navigation={navigation}
             kittenTheme={kittenTheme}
             themeContext={themeContext}
             key={`${elem.key}_${elem.key}`}
-            name={elem.name}
-            amount={elem.balance}
-            color={elem.style}
+            item={elem}
           />
         ))}
       </View>

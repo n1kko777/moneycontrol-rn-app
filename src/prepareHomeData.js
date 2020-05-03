@@ -64,9 +64,11 @@ export const prepareHomeData = (
         data: accounts
           .filter((acc) => profile !== null && acc.profile === profile.id)
           .map((elem) => ({
+            id: elem.id,
             key: elem.last_updated,
             name: elem.account_name,
             balance: elem.balance,
+            type: "account",
           })),
       });
 
@@ -75,9 +77,11 @@ export const prepareHomeData = (
         navigate: "Category",
         title: "Категории",
         data: categories.map((elem) => ({
+          id: elem.id,
           key: elem.last_updated,
           name: elem.category_name,
           balance: "",
+          type: "category",
         })),
       });
 
@@ -86,9 +90,11 @@ export const prepareHomeData = (
         navigate: "Tag",
         title: "Теги",
         data: tags.map((elem) => ({
+          id: elem.id,
           key: elem.last_updated,
           name: elem.tag_name,
           balance: "",
+          type: "tag",
         })),
       });
 

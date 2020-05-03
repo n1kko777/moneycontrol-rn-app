@@ -25,7 +25,7 @@ export const TeamsScreen = ({ navigation }) => {
   const { company } = state.company;
 
   const companyProfileListData =
-    company !== undefined
+    company !== undefined && company.hasOwnProperty("profiles")
       ? company.profiles.sort((a, b) => b.is_admin > a.is_admin)
       : [];
 

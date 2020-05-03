@@ -19,9 +19,12 @@ import { getAction } from "../../store/actions/actionAction";
 import { getTransfer } from "../../store/actions/transferAction";
 import { getTransaction } from "../../store/actions/transactionAction";
 import { logout } from "../../store/actions/authAction";
+import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 
-export const OperationsScreen = ({ navigation }) => {
+export const OperationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
+  const filterParam =
+    route.params !== undefined ? route.params.filterParam : null;
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -37,12 +40,38 @@ export const OperationsScreen = ({ navigation }) => {
   const { actions } = state.action;
   const { transfer } = state.transfer;
 
-  const operationListData = prepareOperationData(
-    company,
-    filterArrayByDate(transactions, startDate, endDate),
-    filterArrayByDate(actions, startDate, endDate),
-    filterArrayByDate(transfer, startDate, endDate)
-  );
+  const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
+
+  const onFilterOperation = () => {
+    if (isFiltered) {
+      setIsFiltered(false);
+      navigation.setParams();
+    }
+  };
+
+  React.useEffect(() => {
+    setIsFiltered(filterParam !== null);
+  }, [filterParam]);
+
+  console.log("filterParam :>> ", filterParam);
+
+  const operationListData = isFiltered
+    ? prepareOperationData(
+        company,
+        filterArrayByDate(transactions, startDate, endDate),
+        filterArrayByDate(actions, startDate, endDate),
+        filterArrayByDate(transfer, startDate, endDate)
+      ).filter((elem) =>
+        elem[filterParam.type] !== undefined
+          ? elem[filterParam.type] == filterParam.id
+          : elem.type === filterParam.type
+      )
+    : prepareOperationData(
+        company,
+        filterArrayByDate(transactions, startDate, endDate),
+        filterArrayByDate(actions, startDate, endDate),
+        filterArrayByDate(transfer, startDate, endDate)
+      );
 
   const onOperationRefresh = async () => {
     dispatch(startLoader());
@@ -60,6 +89,7 @@ export const OperationsScreen = ({ navigation }) => {
       dispatch(logout());
     }
   }, [company]);
+
   return (
     <ScreenTemplate>
       {company !== undefined && (
@@ -68,6 +98,8 @@ export const OperationsScreen = ({ navigation }) => {
           title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
             company.company_name
           }`}
+          TargetIcon={isFiltered ? ActiveFilterIcon : FilterIcon}
+          onTarget={onFilterOperation}
         />
       )}
       <Layout

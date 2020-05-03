@@ -6,18 +6,30 @@ import { Text } from "@ui-kitten/components";
 export const HomeCardItem = ({
   kittenTheme,
   themeContext,
-  name,
-  amount,
-  color
+  item,
+  navigation,
 }) => {
+  const { id, name, balance, type, style: color } = item;
+
+  const onFilterOperation = () => {
+    navigation.navigate("Operation", {
+      filterParam: {
+        name,
+        type,
+        id,
+      },
+    });
+  };
+
   return (
     <TouchableOpacity
       style={{
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        paddingBottom: 5
+        paddingBottom: 5,
       }}
+      onPress={onFilterOperation}
     >
       <Text
         style={{
@@ -28,7 +40,7 @@ export const HomeCardItem = ({
                 ? color
                 : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
             ],
-          textDecorationLine: "underline"
+          textDecorationLine: "underline",
         }}
         category="s1"
       >
@@ -42,10 +54,10 @@ export const HomeCardItem = ({
               color !== undefined
                 ? color
                 : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-            ]
+            ],
         }}
       >
-        {amount !== "" && splitToDigits(amount.toString()) + " ₽"}
+        {balance !== "" && splitToDigits(balance.toString()) + " ₽"}
       </Text>
     </TouchableOpacity>
   );
