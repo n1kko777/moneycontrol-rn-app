@@ -1,4 +1,4 @@
-let localhost = "http://95.213.224.10";
+let localhost = "https://mncntrl.ru";
 
 const apiURL = "/api/v1";
 
