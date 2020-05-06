@@ -14,6 +14,7 @@ import {
   CLEAR_TRANSFER,
   CLEAR_CATEGORY,
   CLEAR_TAG,
+  RESET_SUCCESS,
 } from "../types";
 
 import { url } from "../constants";
@@ -173,6 +174,22 @@ export const authSignUp = ({
         password1,
       };
       dispatch(registerSuccess(authUser));
+    })
+    .catch((err) => dispatch(authFail(err)));
+};
+
+export const resetPass = ({ email }) => async (dispatch) => {
+  dispatch(authStart());
+  return await axios
+    .post(`${url}/rest-auth/password/reset/`, {
+      email,
+    })
+    .then((res) => {
+      const { detail } = res.data;
+      Alert.alert("Проверьте почту", `${detail}`, [{ text: "Закрыть" }], {
+        cancelable: false,
+      });
+      dispatch({ type: RESET_SUCCESS });
     })
     .catch((err) => dispatch(authFail(err)));
 };

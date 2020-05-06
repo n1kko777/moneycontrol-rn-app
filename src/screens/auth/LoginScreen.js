@@ -14,7 +14,7 @@ import { getProfile } from "../../store/actions/profileAction";
 import { startLoader, endLoader } from ".././../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-export const LoginScreen = ({ route, navigation }) => {
+export const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { isAuth } = state.auth;
@@ -74,6 +74,11 @@ export const LoginScreen = ({ route, navigation }) => {
     navigation.navigate("Register");
   };
 
+  const navigateReset = () => {
+    Keyboard.dismiss();
+    navigation.navigate("Reset");
+  };
+
   return (
     <ScreenTemplate>
       <Layout
@@ -127,7 +132,7 @@ export const LoginScreen = ({ route, navigation }) => {
             Войти
           </Button>
         </View>
-        <TouchableOpacity onPress={navigateRegister}>
+        <TouchableOpacity onPress={navigateReset}>
           <Text
             style={{
               marginVertical: 7,
