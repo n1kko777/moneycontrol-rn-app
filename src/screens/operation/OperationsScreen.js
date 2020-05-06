@@ -53,8 +53,6 @@ export const OperationsScreen = ({ navigation, route }) => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
 
-  console.log("filterParam :>> ", filterParam);
-
   const operationListData = isFiltered
     ? prepareOperationData(
         company,
