@@ -139,7 +139,7 @@ export const authLogin = (email, password, isRemindMe) => async (dispatch) => {
   dispatch(authStart());
 
   return await axios
-    .post(`${url}/rest-auth/login/`, {
+    .post(`${url}/dj-rest-auth/login/`, {
       email: email,
       password: password,
     })
@@ -158,7 +158,7 @@ export const authSignUp = ({
 }) => async (dispatch) => {
   dispatch(authStart());
   return await axios
-    .post(`${url}/rest-auth/registration/`, {
+    .post(`${url}/dj-rest-auth/registration/`, {
       first_name,
       last_name,
       email,
@@ -181,7 +181,7 @@ export const authSignUp = ({
 export const resetPass = ({ email }) => async (dispatch) => {
   dispatch(authStart());
   return await axios
-    .post(`${url}/rest-auth/password/reset/`, {
+    .post(`${url}/dj-rest-auth/password/reset/`, {
       email,
     })
     .then((res) => {

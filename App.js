@@ -6,7 +6,7 @@ import { AppContainer } from "./src/components/AppContainer";
 import { BackHandler } from "react-native";
 
 const App = () => {
-  BackHandler.addEventListener("hardwareBackPress", function() {
+  BackHandler.addEventListener("hardwareBackPress", function () {
     return true;
   });
 
