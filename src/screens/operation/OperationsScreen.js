@@ -20,6 +20,7 @@ import { getTransfer } from "../../store/actions/transferAction";
 import { getTransaction } from "../../store/actions/transactionAction";
 import { logout } from "../../store/actions/authAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
+import { BalanceComponent } from "../../components/home/BalanceComponent";
 
 export const OperationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -35,6 +36,8 @@ export const OperationsScreen = ({ navigation, route }) => {
 
   const { profile } = state.profile;
   const { company } = state.company;
+
+  const { accounts } = state.account;
 
   const { transactions } = state.transaction;
   const { actions } = state.action;
@@ -70,6 +73,38 @@ export const OperationsScreen = ({ navigation, route }) => {
         filterArrayByDate(actions, startDate, endDate),
         filterArrayByDate(transfer, startDate, endDate)
       );
+
+  const [totalTransactions, setTotalTransactions] = React.useState(
+    parseFloat(
+      operationListData
+        .filter((elem) => elem.type == "transaction")
+        .reduce((sum, next) => (sum += +next.balance), 0)
+    )
+  );
+  const [totalActions, setTotalActions] = React.useState(
+    parseFloat(
+      operationListData
+        .filter((elem) => elem.type == "action")
+        .reduce((sum, next) => (sum += +next.balance), 0)
+    )
+  );
+
+  React.useEffect(() => {
+    setTotalTransactions(
+      parseFloat(
+        operationListData
+          .filter((elem) => elem.type == "transaction")
+          .reduce((sum, next) => (sum += +next.balance), 0)
+      )
+    );
+    setTotalActions(
+      parseFloat(
+        operationListData
+          .filter((elem) => elem.type == "action")
+          .reduce((sum, next) => (sum += +next.balance), 0)
+      )
+    );
+  }, [isFiltered, startDate]);
 
   const onOperationRefresh = async () => {
     dispatch(startLoader());
@@ -109,7 +144,13 @@ export const OperationsScreen = ({ navigation, route }) => {
             ],
         }}
       >
-        <View style={{ height: 30, marginVertical: 20 }}>
+        <BalanceComponent
+          transaction={totalTransactions}
+          action={totalActions}
+          isAdmin={profile !== null && profile.is_admin}
+        />
+
+        <View style={{ height: 30, marginTop: 10, marginBottom: 20 }}>
           <CustomDatePicker />
         </View>
         <Layout

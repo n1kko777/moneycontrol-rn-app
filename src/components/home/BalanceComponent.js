@@ -14,13 +14,18 @@ import {
   DecreaseIcon,
 } from "../../themes/icons";
 
-export const BalanceComponent = ({ balance, transaction, action, isAdmin }) => {
+export const BalanceComponent = ({
+  balance = null,
+  transaction,
+  action,
+  isAdmin,
+}) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
   const [isVisibleBalance, setIsVisibleBalance] = React.useState(true);
 
-  if (balance !== 0) {
+  if (balance !== null && balance !== 0) {
     balance = splitToDigits(balance.toString().replace(/\s/g, ""));
   }
 
@@ -46,34 +51,36 @@ export const BalanceComponent = ({ balance, transaction, action, isAdmin }) => {
           ],
       }}
     >
-      <View style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 12, textAlign: "center" }}>{`Баланс ${
-          isAdmin ? "компании" : "счетов"
-        }`}</Text>
-        {isVisibleBalance ? (
-          <Text
-            style={{ fontWeight: "600", textAlign: "center" }}
-            category="h2"
-          >
-            {balance} ₽
-          </Text>
-        ) : (
-          <View
-            style={{
-              ...styles.hideBalance,
-              marginVertical: 20,
-              width: 100,
-              backgroundColor: kittenTheme["color-basic-600"],
-            }}
-          />
-        )}
-        <Button
-          size="large"
-          appearance="ghost"
-          icon={!isVisibleBalance ? ShowIconBalance : HideIconBalance}
-          onPress={toggleVisibleBalance}
-        ></Button>
-      </View>
+      {balance !== null && (
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ fontSize: 12, textAlign: "center" }}>{`Баланс ${
+            isAdmin ? "компании" : "счетов"
+          }`}</Text>
+          {isVisibleBalance ? (
+            <Text
+              style={{ fontWeight: "600", textAlign: "center" }}
+              category="h2"
+            >
+              {balance} ₽
+            </Text>
+          ) : (
+            <View
+              style={{
+                ...styles.hideBalance,
+                marginVertical: 20,
+                width: 100,
+                backgroundColor: kittenTheme["color-basic-600"],
+              }}
+            />
+          )}
+          <Button
+            size="large"
+            appearance="ghost"
+            icon={!isVisibleBalance ? ShowIconBalance : HideIconBalance}
+            onPress={toggleVisibleBalance}
+          ></Button>
+        </View>
+      )}
 
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <View style={styles.creaseItem}>
