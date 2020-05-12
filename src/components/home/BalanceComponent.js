@@ -11,10 +11,10 @@ import {
   HideIconBalance,
   ShowIconBalance,
   IncreaseIcon,
-  DecreaseIcon
+  DecreaseIcon,
 } from "../../themes/icons";
 
-export const BalanceComponent = ({ balance, transaction, action }) => {
+export const BalanceComponent = ({ balance, transaction, action, isAdmin }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -43,11 +43,13 @@ export const BalanceComponent = ({ balance, transaction, action }) => {
         backgroundColor:
           kittenTheme[
             `color-basic-${themeContext.theme === "light" ? 100 : 800}`
-          ]
+          ],
       }}
     >
       <View style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 12, textAlign: "center" }}>Баланс счетов</Text>
+        <Text style={{ fontSize: 12, textAlign: "center" }}>{`Баланс ${
+          isAdmin ? "компании" : "счетов"
+        }`}</Text>
         {isVisibleBalance ? (
           <Text
             style={{ fontWeight: "600", textAlign: "center" }}
@@ -61,7 +63,7 @@ export const BalanceComponent = ({ balance, transaction, action }) => {
               ...styles.hideBalance,
               marginVertical: 20,
               width: 100,
-              backgroundColor: kittenTheme["color-basic-600"]
+              backgroundColor: kittenTheme["color-basic-600"],
             }}
           />
         )}
@@ -86,7 +88,7 @@ export const BalanceComponent = ({ balance, transaction, action }) => {
               <Text
                 style={{
                   fontWeight: "600",
-                  color: kittenTheme["color-success-600"]
+                  color: kittenTheme["color-success-600"],
                 }}
                 category="h5"
               >
@@ -98,7 +100,7 @@ export const BalanceComponent = ({ balance, transaction, action }) => {
                   ...styles.hideBalance,
                   width: 70,
                   marginVertical: 11,
-                  backgroundColor: kittenTheme["color-basic-600"]
+                  backgroundColor: kittenTheme["color-basic-600"],
                 }}
               />
             )}
@@ -116,7 +118,7 @@ export const BalanceComponent = ({ balance, transaction, action }) => {
               <Text
                 style={{
                   fontWeight: "600",
-                  color: kittenTheme["color-danger-600"]
+                  color: kittenTheme["color-danger-600"],
                 }}
                 category="h5"
               >
@@ -128,7 +130,7 @@ export const BalanceComponent = ({ balance, transaction, action }) => {
                   ...styles.hideBalance,
                   width: 70,
                   marginVertical: 11,
-                  backgroundColor: kittenTheme["color-basic-600"]
+                  backgroundColor: kittenTheme["color-basic-600"],
                 }}
               />
             )}
@@ -146,22 +148,22 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     marginBottom: 10,
-    zIndex: 1
+    zIndex: 1,
   },
   hideBalance: {
     minWidth: 50,
-    height: 4
+    height: 4,
   },
   creaseItem: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    flex: 1
+    flex: 1,
   },
   creaseButton: {
     width: 45,
     height: 45,
     borderRadius: THEME.BUTTON_RADIUS,
-    marginRight: 10
-  }
+    marginRight: 10,
+  },
 });

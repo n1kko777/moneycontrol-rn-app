@@ -14,6 +14,7 @@ import { THEME } from "../../themes/themes";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { getCompany } from "../../store/actions/companyAction";
 import { logout } from "../../store/actions/authAction";
+import { getAccount } from "../../store/actions/accountAction";
 
 export const TeamsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -22,16 +23,27 @@ export const TeamsScreen = ({ navigation }) => {
 
   const state = useSelector((state) => state);
   const { profile } = state.profile;
+  const { accounts } = state.account;
   const { company } = state.company;
 
   const companyProfileListData =
     company !== undefined && company.hasOwnProperty("profiles")
-      ? company.profiles.sort((a, b) => b.is_admin > a.is_admin)
+      ? profile !== null && profile.is_admin
+        ? company.profiles
+            .sort((a, b) => b.is_admin > a.is_admin)
+            .map((elem) => ({
+              ...elem,
+              balance: accounts
+                .filter((acc) => acc.profile == elem.id)
+                .reduce((sum, next) => (sum += +next.balance), 0),
+            }))
+        : company.profiles.sort((a, b) => b.is_admin > a.is_admin)
       : [];
 
   const onCompanyRefresh = async () => {
     dispatch(startLoader());
     await dispatch(getCompany());
+    await dispatch(getAccount());
     dispatch(endLoader());
   };
 

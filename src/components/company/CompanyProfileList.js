@@ -1,10 +1,12 @@
 import React from "react";
 import { FlatList, RefreshControl } from "react-native";
-import { ListItem, useTheme, Avatar } from "@ui-kitten/components";
-import { ProfileIcon, RightIcon } from "../../themes/icons";
+import { ListItem, useTheme, Avatar, Text } from "@ui-kitten/components";
+import { ProfileIcon } from "../../themes/icons";
 
 import { ThemeContext } from "../../themes/theme-context";
 import { getShortName } from "../../getShortName";
+
+import { splitToDigits } from "../../splitToDigits";
 
 export const CompanyProfileList = ({ dataList, onCompanyRefresh }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -40,6 +42,10 @@ export const CompanyProfileList = ({ dataList, onCompanyRefresh }) => {
     );
   };
 
+  const renderItemAccessory = (balance) => (
+    <Text category="s1">{`${splitToDigits(balance)} ₽`}</Text>
+  );
+
   const renderItem = ({ item, index }) => (
     <ListItem
       title={`${getShortName(item.first_name + " " + item.last_name)} ${
@@ -48,11 +54,13 @@ export const CompanyProfileList = ({ dataList, onCompanyRefresh }) => {
       titleStyle={{
         fontSize: 16,
       }}
-      description={`${item.accounts.filter((elem) => elem !== "").join(",")}`}
       descriptionStyle={{
         fontSize: 14,
       }}
       icon={(style) => renderItemIcon(item, style)}
+      accessory={
+        item.balance && (() => renderItemAccessory(item.balance.toString()))
+      }
       style={{
         paddingVertical: 15,
         borderTopLeftRadius: index === 0 ? 10 : 0,

@@ -148,6 +148,7 @@ export const HomeScreen = ({ navigation }) => {
             balance={totalBalance}
             transaction={totalTransactions}
             action={totalActions}
+            isAdmin={profile !== null && profile.is_admin}
           />
 
           <View style={{ height: 30, marginVertical: 10 }}>
