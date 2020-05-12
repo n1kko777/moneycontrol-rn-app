@@ -8,7 +8,7 @@ import { HomeCardItem } from "./HomeCardItem";
 import { ThemeContext } from "../../themes/theme-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const HomeCard = ({ item, navigation }) => {
+export const HomeCard = ({ item, navigation, isNavigate }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -34,20 +34,22 @@ export const HomeCard = ({ item, navigation }) => {
           flexDirection: "row",
           marginBottom: 20,
         }}
-        onPress={titleNavigationHandler}
+        onPress={isNavigate ? () => titleNavigationHandler() : null}
       >
         <Text category="h5">{item.title}</Text>
-        <RightIcon
-          fill={
-            kittenTheme[
-              `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-            ]
-          }
-          style={{
-            width: 30,
-            height: 30,
-          }}
-        />
+        {isNavigate && (
+          <RightIcon
+            fill={
+              kittenTheme[
+                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              ]
+            }
+            style={{
+              width: 30,
+              height: 30,
+            }}
+          />
+        )}
       </TouchableOpacity>
 
       <View>

@@ -108,6 +108,8 @@ export const HomeScreen = ({ navigation }) => {
     }
   }, [company]);
 
+  homeListData.isNavigate = true;
+
   return (
     <ScreenTemplate>
       <Layout

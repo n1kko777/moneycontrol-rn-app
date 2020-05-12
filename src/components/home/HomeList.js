@@ -14,6 +14,7 @@ export const HomeList = ({ navigation, dataList }) => {
             key={index}
             item={item}
             navigation={navigation}
+            isNavigate={dataList.isNavigate}
           />
         ))
       ) : (

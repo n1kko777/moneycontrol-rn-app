@@ -5,6 +5,7 @@ import { LoginScreen } from "../screens/auth/LoginScreen";
 import { ResetPassword } from "../screens/auth/ResetPassword";
 import { RegisterScreen } from "../screens/auth/RegisterScreen";
 import { CreateProfileScreen } from "../screens/profile/CreateProfileScreen";
+import { CompanyMemberScreen } from "../screens/company/CompanyMemberScreen";
 import { ProfileScreen } from "../screens/profile/ProfileScreen";
 import { CompanyManagerScreen } from "../screens/company/CompanyManagerScreen";
 
@@ -41,6 +42,7 @@ const HomeNavigator = () => (
     <Stack.Screen name="Reset" component={ResetPassword} />
     <Stack.Screen name="Register" component={RegisterScreen} />
     <Stack.Screen name="CreateProfile" component={CreateProfileScreen} />
+    <Stack.Screen name="CompanyMember" component={CompanyMemberScreen} />
     <Stack.Screen name="CompanyManager" component={CompanyManagerScreen} />
     <Stack.Screen
       name="CreateTransaction"

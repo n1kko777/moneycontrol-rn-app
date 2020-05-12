@@ -8,7 +8,11 @@ import { getShortName } from "../../getShortName";
 
 import { splitToDigits } from "../../splitToDigits";
 
-export const CompanyProfileList = ({ dataList, onCompanyRefresh }) => {
+export const CompanyProfileList = ({
+  dataList,
+  onCompanyRefresh,
+  navigation,
+}) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -68,6 +72,13 @@ export const CompanyProfileList = ({ dataList, onCompanyRefresh }) => {
         borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
         borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
       }}
+      onPress={
+        item.balance &&
+        (() =>
+          navigation.navigate("CompanyMember", {
+            profile: item,
+          }))
+      }
     />
   );
 

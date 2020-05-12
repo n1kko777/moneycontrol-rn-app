@@ -8,8 +8,8 @@ export const prepareHomeData = (
   transactions,
   actions,
   transfer,
-  categories,
-  tags
+  categories = [],
+  tags = []
 ) => {
   const allOpprations = [];
   const homeListData = [];

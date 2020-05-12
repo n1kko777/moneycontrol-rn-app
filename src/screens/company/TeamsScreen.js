@@ -29,15 +29,13 @@ export const TeamsScreen = ({ navigation }) => {
   const companyProfileListData =
     company !== undefined && company.hasOwnProperty("profiles")
       ? profile !== null && profile.is_admin
-        ? company.profiles
-            .sort((a, b) => b.is_admin > a.is_admin)
-            .map((elem) => ({
-              ...elem,
-              balance: accounts
-                .filter((acc) => acc.profile == elem.id)
-                .reduce((sum, next) => (sum += +next.balance), 0),
-            }))
-        : company.profiles.sort((a, b) => b.is_admin > a.is_admin)
+        ? company.profiles.map((elem) => ({
+            ...elem,
+            balance: accounts
+              .filter((acc) => acc.profile == elem.id)
+              .reduce((sum, next) => (sum += +next.balance), 0),
+          }))
+        : company.profiles
       : [];
 
   const onCompanyRefresh = async () => {
@@ -111,7 +109,10 @@ export const TeamsScreen = ({ navigation }) => {
         >
           <CompanyProfileList
             onCompanyRefresh={onCompanyRefresh}
-            dataList={companyProfileListData}
+            dataList={companyProfileListData.sort((a, b) =>
+              a.is_admin === b.is_admin ? 0 : a.is_admin ? -1 : 1
+            )}
+            navigation={navigation}
           />
         </Layout>
       </Layout>
