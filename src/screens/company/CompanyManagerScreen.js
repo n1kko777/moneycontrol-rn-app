@@ -5,7 +5,7 @@ import {
   TopNavigationAction,
   Text,
   Button,
-  Input
+  Input,
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
@@ -21,11 +21,11 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const store = useSelector(store => store);
+  const store = useSelector((store) => store);
   const {
     profile: profileStore,
     company: companyStore,
-    auth: authUserStore
+    auth: authUserStore,
   } = store;
 
   const { isAuth } = authUserStore;
@@ -54,12 +54,12 @@ export const CompanyManagerScreen = ({ navigation }) => {
       [
         {
           text: "Отмена",
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Выйти", onPress: logoutHandler }
+        { text: "Выйти", onPress: logoutHandler },
       ],
       {
-        cancelable: false
+        cancelable: false,
       }
     );
   };
@@ -74,14 +74,6 @@ export const CompanyManagerScreen = ({ navigation }) => {
     await dispatch(createCompany(company)).then(() => {
       dispatch(getProfile());
     });
-    dispatch(endLoader());
-  };
-
-  const joinCompanyHandler = async () => {
-    dispatch(startLoader());
-    const teamProfile = JSON.parse(JSON.stringify(profile));
-    teamProfile.company_identificator = companyId;
-    await dispatch(updateProfile(teamProfile));
     dispatch(endLoader());
   };
 
@@ -101,8 +93,8 @@ export const CompanyManagerScreen = ({ navigation }) => {
             flex: 1,
             justifyContent: "flex-start",
             marginVertical: 8,
-            marginTop: 170,
-            marginHorizontal: 16
+            marginTop: 30,
+            marginHorizontal: 16,
           }}
         >
           <Input
@@ -113,18 +105,18 @@ export const CompanyManagerScreen = ({ navigation }) => {
           />
           <Button onPress={createCompanyHandler}>Создать компанию</Button>
           <Text style={{ marginVertical: 20, alignSelf: "center" }}>или</Text>
-          <Input
-            placeholder="Идентификатор компании"
-            autoCapitalize="none"
-            autoCompleteType="off"
-            autoCorrect={false}
-            value={companyId}
-            onChangeText={setCompanyId}
-            style={{ marginBottom: 15 }}
-          />
-          <Button onPress={joinCompanyHandler} status="info">
-            Присоединиться
-          </Button>
+
+          <Text style={{ marginBottom: 10 }} category="s1">
+            Сообщите руководителю следующие данные:
+          </Text>
+          <Text category="label">ID профиля:</Text>
+          <Text selectable={true} style={{ marginBottom: 15 }} category="h4">
+            {profile !== null && profile.id}
+          </Text>
+          <Text category="label">Номер телефона:</Text>
+          <Text selectable={true} style={{ marginBottom: 15 }} category="h4">
+            {profile !== null && profile.phone}
+          </Text>
         </Layout>
       </>
     </ScreenTemplate>
