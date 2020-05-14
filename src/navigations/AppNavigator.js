@@ -8,6 +8,7 @@ import { CreateProfileScreen } from "../screens/profile/CreateProfileScreen";
 import { CompanyMemberScreen } from "../screens/company/CompanyMemberScreen";
 import { ProfileScreen } from "../screens/profile/ProfileScreen";
 import { CompanyManagerScreen } from "../screens/company/CompanyManagerScreen";
+import { InviteMemberScreen } from "../screens/company/InviteMemberScreen";
 
 import { RootNavigator } from "./RootNavigator";
 
@@ -44,6 +45,7 @@ const HomeNavigator = () => (
     <Stack.Screen name="CreateProfile" component={CreateProfileScreen} />
     <Stack.Screen name="CompanyMember" component={CompanyMemberScreen} />
     <Stack.Screen name="CompanyManager" component={CompanyManagerScreen} />
+    <Stack.Screen name="InviteMember" component={InviteMemberScreen} />
     <Stack.Screen
       name="CreateTransaction"
       component={CreateTransactionScreen}

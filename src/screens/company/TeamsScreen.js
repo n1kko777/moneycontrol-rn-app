@@ -45,17 +45,8 @@ export const TeamsScreen = ({ navigation }) => {
     dispatch(endLoader());
   };
 
-  const inviteToTeam = async () => {
-    await Clipboard.setString(company.company_id);
-
-    Alert.alert(
-      "Идентификатор скопирован",
-      "Отправьте код сотруднику.",
-      [{ text: "OK" }],
-      {
-        cancelable: false,
-      }
-    );
+  const inviteToTeam = () => {
+    navigation.navigate("InviteMember");
   };
 
   React.useEffect(() => {

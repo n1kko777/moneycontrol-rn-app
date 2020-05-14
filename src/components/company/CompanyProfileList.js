@@ -63,7 +63,7 @@ export const CompanyProfileList = ({
       }}
       icon={(style) => renderItemIcon(item, style)}
       accessory={
-        item.balance && (() => renderItemAccessory(item.balance.toString()))
+        item.balance ? () => renderItemAccessory(item.balance.toString()) : null
       }
       style={{
         paddingVertical: 15,

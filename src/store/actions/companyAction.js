@@ -131,3 +131,19 @@ export const setLoading = () => (dispatch) => {
     type: LOADING_COMPANY,
   });
 };
+
+// Invite Profile To Company
+export const joinProfileToCompany = async (profile_id, profile_phone) =>
+  axios.post(
+    `${endpointAPI}/join-profile-to-company/`,
+    {
+      profile_id,
+      profile_phone,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + (await AsyncStorage.getItem("AUTH_TOKEN")),
+      },
+    }
+  );
