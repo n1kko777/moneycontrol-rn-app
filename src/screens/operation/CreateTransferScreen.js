@@ -24,6 +24,7 @@ import {
 } from "../../store/actions/transferAction";
 
 import { splitToDigits } from "../../splitToDigits";
+import { getAccount } from "../../store/actions/accountAction";
 
 export const CreateTransferScreen = ({ route, navigation }) => {
   const prevItem = route.params;
