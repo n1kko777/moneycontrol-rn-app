@@ -63,7 +63,9 @@ export const CompanyProfileList = ({
       }}
       icon={(style) => renderItemIcon(item, style)}
       accessory={
-        item.balance ? () => renderItemAccessory(item.balance.toString()) : null
+        item.balance !== undefined
+          ? () => renderItemAccessory(item.balance.toString())
+          : null
       }
       style={{
         paddingVertical: 15,
@@ -73,7 +75,7 @@ export const CompanyProfileList = ({
         borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
       }}
       onPress={
-        item.balance &&
+        item.balance !== undefined &&
         (() =>
           navigation.navigate("CompanyMember", {
             profile: item,

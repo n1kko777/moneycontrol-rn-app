@@ -25,6 +25,7 @@ import {
   endLoader,
 } from "../store/actions/apiAction";
 import { logout } from "../store/actions/authAction";
+import { getAccount } from "../store/actions/accountAction";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -49,6 +50,17 @@ export const HomeScreen = ({ navigation }) => {
     parseFloat(0)
   );
   const [totalActions, setTotalActions] = React.useState(parseFloat(0));
+
+  const homeListData = prepareHomeData(
+    profile,
+    company,
+    accounts,
+    filterArrayByDate(transactions, startDate, endDate),
+    filterArrayByDate(actions, startDate, endDate),
+    filterArrayByDate(transfer, startDate, endDate),
+    categories,
+    tags
+  );
 
   useEffect(() => {
     setTotalActions(
@@ -79,17 +91,6 @@ export const HomeScreen = ({ navigation }) => {
       )
     );
   }, [accounts, startDate]);
-
-  const homeListData = prepareHomeData(
-    profile,
-    company,
-    accounts,
-    filterArrayByDate(transactions, startDate, endDate),
-    filterArrayByDate(actions, startDate, endDate),
-    filterArrayByDate(transfer, startDate, endDate),
-    categories,
-    tags
-  );
 
   const refreshData = async () => {
     dispatch(startLoader());

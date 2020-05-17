@@ -104,7 +104,7 @@ export const OperationsScreen = ({ navigation, route }) => {
           .reduce((sum, next) => (sum += +next.balance), 0)
       )
     );
-  }, [isFiltered, startDate]);
+  }, [isFiltered, startDate, operationListData]);
 
   const onOperationRefresh = async () => {
     dispatch(startLoader());
