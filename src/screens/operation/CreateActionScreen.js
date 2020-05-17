@@ -21,6 +21,7 @@ import { Keyboard } from "react-native";
 
 import { splitToDigits } from "../../splitToDigits";
 import { createAction } from "../../store/actions/actionAction";
+import { getAccount } from "../../store/actions/accountAction";
 
 export const CreateActionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
@@ -94,6 +95,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
       await dispatch(createAction(newAction));
 
       if (actionError === null) {
+        dispatch(getAccount());
         navigateBack();
       }
 

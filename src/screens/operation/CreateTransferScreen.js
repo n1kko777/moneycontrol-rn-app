@@ -111,6 +111,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
       await dispatch(createTransfer(newTransfer));
 
       if (transferError === null) {
+        dispatch(getAccount());
         navigateBack();
       }
 

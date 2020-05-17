@@ -111,6 +111,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
       await dispatch(createTransaction(newTransaction));
 
       if (transactionError === null) {
+        dispatch(getAccount());
         navigateBack();
       }
 
