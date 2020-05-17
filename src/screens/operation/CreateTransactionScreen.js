@@ -20,7 +20,11 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
 import { splitToDigits } from "../../splitToDigits";
-import { createTransaction } from "../../store/actions/transactionAction";
+import {
+  createTransaction,
+  getTransaction,
+} from "../../store/actions/transactionAction";
+import { getAccount } from "../../store/actions/accountAction";
 
 export const CreateTransactionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
@@ -112,6 +116,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
 
       if (transactionError === null) {
         dispatch(getAccount());
+        dispatch(getTransaction());
         navigateBack();
       }
 

@@ -20,7 +20,7 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
 import { splitToDigits } from "../../splitToDigits";
-import { createAction } from "../../store/actions/actionAction";
+import { createAction, getAction } from "../../store/actions/actionAction";
 import { getAccount } from "../../store/actions/accountAction";
 
 export const CreateActionScreen = ({ route, navigation }) => {
@@ -96,6 +96,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
 
       if (actionError === null) {
         dispatch(getAccount());
+        dispatch(getAction());
         navigateBack();
       }
 

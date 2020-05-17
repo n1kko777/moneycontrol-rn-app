@@ -18,7 +18,10 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { createTransfer } from "../../store/actions/transferAction";
+import {
+  createTransfer,
+  getTransfer,
+} from "../../store/actions/transferAction";
 
 import { splitToDigits } from "../../splitToDigits";
 
@@ -112,6 +115,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
 
       if (transferError === null) {
         dispatch(getAccount());
+        dispatch(getTransfer());
         navigateBack();
       }
 
