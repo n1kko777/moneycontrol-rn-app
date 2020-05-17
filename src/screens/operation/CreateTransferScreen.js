@@ -42,7 +42,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
     items: elem.accounts.map((insideElem, insideIndex) => ({
       parentIndex: index,
       index: insideIndex,
-      text: insideElem,
+      text: insideElem.split("(pk=")[0],
       id: insideElem.split("(pk=")[1].replace(")", ""),
     })),
   }));
