@@ -25,6 +25,7 @@ export const prepareHomeData = (
           id: elem.id,
           account: elem.account,
           type: "transaction",
+          last_updated: elem.last_updated,
         }))
       );
 
@@ -38,6 +39,7 @@ export const prepareHomeData = (
           id: elem.id,
           account: elem.account,
           type: "action",
+          last_updated: elem.last_updated,
         }))
       );
 
@@ -54,6 +56,7 @@ export const prepareHomeData = (
           to_account: elem.to_account,
           id: elem.id,
           type: "transfer",
+          last_updated: elem.last_updated,
         }))
       );
 
@@ -69,6 +72,7 @@ export const prepareHomeData = (
             name: elem.account_name,
             balance: elem.balance,
             type: "account",
+            last_updated: elem.last_updated,
           })),
       });
 
@@ -82,6 +86,7 @@ export const prepareHomeData = (
           name: elem.category_name,
           balance: "",
           type: "category",
+          last_updated: elem.last_updated,
         })),
       });
 
@@ -95,6 +100,7 @@ export const prepareHomeData = (
           name: elem.tag_name,
           balance: "",
           type: "tag",
+          last_updated: elem.last_updated,
         })),
       });
 

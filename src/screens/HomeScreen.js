@@ -45,12 +45,6 @@ export const HomeScreen = ({ navigation }) => {
   const { categories } = state.category;
   const { tags } = state.tag;
 
-  const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
-  const [totalTransactions, setTotalTransactions] = React.useState(
-    parseFloat(0)
-  );
-  const [totalActions, setTotalActions] = React.useState(parseFloat(0));
-
   const homeListData = prepareHomeData(
     profile,
     company,
@@ -62,27 +56,31 @@ export const HomeScreen = ({ navigation }) => {
     tags
   );
 
+  const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
+  const [totalActions, setTotalActions] = React.useState(parseFloat(0));
+  const [totalTransactions, setTotalTransactions] = React.useState(
+    parseFloat(0)
+  );
+
   useEffect(() => {
     setTotalActions(
       parseFloat(
-        filterArrayByDate(actions, startDate, endDate).reduce(
-          (sum, nextAcc) => (sum += +nextAcc.action_amount),
-          0
-        )
+        []
+          .concat(...homeListData.map((elem) => elem.data))
+          .filter((elem) => elem.type == "action")
+          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
       )
     );
-  }, [actions, startDate]);
 
-  useEffect(() => {
     setTotalTransactions(
       parseFloat(
-        filterArrayByDate(transactions, startDate, endDate).reduce(
-          (sum, nextAcc) => (sum += +nextAcc.transaction_amount),
-          0
-        )
+        []
+          .concat(...homeListData.map((elem) => elem.data))
+          .filter((elem) => elem.type == "transaction")
+          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
       )
     );
-  }, [transactions, startDate]);
+  }, [accounts, startDate, homeListData]);
 
   useEffect(() => {
     setTotalBalance(

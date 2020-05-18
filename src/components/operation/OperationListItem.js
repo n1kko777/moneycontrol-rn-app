@@ -18,6 +18,8 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { hideAction } from "../../store/actions/actionAction";
 import { hideTransaction } from "../../store/actions/transactionAction";
 import { hideTransfer } from "../../store/actions/transferAction";
+import moment from "moment";
+import { getAccount } from "../../store/actions/accountAction";
 
 export const OperationListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
@@ -113,7 +115,7 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
                   break;
               }
             } catch (error) {}
-
+            await dispatch(getAccount());
             dispatch(endLoader());
           },
         },
@@ -172,7 +174,9 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
   return (
     <WrapperComponent>
       <ListItem
-        title={`${item.name}${
+        title={`${moment(item.last_updated).format("DD.MM.YYYY")}\n${
+          item.name
+        }${
           item.category !== undefined
             ? " (" +
               (categories.find((cat) => cat.id == item.category) !== undefined
@@ -186,12 +190,13 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
           fontSize: 16,
         }}
         description={
-          item.tags !== undefined &&
-          `${item.tags.map((elTag) =>
-            tags.find((tag) => tag.id == elTag) !== undefined
-              ? `#${tags.find((tag) => tag.id == elTag).tag_name}`
-              : "Удалено"
-          )}`
+          item.tags !== undefined
+            ? `${item.tags.map((elTag) =>
+                tags.find((tag) => tag.id == elTag) !== undefined
+                  ? `#${tags.find((tag) => tag.id == elTag).tag_name}`
+                  : "Удалено"
+              )}`
+            : ""
         }
         descriptionStyle={{
           fontSize: 14,

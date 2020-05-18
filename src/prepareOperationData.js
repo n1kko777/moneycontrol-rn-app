@@ -21,6 +21,7 @@ export const prepareOperationData = (
           id: elem.id,
           account: elem.account,
           type: "transaction",
+          last_updated: elem.last_updated,
         }))
       );
 
@@ -36,6 +37,7 @@ export const prepareOperationData = (
           id: elem.id,
           account: elem.account,
           type: "action",
+          last_updated: elem.last_updated,
         }))
       );
 
@@ -54,6 +56,7 @@ export const prepareOperationData = (
           from_account: elem.from_account,
           to_account: elem.to_account,
           type: "transfer",
+          last_updated: elem.last_updated,
         }))
       );
   }
