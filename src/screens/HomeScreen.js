@@ -25,7 +25,6 @@ import {
   endLoader,
 } from "../store/actions/apiAction";
 import { logout } from "../store/actions/authAction";
-import { getAccount } from "../store/actions/accountAction";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();

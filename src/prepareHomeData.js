@@ -76,6 +76,36 @@ export const prepareHomeData = (
           })),
       });
 
+    const companyProfileListData =
+      company !== undefined && company.hasOwnProperty("profiles")
+        ? profile !== null && profile.is_admin
+          ? company.profiles.map((elem) => ({
+              ...elem,
+              balance: accounts
+                .filter((acc) => acc.profile == elem.id)
+                .reduce((sum, next) => (sum += +next.balance), 0),
+            }))
+          : company.profiles
+        : [];
+
+    profile !== null &&
+      profile.is_admin &&
+      companyProfileListData.length !== 0 &&
+      homeListData.push({
+        navigate: "Team",
+        title: "Команда",
+        data: companyProfileListData
+          .sort((a, b) => (a.is_admin === b.is_admin ? 0 : a.is_admin ? -1 : 1))
+          .map((elem) => ({
+            id: elem.id,
+            key: elem.last_updated,
+            name: elem.first_name + " " + elem.last_name,
+            balance: elem.balance !== undefined ? elem.balance : "",
+            type: "profile",
+            last_updated: elem.last_updated,
+          })),
+      });
+
     categories.length !== 0 &&
       homeListData.push({
         navigate: "Category",
@@ -108,9 +138,7 @@ export const prepareHomeData = (
       homeListData.push({
         navigate: "Operation",
         title: "Последние операции",
-        data: allOpprations
-          .sort((a, b) => new Date(b.key) - new Date(a.key))
-          .filter((el, index) => index < 15),
+        data: allOpprations.sort((a, b) => new Date(b.key) - new Date(a.key)),
       });
   }
 

@@ -66,7 +66,7 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
       startDate,
       endDate
     )
-  );
+  ).filter((elem) => elem.navigate !== "Team");
 
   homeListData.isNavigate = false;
 

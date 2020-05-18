@@ -29,7 +29,7 @@ export const HomeCardItem = ({
         justifyContent: "space-between",
         paddingBottom: 5,
       }}
-      onPress={onFilterOperation}
+      onPress={type !== "profile" ? onFilterOperation : null}
     >
       <Text
         style={{
@@ -40,7 +40,7 @@ export const HomeCardItem = ({
                 ? color
                 : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
             ],
-          textDecorationLine: "underline",
+          textDecorationLine: type !== "profile" ? "underline" : "none",
         }}
         category="s1"
       >

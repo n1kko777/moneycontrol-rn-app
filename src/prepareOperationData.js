@@ -61,7 +61,5 @@ export const prepareOperationData = (
       );
   }
 
-  return allOpprations
-    .sort((a, b) => new Date(b.key) - new Date(a.key))
-    .filter((el, index) => index < 15);
+  return allOpprations.sort((a, b) => new Date(b.key) - new Date(a.key));
 };
