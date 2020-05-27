@@ -22,6 +22,7 @@ import { ReportFilter } from "../components/report/ReportFilter";
 import { ChartCompany } from "../components/report/ChartCompany";
 
 import moment from "moment";
+moment.locale("ru");
 
 export const ReportScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -209,18 +210,54 @@ export const ReportScreen = ({ navigation }) => {
     title: "Команда",
     subtitle: "Расходы",
     color: "danger",
-    labels: selectedPeriodOption.map((elem) => elem.shortText),
+    labels: [].concat(
+      ...selectedPeriodOption.map((elem) => [
+        "1 / 4 " + elem.shortText,
+        "1 / 2 " + elem.shortText,
+        "3 / 4 " + elem.shortText,
+        elem.shortText,
+      ])
+    ),
     data:
       selectedPeriodOption.length !== 0
-        ? selectedPeriodOption
-            .map((elem) => elem.shortText)
+        ? []
+            .concat(
+              ...selectedPeriodOption.map((elem) => [
+                "1 / 4 " + elem.shortText,
+                "1 / 2 " + elem.shortText,
+                "3 / 4 " + elem.shortText,
+                elem.shortText,
+              ])
+            )
             .map((month) =>
               transMonth
-                .filter(
-                  (oper) =>
+                .filter((oper) => {
+                  const periodArray = month.match(/\d+/gi);
+
+                  return (
                     moment(oper.last_updated).month() ==
-                    moment().month(month).format("M") - 1
-                )
+                      moment().month(month).format("M") - 1 &&
+                    moment(oper.last_updated).isBetween(
+                      periodArray !== null
+                        ? moment(oper.last_updated).date(
+                            parseInt(
+                              +moment(oper.last_updated).daysInMonth() /
+                                periodArray[0] ==
+                                1
+                                ? +moment(oper.last_updated).daysInMonth()
+                                : +periodArray[0]
+                            )
+                          )
+                        : moment(oper.last_updated).startOf("month"),
+                      moment(oper.last_updated).date(
+                        parseInt(
+                          +moment(oper.last_updated).daysInMonth() /
+                            (periodArray !== null ? +periodArray[1] : 1)
+                        )
+                      )
+                    )
+                  );
+                })
                 .filter((oper) =>
                   selectedAccountOption
                     .map((ac) => ac.id)
@@ -287,18 +324,54 @@ export const ReportScreen = ({ navigation }) => {
   const chartActions = {
     subtitle: "Доходы",
     color: "success",
-    labels: selectedPeriodOption.map((elem) => elem.shortText),
+    labels: [].concat(
+      ...selectedPeriodOption.map((elem) => [
+        "1 / 4 " + elem.shortText,
+        "1 / 2 " + elem.shortText,
+        "3 / 4 " + elem.shortText,
+        elem.shortText,
+      ])
+    ),
     data:
       selectedPeriodOption.length !== 0
-        ? selectedPeriodOption
-            .map((elem) => elem.shortText)
+        ? []
+            .concat(
+              ...selectedPeriodOption.map((elem) => [
+                "1 / 4 " + elem.shortText,
+                "1 / 2 " + elem.shortText,
+                "3 / 4 " + elem.shortText,
+                elem.shortText,
+              ])
+            )
             .map((month) =>
               actsMonth
-                .filter(
-                  (oper) =>
+                .filter((oper) => {
+                  const periodArray = month.match(/\d+/gi);
+
+                  return (
                     moment(oper.last_updated).month() ==
-                    moment().month(month).format("M") - 1
-                )
+                      moment().month(month).format("M") - 1 &&
+                    moment(oper.last_updated).isBetween(
+                      periodArray !== null
+                        ? moment(oper.last_updated).date(
+                            parseInt(
+                              +moment(oper.last_updated).daysInMonth() /
+                                periodArray[0] ==
+                                1
+                                ? +moment(oper.last_updated).daysInMonth()
+                                : +periodArray[0]
+                            )
+                          )
+                        : moment(oper.last_updated).startOf("month"),
+                      moment(oper.last_updated).date(
+                        parseInt(
+                          +moment(oper.last_updated).daysInMonth() /
+                            (periodArray !== null ? +periodArray[1] : 1)
+                        )
+                      )
+                    )
+                  );
+                })
                 .filter((oper) =>
                   selectedAccountOption
                     .map((ac) => ac.id)
