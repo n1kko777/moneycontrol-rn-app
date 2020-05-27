@@ -114,23 +114,16 @@ export const hideCategory = (category) => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .put(
-      `${endpointAPI}/category/${category.id}/`,
-      {
-        ...category,
+    .delete(`${endpointAPI}/category/${category.id}/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
+    })
     .then((res) => {
-      const hiddenCategory = res.data;
       dispatch({
         type: DELETE_CATEGORY,
-        payload: hiddenCategory,
+        payload: category.id,
       });
     })
 

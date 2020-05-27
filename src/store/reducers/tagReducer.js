@@ -45,7 +45,7 @@ export const tagReducer = (state = initialState, action) => {
       console.log("case DELETE_TAG:");
       return {
         ...state,
-        tags: state.tags.filter((tag) => tag.id !== payload.id),
+        tags: state.tags.filter((tag) => tag.id !== payload),
         loading: false,
         error: null,
       };

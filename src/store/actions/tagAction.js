@@ -118,23 +118,16 @@ export const hideTag = (tag) => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .put(
-      `${endpointAPI}/tag/${tag.id}/`,
-      {
-        ...tag,
+    .delete(`${endpointAPI}/tag/${tag.id}/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
+    })
     .then((res) => {
-      const hiddenTag = res.data;
       dispatch({
         type: DELETE_TAG,
-        payload: hiddenTag,
+        payload: tag.id,
       });
     })
 

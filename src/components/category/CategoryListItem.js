@@ -39,7 +39,7 @@ export const CategoryListItem = ({ item, index, dataList, navigation }) => {
           onPress: async () => {
             dispatch(startLoader());
             const hideItem = item;
-            hideItem.is_active = false;
+
             await dispatch(hideCategory(hideItem)).then(() => {
               dispatch(endLoader());
             });

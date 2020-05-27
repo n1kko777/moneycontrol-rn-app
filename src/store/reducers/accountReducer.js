@@ -47,7 +47,7 @@ export const accountReducer = (state = initialState, action) => {
       console.log("case DELETE_ACCOUNT:");
       return {
         ...state,
-        accounts: state.accounts.filter((account) => account.id !== payload.id),
+        accounts: state.accounts.filter((account) => account.id !== payload),
         loading: false,
         error: null,
       };

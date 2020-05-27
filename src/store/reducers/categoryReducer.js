@@ -48,7 +48,7 @@ export const categoryReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: state.categories.filter(
-          (category) => category.id !== payload.id
+          (category) => category.id !== payload
         ),
         loading: false,
         error: null,

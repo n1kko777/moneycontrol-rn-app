@@ -165,7 +165,7 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
       overshootLeft={false}
       renderLeftActions={LeftAction}
       overshootRight={false}
-      renderRightActions={profile !== null && profile.is_admin && RightAction}
+      renderRightActions={RightAction}
     >
       {children}
     </Swipeable>

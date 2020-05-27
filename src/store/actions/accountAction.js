@@ -131,23 +131,16 @@ export const hideAccount = (account) => async (dispatch) => {
   const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
   return await axios
-    .put(
-      `${endpointAPI}/account/${account.id}/`,
-      {
-        ...account,
+    .delete(`${endpointAPI}/account/${account.id}/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
+    })
     .then((res) => {
-      const hiddenAccount = res.data;
       dispatch({
         type: DELETE_ACCOUNT,
-        payload: hiddenAccount,
+        payload: account.id,
       });
     })
 
