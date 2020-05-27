@@ -147,3 +147,19 @@ export const joinProfileToCompany = async (profile_id, profile_phone) =>
       },
     }
   );
+
+// Remove Profile To Company
+export const removeProfileFromCompany = async (profile_id, profile_phone) =>
+  axios.post(
+    `${endpointAPI}/remove-profile-from-company/`,
+    {
+      profile_id,
+      profile_phone,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + (await AsyncStorage.getItem("AUTH_TOKEN")),
+      },
+    }
+  );
