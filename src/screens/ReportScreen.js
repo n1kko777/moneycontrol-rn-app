@@ -88,7 +88,7 @@ export const ReportScreen = ({ navigation }) => {
     index,
     text: elem.normal,
     shortText: elem.short,
-    month: elem.month,
+    month: +elem.month > 9 ? elem.month : "0" + elem.month,
   }));
 
   const [selectedPeriodOption, setSelectedPeriodOption] = React.useState([
@@ -206,81 +206,71 @@ export const ReportScreen = ({ navigation }) => {
     setSelectedPeriodOption(opt);
   });
 
+  const periodPart = [].concat(
+    ...selectedPeriodOption.map((elem) =>
+      selectedPeriodOption.length > 1
+        ? ["01." + elem.month, "10." + elem.month, "20." + elem.month]
+        : [
+            "01." + elem.month,
+            "10." + elem.month,
+            "20." + elem.month,
+            "01." +
+              (parseInt(elem.month) + 1 > 9
+                ? parseInt(elem.month) + 1
+                : "0" + (parseInt(elem.month) + 1)),
+          ]
+    )
+  );
+
+  console.log("periodPart :>> ", periodPart);
+
   const chartTransactions = {
     title: "Команда",
     subtitle: "Расходы",
     color: "danger",
-    labels: [].concat(
-      ...selectedPeriodOption.map((elem) => [
-        "1 / 4 " + elem.shortText,
-        "1 / 2 " + elem.shortText,
-        "3 / 4 " + elem.shortText,
-        elem.shortText,
-      ])
-    ),
+    labels: periodPart,
     data:
       selectedPeriodOption.length !== 0
-        ? []
-            .concat(
-              ...selectedPeriodOption.map((elem) => [
-                "1 / 4 " + elem.shortText,
-                "1 / 2 " + elem.shortText,
-                "3 / 4 " + elem.shortText,
-                elem.shortText,
-              ])
-            )
-            .map((month) =>
-              transMonth
-                .filter((oper) => {
-                  const periodArray = month.match(/\d+/gi);
+        ? periodPart.map((month, monthIndex) =>
+            transMonth
+              .filter((oper) => {
+                const periodArray = [
+                  `${month}.${moment().year()}`,
+                  `${
+                    periodPart[
+                      monthIndex + 1 === periodPart.length
+                        ? monthIndex
+                        : monthIndex + 1
+                    ]
+                  }.${moment().year()}`,
+                ];
 
-                  return (
-                    moment(oper.last_updated).month() ==
-                      moment().month(month).format("M") - 1 &&
-                    moment(oper.last_updated).isBetween(
-                      periodArray !== null
-                        ? moment(oper.last_updated).date(
-                            parseInt(
-                              +moment(oper.last_updated).daysInMonth() /
-                                periodArray[0] ==
-                                1
-                                ? +moment(oper.last_updated).daysInMonth()
-                                : +periodArray[0]
-                            )
-                          )
-                        : moment(oper.last_updated).startOf("month"),
-                      moment(oper.last_updated).date(
-                        parseInt(
-                          +moment(oper.last_updated).daysInMonth() /
-                            (periodArray !== null ? +periodArray[1] : 1)
-                        )
+                return moment(oper.last_updated).isBetween(
+                  moment(periodArray[0], "DD.MM.YYYY"),
+                  moment(periodArray[1], "DD.MM.YYYY")
+                );
+              })
+              .filter((oper) =>
+                selectedAccountOption.map((ac) => ac.id).includes(oper.account)
+              )
+              .filter((oper) =>
+                selectedCategoryOption.length !== 0
+                  ? selectedCategoryOption
+                      .map((ac) => ac.id)
+                      .includes(oper.category)
+                  : oper
+              )
+              .filter((oper) =>
+                selectedTagOption.length !== 0
+                  ? [].concat
+                      .apply(
+                        [],
+                        selectedTagOption.map((trs) => trs.id)
                       )
-                    )
-                  );
-                })
-                .filter((oper) =>
-                  selectedAccountOption
-                    .map((ac) => ac.id)
-                    .includes(oper.account)
-                )
-                .filter((oper) =>
-                  selectedCategoryOption.length !== 0
-                    ? selectedCategoryOption
-                        .map((ac) => ac.id)
-                        .includes(oper.category)
-                    : oper
-                )
-                .filter((oper) =>
-                  selectedTagOption.length !== 0
-                    ? [].concat
-                        .apply(
-                          [],
-                          selectedTagOption.map((trs) => trs.id)
-                        )
-                        .some((selTag) => oper.tags.includes(selTag))
-                    : oper
-                )
-            )
+                      .some((selTag) => oper.tags.includes(selTag))
+                  : oper
+              )
+          )
         : [],
     totalAmount:
       selectedPeriodOption.length !== 0
@@ -324,77 +314,48 @@ export const ReportScreen = ({ navigation }) => {
   const chartActions = {
     subtitle: "Доходы",
     color: "success",
-    labels: [].concat(
-      ...selectedPeriodOption.map((elem) => [
-        "1 / 4 " + elem.shortText,
-        "1 / 2 " + elem.shortText,
-        "3 / 4 " + elem.shortText,
-        elem.shortText,
-      ])
-    ),
+    labels: periodPart,
     data:
       selectedPeriodOption.length !== 0
-        ? []
-            .concat(
-              ...selectedPeriodOption.map((elem) => [
-                "1 / 4 " + elem.shortText,
-                "1 / 2 " + elem.shortText,
-                "3 / 4 " + elem.shortText,
-                elem.shortText,
-              ])
-            )
-            .map((month) =>
-              actsMonth
-                .filter((oper) => {
-                  const periodArray = month.match(/\d+/gi);
-
-                  return (
-                    moment(oper.last_updated).month() ==
-                      moment().month(month).format("M") - 1 &&
-                    moment(oper.last_updated).isBetween(
-                      periodArray !== null
-                        ? moment(oper.last_updated).date(
-                            parseInt(
-                              +moment(oper.last_updated).daysInMonth() /
-                                periodArray[0] ==
-                                1
-                                ? +moment(oper.last_updated).daysInMonth()
-                                : +periodArray[0]
-                            )
-                          )
-                        : moment(oper.last_updated).startOf("month"),
-                      moment(oper.last_updated).date(
-                        parseInt(
-                          +moment(oper.last_updated).daysInMonth() /
-                            (periodArray !== null ? +periodArray[1] : 1)
-                        )
+        ? periodPart.map((month, monthIndex) =>
+            actsMonth
+              .filter((oper) => {
+                const periodArray = [
+                  `${month}.${moment().year()}`,
+                  `${
+                    periodPart[
+                      monthIndex + 1 === periodPart.length
+                        ? monthIndex
+                        : monthIndex + 1
+                    ]
+                  }.${moment().year()}`,
+                ];
+                return moment(oper.last_updated).isBetween(
+                  moment(periodArray[0], "DD.MM.YYYY"),
+                  moment(periodArray[1], "DD.MM.YYYY")
+                );
+              })
+              .filter((oper) =>
+                selectedAccountOption.map((ac) => ac.id).includes(oper.account)
+              )
+              .filter((oper) =>
+                selectedCategoryOption.length !== 0
+                  ? selectedCategoryOption
+                      .map((ac) => ac.id)
+                      .includes(oper.category)
+                  : oper
+              )
+              .filter((oper) =>
+                selectedTagOption.length !== 0
+                  ? [].concat
+                      .apply(
+                        [],
+                        selectedTagOption.map((trs) => trs.id)
                       )
-                    )
-                  );
-                })
-                .filter((oper) =>
-                  selectedAccountOption
-                    .map((ac) => ac.id)
-                    .includes(oper.account)
-                )
-                .filter((oper) =>
-                  selectedCategoryOption.length !== 0
-                    ? selectedCategoryOption
-                        .map((ac) => ac.id)
-                        .includes(oper.category)
-                    : oper
-                )
-                .filter((oper) =>
-                  selectedTagOption.length !== 0
-                    ? [].concat
-                        .apply(
-                          [],
-                          selectedTagOption.map((trs) => trs.id)
-                        )
-                        .some((selTag) => oper.tags.includes(selTag))
-                    : oper
-                )
-            )
+                      .some((selTag) => oper.tags.includes(selTag))
+                  : oper
+              )
+          )
         : [],
     totalAmount:
       selectedPeriodOption.length !== 0
