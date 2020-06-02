@@ -222,8 +222,6 @@ export const ReportScreen = ({ navigation }) => {
     )
   );
 
-  console.log("periodPart :>> ", periodPart);
-
   const chartTransactions = {
     title: "Команда",
     subtitle: "Расходы",
