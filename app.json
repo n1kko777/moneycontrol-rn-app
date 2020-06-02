@@ -1,8 +1,8 @@
 {
     "expo": {
-        "name": "Money Control",
+        "name": "CMC",
         "slug": "moneycontrol-rn-app",
-        "description": "Money Control – мобильные приложения для автоматизации профессиональной деятельности, существенно облегчают и автоматизируют экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
+        "description": "Corporate Money Control – мобильные приложения для автоматизации профессиональной деятельности, существенно облегчают и автоматизируют экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
         "privacy": "public",
         "sdkVersion": "36.0.0",
         "platforms": [
@@ -25,17 +25,17 @@
         ],
         "ios": {
             "supportsTablet": true,
-            "bundleIdentifier": "com.n1kko777dev.moneycontrol",
+            "bundleIdentifier": "ru.mncntrl.n1kko777",
             "buildNumber": "1.0.0"
         },
         "android": {
-            "package": "com.n1kko777dev.moneycontrol",
+            "package": "ru.mncntrl.n1kko777",
             "versionCode": 1,
             "permissions": [
                 "CAMERA",
-                "READ_CONTACTS",
-                "WRITE_EXTERNAL_STORAGE",
-                "VIBRATE"
+                "READ_EXTERNAL_STORAGE",
+                "VIBRATE",
+                "WRITE_EXTERNAL_STORAGE"
             ]
         }
     }
