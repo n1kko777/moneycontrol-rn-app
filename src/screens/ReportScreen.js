@@ -138,6 +138,8 @@ export const ReportScreen = ({ navigation }) => {
     )
     .map((elem, index) => ({
       index,
+      balance: elem.balance,
+      profile: elem.profile,
       text:
         selectedProfileOption.length == 1
           ? `${elem.account_name}`
@@ -498,6 +500,94 @@ export const ReportScreen = ({ navigation }) => {
             transactions={chartActions}
             accountData={selectedAccountOption}
           />
+          {selectedProfileOption.map((elProf, elProfIndex) => (
+            <ChartCompany
+              key={elProf.id}
+              kittenTheme={kittenTheme}
+              themeContext={themeContext}
+              transactions={{
+                title: elProfIndex === 0 ? "Баланс" : null,
+                subtitle: elProf.text,
+                color: "basic",
+                labels: periodPart,
+                data:
+                  selectedPeriodOption.length !== 0
+                    ? periodPart.map((month, monthIndex) =>
+                        totalMonth
+                          .filter((oper) => {
+                            const periodArray = [
+                              `${month}.${moment().year()}`,
+                              `${
+                                periodPart[
+                                  monthIndex + 1 === periodPart.length
+                                    ? monthIndex
+                                    : monthIndex + 1
+                                ]
+                              }.${moment().year()}`,
+                            ];
+
+                            return moment(oper.last_updated).isBetween(
+                              moment(periodArray[0], "DD.MM.YYYY"),
+                              moment(periodArray[1], "DD.MM.YYYY")
+                            );
+                          })
+                          .filter((oper) =>
+                            selectedAccountOption
+                              .filter((ac) => ac.profile === elProf.id)
+                              .map((ac) => ac.id)
+                              .includes(oper.account)
+                          )
+                          .map((oper) => {
+                            const newOper = { ...oper };
+                            newOper.transaction_amount !== undefined &&
+                              (newOper.transaction_amount =
+                                newOper.transaction_amount * -1);
+                            return newOper;
+                          })
+                      )
+                    : [],
+                totalAmount: selectedAccountOption
+                  .filter((ac) => ac.profile === elProf.id)
+                  .reduce((acc, next) => (acc += +next.balance), 0),
+              }}
+              accountData={selectedAccountOption.filter(
+                (ac) => ac.profile === elProf.id
+              )}
+              startBalance={
+                selectedAccountOption
+                  .filter((ac) => ac.profile === elProf.id)
+                  .reduce((acc, next) => (acc += +next.balance), 0) -
+                (selectedPeriodOption.length !== 0
+                  ? selectedPeriodOption
+                      .map((elem) => elem.shortText)
+                      .map((month) =>
+                        totalMonth
+                          .filter(
+                            (oper) =>
+                              moment(oper.last_updated).month() ==
+                              moment().month(month).format("M") - 1
+                          )
+                          .filter((oper) =>
+                            selectedAccountOption
+                              .filter((ac) => ac.profile === elProf.id)
+                              .map((ac) => ac.id)
+                              .includes(oper.account)
+                          )
+                          .reduce((oper, prev) => {
+                            oper =
+                              oper +
+                              (prev.transaction_amount !== undefined
+                                ? +prev.transaction_amount * -1
+                                : +prev.action_amount);
+
+                            return oper;
+                          }, 0)
+                      )
+                      .reduce((sum, next) => sum + next, 0)
+                  : 0)
+              }
+            />
+          ))}
         </View>
       </ScrollView>
     </ScreenTemplate>

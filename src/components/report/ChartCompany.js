@@ -12,7 +12,39 @@ export const ChartCompany = ({
   kittenTheme,
   transactions,
   accountData,
+  startBalance = 0,
 }) => {
+  const renderChartData =
+    transactions !== undefined && transactions.data.length !== 0
+      ? transactions.data.map((oper) => {
+          if (startBalance === 0) {
+            return (
+              oper.reduce(
+                (sum, next) =>
+                  (sum += parseInt(
+                    next.transaction_amount
+                      ? next.transaction_amount
+                      : next.action_amount
+                  )),
+                0
+              ) / 1000
+            );
+          } else {
+            startBalance = oper.reduce(
+              (sum, next) =>
+                (sum += parseInt(
+                  next.transaction_amount
+                    ? next.transaction_amount
+                    : next.action_amount
+                )),
+              startBalance
+            );
+
+            return startBalance / 1000;
+          }
+        })
+      : [0];
+
   return (
     <View
       style={{
@@ -39,22 +71,7 @@ export const ChartCompany = ({
           labels: transactions.labels,
           datasets: [
             {
-              data:
-                transactions !== undefined && transactions.data.length !== 0
-                  ? transactions.data.map(
-                      (oper) =>
-                        oper.reduce(
-                          (sum, next) =>
-                            sum +
-                            parseInt(
-                              next.transaction_amount
-                                ? next.transaction_amount
-                                : next.action_amount
-                            ),
-                          0
-                        ) / 1000
-                    )
-                  : [0],
+              data: renderChartData,
             },
           ],
         }}
