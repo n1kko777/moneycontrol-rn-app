@@ -91,9 +91,7 @@ export const LoginScreen = ({ navigation }) => {
         <View style={{ marginBottom: 50, marginTop: 70 }}>
           <Image
             style={{ width: 120, height: 120 }}
-            source={{
-              uri: "https://studwallet.herokuapp.com/static/logo192.png",
-            }}
+            source={require("../../../assets/logo.png")}
           />
         </View>
         <View

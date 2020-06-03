@@ -157,7 +157,8 @@ export const AddButton = ({ kittenTheme, navigation }) => {
         onPress={handlePress}
         style={{
           ...styles.button,
-          backgroundColor: kittenTheme["color-info-500"],
+          backgroundColor: "#FFC300",
+          borderColor: "#FFC300",
         }}
         size="giant"
         icon={() => (
@@ -166,7 +167,7 @@ export const AddButton = ({ kittenTheme, navigation }) => {
               transform: [{ rotate: rotation }],
             }}
           >
-            <AddIcon style={{ marginTop: -4, marginLeft: -4 }} fill="#fff" />
+            <AddIcon style={{ marginTop: -4, marginLeft: -4 }} fill="#6B0848" />
           </Animated.View>
         )}
       />
