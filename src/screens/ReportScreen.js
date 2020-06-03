@@ -92,7 +92,7 @@ export const ReportScreen = ({ navigation }) => {
   }));
 
   const [selectedPeriodOption, setSelectedPeriodOption] = React.useState([
-    ...periodData,
+    ...periodData.sort((a, b) => +a.month > +b.month),
   ]);
 
   const transMonth = transYear.filter((oper) =>
