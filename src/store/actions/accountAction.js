@@ -113,11 +113,11 @@ export const updateAccount = (id, account) => async (dispatch) => {
 
 // Delete account from server
 export const hideAccount = (account) => async (dispatch) => {
-  if (account.balance > 0) {
+  if (account.balance == 0) {
     dispatch(
       accountFail({
         custom: {
-          title: "Баланс счета больше нуля!!",
+          title: "Баланс счета не равен 0!!",
           message: "Пожалуйста, переведи средства на другой счет.",
         },
       })
