@@ -96,7 +96,7 @@ export const AddButton = ({ kittenTheme, navigation }) => {
           }}
         >
           <Text style={{ marginTop: 5 }} category="c1">
-            Дооход
+            Доход
           </Text>
         </Animated.View>
       </Animated.View>
