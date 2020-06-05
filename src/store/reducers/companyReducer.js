@@ -3,13 +3,13 @@ import {
   CREATE_COMPANY,
   LOADING_COMPANY,
   ERROR_COMPANY,
-  CLEAR_COMPANY
+  CLEAR_COMPANY,
 } from "../types";
 
 const initialState = {
   company: {},
   error: null,
-  loading: false
+  loading: false,
 };
 
 export const companyReducer = (state = initialState, action) => {
@@ -20,28 +20,31 @@ export const companyReducer = (state = initialState, action) => {
       return {
         ...state,
         company: payload,
-        loading: false
+        loading: false,
+        error: null,
       };
     case CREATE_COMPANY:
       console.log("case CREATE_COMPANY:");
       return {
         ...state,
         company: payload,
-        loading: false
+        loading: false,
+        error: null,
       };
     case CLEAR_COMPANY:
       console.log("case CLEAR_COMPANY:");
       return {
         ...state,
         company: {},
-        loading: false
+        loading: false,
+        error: null,
       };
     case LOADING_COMPANY:
       console.log("==========================");
       console.log("case LOADING_COMPANY:");
       return {
         ...state,
-        loading: true
+        loading: true,
       };
 
     case ERROR_COMPANY:
@@ -49,7 +52,7 @@ export const companyReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: payload
+        error: payload,
       };
     default:
       return state;

@@ -24,7 +24,7 @@ export const CreateAccountScreen = ({ navigation }) => {
   const { error: accountError } = useSelector((store) => store.account);
 
   const [account_name, setAccountName] = React.useState("");
-  const [balance, setBalance] = React.useState("");
+  const [balance, setBalance] = React.useState("0");
 
   const navigateBack = () => {
     navigation.goBack();

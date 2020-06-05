@@ -22,6 +22,7 @@ export const profileReducer = (state = initialState, action) => {
         ...state,
         profile: payload,
         loading: false,
+        error: null,
       };
     case CREATE_PROFILE:
       console.log("case CREATE_PROFILE:");
@@ -30,6 +31,7 @@ export const profileReducer = (state = initialState, action) => {
         ...state,
         profile: payload,
         loading: false,
+        error: null,
       };
     case UPDATE_PROFILE:
       console.log("case UPDATE_PROFILE:");
@@ -37,14 +39,15 @@ export const profileReducer = (state = initialState, action) => {
         ...state,
         profile: payload,
         loading: false,
+        error: null,
       };
     case CLEAR_PROFILE:
       console.log("case CLEAR_PROFILE:");
       return {
         ...state,
         profile: null,
-        error: null,
         loading: false,
+        error: null,
       };
     case LOADING_PROFILE:
       console.log("==========================");
