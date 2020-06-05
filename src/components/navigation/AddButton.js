@@ -12,7 +12,7 @@ import {
 } from "../../themes/icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const AddButton = ({ kittenTheme, navigation }) => {
+export const AddButton = ({ navigation }) => {
   const mode = new Animated.Value(0);
 
   const handlePress = () => {
@@ -153,24 +153,33 @@ export const AddButton = ({ kittenTheme, navigation }) => {
           </Text>
         </Animated.View>
       </Animated.View>
-      <Button
-        onPress={handlePress}
+      <View
         style={{
           ...styles.button,
-          backgroundColor: "#FFC300",
-          borderColor: "#FFC300",
         }}
-        size="giant"
-        icon={() => (
+      >
+        <TouchableOpacity
+          onPress={handlePress}
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: "#FFC300",
+            borderColor: "#FFC300",
+          }}
+          activeOpacity={1}
+        >
           <Animated.View
             style={{
               transform: [{ rotate: rotation }],
             }}
           >
-            <AddIcon style={{ marginTop: -4, marginLeft: -4 }} fill="#6B0848" />
+            <AddIcon style={{}} fill="#6B0848" />
           </Animated.View>
-        )}
-      />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -183,7 +192,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     marginTop: -35,
-    zIndex: 2,
+    zIndex: 1000,
   },
   secondaryButton: {
     alignItems: "center",
