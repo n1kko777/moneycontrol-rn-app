@@ -81,7 +81,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
   );
 
   // Validate
-  const isNotAmountEmpty = transaction_amount > 0;
+  const isNotAmountEmpty = parseFloat(transaction_amount) > 0;
   const isNotAccountEmpty = selectedAccountOption !== null;
   const isNotCategoryEmpty = selectedCategoryOption !== null;
 
@@ -95,7 +95,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
       dispatch(startLoader());
 
       const newTransaction = {
-        transaction_amount,
+        transaction_amount: parseFloat(transaction_amount),
         account:
           selectedAccountOption !== null &&
           accountData[selectedAccountOption].id,

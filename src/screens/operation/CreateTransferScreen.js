@@ -86,7 +86,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
   );
 
   // Validate
-  const isNotAmountEmpty = transfer_amount > 0;
+  const isNotAmountEmpty = parseFloat(transfer_amount) > 0;
   const isNotFromAccountEmpty = selectedFromAccountOption !== null;
   const isNotToAccountEmpty = selectedToAccountOption !== null;
 
@@ -100,7 +100,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
       dispatch(startLoader());
 
       const newTransfer = {
-        transfer_amount,
+        transfer_amount: parseFloat(transfer_amount),
         from_account:
           selectedFromAccountOption !== null &&
           fromAccountData[selectedFromAccountOption].id,

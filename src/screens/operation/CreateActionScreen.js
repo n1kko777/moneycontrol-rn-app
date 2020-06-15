@@ -65,7 +65,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
   );
 
   // Validate
-  const isNotAmountEmpty = action_amount > 0;
+  const isNotAmountEmpty = parseFloat(action_amount) > 0;
   const isNotAccountEmpty = selectedAccountOption !== null;
 
   const navigateBack = () => {
@@ -78,7 +78,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
       dispatch(startLoader());
 
       const newAction = {
-        action_amount,
+        action_amount: parseFloat(action_amount),
         account:
           selectedAccountOption !== null &&
           accountData[selectedAccountOption].id,
