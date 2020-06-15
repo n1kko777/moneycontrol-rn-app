@@ -165,7 +165,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
             <Input
               value={transaction_amount}
               placeholder="Сумма расхода"
-              keyboardType="phone-pad"
+              keyboardType="decimal-pad"
               onChangeText={setTransactionAmount}
               style={{ marginVertical: 10 }}
               status={isNotAmountEmpty ? "success" : "danger"}

@@ -88,7 +88,7 @@ export const CreateAccountScreen = ({ navigation }) => {
             <Input
               value={balance}
               placeholder="Остаток на счете"
-              keyboardType="phone-pad"
+              keyboardType="decimal-pad"
               onChangeText={setBalance}
               style={{ marginVertical: 10 }}
             />

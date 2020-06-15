@@ -68,7 +68,7 @@ export const InviteMemberScreen = ({ navigation }) => {
           <Input
             value={profile_id}
             placeholder="ID пользователя"
-            keyboardType="phone-pad"
+            keyboardType="number-pad"
             onChangeText={setProfileId}
             style={{ marginVertical: 10 }}
             status={isNotProfileIdEmpty ? "success" : "danger"}

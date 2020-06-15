@@ -141,7 +141,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
             <Input
               value={action_amount}
               placeholder="Сумма дохода"
-              keyboardType="phone-pad"
+              keyboardType="decimal-pad"
               onChangeText={setActionAmount}
               style={{ marginVertical: 10 }}
               status={isNotAmountEmpty ? "success" : "danger"}

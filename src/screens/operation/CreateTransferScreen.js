@@ -161,7 +161,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
             <Input
               value={transfer_amount}
               placeholder="Сумма перевода"
-              keyboardType="phone-pad"
+              keyboardType="decimal-pad"
               onChangeText={setTransferAmount}
               style={{ marginVertical: 10 }}
               status={isNotAmountEmpty ? "success" : "danger"}
