@@ -9,7 +9,7 @@
             "ios",
             "android"
         ],
-        "version": "1.0.1",
+        "version": "1.0.2",
         "orientation": "portrait",
         "icon": "./assets/logo.png",
         "splash": {
@@ -26,11 +26,11 @@
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "ru.mncntrl.n1kko777",
-            "buildNumber": "1.0.1"
+            "buildNumber": "1.0.2"
         },
         "android": {
             "package": "ru.mncntrl.n1kko777",
-            "versionCode": 2,
+            "versionCode": 3,
             "permissions": [
                 "CAMERA",
                 "READ_EXTERNAL_STORAGE",
