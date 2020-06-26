@@ -20,8 +20,9 @@ import {
 
 import { ReportFilter } from "../components/report/ReportFilter";
 import { ChartCompany } from "../components/report/ChartCompany";
-
 import moment from "moment";
+
+import "moment/locale/ru";
 moment.locale("ru");
 
 export const ReportScreen = ({ navigation }) => {
