@@ -42,6 +42,14 @@ export const CreateActionScreen = ({ route, navigation }) => {
       id: elem.id,
     }));
 
+  const { categories } = useSelector((store) => store.category);
+
+  const categoriesData = categories.map((elem, index) => ({
+    index,
+    text: elem.category_name,
+    id: elem.id,
+  }));
+
   const { tags } = useSelector((store) => store.tag);
 
   const tagData = tags.map((elem, index) => ({
@@ -58,6 +66,11 @@ export const CreateActionScreen = ({ route, navigation }) => {
       ? accountData.findIndex((elem) => elem.id == prevItem.account)
       : null
   );
+  const [selectedCategoryOption, setSelectedCategoryOption] = React.useState(
+    prevItem !== undefined
+      ? categoriesData.findIndex((elem) => elem.id == prevItem.category)
+      : null
+  );
   const [selectedTagOption, setSelectedTagOption] = React.useState(
     prevItem !== undefined
       ? tagData.filter((elem) => prevItem.tags.includes(elem.id))
@@ -67,6 +80,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
   // Validate
   const isNotAmountEmpty = parseFloat(action_amount) > 0;
   const isNotAccountEmpty = selectedAccountOption !== null;
+  const isNotCategoryEmpty = selectedCategoryOption !== null;
 
   const navigateBack = () => {
     navigation.goBack();
@@ -82,6 +96,9 @@ export const CreateActionScreen = ({ route, navigation }) => {
         account:
           selectedAccountOption !== null &&
           accountData[selectedAccountOption].id,
+        category:
+          selectedCategoryOption !== null &&
+          categoriesData[selectedCategoryOption].id,
         is_active: true,
         tags: tagData
           .filter(
@@ -110,6 +127,10 @@ export const CreateActionScreen = ({ route, navigation }) => {
 
   const onSelectAccount = React.useCallback((opt) => {
     setSelectedAccountOption(opt.index);
+  });
+
+  const onSelectCategory = React.useCallback((opt) => {
+    setSelectedCategoryOption(opt.index);
   });
 
   const onSelectTag = React.useCallback((opt) => {
@@ -149,6 +170,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
                 isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
               }
             />
+
             <Select
               data={accountData}
               placeholder="Укажите счет"
@@ -157,6 +179,16 @@ export const CreateActionScreen = ({ route, navigation }) => {
               style={{ marginVertical: 10 }}
               status={isNotAccountEmpty ? "success" : "danger"}
               caption={isNotAccountEmpty ? "" : "Поле не может быть пустым"}
+            />
+
+            <Select
+              data={categoriesData}
+              placeholder="Укажите категорию"
+              selectedOption={categoriesData[selectedCategoryOption]}
+              onSelect={onSelectCategory}
+              style={{ marginVertical: 10 }}
+              status={isNotCategoryEmpty ? "success" : "danger"}
+              caption={isNotCategoryEmpty ? "" : "Поле не может быть пустым"}
             />
 
             <Select
@@ -180,7 +212,9 @@ export const CreateActionScreen = ({ route, navigation }) => {
                 borderRadius: THEME.BUTTON_RADIUS,
               }}
               onPress={onSubmit}
-              disabled={!isNotAmountEmpty || !isNotAccountEmpty}
+              disabled={
+                !isNotAmountEmpty || !isNotAccountEmpty || !isNotCategoryEmpty
+              }
             >
               Создать
             </Button>
