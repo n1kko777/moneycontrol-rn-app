@@ -25,6 +25,7 @@ import {
   getTransaction,
 } from "../../store/actions/transactionAction";
 import { getAccount } from "../../store/actions/accountAction";
+import { CustomTag } from "../../components/operation/tag/CustomTag";
 
 export const CreateTransactionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
@@ -57,7 +58,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
 
   const tagData = tags.map((elem, index) => ({
     index,
-    text: elem.tag_name,
+    title: elem.tag_name,
     id: elem.id,
   }));
 
@@ -74,7 +75,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
       ? categoriesData.findIndex((elem) => elem.id == prevItem.category)
       : null
   );
-  const [selectedTagOption, setSelectedTagOption] = React.useState(
+  const [tagList, setTagList] = React.useState(
     prevItem !== undefined
       ? tagData.filter((elem) => prevItem.tags.includes(elem.id))
       : []
@@ -103,13 +104,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
           selectedCategoryOption !== null &&
           categoriesData[selectedCategoryOption].id,
         is_active: true,
-        tags: tagData
-          .filter(
-            (elem) =>
-              selectedTagOption !== undefined &&
-              selectedTagOption.map((elem) => elem.index).includes(elem.index)
-          )
-          .map((elem) => elem.id),
+        tags: tagList.map((elem) => elem.id),
       };
 
       await dispatch(createTransaction(newTransaction));
@@ -134,10 +129,6 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
 
   const onSelectCategory = React.useCallback((opt) => {
     setSelectedCategoryOption(opt.index);
-  });
-
-  const onSelectTag = React.useCallback((opt) => {
-    setSelectedTagOption(opt);
   });
 
   return (
@@ -193,19 +184,10 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
               caption={isNotCategoryEmpty ? "" : "Поле не может быть пустым"}
             />
 
-            <Select
-              data={tagData}
-              placeholder="Укажите теги"
-              selectedOption={tagData.filter(
-                (elem) =>
-                  selectedTagOption !== undefined &&
-                  selectedTagOption
-                    .map((elem) => elem.index)
-                    .includes(elem.index)
-              )}
-              onSelect={onSelectTag}
-              style={{ marginVertical: 10 }}
-              multiSelect={true}
+            <CustomTag
+              tagData={tagData}
+              tagList={tagList}
+              setTagList={setTagList}
             />
 
             <Button
