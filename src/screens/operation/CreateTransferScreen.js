@@ -28,6 +28,11 @@ import { getAccount } from "../../store/actions/accountAction";
 
 export const CreateTransferScreen = ({ route, navigation }) => {
   const prevItem = route.params;
+  const amountRef = React.useRef();
+
+  React.useEffect(() => {
+    amountRef.current.focus();
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -159,6 +164,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
             }}
           >
             <Input
+              ref={amountRef}
               value={transfer_amount}
               placeholder="Сумма перевода"
               keyboardType="decimal-pad"

@@ -29,6 +29,11 @@ import { CustomTag } from "../../components/operation/tag/CustomTag";
 
 export const CreateTransactionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
+  const amountRef = React.useRef();
+
+  React.useEffect(() => {
+    amountRef.current.focus();
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -154,6 +159,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
             }}
           >
             <Input
+              ref={amountRef}
               value={transaction_amount}
               placeholder="Сумма расхода"
               keyboardType="decimal-pad"
