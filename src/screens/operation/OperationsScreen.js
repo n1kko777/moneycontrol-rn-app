@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { useTheme, Layout } from "@ui-kitten/components";
+import { useTheme, Layout, Text } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -182,11 +182,17 @@ export const OperationsScreen = ({ navigation, route }) => {
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          <OperationList
-            onOperationRefresh={onOperationRefresh}
-            dataList={operationListData}
-            navigation={navigation}
-          />
+          {operationListData.length !== 0 ? (
+            <OperationList
+              onOperationRefresh={onOperationRefresh}
+              dataList={operationListData}
+              navigation={navigation}
+            />
+          ) : (
+            <Text style={{ marginTop: 15, textAlign: "center" }}>
+              Операций не найдено.
+            </Text>
+          )}
         </Layout>
       </Layout>
     </ScreenTemplate>
