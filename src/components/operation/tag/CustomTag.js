@@ -14,7 +14,7 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
   const { tags } = useSelector((store) => store.tag);
   const tagInput = React.createRef();
 
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState("");
   const [data, setData] = React.useState(tagData);
 
   const onSelect = ({ title }) => {
