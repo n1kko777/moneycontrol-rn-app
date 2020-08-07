@@ -174,9 +174,7 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
   return (
     <WrapperComponent>
       <ListItem
-        title={`${moment(item.last_updated).format("DD.MM.YYYY")}\n${
-          item.name
-        }${
+        title={`${item.name}${
           item.category !== undefined
             ? " (" +
               (categories.find((cat) => cat.id == item.category) !== undefined

@@ -21,6 +21,7 @@ import { getTransaction } from "../../store/actions/transactionAction";
 import { logout } from "../../store/actions/authAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
+import moment from "moment";
 
 export const OperationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ export const OperationsScreen = ({ navigation, route }) => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
 
-  const operationListData = isFiltered
+  const operationListData = (isFiltered
     ? prepareOperationData(
         company,
         filterArrayByDate(transactions, startDate, endDate),
@@ -72,7 +73,32 @@ export const OperationsScreen = ({ navigation, route }) => {
         filterArrayByDate(transactions, startDate, endDate),
         filterArrayByDate(actions, startDate, endDate),
         filterArrayByDate(transfer, startDate, endDate)
-      );
+      )
+  ).reduce((arrDate, nextItem) => {
+    if (
+      arrDate
+        .map((el) => el.title)
+        .some((el) => el === moment(nextItem.last_updated).format("DD.MM.YYYY"))
+    ) {
+      return arrDate.map((itemDay) => {
+        if (
+          itemDay.title === moment(nextItem.last_updated).format("DD.MM.YYYY")
+        ) {
+          itemDay.itemList = [...itemDay.itemList, nextItem];
+        }
+
+        return itemDay;
+      });
+    } else {
+      return [
+        ...arrDate,
+        {
+          title: moment(nextItem.last_updated).format("DD.MM.YYYY"),
+          itemList: [nextItem],
+        },
+      ];
+    }
+  }, []);
 
   const [totalTransactions, setTotalTransactions] = React.useState(
     parseFloat(
