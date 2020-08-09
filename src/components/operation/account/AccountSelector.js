@@ -9,6 +9,7 @@ export const AccountSelector = ({ selectedId, setSelectedId, isNotEmpty }) => {
   const { accounts } = useSelector((store) => store.account);
   const accountData = accounts
     .filter((elem) => elem.profile == profile.id)
+    .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
     .map((elem) => ({
       title: `${elem.account_name} (${splitToDigits(elem.balance)} ₽)`,
       id: elem.id,

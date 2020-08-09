@@ -6,10 +6,12 @@ import { useSelector } from "react-redux";
 export const CategorySelector = ({ selectedId, setSelectedId, isNotEmpty }) => {
   const { categories } = useSelector((store) => store.category);
 
-  const categoriesData = categories.map((elem) => ({
-    title: elem.category_name,
-    id: elem.id,
-  }));
+  const categoriesData = categories
+    .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
+    .map((elem) => ({
+      title: elem.category_name,
+      id: elem.id,
+    }));
 
   const [value, setValue] = React.useState(
     selectedId !== null
