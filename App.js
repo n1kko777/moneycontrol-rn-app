@@ -3,13 +3,9 @@ import { Provider } from "react-redux";
 import store from "./src/store";
 
 import { AppContainer } from "./src/components/AppContainer";
-import { BackHandler } from "react-native";
-
+import useDisableBack from "./src/hook/useDisableBack";
 const App = () => {
-  BackHandler.addEventListener("hardwareBackPress", function () {
-    return true;
-  });
-
+  useDisableBack();
   return (
     <Provider store={store}>
       <AppContainer />
