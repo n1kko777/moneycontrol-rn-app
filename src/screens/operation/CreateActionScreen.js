@@ -1,5 +1,5 @@
 import React from "react";
-
+import { View, Keyboard } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -8,21 +8,19 @@ import {
   TopNavigationAction,
   Input,
   Button,
-  Select,
 } from "@ui-kitten/components";
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
+import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { createAction, getAction } from "../../store/actions/actionAction";
+import { getAccount } from "../../store/actions/accountAction";
+
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { Keyboard } from "react-native";
-
-import { createAction, getAction } from "../../store/actions/actionAction";
-import { getAccount } from "../../store/actions/accountAction";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { CustomTag } from "../../components/operation/tag/CustomTag";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
+import { CategorySelector } from "../../components/operation/category/CategorySelector";
 
 export const CreateActionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
@@ -37,14 +35,25 @@ export const CreateActionScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const { error: actionError } = useSelector((store) => store.action);
 
-  const { categories } = useSelector((store) => store.category);
+  // Amount
+  const [action_amount, setActionAmount] = React.useState(
+    prevItem !== undefined ? prevItem.balance : ""
+  );
+  const isNotAmountEmpty = parseFloat(action_amount) > 0;
 
-  const categoriesData = categories.map((elem, index) => ({
-    index,
-    text: elem.category_name,
-    id: elem.id,
-  }));
+  // Account
+  const [selectedAccountId, setSelectedAccountId] = React.useState(
+    prevItem !== undefined ? prevItem.account : null
+  );
+  const isNotAccountEmpty = selectedAccountId !== null;
 
+  // Category
+  const [selectedCategoryId, setSelectedCategoryId] = React.useState(
+    prevItem !== undefined ? prevItem.account : null
+  );
+  const isNotCategoryEmpty = selectedCategoryId !== null;
+
+  // Tag
   const { tags } = useSelector((store) => store.tag);
 
   const tagData = tags.map((elem, index) => ({
@@ -52,34 +61,11 @@ export const CreateActionScreen = ({ route, navigation }) => {
     title: elem.tag_name,
     id: elem.id,
   }));
-
-  const [action_amount, setActionAmount] = React.useState(
-    prevItem !== undefined ? prevItem.balance : ""
-  );
-
-  const [selectedAccountId, setSelectedAccountId] = React.useState(
-    prevItem !== undefined ? prevItem.account : null
-  );
-  const isNotAccountEmpty = selectedAccountId !== null;
-
-  const [selectedCategoryOption, setSelectedCategoryOption] = React.useState(
-    prevItem !== undefined
-      ? categoriesData.findIndex((elem) => elem.id == prevItem.category)
-      : null
-  );
   const [tagList, setTagList] = React.useState(
     prevItem !== undefined
       ? tagData.filter((elem) => prevItem.tags.includes(elem.id))
       : []
   );
-
-  // Validate
-  const isNotAmountEmpty = parseFloat(action_amount) > 0;
-  const isNotCategoryEmpty = selectedCategoryOption !== null;
-
-  const navigateBack = () => {
-    navigation.goBack();
-  };
 
   const onSubmit = async () => {
     try {
@@ -89,11 +75,9 @@ export const CreateActionScreen = ({ route, navigation }) => {
       const newAction = {
         action_amount: parseFloat(action_amount),
         account: selectedAccountId,
-        category:
-          selectedCategoryOption !== null &&
-          categoriesData[selectedCategoryOption].id,
-        is_active: true,
+        category: selectedCategoryId,
         tags: tagList.map((elem) => elem.id),
+        is_active: true,
       };
 
       await dispatch(createAction(newAction));
@@ -108,13 +92,13 @@ export const CreateActionScreen = ({ route, navigation }) => {
     } catch (error) {}
   };
 
+  const navigateBack = () => {
+    navigation.goBack();
+  };
+
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
-
-  const onSelectCategory = React.useCallback((opt) => {
-    setSelectedCategoryOption(opt.index);
-  });
 
   return (
     <ScreenTemplate>
@@ -155,22 +139,16 @@ export const CreateActionScreen = ({ route, navigation }) => {
               setSelectedId={setSelectedAccountId}
               isNotEmpty={isNotAccountEmpty}
             />
-            <Select
-              data={categoriesData}
-              placeholder="Укажите категорию"
-              selectedOption={categoriesData[selectedCategoryOption]}
-              onSelect={onSelectCategory}
-              style={{ marginVertical: 10 }}
-              status={isNotCategoryEmpty ? "success" : "danger"}
-              caption={isNotCategoryEmpty ? "" : "Поле не может быть пустым"}
+            <CategorySelector
+              selectedId={selectedCategoryId}
+              setSelectedId={setSelectedCategoryId}
+              isNotEmpty={isNotCategoryEmpty}
             />
-
             <CustomTag
               tagData={tagData}
               tagList={tagList}
               setTagList={setTagList}
             />
-
             <Button
               style={{
                 marginVertical: 25,
