@@ -57,7 +57,7 @@ export const OperationsScreen = ({ navigation, route }) => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
 
-  const operationListData = (isFiltered
+  const operationListData = isFiltered
     ? prepareOperationData(
         company,
         filterArrayByDate(transactions, startDate, endDate),
@@ -73,32 +73,38 @@ export const OperationsScreen = ({ navigation, route }) => {
         filterArrayByDate(transactions, startDate, endDate),
         filterArrayByDate(actions, startDate, endDate),
         filterArrayByDate(transfer, startDate, endDate)
-      )
-  ).reduce((arrDate, nextItem) => {
-    if (
-      arrDate
-        .map((el) => el.title)
-        .some((el) => el === moment(nextItem.last_updated).format("DD.MM.YYYY"))
-    ) {
-      return arrDate.map((itemDay) => {
-        if (
-          itemDay.title === moment(nextItem.last_updated).format("DD.MM.YYYY")
-        ) {
-          itemDay.itemList = [...itemDay.itemList, nextItem];
-        }
+      );
 
-        return itemDay;
-      });
-    } else {
-      return [
-        ...arrDate,
-        {
-          title: moment(nextItem.last_updated).format("DD.MM.YYYY"),
-          itemList: [nextItem],
-        },
-      ];
-    }
-  }, []);
+  const formatedOperationList = operationListData.reduce(
+    (arrDate, nextItem) => {
+      if (
+        arrDate
+          .map((el) => el.title)
+          .some(
+            (el) => el === moment(nextItem.last_updated).format("DD.MM.YYYY")
+          )
+      ) {
+        return arrDate.map((itemDay) => {
+          if (
+            itemDay.title === moment(nextItem.last_updated).format("DD.MM.YYYY")
+          ) {
+            itemDay.itemList = [...itemDay.itemList, nextItem];
+          }
+
+          return itemDay;
+        });
+      } else {
+        return [
+          ...arrDate,
+          {
+            title: moment(nextItem.last_updated).format("DD.MM.YYYY"),
+            itemList: [nextItem],
+          },
+        ];
+      }
+    },
+    []
+  );
 
   const [totalTransactions, setTotalTransactions] = React.useState(
     parseFloat(
@@ -130,7 +136,7 @@ export const OperationsScreen = ({ navigation, route }) => {
           .reduce((sum, next) => (sum += +next.balance), 0)
       )
     );
-  }, [isFiltered, startDate, accounts]);
+  }, [isFiltered, startDate, accounts, operationListData]);
 
   const onOperationRefresh = async () => {
     dispatch(startLoader());
@@ -182,15 +188,15 @@ export const OperationsScreen = ({ navigation, route }) => {
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          {operationListData.length !== 0 ? (
+          {formatedOperationList.length !== 0 ? (
             <OperationList
               onOperationRefresh={onOperationRefresh}
-              dataList={operationListData}
+              dataList={formatedOperationList}
               navigation={navigation}
             />
           ) : (
             <Text style={{ marginTop: 15, textAlign: "center" }}>
-              Операций не найдено.
+              Операции не найдены.
             </Text>
           )}
         </Layout>

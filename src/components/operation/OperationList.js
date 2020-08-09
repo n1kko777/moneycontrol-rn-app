@@ -31,6 +31,7 @@ export const OperationList = ({ dataList, navigation, onOperationRefresh }) => {
             style={{
               marginHorizontal: 8,
               marginTop: 15,
+              marginBottom: 5,
             }}
             category="h5"
           >

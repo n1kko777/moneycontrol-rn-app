@@ -23,8 +23,8 @@ import {
   getTransfer,
 } from "../../store/actions/transferAction";
 
-import { splitToDigits } from "../../splitToDigits";
 import { getAccount } from "../../store/actions/accountAction";
+import { AccountSelector } from "../../components/operation/account/AccountSelector";
 
 export const CreateTransferScreen = ({ route, navigation }) => {
   const prevItem = route.params;
@@ -52,32 +52,17 @@ export const CreateTransferScreen = ({ route, navigation }) => {
     })),
   }));
 
-  const { accounts } = useSelector((store) => store.account);
-
   const { error: transferError } = useSelector((store) => store.transfer);
-
-  const fromAccountData = accounts
-    .filter((elem) => elem.profile == profile.id)
-    .map((elem, index) => ({
-      index,
-      text: `${elem.account_name} (${splitToDigits(elem.balance)} ₽)`,
-      id: elem.id,
-    }));
 
   const [transfer_amount, setTransferAmount] = React.useState(
     prevItem !== undefined ? prevItem.balance : ""
   );
-  const [
-    selectedFromAccountOption,
-    setSelectedFromAccountOption,
-  ] = React.useState(
+  const [selectedFromAccountId, setSelectedFromAccountId] = React.useState(
     prevItem !== undefined
-      ? fromAccountData.findIndex(
-          (elem) =>
-            elem.id == prevItem.from_account.split("(pk=")[1].replace(")", "")
-        )
+      ? parseInt(prevItem.from_account.split("pk=")[1])
       : null
   );
+  const isNotFromAccountEmpty = selectedFromAccountId !== null;
 
   const [selectedToAccountOption, setSelectedToAccountOption] = React.useState(
     prevItem !== undefined
@@ -92,7 +77,6 @@ export const CreateTransferScreen = ({ route, navigation }) => {
 
   // Validate
   const isNotAmountEmpty = parseFloat(transfer_amount) > 0;
-  const isNotFromAccountEmpty = selectedFromAccountOption !== null;
   const isNotToAccountEmpty = selectedToAccountOption !== null;
 
   const navigateBack = () => {
@@ -106,9 +90,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
 
       const newTransfer = {
         transfer_amount: parseFloat(transfer_amount),
-        from_account:
-          selectedFromAccountOption !== null &&
-          fromAccountData[selectedFromAccountOption].id,
+        from_account: selectedFromAccountId,
         to_account:
           selectedToAccountOption !== null &&
           toAccountData[selectedToAccountOption.parentIndex].items[
@@ -132,10 +114,6 @@ export const CreateTransferScreen = ({ route, navigation }) => {
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
-
-  const onFromSelectAccount = React.useCallback((opt) => {
-    setSelectedFromAccountOption(opt.index);
-  });
 
   const onToSelectAccount = React.useCallback((opt) => {
     setSelectedToAccountOption(opt);
@@ -175,16 +153,11 @@ export const CreateTransferScreen = ({ route, navigation }) => {
                 isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
               }
             />
-            <Select
-              data={fromAccountData}
-              placeholder="Укажите счет списания"
-              selectedOption={fromAccountData[selectedFromAccountOption]}
-              onSelect={onFromSelectAccount}
-              style={{ marginVertical: 10 }}
-              status={isNotFromAccountEmpty ? "success" : "danger"}
-              caption={isNotFromAccountEmpty ? "" : "Поле не может быть пустым"}
+            <AccountSelector
+              selectedId={selectedFromAccountId}
+              setSelectedId={setSelectedFromAccountId}
+              isNotEmpty={isNotFromAccountEmpty}
             />
-
             <Select
               data={toAccountData}
               placeholder="Укажите счет пополнения"

@@ -89,3 +89,5 @@ export const FilterIcon = (style) => <Icon {...style} name="funnel-outline" />;
 export const ActiveFilterIcon = (style) => (
   <Icon {...style} name="funnel" fill="#3366FF" />
 );
+
+export const CloseIcon = (style) => <Icon {...style} name="close" />;

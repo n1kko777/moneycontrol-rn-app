@@ -19,10 +19,10 @@ import { BackIcon } from "../../themes/icons";
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-import { splitToDigits } from "../../splitToDigits";
 import { createAction, getAction } from "../../store/actions/actionAction";
 import { getAccount } from "../../store/actions/accountAction";
 import { CustomTag } from "../../components/operation/tag/CustomTag";
+import { AccountSelector } from "../../components/operation/account/AccountSelector";
 
 export const CreateActionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
@@ -33,20 +33,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
   }, []);
 
   const dispatch = useDispatch();
-
-  const { profile } = useSelector((store) => store.profile);
-
-  const { accounts } = useSelector((store) => store.account);
-
   const { error: actionError } = useSelector((store) => store.action);
-
-  const accountData = accounts
-    .filter((elem) => elem.profile == profile.id)
-    .map((elem, index) => ({
-      index,
-      text: `${elem.account_name} (${splitToDigits(elem.balance)} ₽)`,
-      id: elem.id,
-    }));
 
   const { categories } = useSelector((store) => store.category);
 
@@ -67,11 +54,12 @@ export const CreateActionScreen = ({ route, navigation }) => {
   const [action_amount, setActionAmount] = React.useState(
     prevItem !== undefined ? prevItem.balance : ""
   );
-  const [selectedAccountOption, setSelectedAccountOption] = React.useState(
-    prevItem !== undefined
-      ? accountData.findIndex((elem) => elem.id == prevItem.account)
-      : null
+
+  const [selectedAccountId, setSelectedAccountId] = React.useState(
+    prevItem !== undefined ? prevItem.account : null
   );
+  const isNotAccountEmpty = selectedAccountId !== null;
+
   const [selectedCategoryOption, setSelectedCategoryOption] = React.useState(
     prevItem !== undefined
       ? categoriesData.findIndex((elem) => elem.id == prevItem.category)
@@ -85,7 +73,6 @@ export const CreateActionScreen = ({ route, navigation }) => {
 
   // Validate
   const isNotAmountEmpty = parseFloat(action_amount) > 0;
-  const isNotAccountEmpty = selectedAccountOption !== null;
   const isNotCategoryEmpty = selectedCategoryOption !== null;
 
   const navigateBack = () => {
@@ -99,9 +86,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
 
       const newAction = {
         action_amount: parseFloat(action_amount),
-        account:
-          selectedAccountOption !== null &&
-          accountData[selectedAccountOption].id,
+        account: selectedAccountId,
         category:
           selectedCategoryOption !== null &&
           categoriesData[selectedCategoryOption].id,
@@ -124,10 +109,6 @@ export const CreateActionScreen = ({ route, navigation }) => {
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
-
-  const onSelectAccount = React.useCallback((opt) => {
-    setSelectedAccountOption(opt.index);
-  });
 
   const onSelectCategory = React.useCallback((opt) => {
     setSelectedCategoryOption(opt.index);
@@ -167,17 +148,11 @@ export const CreateActionScreen = ({ route, navigation }) => {
                 isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
               }
             />
-
-            <Select
-              data={accountData}
-              placeholder="Укажите счет"
-              selectedOption={accountData[selectedAccountOption]}
-              onSelect={onSelectAccount}
-              style={{ marginVertical: 10 }}
-              status={isNotAccountEmpty ? "success" : "danger"}
-              caption={isNotAccountEmpty ? "" : "Поле не может быть пустым"}
+            <AccountSelector
+              selectedId={selectedAccountId}
+              setSelectedId={setSelectedAccountId}
+              isNotEmpty={isNotAccountEmpty}
             />
-
             <Select
               data={categoriesData}
               placeholder="Укажите категорию"
