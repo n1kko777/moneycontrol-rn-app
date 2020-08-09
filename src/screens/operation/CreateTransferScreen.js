@@ -31,7 +31,9 @@ export const CreateTransferScreen = ({ route, navigation }) => {
   const amountRef = React.useRef();
 
   React.useEffect(() => {
-    amountRef.current.focus();
+    setTimeout(() => {
+      amountRef.current.focus();
+    }, 100);
   }, []);
 
   const dispatch = useDispatch();
