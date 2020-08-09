@@ -1,27 +1,25 @@
 import React from "react";
-import { StyleSheet, ScrollView } from "react-native";
-import { Autocomplete, Layout, Text } from "@ui-kitten/components";
-import { AddSmallIcon } from "../../../themes/icons";
-import { TagItem } from "./TagItem";
-import { View, Keyboard } from "react-native";
-
+import { StyleSheet, ScrollView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { createTag } from "../../../store/actions/tagAction";
+import { Autocomplete, Layout, Text } from "@ui-kitten/components";
+
 import { startLoader, endLoader } from "../../../store/actions/apiAction";
+import { createTag } from "../../../store/actions/tagAction";
+
+import { AddSmallIcon } from "../../../themes/icons";
+
+import { TagItem } from "./TagItem";
 
 export const CustomTag = ({ tagData, tagList, setTagList }) => {
   const dispatch = useDispatch();
-  const { tags } = useSelector((store) => store.tag);
   const tagInput = React.createRef();
 
-  const [value, setValue] = React.useState("");
-  const [data, setData] = React.useState(tagData);
+  const { tags } = useSelector((store) => store.tag);
 
-  const onSelect = ({ title }) => {
-    onChangeText("");
-    tagList.find((el) => el.title === title) === undefined &&
-      setTagList([...tagList, tagData.find((el) => el.title === title)]);
-  };
+  const [value, setValue] = React.useState("");
+  const [data, setData] = React.useState(
+    tagData.sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
+  );
 
   const onChangeText = (query) => {
     setValue(query);
@@ -30,6 +28,13 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
         item.title.toLowerCase().includes(query.toLowerCase())
       )
     );
+  };
+
+  const onSelect = ({ title }) => {
+    onChangeText("");
+
+    tagList.find((el) => el.title === title) === undefined &&
+      setTagList([...tagList, data.find((el) => el.title === title)]);
   };
 
   const addTag = async () => {
@@ -55,11 +60,16 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
   };
 
   React.useEffect(() => {
+    setData(
+      tagData.filter((el) => !tagList.map((tag) => tag.id).includes(el.id))
+    );
+  }, [tagList]);
+
+  React.useEffect(() => {
     if (tags.find((el) => el.tag_name === value) !== undefined) {
       setTagList([
         ...tagList,
         {
-          index: tagList.length,
           id: tags.find((el) => el.tag_name === value).id,
           title: tags.find((el) => el.tag_name === value).tag_name,
         },
@@ -77,12 +87,11 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
         data={data}
         onChangeText={onChangeText}
         onSelect={onSelect}
-        icon={AddSmallIcon}
+        icon={value.trim().length !== 0 && AddSmallIcon}
         onIconPress={addTag}
         onSubmitEditing={addTag}
         ref={tagInput}
       />
-
       <ScrollView
         style={{
           maxHeight: 108,
@@ -90,8 +99,8 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
         }}
       >
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-          {tagList.map((el, index) => (
-            <TagItem deleteTag={deleteTag} key={index} text={el.title} />
+          {tagList.map((el) => (
+            <TagItem deleteTag={deleteTag} key={el.id} text={el.title} />
           ))}
         </View>
       </ScrollView>

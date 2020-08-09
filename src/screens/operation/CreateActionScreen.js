@@ -56,11 +56,11 @@ export const CreateActionScreen = ({ route, navigation }) => {
   // Tag
   const { tags } = useSelector((store) => store.tag);
 
-  const tagData = tags.map((elem, index) => ({
-    index,
+  const tagData = tags.map((elem) => ({
     title: elem.tag_name,
     id: elem.id,
   }));
+
   const [tagList, setTagList] = React.useState(
     prevItem !== undefined
       ? tagData.filter((elem) => prevItem.tags.includes(elem.id))
