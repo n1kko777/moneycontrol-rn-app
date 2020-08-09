@@ -9,6 +9,7 @@ import { createTag } from "../../../store/actions/tagAction";
 import { AddSmallIcon } from "../../../themes/icons";
 
 import { TagItem } from "./TagItem";
+import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
 
 export const CustomTag = ({ tagData, tagList, setTagList }) => {
   const dispatch = useDispatch();
@@ -91,6 +92,7 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
         onIconPress={addTag}
         onSubmitEditing={addTag}
         ref={tagInput}
+        placement={PopoverPlacements.TOP}
       />
       <ScrollView
         style={{
