@@ -45,10 +45,11 @@ export const prepareOperationData = (
       allOpprations.push(
         ...transfer.map((elem) => ({
           key: elem.last_updated,
-          name:
-            getShortName(elem.from_profile.split(" (")[0]) +
-            " => " +
-            getShortName(elem.to_profile.split(" (")[0]),
+          name: `${getShortName(elem.from_profile.split(" (")[0])} (${
+            elem.from_account.split(" (pk=")[0]
+          }) => ${getShortName(elem.to_profile.split(" (")[0])} (${
+            elem.to_account.split(" (pk=")[0]
+          })`,
           balance: elem.transfer_amount,
           tags: elem.tags,
           category: elem.category,
