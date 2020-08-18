@@ -28,25 +28,28 @@ export const CreateCategoryScreen = ({ navigation }) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    Keyboard.dismiss();
-    dispatch(startLoader());
+    if (!loader) {
+      Keyboard.dismiss();
+      dispatch(startLoader());
 
-    try {
-      await dispatch(
-        createCategory({
-          category_name,
-        })
-      );
+      try {
+        await dispatch(
+          createCategory({
+            category_name,
+          })
+        );
 
-      if (categoryError === null) {
-        setCategoryName("");
-        navigateBack();
-      }
-    } catch (error) {}
+        if (categoryError === null) {
+          setCategoryName("");
+          navigateBack();
+        }
+      } catch (error) {}
 
-    dispatch(endLoader());
+      dispatch(endLoader());
+    }
   };
 
   const BackAction = () => (

@@ -22,6 +22,7 @@ import { Keyboard } from "react-native";
 export const CreateAccountScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { error: accountError } = useSelector((store) => store.account);
+  const loader = useSelector((store) => store.api.loader);
 
   const [account_name, setAccountName] = React.useState("");
   const [balance, setBalance] = React.useState("0");
@@ -31,25 +32,27 @@ export const CreateAccountScreen = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
-    Keyboard.dismiss();
-    dispatch(startLoader());
+    if (!loader) {
+      Keyboard.dismiss();
+      dispatch(startLoader());
 
-    try {
-      await dispatch(
-        createAccount({
-          account_name,
-          balance,
-        })
-      );
+      try {
+        await dispatch(
+          createAccount({
+            account_name,
+            balance,
+          })
+        );
 
-      if (accountError === null) {
-        setAccountName("");
-        setBalance("");
-        navigateBack();
-      }
-    } catch (error) {}
+        if (accountError === null) {
+          setAccountName("");
+          setBalance("");
+          navigateBack();
+        }
+      } catch (error) {}
 
-    dispatch(endLoader());
+      dispatch(endLoader());
+    }
   };
 
   const BackAction = () => (

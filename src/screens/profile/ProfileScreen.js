@@ -30,9 +30,10 @@ export const ProfileScreen = ({ navigation }) => {
   const [imageUrl, setImageUrl] = React.useState(profile.image);
 
   const [isEdit, setIsEdit] = React.useState(false);
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    if (isEdit) {
+    if (isEdit && !loader) {
       dispatch(startLoader());
 
       let data = new FormData();

@@ -31,25 +31,28 @@ export const UpdateAccountScreen = ({ route, navigation }) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    Keyboard.dismiss();
-    dispatch(startLoader());
+    if (!loader) {
+      Keyboard.dismiss();
+      dispatch(startLoader());
 
-    try {
-      await dispatch(
-        updateAccount(account.id, {
-          account_name,
-          balance,
-        })
-      );
-    } catch (error) {}
+      try {
+        await dispatch(
+          updateAccount(account.id, {
+            account_name,
+            balance,
+          })
+        );
+      } catch (error) {}
 
-    if (accountError === null) {
-      navigateBack();
+      if (accountError === null) {
+        navigateBack();
+      }
+
+      dispatch(endLoader());
     }
-
-    dispatch(endLoader());
   };
 
   const BackAction = () => (

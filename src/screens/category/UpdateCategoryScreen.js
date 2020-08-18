@@ -32,24 +32,27 @@ export const UpdateCategoryScreen = ({ route, navigation }) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    Keyboard.dismiss();
-    dispatch(startLoader());
+    if (!loader) {
+      Keyboard.dismiss();
+      dispatch(startLoader());
 
-    try {
-      await dispatch(
-        updateCategory(category.id, {
-          category_name,
-        })
-      );
-    } catch (error) {}
+      try {
+        await dispatch(
+          updateCategory(category.id, {
+            category_name,
+          })
+        );
+      } catch (error) {}
 
-    if (categoryError === null) {
-      navigateBack();
+      if (categoryError === null) {
+        navigateBack();
+      }
+
+      dispatch(endLoader());
     }
-
-    dispatch(endLoader());
   };
 
   const BackAction = () => (

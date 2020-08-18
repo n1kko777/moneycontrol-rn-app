@@ -47,11 +47,14 @@ export const LoginScreen = ({ navigation }) => {
         : navigateCreateProfile();
     }
   }, [profile]);
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    dispatch(startLoader());
-    await dispatch(authLogin(email, password));
-    dispatch(endLoader());
+    if (!loader) {
+      dispatch(startLoader());
+      await dispatch(authLogin(email, password));
+      dispatch(endLoader());
+    }
   };
 
   const navigateHome = () => {

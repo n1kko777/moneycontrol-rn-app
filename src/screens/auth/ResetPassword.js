@@ -25,16 +25,19 @@ export const ResetPassword = ({ navigation }) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    dispatch(startLoader());
-    await dispatch(
-      resetPass({
-        email,
-      })
-    );
-    dispatch(endLoader());
-    setEmail("");
+    if (!loader) {
+      dispatch(startLoader());
+      await dispatch(
+        resetPass({
+          email,
+        })
+      );
+      dispatch(endLoader());
+      setEmail("");
+    }
   };
 
   const BackAction = () => (

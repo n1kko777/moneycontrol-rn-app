@@ -9,7 +9,7 @@ import {
   TopNavigation,
   TopNavigationAction,
   Input,
-  Button
+  Button,
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
@@ -18,14 +18,14 @@ import { THEME } from "../../themes/themes";
 import {
   BackIcon,
   hideIconPassword,
-  showIconPassword
+  showIconPassword,
 } from "../../themes/icons";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
   const { isRegister, error } = state.auth;
 
   useEffect(() => {
@@ -50,19 +50,22 @@ export const RegisterScreen = ({ navigation }) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    dispatch(startLoader());
-    await dispatch(
-      authSignUp({
-        first_name,
-        last_name,
-        email,
-        password1,
-        password2
-      })
-    );
-    dispatch(endLoader());
+    if (!loader) {
+      dispatch(startLoader());
+      await dispatch(
+        authSignUp({
+          first_name,
+          last_name,
+          email,
+          password1,
+          password2,
+        })
+      );
+      dispatch(endLoader());
+    }
   };
 
   const BackAction = () => (
@@ -81,14 +84,14 @@ export const RegisterScreen = ({ navigation }) => {
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <View
             style={{
               width: "85%",
               maxWidth: 720,
-              manrginBottom: 25
+              manrginBottom: 25,
             }}
           >
             <Input
@@ -137,7 +140,7 @@ export const RegisterScreen = ({ navigation }) => {
             <Button
               style={{
                 marginVertical: 25,
-                borderRadius: THEME.BUTTON_RADIUS
+                borderRadius: THEME.BUTTON_RADIUS,
               }}
               onPress={onSubmit}
             >
@@ -149,7 +152,7 @@ export const RegisterScreen = ({ navigation }) => {
                 alignSelf: "center",
                 fontSize: 14,
                 textAlign: "center",
-                opacity: 0.7
+                opacity: 0.7,
               }}
             >
               Нажав кнопку "Зарегистрироваться", я соглашаюсь с условиями

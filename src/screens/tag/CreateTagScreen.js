@@ -28,25 +28,28 @@ export const CreateTagScreen = ({ navigation }) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    Keyboard.dismiss();
-    dispatch(startLoader());
+    if (!loader) {
+      Keyboard.dismiss();
+      dispatch(startLoader());
 
-    try {
-      await dispatch(
-        createTag({
-          tag_name,
-        })
-      );
+      try {
+        await dispatch(
+          createTag({
+            tag_name,
+          })
+        );
 
-      if (tagError === null) {
-        setTagName("");
-        navigateBack();
-      }
-    } catch (error) {}
+        if (tagError === null) {
+          setTagName("");
+          navigateBack();
+        }
+      } catch (error) {}
 
-    dispatch(endLoader());
+      dispatch(endLoader());
+    }
   };
 
   const BackAction = () => (

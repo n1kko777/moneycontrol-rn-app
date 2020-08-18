@@ -29,6 +29,7 @@ import { AccountSelector } from "../../components/operation/account/AccountSelec
 export const CreateTransferScreen = ({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
+  const loader = useSelector((store) => store.api.loader);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -86,31 +87,33 @@ export const CreateTransferScreen = ({ route, navigation }) => {
   };
 
   const onSubmit = async () => {
-    try {
-      Keyboard.dismiss();
-      dispatch(startLoader());
+    if (!loader) {
+      try {
+        Keyboard.dismiss();
+        dispatch(startLoader());
 
-      const newTransfer = {
-        transfer_amount: parseFloat(transfer_amount),
-        from_account: selectedFromAccountId,
-        to_account:
-          selectedToAccountOption !== null &&
-          toAccountData[selectedToAccountOption.parentIndex].items[
-            selectedToAccountOption.index
-          ].id,
-        is_active: true,
-      };
+        const newTransfer = {
+          transfer_amount: parseFloat(transfer_amount),
+          from_account: selectedFromAccountId,
+          to_account:
+            selectedToAccountOption !== null &&
+            toAccountData[selectedToAccountOption.parentIndex].items[
+              selectedToAccountOption.index
+            ].id,
+          is_active: true,
+        };
 
-      await dispatch(createTransfer(newTransfer));
+        await dispatch(createTransfer(newTransfer));
 
-      if (transferError === null) {
-        dispatch(getAccount());
-        dispatch(getTransfer());
-        navigateBack();
-      }
+        if (transferError === null) {
+          dispatch(getAccount());
+          dispatch(getTransfer());
+          navigateBack();
+        }
 
-      dispatch(endLoader());
-    } catch (error) {}
+        dispatch(endLoader());
+      } catch (error) {}
+    }
   };
 
   const BackAction = () => (

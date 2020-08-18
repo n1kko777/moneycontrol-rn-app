@@ -5,7 +5,7 @@ import {
   TopNavigation,
   TopNavigationAction,
   Input,
-  Button
+  Button,
 } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,7 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const profileStore = useSelector(store => store.profile);
+  const profileStore = useSelector((store) => store.profile);
   const { loading, profile } = profileStore;
 
   const [first_name, setFirstName] = React.useState("");
@@ -34,15 +34,19 @@ export const CreateProfileScreen = ({ navigation }) => {
       navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
   }, [loading]);
 
+  const loader = useSelector((store) => store.api.loader);
+
   const onSubmit = async () => {
-    dispatch(startLoader());
-    const newProfile = {
-      first_name,
-      last_name,
-      phone
-    };
-    await dispatch(createProfile(newProfile));
-    dispatch(endLoader());
+    if (!loader) {
+      dispatch(startLoader());
+      const newProfile = {
+        first_name,
+        last_name,
+        phone,
+      };
+      await dispatch(createProfile(newProfile));
+      dispatch(endLoader());
+    }
   };
 
   const logoutHandler = async () => {
@@ -60,12 +64,12 @@ export const CreateProfileScreen = ({ navigation }) => {
       [
         {
           text: "Отмена",
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Выйти", onPress: logoutHandler }
+        { text: "Выйти", onPress: logoutHandler },
       ],
       {
-        cancelable: false
+        cancelable: false,
       }
     );
   };
@@ -86,14 +90,14 @@ export const CreateProfileScreen = ({ navigation }) => {
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <View
             style={{
               width: "85%",
               maxWidth: 720,
-              manrginBottom: 25
+              manrginBottom: 25,
             }}
           >
             <Input
@@ -121,7 +125,7 @@ export const CreateProfileScreen = ({ navigation }) => {
             <Button
               style={{
                 marginVertical: 25,
-                borderRadius: THEME.BUTTON_RADIUS
+                borderRadius: THEME.BUTTON_RADIUS,
               }}
               onPress={onSubmit}
             >

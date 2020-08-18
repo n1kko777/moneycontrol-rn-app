@@ -14,6 +14,7 @@ import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
 export const CustomTag = ({ tagData, tagList, setTagList }) => {
   const dispatch = useDispatch();
   const tagInput = React.createRef();
+  const loader = useSelector((store) => store.api.loader);
 
   const { tags } = useSelector((store) => store.tag);
 
@@ -40,7 +41,7 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
 
   const addTag = async () => {
     tagInput.current.blur();
-    if (value.trim().length !== 0) {
+    if (value.trim().length !== 0 && !loader) {
       dispatch(startLoader());
 
       try {

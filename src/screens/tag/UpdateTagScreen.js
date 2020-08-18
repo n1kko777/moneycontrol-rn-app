@@ -30,24 +30,27 @@ export const UpdateTagScreen = ({ route, navigation }) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const loader = useSelector((store) => store.api.loader);
 
   const onSubmit = async () => {
-    Keyboard.dismiss();
-    dispatch(startLoader());
+    if (!loader) {
+      Keyboard.dismiss();
+      dispatch(startLoader());
 
-    try {
-      await dispatch(
-        updateTag(tag.id, {
-          tag_name,
-        })
-      );
-    } catch (error) {}
+      try {
+        await dispatch(
+          updateTag(tag.id, {
+            tag_name,
+          })
+        );
+      } catch (error) {}
 
-    if (tagError === null) {
-      navigateBack();
+      if (tagError === null) {
+        navigateBack();
+      }
+
+      dispatch(endLoader());
     }
-
-    dispatch(endLoader());
   };
 
   const BackAction = () => (

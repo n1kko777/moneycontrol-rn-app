@@ -28,6 +28,7 @@ import { CategorySelector } from "../../components/operation/category/CategorySe
 export const CreateTransactionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
+  const loader = useSelector((store) => store.api.loader);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -70,28 +71,30 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
   );
 
   const onSubmit = async () => {
-    try {
-      Keyboard.dismiss();
-      dispatch(startLoader());
+    if (!loader) {
+      try {
+        Keyboard.dismiss();
+        dispatch(startLoader());
 
-      const newTransaction = {
-        transaction_amount: parseFloat(transaction_amount),
-        account: selectedAccountId,
-        category: selectedCategoryId,
-        tags: tagList.map((elem) => elem.id),
-        is_active: true,
-      };
+        const newTransaction = {
+          transaction_amount: parseFloat(transaction_amount),
+          account: selectedAccountId,
+          category: selectedCategoryId,
+          tags: tagList.map((elem) => elem.id),
+          is_active: true,
+        };
 
-      await dispatch(createTransaction(newTransaction));
+        await dispatch(createTransaction(newTransaction));
 
-      if (transactionError === null) {
-        dispatch(getAccount());
-        dispatch(getTransaction());
-        navigateBack();
-      }
+        if (transactionError === null) {
+          dispatch(getAccount());
+          dispatch(getTransaction());
+          navigateBack();
+        }
 
-      dispatch(endLoader());
-    } catch (error) {}
+        dispatch(endLoader());
+      } catch (error) {}
+    }
   };
 
   const navigateBack = () => {
