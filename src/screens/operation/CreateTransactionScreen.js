@@ -53,7 +53,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
 
   // Category
   const [selectedCategoryId, setSelectedCategoryId] = React.useState(
-    prevItem !== undefined ? prevItem.account : null
+    prevItem !== undefined ? prevItem.category : null
   );
   const isNotCategoryEmpty = selectedCategoryId !== null;
 
