@@ -41,7 +41,10 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
 
   const addTag = async () => {
     tagInput.current.blur();
-    if (value.trim().length !== 0 && !loader) {
+
+    if (tags.map((el) => el.tag_name).includes(value)) {
+      onSelect({ title: value });
+    } else if (value.trim().length !== 0 && !loader) {
       dispatch(startLoader());
 
       try {
