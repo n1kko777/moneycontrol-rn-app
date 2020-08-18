@@ -63,12 +63,47 @@ export const OperationsScreen = ({ navigation, route }) => {
         filterArrayByDate(transactions, startDate, endDate),
         filterArrayByDate(actions, startDate, endDate),
         filterArrayByDate(transfer, startDate, endDate)
-      ).filter((elem) =>
-        elem[filterParam.type] !== undefined
-          ? elem[filterParam.type] == filterParam.id
-          : elem.type === filterParam.type
-      )
-    : prepareOperationData(
+      ).filter((elem) => {
+        switch (filterParam.type) {
+          case "action":
+          case "transaction":
+          case "transfer":
+            return elem.type === filterParam.type;
+
+          case "tag":
+            return (
+              elem.tags !== undefined && elem.tags.includes(filterParam.id)
+            );
+
+          case "category":
+            return (
+              elem.category !== undefined && elem.category === filterParam.id
+            );
+          case "account":
+            return (
+              (elem.account !== undefined && elem.account === filterParam.id) ||
+              (elem.from_account !== undefined &&
+                parseInt(elem.from_account.split(" (pk=")[1]) ===
+                  filterParam.id) ||
+              (elem.to_account !== undefined &&
+                parseInt(elem.to_account.split(" (pk=")[1]) === filterParam.id)
+            );
+
+          case "profile":
+            break;
+
+          default:
+            break;
+        }
+
+        return elem;
+      })
+    : // ).filter((elem) =>
+      //   elem[filterParam.type] !== undefined
+      //     ? elem[filterParam.type] == filterParam.id
+      //     : elem.type === filterParam.type
+      // )
+      prepareOperationData(
         company,
         filterArrayByDate(transactions, startDate, endDate),
         filterArrayByDate(actions, startDate, endDate),
