@@ -6,11 +6,24 @@ import {
   ERROR_ACCOUNT,
   DELETE_ACCOUNT,
   UPDATE_ACCOUNT,
+  SET_CURRENT_ACCOUNT,
+  CLEAR_CURRENT_ACCOUNT,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
+
+// Set current account
+export const setCurrentAccount = (account) => ({
+  type: SET_CURRENT_ACCOUNT,
+  payload: account,
+});
+
+// Clear current account
+export const clearCurrentAccount = () => ({
+  type: CLEAR_CURRENT_ACCOUNT,
+});
 
 // Get account from server
 export const getAccount = () => async (dispatch) => {
@@ -75,7 +88,7 @@ export const createAccount = (account) => async (dispatch) => {
     });
 };
 
-// Create account from server
+// Update account from server
 export const updateAccount = (id, account) => async (dispatch) => {
   dispatch(setLoading());
   const token = await AsyncStorage.getItem("AUTH_TOKEN");

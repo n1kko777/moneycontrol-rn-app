@@ -16,7 +16,10 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { createAccount } from "../../store/actions/accountAction";
+import {
+  createAccount,
+  clearCurrentAccount,
+} from "../../store/actions/accountAction";
 import { Keyboard } from "react-native";
 
 export const CreateAccountScreen = ({ navigation, route }) => {
@@ -32,6 +35,7 @@ export const CreateAccountScreen = ({ navigation, route }) => {
   const [balance, setBalance] = React.useState("0");
 
   const navigateBack = () => {
+    prevItem === undefined && dispatch(clearCurrentAccount());
     navigation.goBack();
   };
 

@@ -12,7 +12,10 @@ import {
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { createAction, getAction } from "../../store/actions/actionAction";
-import { getAccount } from "../../store/actions/accountAction";
+import {
+  getAccount,
+  clearCurrentAccount,
+} from "../../store/actions/accountAction";
 
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
@@ -21,11 +24,15 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { CustomTag } from "../../components/operation/tag/CustomTag";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
 import { CategorySelector } from "../../components/operation/category/CategorySelector";
+import { clearCurrentCategory } from "../../store/actions/categoryAction";
 
 export const CreateActionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
   const loader = useSelector((store) => store.api.loader);
+
+  const currentAccount = useSelector((store) => store.account.current);
+  const currentCateory = useSelector((store) => store.category.current);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -96,6 +103,8 @@ export const CreateActionScreen = ({ route, navigation }) => {
   };
 
   const navigateBack = () => {
+    currentAccount !== null && dispatch(clearCurrentAccount());
+    currentCateory !== null && dispatch(clearCurrentCategory());
     navigation.goBack();
   };
 

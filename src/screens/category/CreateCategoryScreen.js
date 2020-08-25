@@ -16,7 +16,10 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { createCategory } from "../../store/actions/categoryAction";
+import {
+  createCategory,
+  clearCurrentCategory,
+} from "../../store/actions/categoryAction";
 import { Keyboard } from "react-native";
 
 export const CreateCategoryScreen = ({ route, navigation }) => {
@@ -28,6 +31,7 @@ export const CreateCategoryScreen = ({ route, navigation }) => {
     prevItem !== undefined ? prevItem.category_name : ""
   );
   const navigateBack = () => {
+    prevItem === undefined && dispatch(clearCurrentCategory());
     navigation.goBack();
   };
   const loader = useSelector((store) => store.api.loader);

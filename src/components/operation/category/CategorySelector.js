@@ -10,7 +10,7 @@ export const CategorySelector = ({
   navigation,
 }) => {
   const categoryInput = React.useRef(null);
-  const { categories } = useSelector((store) => store.category);
+  const { categories, current } = useSelector((store) => store.category);
 
   const categoriesData = categories
     .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
@@ -30,6 +30,14 @@ export const CategorySelector = ({
     setValue(item.title);
     setSelectedId(item.id);
   };
+
+  React.useEffect(() => {
+    current !== null &&
+      onSelect({
+        title: current.category_name,
+        id: current.id,
+      });
+  }, [current]);
 
   const onChangeText = (query) => {
     setValue(query);
@@ -53,7 +61,6 @@ export const CategorySelector = ({
       onSelect({ title: value });
     } else if (value.trim().length !== 0) {
       navigation.navigate("CreateCategory", { category_name: value });
-      clearInput();
     } else {
       onChangeText("");
     }

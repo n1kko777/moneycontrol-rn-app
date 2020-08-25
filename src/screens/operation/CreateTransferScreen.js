@@ -23,13 +23,18 @@ import {
   getTransfer,
 } from "../../store/actions/transferAction";
 
-import { getAccount } from "../../store/actions/accountAction";
+import {
+  getAccount,
+  clearCurrentAccount,
+} from "../../store/actions/accountAction";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
 
 export const CreateTransferScreen = ({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
   const loader = useSelector((store) => store.api.loader);
+
+  const currentAccount = useSelector((store) => store.account.current);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -83,6 +88,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
   const isNotToAccountEmpty = selectedToAccountOption !== null;
 
   const navigateBack = () => {
+    currentAccount !== null && dispatch(clearCurrentAccount());
     navigation.goBack();
   };
 

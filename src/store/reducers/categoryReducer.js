@@ -6,10 +6,13 @@ import {
   CLEAR_CATEGORY,
   DELETE_CATEGORY,
   UPDATE_CATEGORY,
+  SET_CURRENT_CATEGORY,
+  CLEAR_CURRENT_CATEGORY,
 } from "../types";
 
 const initialState = {
   categories: [],
+  current: null,
   error: null,
   loading: false,
 };
@@ -17,6 +20,18 @@ const initialState = {
 export const categoryReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
+    case SET_CURRENT_CATEGORY:
+      console.log("case SET_CURRENT_CATEGORY:");
+      return {
+        ...state,
+        current: payload,
+      };
+    case CLEAR_CURRENT_CATEGORY:
+      console.log("case CLEAR_CURRENT_CATEGORY:");
+      return {
+        ...state,
+        current: null,
+      };
     case GET_CATEGORY:
       console.log("case GET_CATEGORY:");
       return {
@@ -30,6 +45,7 @@ export const categoryReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: [payload, ...state.categories],
+        current: payload,
         loading: false,
         error: null,
       };
@@ -58,6 +74,7 @@ export const categoryReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: [],
+        current: null,
         loading: false,
         error: null,
       };

@@ -12,7 +12,7 @@ export const AccountSelector = ({
 }) => {
   const accountInput = React.useRef(null);
   const { profile } = useSelector((store) => store.profile);
-  const { accounts } = useSelector((store) => store.account);
+  const { accounts, current } = useSelector((store) => store.account);
   const accountData = accounts
     .filter((elem) => elem.profile == profile.id)
     .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
@@ -32,6 +32,14 @@ export const AccountSelector = ({
     setValue(item.title);
     setSelectedId(item.id);
   };
+
+  React.useEffect(() => {
+    current !== null &&
+      onSelect({
+        title: `${current.account_name} (${splitToDigits(current.balance)} ₽)`,
+        id: current.id,
+      });
+  }, [current]);
 
   const onChangeText = (query) => {
     setValue(query);
@@ -55,7 +63,6 @@ export const AccountSelector = ({
       onSelect({ title: value });
     } else if (value.trim().length !== 0) {
       navigation.navigate("CreateAccount", { account_name: value });
-      clearInput();
     } else {
       onChangeText("");
     }

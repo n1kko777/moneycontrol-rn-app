@@ -6,10 +6,13 @@ import {
   CLEAR_ACCOUNT,
   DELETE_ACCOUNT,
   UPDATE_ACCOUNT,
+  SET_CURRENT_ACCOUNT,
+  CLEAR_CURRENT_ACCOUNT,
 } from "../types";
 
 const initialState = {
   accounts: [],
+  current: null,
   error: null,
   loading: false,
 };
@@ -17,6 +20,18 @@ const initialState = {
 export const accountReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
+    case SET_CURRENT_ACCOUNT:
+      console.log("case SET_CURRENT_ACCOUNT:");
+      return {
+        ...state,
+        current: payload,
+      };
+    case CLEAR_CURRENT_ACCOUNT:
+      console.log("case CLEAR_CURRENT_ACCOUNT:");
+      return {
+        ...state,
+        current: null,
+      };
     case GET_ACCOUNT:
       console.log("case GET_ACCOUNT:");
       return {
@@ -30,6 +45,7 @@ export const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         accounts: [payload, ...state.accounts],
+        current: payload,
         loading: false,
         error: null,
       };
@@ -56,6 +72,7 @@ export const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         accounts: [],
+        current: null,
         loading: false,
         error: null,
       };

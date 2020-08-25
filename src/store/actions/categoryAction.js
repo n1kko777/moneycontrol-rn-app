@@ -6,11 +6,24 @@ import {
   ERROR_CATEGORY,
   DELETE_CATEGORY,
   UPDATE_CATEGORY,
+  SET_CURRENT_CATEGORY,
+  CLEAR_CURRENT_CATEGORY,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
+
+// Set current category
+export const setCurrentCategory = (category) => ({
+  type: SET_CURRENT_CATEGORY,
+  payload: category,
+});
+
+// Clear current account
+export const clearCurrentCategory = () => ({
+  type: CLEAR_CURRENT_CATEGORY,
+});
 
 // Get category from server
 export const getCategory = () => async (dispatch) => {
@@ -75,7 +88,7 @@ export const createCategory = (category) => async (dispatch) => {
     });
 };
 
-// Create category from server
+// Update category from server
 export const updateCategory = (id, category) => async (dispatch) => {
   dispatch(setLoading());
   const token = await AsyncStorage.getItem("AUTH_TOKEN");

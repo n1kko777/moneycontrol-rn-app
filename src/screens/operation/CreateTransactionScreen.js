@@ -18,17 +18,24 @@ import {
   createTransaction,
   getTransaction,
 } from "../../store/actions/transactionAction";
-import { getAccount } from "../../store/actions/accountAction";
+import {
+  getAccount,
+  clearCurrentAccount,
+} from "../../store/actions/accountAction";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { CustomTag } from "../../components/operation/tag/CustomTag";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
 import { CategorySelector } from "../../components/operation/category/CategorySelector";
+import { clearCurrentCategory } from "../../store/actions/categoryAction";
 
 export const CreateTransactionScreen = ({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
   const loader = useSelector((store) => store.api.loader);
+
+  const currentAccount = useSelector((store) => store.account.current);
+  const currentCateory = useSelector((store) => store.category.current);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -98,6 +105,8 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
   };
 
   const navigateBack = () => {
+    currentAccount && dispatch(clearCurrentAccount());
+    currentCateory && dispatch(clearCurrentCategory());
     navigation.goBack();
   };
   const BackAction = () => (
