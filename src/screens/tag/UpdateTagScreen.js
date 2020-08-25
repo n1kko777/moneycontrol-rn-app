@@ -28,7 +28,7 @@ export const UpdateTagScreen = ({ route, navigation }) => {
   const [tag_name, setTagName] = React.useState(tag.tag_name);
 
   const navigateBack = () => {
-    navigation.goBack();
+    navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
 

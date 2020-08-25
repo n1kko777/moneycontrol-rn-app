@@ -48,7 +48,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [isVisiblePassword2, setIsVisiblePassword2] = React.useState(false);
 
   const navigateBack = () => {
-    navigation.goBack();
+    navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
 

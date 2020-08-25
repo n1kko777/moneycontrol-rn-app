@@ -96,7 +96,7 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
                 .filter((acc) => acc.profile == profile.id)
                 .reduce((sum, next) => (sum += +next.balance), 0) == 0
             ) {
-              navigation.goBack();
+              navigation.goBack(null);
               await dispatch(startLoader());
               await removeProfileFromCompany(profile.id, profile.phone)
                 .then((res) => {

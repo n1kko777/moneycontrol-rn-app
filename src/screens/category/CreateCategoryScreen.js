@@ -32,7 +32,7 @@ export const CreateCategoryScreen = ({ route, navigation }) => {
   );
   const navigateBack = () => {
     prevItem === undefined && dispatch(clearCurrentCategory());
-    navigation.goBack();
+    navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
 

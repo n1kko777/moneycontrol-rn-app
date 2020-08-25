@@ -36,7 +36,7 @@ export const CreateAccountScreen = ({ navigation, route }) => {
 
   const navigateBack = () => {
     prevItem === undefined && dispatch(clearCurrentAccount());
-    navigation.goBack();
+    navigation.goBack(null);
   };
 
   const onSubmit = async () => {

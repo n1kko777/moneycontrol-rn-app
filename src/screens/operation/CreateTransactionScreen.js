@@ -107,7 +107,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
   const navigateBack = () => {
     currentAccount && dispatch(clearCurrentAccount());
     currentCateory && dispatch(clearCurrentCategory());
-    navigation.goBack();
+    navigation.goBack(null);
   };
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

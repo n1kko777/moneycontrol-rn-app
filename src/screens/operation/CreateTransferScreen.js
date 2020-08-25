@@ -89,7 +89,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
 
   const navigateBack = () => {
     currentAccount !== null && dispatch(clearCurrentAccount());
-    navigation.goBack();
+    navigation.goBack(null);
   };
 
   const onSubmit = async () => {

@@ -23,7 +23,7 @@ export const ResetPassword = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
 
   const navigateBack = () => {
-    navigation.goBack();
+    navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
 

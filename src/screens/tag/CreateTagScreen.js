@@ -26,7 +26,7 @@ export const CreateTagScreen = ({ navigation }) => {
   const [tag_name, setTagName] = React.useState("");
 
   const navigateBack = () => {
-    navigation.goBack();
+    navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
 

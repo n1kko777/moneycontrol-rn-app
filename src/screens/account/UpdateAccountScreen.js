@@ -29,7 +29,7 @@ export const UpdateAccountScreen = ({ route, navigation }) => {
   const [balance, setBalance] = React.useState(account.balance);
 
   const navigateBack = () => {
-    navigation.goBack();
+    navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
 

@@ -105,7 +105,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
   const navigateBack = () => {
     currentAccount !== null && dispatch(clearCurrentAccount());
     currentCateory !== null && dispatch(clearCurrentCategory());
-    navigation.goBack();
+    navigation.goBack(null);
   };
 
   const BackAction = () => (
