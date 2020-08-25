@@ -162,6 +162,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
               selectedId={selectedFromAccountId}
               setSelectedId={setSelectedFromAccountId}
               isNotEmpty={isNotFromAccountEmpty}
+              navigation={navigation}
             />
             <Select
               data={toAccountData}

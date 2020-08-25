@@ -19,12 +19,16 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { createAccount } from "../../store/actions/accountAction";
 import { Keyboard } from "react-native";
 
-export const CreateAccountScreen = ({ navigation }) => {
+export const CreateAccountScreen = ({ navigation, route }) => {
+  const { account_name: accountName } = route.params;
+
   const dispatch = useDispatch();
   const { error: accountError } = useSelector((store) => store.account);
   const loader = useSelector((store) => store.api.loader);
 
-  const [account_name, setAccountName] = React.useState("");
+  const [account_name, setAccountName] = React.useState(
+    accountName !== undefined ? accountName : ""
+  );
   const [balance, setBalance] = React.useState("0");
 
   const navigateBack = () => {

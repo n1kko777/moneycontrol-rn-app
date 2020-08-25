@@ -15,7 +15,7 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 export const CategoryListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
 
-  const swipeableRow = React.createRef();
+  const swipeableRow = React.useRef(null);
 
   const close = () => {
     swipeableRow.current.close();

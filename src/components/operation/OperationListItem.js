@@ -24,7 +24,7 @@ import { getAccount } from "../../store/actions/accountAction";
 export const OperationListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
 
-  const swipeableRow = React.createRef();
+  const swipeableRow = React.useRef(null);
 
   const close = () => {
     swipeableRow.current.close();

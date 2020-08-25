@@ -13,7 +13,7 @@ import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
 
 export const CustomTag = ({ tagData, tagList, setTagList }) => {
   const dispatch = useDispatch();
-  const tagInput = React.createRef();
+  const tagInput = React.useRef(null);
   const loader = useSelector((store) => store.api.loader);
 
   const { tags } = useSelector((store) => store.tag);

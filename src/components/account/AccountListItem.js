@@ -20,7 +20,7 @@ export const AccountListItem = ({ item, index, dataList, navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const swipeableRow = React.createRef();
+  const swipeableRow = React.useRef(null);
 
   const close = () => {
     swipeableRow.current.close();

@@ -142,6 +142,7 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
               selectedId={selectedAccountId}
               setSelectedId={setSelectedAccountId}
               isNotEmpty={isNotAccountEmpty}
+              navigation={navigation}
             />
             <CategorySelector
               selectedId={selectedCategoryId}
