@@ -147,6 +147,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
               selectedId={selectedCategoryId}
               setSelectedId={setSelectedCategoryId}
               isNotEmpty={isNotCategoryEmpty}
+              navigation={navigation}
             />
             <CustomTag
               tagData={tagData}

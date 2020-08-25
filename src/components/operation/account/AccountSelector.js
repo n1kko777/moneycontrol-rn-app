@@ -33,12 +33,6 @@ export const AccountSelector = ({
     setSelectedId(item.id);
   };
 
-  const onClearSelect = () => {
-    setValue("");
-    setData(accountData);
-    setSelectedId(null);
-  };
-
   const onChangeText = (query) => {
     setValue(query);
     setData(
@@ -61,7 +55,7 @@ export const AccountSelector = ({
       onSelect({ title: value });
     } else if (value.trim().length !== 0) {
       navigation.navigate("CreateAccount", { account_name: value });
-      onClearSelect();
+      clearInput();
     } else {
       onChangeText("");
     }
@@ -71,8 +65,6 @@ export const AccountSelector = ({
     <Autocomplete
       value={value}
       data={data}
-      icon={isNotEmpty && CloseIcon}
-      onIconPress={clearInput}
       onChangeText={onChangeText}
       onSelect={onSelect}
       placeholder="Укажите счет"
@@ -81,7 +73,7 @@ export const AccountSelector = ({
         value.trim().length !== 0 &&
         (selectedId !== null ? CloseIcon : AddSmallIcon)
       }
-      onIconPress={selectedId !== null ? onClearSelect : addAccount}
+      onIconPress={selectedId !== null ? clearInput : addAccount}
       onSubmitEditing={addAccount}
       ref={accountInput}
       status={isNotEmpty ? "success" : "danger"}

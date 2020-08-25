@@ -19,12 +19,14 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 import { createCategory } from "../../store/actions/categoryAction";
 import { Keyboard } from "react-native";
 
-export const CreateCategoryScreen = ({ navigation }) => {
+export const CreateCategoryScreen = ({ route, navigation }) => {
+  const prevItem = route.params;
   const dispatch = useDispatch();
   const { error: categoryError } = useSelector((store) => store.category);
 
-  const [category_name, setCategoryName] = React.useState("");
-
+  const [category_name, setCategoryName] = React.useState(
+    prevItem !== undefined ? prevItem.category_name : ""
+  );
   const navigateBack = () => {
     navigation.goBack();
   };

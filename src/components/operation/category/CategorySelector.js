@@ -1,9 +1,15 @@
 import React from "react";
 import { Autocomplete } from "@ui-kitten/components";
-import { CloseIcon } from "../../../themes/icons";
+import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
 import { useSelector } from "react-redux";
 
-export const CategorySelector = ({ selectedId, setSelectedId, isNotEmpty }) => {
+export const CategorySelector = ({
+  selectedId,
+  setSelectedId,
+  isNotEmpty,
+  navigation,
+}) => {
+  const categoryInput = React.useRef(null);
   const { categories } = useSelector((store) => store.category);
 
   const categoriesData = categories
@@ -16,7 +22,7 @@ export const CategorySelector = ({ selectedId, setSelectedId, isNotEmpty }) => {
   const [value, setValue] = React.useState(
     selectedId !== null
       ? categoriesData.find((el) => el.id === selectedId).title
-      : null
+      : ""
   );
   const [data, setData] = React.useState(categoriesData);
 
@@ -40,16 +46,34 @@ export const CategorySelector = ({ selectedId, setSelectedId, isNotEmpty }) => {
     setSelectedId(null);
   };
 
+  const addCategory = () => {
+    categoryInput.current.blur();
+
+    if (categories.map((el) => el.category_name).includes(value)) {
+      onSelect({ title: value });
+    } else if (value.trim().length !== 0) {
+      navigation.navigate("CreateCategory", { category_name: value });
+      clearInput();
+    } else {
+      onChangeText("");
+    }
+  };
+
   return (
     <Autocomplete
       value={value}
       data={data}
-      icon={isNotEmpty && CloseIcon}
-      onIconPress={clearInput}
       onChangeText={onChangeText}
       onSelect={onSelect}
       placeholder="Укажите категорию"
       style={{ marginVertical: 10 }}
+      icon={
+        value.trim().length !== 0 &&
+        (selectedId !== null ? CloseIcon : AddSmallIcon)
+      }
+      onIconPress={selectedId !== null ? clearInput : addCategory}
+      onSubmitEditing={addCategory}
+      ref={categoryInput}
       status={isNotEmpty ? "success" : "danger"}
     />
   );
