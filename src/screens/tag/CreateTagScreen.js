@@ -56,6 +56,14 @@ export const CreateTagScreen = ({ navigation }) => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
   return (
     <ScreenTemplate>
       <>
@@ -79,6 +87,7 @@ export const CreateTagScreen = ({ navigation }) => {
             }}
           >
             <Input
+              ref={inputRef}
               value={tag_name}
               placeholder="Название тега"
               onChangeText={setTagName}

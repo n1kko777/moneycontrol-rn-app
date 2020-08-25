@@ -32,6 +32,8 @@ export const ProfileScreen = ({ navigation }) => {
   const [isEdit, setIsEdit] = React.useState(false);
   const loader = useSelector((store) => store.api.loader);
 
+  const inputRef = React.useRef(null);
+
   const onSubmit = async () => {
     if (isEdit && !loader) {
       dispatch(startLoader());
@@ -52,6 +54,7 @@ export const ProfileScreen = ({ navigation }) => {
       setIsEdit(false);
     } else {
       setIsEdit(true);
+      inputRef.current.focus();
     }
   };
 
@@ -93,6 +96,7 @@ export const ProfileScreen = ({ navigation }) => {
             }}
           >
             <Input
+              ref={inputRef}
               value={first_name}
               placeholder="Имя"
               onChangeText={setFirstName}

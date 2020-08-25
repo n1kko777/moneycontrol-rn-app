@@ -62,6 +62,14 @@ export const CreateCategoryScreen = ({ route, navigation }) => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
   return (
     <ScreenTemplate>
       <>
@@ -85,6 +93,7 @@ export const CreateCategoryScreen = ({ route, navigation }) => {
             }}
           >
             <Input
+              ref={inputRef}
               value={category_name}
               placeholder="Название категории"
               onChangeText={setCategoryName}

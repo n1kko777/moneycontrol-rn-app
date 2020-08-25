@@ -67,6 +67,14 @@ export const CreateAccountScreen = ({ navigation, route }) => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
   return (
     <ScreenTemplate>
       <>
@@ -90,6 +98,7 @@ export const CreateAccountScreen = ({ navigation, route }) => {
             }}
           >
             <Input
+              ref={inputRef}
               value={account_name}
               placeholder="Название счета"
               onChangeText={setAccountName}

@@ -24,6 +24,14 @@ export const CreateProfileScreen = ({ navigation }) => {
   const profileStore = useSelector((store) => store.profile);
   const { loading, profile } = profileStore;
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
   const [first_name, setFirstName] = React.useState("");
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
@@ -101,6 +109,7 @@ export const CreateProfileScreen = ({ navigation }) => {
             }}
           >
             <Input
+              ref={inputRef}
               value={first_name}
               placeholder="Имя"
               onChangeText={setFirstName}

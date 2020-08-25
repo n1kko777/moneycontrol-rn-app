@@ -45,6 +45,14 @@ export const InviteMemberScreen = ({ navigation }) => {
     }
   };
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
   return (
     <ScreenTemplate>
       <Toolbar
@@ -70,6 +78,7 @@ export const InviteMemberScreen = ({ navigation }) => {
           }}
         >
           <Input
+            ref={inputRef}
             value={profile_id}
             placeholder="ID пользователя"
             keyboardType="number-pad"

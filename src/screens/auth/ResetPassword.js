@@ -44,6 +44,14 @@ export const ResetPassword = ({ navigation }) => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
   return (
     <ScreenTemplate>
       <>
@@ -67,6 +75,7 @@ export const ResetPassword = ({ navigation }) => {
             }}
           >
             <Input
+              ref={inputRef}
               value={email}
               autoCapitalize="none"
               placeholder="Почта"

@@ -72,6 +72,14 @@ export const RegisterScreen = ({ navigation }) => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
   return (
     <ScreenTemplate>
       <>
@@ -95,6 +103,7 @@ export const RegisterScreen = ({ navigation }) => {
             }}
           >
             <Input
+              ref={inputRef}
               value={first_name}
               placeholder="Имя"
               onChangeText={setFirstName}
