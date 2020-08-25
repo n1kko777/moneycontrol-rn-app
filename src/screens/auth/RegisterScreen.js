@@ -25,8 +25,8 @@ import { startLoader, endLoader } from "../../store/actions/apiAction";
 
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { isRegister, error } = state.auth;
+  const store = useSelector((store) => store);
+  const { isRegister, error } = store.auth;
 
   useEffect(() => {
     if (error === null && isRegister) {

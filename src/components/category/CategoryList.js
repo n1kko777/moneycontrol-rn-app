@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { CategoryListItem } from "./CategoryListItem";
 
 export const CategoryList = ({ navigation }) => {
-  const { categories } = useSelector((state) => state.category);
+  const { categories } = useSelector((store) => store.category);
   const dataList = categories;
 
   const keyExtractor = (item) => item.id.toString();

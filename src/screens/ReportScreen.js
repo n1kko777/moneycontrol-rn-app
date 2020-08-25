@@ -30,7 +30,7 @@ export const ReportScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((state) => state);
+  const store = useSelector((store) => store);
 
   const { transactions } = store.transaction;
   const { actions } = store.action;

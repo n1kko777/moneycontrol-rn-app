@@ -16,9 +16,9 @@ import { Keyboard } from "react-native";
 
 export const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { isAuth } = state.auth;
-  const { profile } = state.profile;
+  const store = useSelector((store) => store);
+  const { isAuth } = store.auth;
+  const { profile } = store.profile;
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");

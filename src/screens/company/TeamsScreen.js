@@ -21,10 +21,10 @@ export const TeamsScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const state = useSelector((state) => state);
-  const { profile } = state.profile;
-  const { accounts } = state.account;
-  const { company } = state.company;
+  const store = useSelector((store) => store);
+  const { profile } = store.profile;
+  const { accounts } = store.account;
+  const { company } = store.company;
 
   const companyProfileListData =
     company !== undefined && company.hasOwnProperty("profiles")

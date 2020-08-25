@@ -31,18 +31,18 @@ export const OperationsScreen = ({ navigation, route }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const state = useSelector((state) => state);
+  const store = useSelector((store) => store);
 
-  const { startDate, endDate } = state.calendar;
+  const { startDate, endDate } = store.calendar;
 
-  const { profile } = state.profile;
-  const { company } = state.company;
+  const { profile } = store.profile;
+  const { company } = store.company;
 
-  const { accounts } = state.account;
+  const { accounts } = store.account;
 
-  const { transactions } = state.transaction;
-  const { actions } = state.action;
-  const { transfer } = state.transfer;
+  const { transactions } = store.transaction;
+  const { actions } = store.action;
+  const { transfer } = store.transfer;
 
   const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
 

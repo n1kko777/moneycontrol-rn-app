@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 import { AccountListItem } from "./AccountListItem";
 
 export const AccountList = ({ navigation }) => {
-  const { profile } = useSelector((state) => state.profile);
-  const { accounts } = useSelector((state) => state.account);
+  const { profile } = useSelector((store) => store.profile);
+  const { accounts } = useSelector((store) => store.account);
   const dataList = accounts.filter(
     (acc) => profile !== null && acc.profile == profile.id
   );

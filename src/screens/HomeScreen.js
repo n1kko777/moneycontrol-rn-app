@@ -32,17 +32,17 @@ export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const state = useSelector((state) => state);
+  const store = useSelector((store) => store);
 
-  const { startDate, endDate } = state.calendar;
-  const { profile } = state.profile;
-  const { company } = state.company;
-  const { accounts } = state.account;
-  const { transactions } = state.transaction;
-  const { actions } = state.action;
-  const { transfer } = state.transfer;
-  const { categories } = state.category;
-  const { tags } = state.tag;
+  const { startDate, endDate } = store.calendar;
+  const { profile } = store.profile;
+  const { company } = store.company;
+  const { accounts } = store.account;
+  const { transactions } = store.transaction;
+  const { actions } = store.action;
+  const { transfer } = store.transfer;
+  const { categories } = store.category;
+  const { tags } = store.tag;
 
   const homeListData = prepareHomeData(
     profile,

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { StyleSheet, View } from "react-native";
 
 export const LoadingSpinner = () => {
-  const { loader } = useSelector((state) => state.api);
+  const { loader } = useSelector((store) => store.api);
 
   const renderModalElement = () => (
     <View style={styles.modalView}>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { TagListItem } from "./TagListItem";
 
 export const TagList = ({ navigation }) => {
-  const { tags } = useSelector((state) => state.tag);
+  const { tags } = useSelector((store) => store.tag);
   const dataList = tags;
 
   const keyExtractor = (item) => item.id.toString();
