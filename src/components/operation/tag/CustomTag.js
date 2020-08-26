@@ -19,9 +19,7 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
   const { tags } = useSelector((store) => store.tag);
 
   const [value, setValue] = React.useState("");
-  const [data, setData] = React.useState(
-    tagData.sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
-  );
+  const [data, setData] = React.useState(tagData);
 
   const onChangeText = (query) => {
     setValue(query);

@@ -73,8 +73,7 @@ export const prepareHomeData = (
             balance: elem.balance,
             type: "account",
             last_updated: elem.last_updated,
-          }))
-          .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated)),
+          })),
       });
 
     const companyProfileListData =
