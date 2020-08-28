@@ -15,13 +15,11 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { createTag } from "../../store/actions/tagAction";
+import { createTagAction } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
 export const CreateTagScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { error: tagError } = useSelector((store) => store.tag);
 
   const [tag_name, setTagName] = React.useState("");
 
@@ -29,26 +27,22 @@ export const CreateTagScreen = ({ navigation }) => {
     navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
-
-  const onSubmit = async () => {
+  const onReset = () => {
+    setTagName("");
+    navigateBack();
+  };
+  const onSubmit = () => {
     if (!loader) {
       Keyboard.dismiss();
-      dispatch(startLoader());
 
-      try {
-        await dispatch(
-          createTag({
+      dispatch(
+        createTagAction(
+          {
             tag_name,
-          })
-        );
-
-        if (tagError === null) {
-          setTagName("");
-          navigateBack();
-        }
-      } catch (error) {}
-
-      dispatch(endLoader());
+          },
+          onReset
+        )
+      );
     }
   };
 

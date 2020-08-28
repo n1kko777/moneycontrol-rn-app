@@ -17,7 +17,6 @@ export const actionReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case GET_ACTION:
-      console.log("case GET_ACTION:");
       return {
         ...state,
         actions: payload,
@@ -25,7 +24,6 @@ export const actionReducer = (state = initialState, action) => {
         error: null,
       };
     case CREATE_ACTION:
-      console.log("case CREATE_ACTION:");
       return {
         ...state,
         actions: [payload, ...state.actions],
@@ -33,7 +31,6 @@ export const actionReducer = (state = initialState, action) => {
         error: null,
       };
     case DELETE_ACTION:
-      console.log("case DELETE_ACTION:");
       return {
         ...state,
         actions: state.actions.filter((action) => action.id !== payload),
@@ -41,7 +38,6 @@ export const actionReducer = (state = initialState, action) => {
         error: null,
       };
     case CLEAR_ACTION:
-      console.log("case CLEAR_ACTION:");
       return {
         ...state,
         actions: [],
@@ -49,8 +45,6 @@ export const actionReducer = (state = initialState, action) => {
         error: null,
       };
     case LOADING_ACTION:
-      console.log("==========================");
-      console.log("case LOADING_ACTION:");
       return {
         ...state,
         loading: true,
@@ -58,7 +52,6 @@ export const actionReducer = (state = initialState, action) => {
       };
 
     case ERROR_ACTION:
-      console.log("ERROR_ACTION : " + payload);
       return {
         ...state,
         loading: false,

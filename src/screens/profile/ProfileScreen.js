@@ -9,14 +9,12 @@ import {
 } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { updateImageProfile } from "../../store/actions/profileAction";
-
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { THEME } from "../../themes/themes";
 
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { updateImageProfileAction } from "../../store/actions/apiAction";
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
 
 export const ProfileScreen = ({ navigation }) => {
@@ -34,10 +32,12 @@ export const ProfileScreen = ({ navigation }) => {
 
   const inputRef = React.useRef(null);
 
-  const onSubmit = async () => {
-    if (isEdit && !loader) {
-      dispatch(startLoader());
+  const onSuccess = () => {
+    setIsEdit(false);
+  };
 
+  const onSubmit = () => {
+    if (isEdit && !loader) {
       let data = new FormData();
       data.append("image", {
         uri: imageUrl,
@@ -49,9 +49,15 @@ export const ProfileScreen = ({ navigation }) => {
       data.append("last_name", last_name);
       data.append("phone", phone);
 
-      await dispatch(updateImageProfile(data, profile.id));
-      dispatch(endLoader());
-      setIsEdit(false);
+      dispatch(
+        updateImageProfileAction(
+          {
+            id: profile.id,
+            data,
+          },
+          onSuccess
+        )
+      );
     } else {
       setIsEdit(true);
       inputRef.current.focus();

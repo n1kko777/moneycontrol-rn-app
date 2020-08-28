@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Layout,
   TopNavigation,
@@ -10,41 +10,24 @@ import {
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { useDispatch, useSelector } from "react-redux";
-import { createCompany } from "../../store/actions/companyAction";
-import { updateProfile, getProfile } from "../../store/actions/profileAction";
 import { logout } from "../../store/actions/authAction";
 import { Alert } from "react-native";
 
 import { LogoutIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { createCompanyAction } from "../../store/actions/apiAction";
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const store = useSelector((store) => store);
-  const {
-    profile: profileStore,
-    company: companyStore,
-    auth: authUserStore,
-  } = store;
-
-  const { isAuth } = authUserStore;
+  const { profile: profileStore } = store;
   const { profile } = profileStore;
-  const { company } = companyStore;
 
   const [companyName, setCompanyName] = React.useState("");
-  const [companyId, setCompanyId] = React.useState("");
-
-  useEffect(() => {
-    dispatch(endLoader());
-    isAuth && profile.company !== null && navigation.navigate("Home");
-  }, [company]);
 
   const logoutHandler = async () => {
-    dispatch(endLoader());
-    await dispatch(logout()).then(() => {
-      navigation.navigate("Login");
-    });
+    await navigation.navigate("Login");
+    dispatch(logout());
   };
 
   const navigateLogout = () => {
@@ -68,13 +51,13 @@ export const CompanyManagerScreen = ({ navigation }) => {
     <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
   );
 
-  const createCompanyHandler = async () => {
-    dispatch(startLoader());
+  const onSuccess = () => {
+    navigation.navigate("Home");
+  };
+
+  const createCompanyHandler = () => {
     const company = { company_name: companyName };
-    await dispatch(createCompany(company)).then(() => {
-      dispatch(getProfile());
-    });
-    dispatch(endLoader());
+    dispatch(createCompanyAction(company, onSuccess));
   };
 
   return (

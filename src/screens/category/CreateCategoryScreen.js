@@ -15,17 +15,13 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import {
-  createCategory,
-  clearCurrentCategory,
-} from "../../store/actions/categoryAction";
+import { createCategoryAction } from "../../store/actions/apiAction";
+import { clearCurrentCategory } from "../../store/actions/categoryAction";
 import { Keyboard } from "react-native";
 
 export const CreateCategoryScreen = ({ route, navigation }) => {
   const prevItem = route.params;
   const dispatch = useDispatch();
-  const { error: categoryError } = useSelector((store) => store.category);
 
   const [category_name, setCategoryName] = React.useState(
     prevItem !== undefined ? prevItem.category_name : ""
@@ -35,26 +31,21 @@ export const CreateCategoryScreen = ({ route, navigation }) => {
     navigation.goBack(null);
   };
   const loader = useSelector((store) => store.api.loader);
-
-  const onSubmit = async () => {
+  const onReset = () => {
+    setCategoryName("");
+    navigateBack();
+  };
+  const onSubmit = () => {
     if (!loader) {
       Keyboard.dismiss();
-      dispatch(startLoader());
-
-      try {
-        await dispatch(
-          createCategory({
+      dispatch(
+        createCategoryAction(
+          {
             category_name,
-          })
-        );
-
-        if (categoryError === null) {
-          setCategoryName("");
-          navigateBack();
-        }
-      } catch (error) {}
-
-      dispatch(endLoader());
+          },
+          onReset
+        )
+      );
     }
   };
 

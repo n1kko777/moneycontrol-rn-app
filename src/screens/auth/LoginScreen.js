@@ -8,10 +8,11 @@ import { THEME } from "../../themes/themes";
 import { hideIconPassword, showIconPassword } from "../../themes/icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import { authLogin } from "../../store/actions/authAction";
-import { getProfile } from "../../store/actions/profileAction";
 
-import { startLoader, endLoader } from ".././../store/actions/apiAction";
+import {
+  getProfileAction,
+  authLoginAction,
+} from ".././../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
 export const LoginScreen = ({ navigation }) => {
@@ -28,9 +29,7 @@ export const LoginScreen = ({ navigation }) => {
   const isAuthHandler = async () => {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
     if (token !== null) {
-      dispatch(startLoader());
-      await dispatch(getProfile());
-      dispatch(endLoader());
+      dispatch(getProfileAction());
     }
   };
 
@@ -49,11 +48,9 @@ export const LoginScreen = ({ navigation }) => {
   }, [profile]);
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
-      dispatch(startLoader());
-      await dispatch(authLogin(email, password));
-      dispatch(endLoader());
+      dispatch(authLoginAction(email, password));
     }
   };
 

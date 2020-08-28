@@ -19,11 +19,7 @@ import { CustomDatePicker } from "../components/CustomDatePicker";
 
 import { filterArrayByDate } from "../filterArrayByDate";
 
-import {
-  getDataDispatcher,
-  startLoader,
-  endLoader,
-} from "../store/actions/apiAction";
+import { getDataDispatcher } from "../store/actions/apiAction";
 import { logout } from "../store/actions/authAction";
 
 export const HomeScreen = ({ navigation }) => {
@@ -89,10 +85,8 @@ export const HomeScreen = ({ navigation }) => {
     );
   }, [accounts, startDate]);
 
-  const refreshData = async () => {
-    dispatch(startLoader());
-    await dispatch(getDataDispatcher());
-    dispatch(endLoader());
+  const refreshData = () => {
+    dispatch(getDataDispatcher());
   };
 
   React.useEffect(() => {

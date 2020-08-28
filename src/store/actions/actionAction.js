@@ -15,88 +15,99 @@ import moment from "moment";
 export const getAction = () => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .get(`${endpointAPI}/action/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      const action = res.data;
+    return axios
+      .get(`${endpointAPI}/action/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        const action = res.data;
 
-      dispatch({
-        type: GET_ACTION,
-        payload: action,
+        dispatch({
+          type: GET_ACTION,
+          payload: action,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(actionFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(actionFail(error));
-    });
+  } catch (error) {
+    dispatch(actionFail(error));
+  }
 };
 
 // Create action from server
 export const createAction = (action) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .post(
-      `${endpointAPI}/action/`,
-      {
-        ...action,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .post(
+        `${endpointAPI}/action/`,
+        {
+          ...action,
         },
-      }
-    )
-    .then((res) => {
-      const action = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const action = res.data;
 
-      if (action["last_updated"] == undefined) {
-        action["last_updated"] = moment();
-      }
+        if (action["last_updated"] == undefined) {
+          action["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: CREATE_ACTION,
-        payload: action,
+        dispatch({
+          type: CREATE_ACTION,
+          payload: action,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(actionFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(actionFail(error));
-    });
+  } catch (error) {
+    dispatch(actionFail(error));
+  }
 };
 
 // Delete action from server
 export const hideAction = (action) => async (dispatch) => {
   dispatch(setLoading());
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    return axios
+      .delete(`${endpointAPI}/action/${action}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: DELETE_ACTION,
+          payload: action,
+        });
+      })
 
-  return await axios
-    .delete(`${endpointAPI}/action/${action}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then(() => {
-      dispatch({
-        type: DELETE_ACTION,
-        payload: action,
+      .catch((error) => {
+        dispatch(actionFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(actionFail(error));
-    });
+  } catch (error) {
+    dispatch(actionFail(error));
+  }
 };
 
 export const actionFail = (error) => (dispatch) => {
@@ -153,8 +164,6 @@ export const actionFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_ACTION,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_ACTION,
+});

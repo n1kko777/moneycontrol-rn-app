@@ -1,8 +1,7 @@
 import React from "react";
-import { View, StyleSheet, Animated } from "react-native";
+import { View, StyleSheet } from "react-native";
+import Animated, { interpolate } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
-
-import { Button, Text } from "@ui-kitten/components";
 
 import {
   AddIcon,
@@ -11,19 +10,57 @@ import {
   ExchangeIcon,
 } from "../../themes/icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTransition } from "react-native-redash";
+
+import { NavButton } from "./NavButton";
 
 export const AddButton = ({ navigation }) => {
-  const mode = new Animated.Value(0);
+  const [toggled, setToggle] = React.useState(false);
+
+  const toggleHandler = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setToggle((prev) => !prev);
+  };
+
+  const transition = useTransition(toggled, { duration: 150 });
+  const rotate = interpolate(transition, {
+    inputRange: [0, 1],
+    outputRange: [0, 0.785398],
+  });
+
+  const earnX = interpolate(transition, {
+    inputRange: [0, 1],
+    outputRange: [0, -94],
+  });
+
+  const earnY = interpolate(transition, {
+    inputRange: [0, 1],
+    outputRange: [0, -50],
+  });
+
+  const transferX = interpolate(transition, {
+    inputRange: [0, 1],
+    outputRange: [0, 0],
+  });
+
+  const transferY = interpolate(transition, {
+    inputRange: [0, 1],
+    outputRange: [-63, -160],
+  });
+
+  const spendX = interpolate(transition, {
+    inputRange: [0, 1],
+    outputRange: [0, 84],
+  });
+
+  const spendY = interpolate(transition, {
+    inputRange: [0, 1],
+    outputRange: [-136, -188],
+  });
 
   const handlePress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-    Animated.sequence([
-      Animated.timing(mode, {
-        toValue: mode._value === 0 ? 1 : 0,
-        duration: 150,
-      }),
-    ]).start();
+    setToggle((prev) => !prev);
   };
 
   const navigateHandlePress = (navRoute = null) => {
@@ -32,134 +69,39 @@ export const AddButton = ({ navigation }) => {
     navRoute !== null && navigation.navigate(navRoute);
   };
 
-  const earnX = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -89],
-  });
-
-  const earnY = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-30, -100],
-  });
-
-  const exchangeX = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 5],
-  });
-
-  const exchangeY = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-30, -150],
-  });
-
-  const spendX = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 89],
-  });
-
-  const spendY = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-30, -100],
-  });
-
-  const rotation = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "45deg"],
-  });
-
-  const opacity = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
-
   return (
-    <View style={{ alignItems: "center" }}>
-      <Animated.View
-        style={{
-          position: "absolute",
-          left: earnX,
-          top: earnY,
-          alignItems: "center",
-        }}
-      >
-        <TouchableOpacity onPress={() => navigateHandlePress("CreateAction")}>
-          <Button
-            status="success"
-            style={styles.secondaryButton}
-            icon={TrendingUpIcon}
-          />
-        </TouchableOpacity>
-
-        <Animated.View
-          style={{
-            opacity,
-          }}
-        >
-          <Text style={{ marginTop: 5 }} category="c1">
-            Доход
-          </Text>
-        </Animated.View>
-      </Animated.View>
-      <Animated.View
-        style={{
-          position: "absolute",
-          left: exchangeX,
-          top: exchangeY,
-          alignItems: "center",
-        }}
-      >
-        <TouchableOpacity onPress={() => navigateHandlePress("CreateTransfer")}>
-          <Button
-            status="info"
-            style={styles.secondaryButton}
-            icon={ExchangeIcon}
-          />
-        </TouchableOpacity>
-
-        <Animated.View
-          style={{
-            opacity,
-          }}
-        >
-          <Text style={{ marginTop: 5 }} category="c1">
-            Перевод
-          </Text>
-        </Animated.View>
-      </Animated.View>
-      <Animated.View
-        style={{
-          position: "absolute",
-          left: spendX,
-          top: spendY,
-          alignItems: "center",
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => navigateHandlePress("CreateTransaction")}
-        >
-          <Button
-            style={styles.secondaryButton}
-            status="danger"
-            icon={TrendingDownIcon}
-          />
-        </TouchableOpacity>
-        <Animated.View
-          style={{
-            opacity,
-          }}
-        >
-          <Text style={{ marginTop: 5 }} category="c1">
-            Расход
-          </Text>
-        </Animated.View>
-      </Animated.View>
+    <View style={{ width: 60, height: 60, marginTop: -35 }}>
+      <NavButton
+        coordinate={{ translateX: earnX, translateY: earnY }}
+        navigateHandlePress={() => navigateHandlePress("CreateAction")}
+        icon={TrendingUpIcon}
+        opacityValue={toggled ? 1 : 0}
+        status="success"
+        name="Доход"
+      />
+      <NavButton
+        coordinate={{ translateX: transferX, translateY: transferY }}
+        navigateHandlePress={() => navigateHandlePress("CreateTransfer")}
+        icon={ExchangeIcon}
+        opacityValue={toggled ? 1 : 0}
+        status="info"
+        name="Перевод"
+      />
+      <NavButton
+        coordinate={{ translateX: spendX, translateY: spendY }}
+        navigateHandlePress={() => navigateHandlePress("CreateTransaction")}
+        icon={TrendingDownIcon}
+        opacityValue={toggled ? 1 : 0}
+        status="danger"
+        name="Расход"
+      />
       <View
         style={{
           ...styles.button,
         }}
       >
         <TouchableOpacity
-          onPress={handlePress}
+          onPress={toggleHandler}
           style={{
             alignItems: "center",
             justifyContent: "center",
@@ -173,7 +115,7 @@ export const AddButton = ({ navigation }) => {
         >
           <Animated.View
             style={{
-              transform: [{ rotate: rotation }],
+              transform: [{ rotate }],
             }}
           >
             <AddIcon style={{}} fill="#6B0848" />
@@ -186,20 +128,12 @@ export const AddButton = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   button: {
+    position: "absolute",
     alignItems: "center",
     justifyContent: "center",
     width: 60,
     height: 60,
     borderRadius: 30,
-    marginTop: -35,
     zIndex: 1000,
-  },
-  secondaryButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    zIndex: 1,
   },
 });

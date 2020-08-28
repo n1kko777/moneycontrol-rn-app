@@ -15,7 +15,11 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import {
+  startLoader,
+  endLoader,
+  updateAccountAction,
+} from "../../store/actions/apiAction";
 import { updateAccount } from "../../store/actions/accountAction";
 import { Keyboard } from "react-native";
 
@@ -33,25 +37,19 @@ export const UpdateAccountScreen = ({ route, navigation }) => {
   };
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
       Keyboard.dismiss();
-      dispatch(startLoader());
-
-      try {
-        await dispatch(
-          updateAccount(account.id, {
+      dispatch(
+        updateAccountAction(
+          {
+            id: account.id,
             account_name,
             balance,
-          })
-        );
-      } catch (error) {}
-
-      if (accountError === null) {
-        navigateBack();
-      }
-
-      dispatch(endLoader());
+          },
+          navigateBack
+        )
+      );
     }
   };
 

@@ -16,88 +16,100 @@ import moment from "moment";
 export const getTransfer = () => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .get(`${endpointAPI}/transfer/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      const transfer = res.data;
+    return axios
+      .get(`${endpointAPI}/transfer/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        const transfer = res.data;
 
-      dispatch({
-        type: GET_TRANSFER,
-        payload: transfer,
+        dispatch({
+          type: GET_TRANSFER,
+          payload: transfer,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(transferFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(transferFail(error));
-    });
+  } catch (error) {
+    dispatch(transferFail(error));
+  }
 };
 
 // Create transfer from server
 export const createTransfer = (transfer) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .post(
-      `${endpointAPI}/transfer/`,
-      {
-        ...transfer,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .post(
+        `${endpointAPI}/transfer/`,
+        {
+          ...transfer,
         },
-      }
-    )
-    .then((res) => {
-      const transfer = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const transfer = res.data;
 
-      if (transfer["last_updated"] == undefined) {
-        transfer["last_updated"] = moment();
-      }
+        if (transfer["last_updated"] == undefined) {
+          transfer["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: CREATE_TRANSFER,
-        payload: transfer,
+        dispatch({
+          type: CREATE_TRANSFER,
+          payload: transfer,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(transferFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(transferFail(error));
-    });
+  } catch (error) {
+    dispatch(transferFail(error));
+  }
 };
 
 // Delete transfer from server
 export const hideTransfer = (transfer) => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .delete(`${endpointAPI}/transfer/${transfer}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then(() => {
-      dispatch({
-        type: DELETE_TRANSFER,
-        payload: transfer,
+    return axios
+      .delete(`${endpointAPI}/transfer/${transfer}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: DELETE_TRANSFER,
+          payload: transfer,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(transferFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(transferFail(error));
-    });
+  } catch (error) {
+    dispatch(transferFail(error));
+  }
 };
 
 export const transferFail = (error) => (dispatch) => {
@@ -154,8 +166,6 @@ export const transferFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_TRANSFER,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_TRANSFER,
+});

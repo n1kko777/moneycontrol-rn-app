@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { resetPass } from "../../store/actions/authAction";
-
 import {
   Layout,
   TopNavigation,
@@ -16,7 +14,7 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { resetPassAction } from "../../store/actions/apiAction";
 
 export const ResetPassword = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -27,16 +25,21 @@ export const ResetPassword = ({ navigation }) => {
   };
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = async () => {
+  const onReset = () => {
+    setEmail("");
+    navigateBack();
+  };
+
+  const onSubmit = () => {
     if (!loader) {
-      dispatch(startLoader());
-      await dispatch(
-        resetPass({
-          email,
-        })
+      dispatch(
+        resetPassAction(
+          {
+            email,
+          },
+          onReset
+        )
       );
-      dispatch(endLoader());
-      setEmail("");
     }
   };
 

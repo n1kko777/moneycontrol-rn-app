@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Alert, View } from "react-native";
 import {
   Layout,
@@ -9,7 +9,6 @@ import {
 } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { createProfile } from "../../store/actions/profileAction";
 import { logout } from "../../store/actions/authAction";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
@@ -17,12 +16,12 @@ import { THEME } from "../../themes/themes";
 
 import { LogoutIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { createProfileAction } from "../../store/actions/apiAction";
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const profileStore = useSelector((store) => store.profile);
-  const { loading, profile } = profileStore;
+  const { profile } = profileStore;
 
   const inputRef = React.useRef(null);
 
@@ -36,33 +35,26 @@ export const CreateProfileScreen = ({ navigation }) => {
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
-  useEffect(() => {
-    profile !== undefined &&
-      profile.hasOwnProperty("company") &&
-      navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
-  }, [loading]);
-
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = async () => {
+  const onSuccess = () => {
+    navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
+  };
+
+  const onSubmit = () => {
     if (!loader) {
-      dispatch(startLoader());
       const newProfile = {
         first_name,
         last_name,
         phone,
       };
-      await dispatch(createProfile(newProfile));
-      dispatch(endLoader());
+      dispatch(createProfileAction(newProfile, onSuccess));
     }
   };
 
   const logoutHandler = async () => {
-    dispatch(startLoader());
-    await dispatch(logout()).then(() => {
-      dispatch(endLoader());
-      navigation.navigate("Login");
-    });
+    await navigation.navigate("Login");
+    dispatch(logout());
   };
 
   const navigateLogout = () => {

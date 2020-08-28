@@ -10,12 +10,8 @@ import {
   Button,
 } from "@ui-kitten/components";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { createAction, getAction } from "../../store/actions/actionAction";
-import {
-  getAccount,
-  clearCurrentAccount,
-} from "../../store/actions/accountAction";
+import { createActionAction } from "../../store/actions/apiAction";
+import { clearCurrentAccount } from "../../store/actions/accountAction";
 
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
@@ -75,30 +71,18 @@ export const CreateActionScreen = ({ route, navigation }) => {
       : []
   );
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
-      try {
-        Keyboard.dismiss();
-        dispatch(startLoader());
+      Keyboard.dismiss();
+      const newAction = {
+        action_amount: parseFloat(action_amount),
+        account: selectedAccountId,
+        category: selectedCategoryId,
+        tags: tagList.map((elem) => elem.id),
+        is_active: true,
+      };
 
-        const newAction = {
-          action_amount: parseFloat(action_amount),
-          account: selectedAccountId,
-          category: selectedCategoryId,
-          tags: tagList.map((elem) => elem.id),
-          is_active: true,
-        };
-
-        await dispatch(createAction(newAction));
-
-        if (actionError === null) {
-          dispatch(getAccount());
-          dispatch(getAction());
-          navigateBack();
-        }
-
-        dispatch(endLoader());
-      } catch (error) {}
+      dispatch(createActionAction(newAction, navigateBack));
     }
   };
 

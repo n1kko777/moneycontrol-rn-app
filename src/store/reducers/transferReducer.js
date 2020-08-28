@@ -17,7 +17,6 @@ export const transferReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case GET_TRANSFER:
-      console.log("case GET_TRANSFER:");
       return {
         ...state,
         transfer: payload,
@@ -25,7 +24,6 @@ export const transferReducer = (state = initialState, action) => {
         error: null,
       };
     case CREATE_TRANSFER:
-      console.log("case CREATE_TRANSFER:");
       return {
         ...state,
         transfer: [...state.transfer, payload],
@@ -33,7 +31,6 @@ export const transferReducer = (state = initialState, action) => {
         error: null,
       };
     case DELETE_TRANSFER:
-      console.log("case DELETE_TRANSFER:");
       return {
         ...state,
         transfer: state.transfer.filter((transfer) => transfer.id !== payload),
@@ -41,7 +38,6 @@ export const transferReducer = (state = initialState, action) => {
         error: null,
       };
     case CLEAR_TRANSFER:
-      console.log("case CLEAR_TRANSFER:");
       return {
         ...state,
         transfer: [],
@@ -49,8 +45,6 @@ export const transferReducer = (state = initialState, action) => {
         error: null,
       };
     case LOADING_TRANSFER:
-      console.log("==========================");
-      console.log("case LOADING_TRANSFER:");
       return {
         ...state,
         loading: true,
@@ -58,7 +52,6 @@ export const transferReducer = (state = initialState, action) => {
       };
 
     case ERROR_TRANSFER:
-      console.log("ERROR_TRANSFER : " + payload);
       return {
         ...state,
         loading: false,

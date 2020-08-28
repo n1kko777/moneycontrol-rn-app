@@ -17,7 +17,6 @@ export const transactionReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case GET_TRANSACTION:
-      console.log("case GET_TRANSACTION:");
       return {
         ...state,
         transactions: payload,
@@ -25,7 +24,6 @@ export const transactionReducer = (state = initialState, action) => {
         error: null,
       };
     case CREATE_TRANSACTION:
-      console.log("case CREATE_TRANSACTION:");
       return {
         ...state,
         transactions: [payload, ...state.transactions],
@@ -33,7 +31,6 @@ export const transactionReducer = (state = initialState, action) => {
         error: null,
       };
     case DELETE_TRANSACTION:
-      console.log("case DELETE_TRANSACTION:");
       return {
         ...state,
         transactions: state.transactions.filter(
@@ -43,7 +40,6 @@ export const transactionReducer = (state = initialState, action) => {
         error: null,
       };
     case CLEAR_TRANSACTION:
-      console.log("case CLEAR_TRANSACTION:");
       return {
         ...state,
         transactions: [],
@@ -51,8 +47,6 @@ export const transactionReducer = (state = initialState, action) => {
         error: null,
       };
     case LOADING_TRANSACTION:
-      console.log("==========================");
-      console.log("case LOADING_TRANSACTION:");
       return {
         ...state,
         loading: true,
@@ -60,7 +54,6 @@ export const transactionReducer = (state = initialState, action) => {
       };
 
     case ERROR_TRANSACTION:
-      console.log("ERROR_TRANSACTION : " + payload);
       return {
         ...state,
         loading: false,

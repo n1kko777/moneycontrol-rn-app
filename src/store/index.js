@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
   transfer: transferReducer,
   category: categoryReducer,
   tag: tagReducer,
-  calendar: calendarReducer
+  calendar: calendarReducer,
 });
 
 export default createStore(rootReducer, applyMiddleware(thunk));

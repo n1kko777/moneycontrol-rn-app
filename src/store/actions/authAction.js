@@ -47,7 +47,6 @@ export const registerSuccess = (user) => (dispatch) => {
       cancelable: false,
     }
   );
-  console.log("Регистрация прошла успешно!");
 
   dispatch({
     type: REGISTER_SUCCESS,
@@ -108,7 +107,6 @@ export const logout = () => async (dispatch) => {
   dispatch({
     type: AUTH_LOGOUT,
   });
-
   dispatch({
     type: CLEAR_PROFILE,
   });
@@ -138,15 +136,21 @@ export const logout = () => async (dispatch) => {
 export const authLogin = (email, password, isRemindMe) => async (dispatch) => {
   dispatch(authStart());
 
-  return await axios
-    .post(`${url}/dj-rest-auth/login/`, {
-      email: email,
-      password: password,
-    })
-    .then(async (res) => {
-      await dispatch(authSuccess(res.data));
-    })
-    .catch(async (error) => await dispatch(authFail(error)));
+  try {
+    return axios
+      .post(`${url}/dj-rest-auth/login/`, {
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        dispatch(authSuccess(res.data));
+      })
+      .catch((error) => {
+        dispatch(authFail(error));
+      });
+  } catch (error) {
+    dispatch(authFail(error));
+  }
 };
 
 export const authSignUp = ({
@@ -157,39 +161,52 @@ export const authSignUp = ({
   password2,
 }) => async (dispatch) => {
   dispatch(authStart());
-  return await axios
-    .post(`${url}/dj-rest-auth/registration/`, {
-      first_name,
-      last_name,
-      email,
-      password1,
-      password2,
-    })
-    .then((res) => {
-      const authUser = {
-        token: res.data.key,
+  try {
+    return axios
+      .post(`${url}/dj-rest-auth/registration/`, {
         first_name,
         last_name,
         email,
         password1,
-      };
-      dispatch(registerSuccess(authUser));
-    })
-    .catch((err) => dispatch(authFail(err)));
+        password2,
+      })
+      .then((res) => {
+        const authUser = {
+          token: res.data.key,
+          first_name,
+          last_name,
+          email,
+          password1,
+        };
+        dispatch(registerSuccess(authUser));
+      })
+      .catch((err) => {
+        dispatch(authFail(err));
+      });
+  } catch (error) {
+    dispatch(authFail(err));
+  }
 };
 
-export const resetPass = ({ email }) => async (dispatch) => {
+export const resetPass = ({ email }, onSuccess) => async (dispatch) => {
   dispatch(authStart());
-  return await axios
-    .post(`${url}/dj-rest-auth/password/reset/`, {
-      email,
-    })
-    .then((res) => {
-      const { detail } = res.data;
-      Alert.alert("Проверьте почту", `${detail}`, [{ text: "Закрыть" }], {
-        cancelable: false,
+  try {
+    return axios
+      .post(`${url}/dj-rest-auth/password/reset/`, {
+        email,
+      })
+      .then((res) => {
+        onSuccess();
+        const { detail } = res.data;
+        Alert.alert("Проверьте почту", `${detail}`, [{ text: "Закрыть" }], {
+          cancelable: false,
+        });
+        dispatch({ type: RESET_SUCCESS });
+      })
+      .catch((err) => {
+        dispatch(authFail(err));
       });
-      dispatch({ type: RESET_SUCCESS });
-    })
-    .catch((err) => dispatch(authFail(err)));
+  } catch (error) {
+    dispatch(authFail(err));
+  }
 };

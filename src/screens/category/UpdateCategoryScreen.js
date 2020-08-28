@@ -15,8 +15,7 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { updateCategory } from "../../store/actions/categoryAction";
+import { updateCategoryAction } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
 export const UpdateCategoryScreen = ({ route, navigation }) => {
@@ -34,24 +33,18 @@ export const UpdateCategoryScreen = ({ route, navigation }) => {
   };
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
       Keyboard.dismiss();
-      dispatch(startLoader());
-
-      try {
-        await dispatch(
-          updateCategory(category.id, {
+      dispatch(
+        updateCategoryAction(
+          {
+            id: category.id,
             category_name,
-          })
-        );
-      } catch (error) {}
-
-      if (categoryError === null) {
-        navigateBack();
-      }
-
-      dispatch(endLoader());
+          },
+          navigateBack
+        )
+      );
     }
   };
 

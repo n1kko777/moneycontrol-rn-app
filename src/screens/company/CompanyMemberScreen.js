@@ -15,12 +15,10 @@ import { Toolbar } from "../../components/navigation/Toolbar";
 import { prepareHomeData } from "../../prepareHomeData";
 
 import { filterArrayByDate } from "../../filterArrayByDate";
-import { removeProfileFromCompany } from "../../store/actions/companyAction";
 
 import {
   getDataDispatcher,
-  startLoader,
-  endLoader,
+  removeProfileFromCompanyAction,
 } from "../../store/actions/apiAction";
 import { BackIcon } from "../../themes/icons";
 
@@ -71,10 +69,8 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
 
   homeListData.isNavigate = false;
 
-  const refreshData = async () => {
-    dispatch(startLoader());
-    await dispatch(getDataDispatcher());
-    dispatch(endLoader());
+  const refreshData = () => {
+    dispatch(getDataDispatcher());
   };
 
   const onDeleteMember = () => {
@@ -90,36 +86,14 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
         },
         {
           text: "Удалить",
-          onPress: async () => {
+          onPress: () => {
             if (
               accounts
                 .filter((acc) => acc.profile == profile.id)
                 .reduce((sum, next) => (sum += +next.balance), 0) == 0
             ) {
               navigation.goBack(null);
-              await dispatch(startLoader());
-              await removeProfileFromCompany(profile.id, profile.phone)
-                .then((res) => {
-                  Alert.alert(
-                    "Статус запроса",
-                    res.data.detail,
-                    [{ text: "OK" }],
-                    {
-                      cancelable: false,
-                    }
-                  );
-                })
-                .catch((err) => {
-                  Alert.alert(
-                    "Статус запроса",
-                    err.response.data.detail,
-                    [{ text: "OK" }],
-                    {
-                      cancelable: false,
-                    }
-                  );
-                });
-              await dispatch(endLoader());
+              dispatch(removeProfileFromCompanyAction(profile));
             } else {
               Alert.alert(
                 "Невозможно удалить сотрудника",

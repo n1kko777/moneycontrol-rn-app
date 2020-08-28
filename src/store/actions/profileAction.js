@@ -18,7 +18,7 @@ export const getProfile = () => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
+    return axios
       .get(`${endpointAPI}/profile/`, {
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const createProfile = (profile) => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
+    return axios
       .post(
         `${endpointAPI}/profile/`,
         {
@@ -91,7 +91,7 @@ export const updateProfile = (profile) => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
+    return axios
       .put(
         `${endpointAPI}/profile/${profile.id}/`,
         {
@@ -132,7 +132,7 @@ export const updateImageProfile = (profile, id) => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
+    return axios
       .put(`${endpointAPI}/profile/${id}/`, profile, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -204,8 +204,6 @@ export const profileFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_PROFILE,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_PROFILE,
+});

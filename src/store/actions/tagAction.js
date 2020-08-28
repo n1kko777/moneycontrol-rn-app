@@ -16,124 +16,139 @@ import moment from "moment";
 export const getTag = () => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .get(`${endpointAPI}/tag/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      const tag = res.data.filter((elem) => elem.is_active);
+    return axios
+      .get(`${endpointAPI}/tag/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        const tag = res.data.filter((elem) => elem.is_active);
 
-      dispatch({
-        type: GET_TAG,
-        payload: tag,
+        dispatch({
+          type: GET_TAG,
+          payload: tag,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(tagFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(tagFail(error));
-    });
+  } catch (error) {
+    dispatch(tagFail(error));
+  }
 };
 
 // Create tag from server
 export const createTag = (tag) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .post(
-      `${endpointAPI}/tag/`,
-      {
-        ...tag,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .post(
+        `${endpointAPI}/tag/`,
+        {
+          ...tag,
         },
-      }
-    )
-    .then((res) => {
-      const tag = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const tag = res.data;
 
-      if (tag["last_updated"] == undefined) {
-        tag["last_updated"] = moment();
-      }
+        if (tag["last_updated"] == undefined) {
+          tag["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: CREATE_TAG,
-        payload: tag,
+        dispatch({
+          type: CREATE_TAG,
+          payload: tag,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(tagFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(tagFail(error));
-    });
+  } catch (error) {
+    dispatch(tagFail(error));
+  }
 };
 
 // Create tag from server
-export const updateTag = (id, tag) => async (dispatch) => {
+export const updateTag = ({ id, tag_name }) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .put(
-      `${endpointAPI}/tag/${id}/`,
-      {
-        ...tag,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .put(
+        `${endpointAPI}/tag/${id}/`,
+        {
+          tag_name,
         },
-      }
-    )
-    .then((res) => {
-      const updatedTag = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const updatedTag = res.data;
 
-      if (updatedTag["last_updated"] == undefined) {
-        updatedTag["last_updated"] = moment();
-      }
+        if (updatedTag["last_updated"] == undefined) {
+          updatedTag["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: UPDATE_TAG,
-        payload: updatedTag,
+        dispatch({
+          type: UPDATE_TAG,
+          payload: updatedTag,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(tagFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(tagFail(error));
-    });
+  } catch (error) {
+    dispatch(tagFail(error));
+  }
 };
 
 // Delete tag from server
 export const hideTag = (tag) => async (dispatch) => {
   dispatch(setLoading());
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    return axios
+      .delete(`${endpointAPI}/tag/${tag.id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        dispatch({
+          type: DELETE_TAG,
+          payload: tag.id,
+        });
+      })
 
-  return await axios
-    .delete(`${endpointAPI}/tag/${tag.id}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      dispatch({
-        type: DELETE_TAG,
-        payload: tag.id,
+      .catch((error) => {
+        dispatch(tagFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(tagFail(error));
-    });
+  } catch (error) {
+    dispatch(tagFail(error));
+  }
 };
 
 export const tagFail = (error) => (dispatch) => {
@@ -190,8 +205,6 @@ export const tagFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_TAG,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_TAG,
+});

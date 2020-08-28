@@ -14,12 +14,7 @@ import { ThemeContext } from "../../themes/theme-context";
 import { splitToDigits } from "../../splitToDigits";
 import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "react-native";
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { hideAction } from "../../store/actions/actionAction";
-import { hideTransaction } from "../../store/actions/transactionAction";
-import { hideTransfer } from "../../store/actions/transferAction";
-import moment from "moment";
-import { getAccount } from "../../store/actions/accountAction";
+import { hideOperationAction } from "../../store/actions/apiAction";
 
 export const OperationListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
@@ -97,26 +92,8 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
         },
         {
           text: "Удалить",
-          onPress: async () => {
-            dispatch(startLoader());
-
-            try {
-              switch (item.type) {
-                case "action":
-                  await dispatch(hideAction(item.id));
-                  break;
-
-                case "transaction":
-                  await dispatch(hideTransaction(item.id));
-                  break;
-
-                case "transfer":
-                  await dispatch(hideTransfer(item.id));
-                  break;
-              }
-            } catch (error) {}
-            await dispatch(getAccount());
-            dispatch(endLoader());
+          onPress: () => {
+            dispatch(hideOperationAction(item));
           },
         },
       ],

@@ -17,16 +17,9 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import {
-  createTransfer,
-  getTransfer,
-} from "../../store/actions/transferAction";
+import { createTransferAction } from "../../store/actions/apiAction";
 
-import {
-  getAccount,
-  clearCurrentAccount,
-} from "../../store/actions/accountAction";
+import { clearCurrentAccount } from "../../store/actions/accountAction";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
 
 export const CreateTransferScreen = ({ route, navigation }) => {
@@ -60,8 +53,6 @@ export const CreateTransferScreen = ({ route, navigation }) => {
     })),
   }));
 
-  const { error: transferError } = useSelector((store) => store.transfer);
-
   const [transfer_amount, setTransferAmount] = React.useState(
     prevItem !== undefined ? prevItem.balance : ""
   );
@@ -92,33 +83,22 @@ export const CreateTransferScreen = ({ route, navigation }) => {
     navigation.goBack(null);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
-      try {
-        Keyboard.dismiss();
-        dispatch(startLoader());
+      Keyboard.dismiss();
 
-        const newTransfer = {
-          transfer_amount: parseFloat(transfer_amount),
-          from_account: selectedFromAccountId,
-          to_account:
-            selectedToAccountOption !== null &&
-            toAccountData[selectedToAccountOption.parentIndex].items[
-              selectedToAccountOption.index
-            ].id,
-          is_active: true,
-        };
+      const newTransfer = {
+        transfer_amount: parseFloat(transfer_amount),
+        from_account: selectedFromAccountId,
+        to_account:
+          selectedToAccountOption !== null &&
+          toAccountData[selectedToAccountOption.parentIndex].items[
+            selectedToAccountOption.index
+          ].id,
+        is_active: true,
+      };
 
-        await dispatch(createTransfer(newTransfer));
-
-        if (transferError === null) {
-          dispatch(getAccount());
-          dispatch(getTransfer());
-          navigateBack();
-        }
-
-        dispatch(endLoader());
-      } catch (error) {}
+      dispatch(createTransferAction(newTransfer, navigateBack));
     }
   };
 

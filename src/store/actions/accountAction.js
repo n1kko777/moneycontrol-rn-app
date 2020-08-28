@@ -29,99 +29,115 @@ export const clearCurrentAccount = () => ({
 export const getAccount = () => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .get(`${endpointAPI}/account/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      const account = res.data.filter((elem) => elem.is_active);
+    return axios
+      .get(`${endpointAPI}/account/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        const account = res.data.filter((elem) => elem.is_active);
 
-      dispatch({
-        type: GET_ACCOUNT,
-        payload: account,
+        dispatch({
+          type: GET_ACCOUNT,
+          payload: account,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(accountFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(accountFail(error));
-    });
+  } catch (error) {
+    dispatch(accountFail(error));
+  }
 };
 
 // Create account from server
 export const createAccount = (account) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .post(
-      `${endpointAPI}/account/`,
-      {
-        ...account,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    return axios
+      .post(
+        `${endpointAPI}/account/`,
+        {
+          ...account,
         },
-      }
-    )
-    .then((res) => {
-      const account = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const account = res.data;
 
-      if (account["last_updated"] == undefined) {
-        account["last_updated"] = moment();
-      }
+        if (account["last_updated"] == undefined) {
+          account["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: CREATE_ACCOUNT,
-        payload: account,
+        dispatch({
+          type: CREATE_ACCOUNT,
+          payload: account,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(accountFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(accountFail(error));
-    });
+  } catch (error) {
+    dispatch(accountFail(error));
+  }
 };
 
 // Update account from server
-export const updateAccount = (id, account) => async (dispatch) => {
+export const updateAccount = ({ id, account_name, balance }) => async (
+  dispatch
+) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .put(
-      `${endpointAPI}/account/${id}/`,
-      {
-        ...account,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .put(
+        `${endpointAPI}/account/${id}/`,
+        {
+          account_name,
+          balance,
         },
-      }
-    )
-    .then((res) => {
-      const updatedAccount = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const updatedAccount = res.data;
 
-      if (updatedAccount["last_updated"] == undefined) {
-        updatedAccount["last_updated"] = moment();
-      }
+        if (updatedAccount["last_updated"] == undefined) {
+          updatedAccount["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: UPDATE_ACCOUNT,
-        payload: updatedAccount,
+        dispatch({
+          type: UPDATE_ACCOUNT,
+          payload: updatedAccount,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(accountFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(accountFail(error));
-    });
+  } catch (error) {
+    dispatch(accountFail(error));
+  }
 };
 
 // Delete account from server
@@ -141,25 +157,29 @@ export const hideAccount = (account) => async (dispatch) => {
 
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .delete(`${endpointAPI}/account/${account.id}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      dispatch({
-        type: DELETE_ACCOUNT,
-        payload: account.id,
+    return axios
+      .delete(`${endpointAPI}/account/${account.id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        dispatch({
+          type: DELETE_ACCOUNT,
+          payload: account.id,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(accountFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(accountFail(error));
-    });
+  } catch (error) {
+    dispatch(accountFail(error));
+  }
 };
 
 export const accountFail = (error) => (dispatch) => {
@@ -216,8 +236,6 @@ export const accountFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_ACCOUNT,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_ACCOUNT,
+});

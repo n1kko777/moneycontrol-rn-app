@@ -14,10 +14,7 @@ import { View } from "react-native";
 import { filterArrayByDate } from "../../filterArrayByDate";
 import { prepareOperationData } from "../../prepareOperationData";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { getAction } from "../../store/actions/actionAction";
-import { getTransfer } from "../../store/actions/transferAction";
-import { getTransaction } from "../../store/actions/transactionAction";
+import { operationRefreshAction } from "../../store/actions/apiAction";
 import { logout } from "../../store/actions/authAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
@@ -98,12 +95,7 @@ export const OperationsScreen = ({ navigation, route }) => {
 
         return elem;
       })
-    : // ).filter((elem) =>
-      //   elem[filterParam.type] !== undefined
-      //     ? elem[filterParam.type] == filterParam.id
-      //     : elem.type === filterParam.type
-      // )
-      prepareOperationData(
+    : prepareOperationData(
         company,
         filterArrayByDate(transactions, startDate, endDate),
         filterArrayByDate(actions, startDate, endDate),
@@ -173,14 +165,8 @@ export const OperationsScreen = ({ navigation, route }) => {
     );
   }, [isFiltered, startDate, accounts, operationListData]);
 
-  const onOperationRefresh = async () => {
-    dispatch(startLoader());
-    await Promise.all([
-      dispatch(getAction()),
-      dispatch(getTransfer()),
-      dispatch(getTransaction()),
-    ]);
-    dispatch(endLoader());
+  const onOperationRefresh = () => {
+    dispatch(operationRefreshAction());
   };
 
   React.useEffect(() => {

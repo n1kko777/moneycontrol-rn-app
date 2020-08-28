@@ -1,13 +1,12 @@
 import React from "react";
-import { View, Alert } from "react-native";
+import { View } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { BackIcon } from "../../themes/icons";
 import { Layout, Input, Button } from "@ui-kitten/components";
 import { THEME } from "../../themes/themes";
 import { useDispatch, useSelector } from "react-redux";
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { joinProfileToCompany } from "../../store/actions/companyAction";
+import { joinProfileToCompanyAction } from "../../store/actions/apiAction";
 
 export const InviteMemberScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -19,29 +18,15 @@ export const InviteMemberScreen = ({ navigation }) => {
   const isNotProfilePhoneEmpty = profile_phone && profile_phone.length > 0;
 
   const loader = useSelector((store) => store.api.loader);
-
-  const onSubmit = async () => {
+  const onReset = () => {
+    setProfileId("");
+    setProfilePhone("");
+  };
+  const onSubmit = () => {
     if (!loader) {
-      await dispatch(startLoader());
-      await joinProfileToCompany(profile_id, profile_phone)
-        .then((res) => {
-          setProfileId("");
-          setProfilePhone("");
-          Alert.alert("Статус запроса", res.data.detail, [{ text: "OK" }], {
-            cancelable: false,
-          });
-        })
-        .catch((err) => {
-          Alert.alert(
-            "Статус запроса",
-            err.response.data.detail,
-            [{ text: "OK" }],
-            {
-              cancelable: false,
-            }
-          );
-        });
-      await dispatch(endLoader());
+      dispatch(
+        joinProfileToCompanyAction({ profile_id, profile_phone }, onReset)
+      );
     }
   };
 

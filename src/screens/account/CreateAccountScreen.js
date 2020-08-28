@@ -15,18 +15,14 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import {
-  createAccount,
-  clearCurrentAccount,
-} from "../../store/actions/accountAction";
+import { createAccountAction } from "../../store/actions/apiAction";
+import { clearCurrentAccount } from "../../store/actions/accountAction";
 import { Keyboard } from "react-native";
 
 export const CreateAccountScreen = ({ navigation, route }) => {
   const prevItem = route.params;
 
   const dispatch = useDispatch();
-  const { error: accountError } = useSelector((store) => store.account);
   const loader = useSelector((store) => store.api.loader);
 
   const [account_name, setAccountName] = React.useState(
@@ -39,27 +35,25 @@ export const CreateAccountScreen = ({ navigation, route }) => {
     navigation.goBack(null);
   };
 
-  const onSubmit = async () => {
+  const onReset = () => {
+    setAccountName("");
+    setBalance("");
+    navigateBack();
+  };
+
+  const onSubmit = () => {
     if (!loader) {
       Keyboard.dismiss();
-      dispatch(startLoader());
 
-      try {
-        await dispatch(
-          createAccount({
+      dispatch(
+        createAccountAction(
+          {
             account_name,
             balance,
-          })
-        );
-
-        if (accountError === null) {
-          setAccountName("");
-          setBalance("");
-          navigateBack();
-        }
-      } catch (error) {}
-
-      dispatch(endLoader());
+          },
+          onReset
+        )
+      );
     }
   };
 

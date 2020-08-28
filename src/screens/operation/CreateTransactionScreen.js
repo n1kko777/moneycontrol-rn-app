@@ -13,15 +13,8 @@ import {
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import {
-  createTransaction,
-  getTransaction,
-} from "../../store/actions/transactionAction";
-import {
-  getAccount,
-  clearCurrentAccount,
-} from "../../store/actions/accountAction";
+import { createTransactionAction } from "../../store/actions/apiAction";
+import { clearCurrentAccount } from "../../store/actions/accountAction";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { CustomTag } from "../../components/operation/tag/CustomTag";
@@ -44,8 +37,6 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
   }, []);
 
   const dispatch = useDispatch();
-
-  const { error: transactionError } = useSelector((store) => store.transaction);
 
   // Amount
   const [transaction_amount, setTransactionAmount] = React.useState(
@@ -77,30 +68,18 @@ export const CreateTransactionScreen = ({ route, navigation }) => {
       : []
   );
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
-      try {
-        Keyboard.dismiss();
-        dispatch(startLoader());
+      Keyboard.dismiss();
+      const newTransaction = {
+        transaction_amount: parseFloat(transaction_amount),
+        account: selectedAccountId,
+        category: selectedCategoryId,
+        tags: tagList.map((elem) => elem.id),
+        is_active: true,
+      };
 
-        const newTransaction = {
-          transaction_amount: parseFloat(transaction_amount),
-          account: selectedAccountId,
-          category: selectedCategoryId,
-          tags: tagList.map((elem) => elem.id),
-          is_active: true,
-        };
-
-        await dispatch(createTransaction(newTransaction));
-
-        if (transactionError === null) {
-          dispatch(getAccount());
-          dispatch(getTransaction());
-          navigateBack();
-        }
-
-        dispatch(endLoader());
-      } catch (error) {}
+      dispatch(createTransactionAction(newTransaction, navigateBack));
     }
   };
 

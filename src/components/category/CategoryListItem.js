@@ -7,10 +7,7 @@ import { DeleteIcon, CategoryIcon } from "../../themes/icons";
 
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
-
-import { hideCategory } from "../../store/actions/categoryAction";
-
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { hideCategoryAction } from "../../store/actions/apiAction";
 
 export const CategoryListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
@@ -36,13 +33,8 @@ export const CategoryListItem = ({ item, index, dataList, navigation }) => {
         },
         {
           text: "Удалить",
-          onPress: async () => {
-            dispatch(startLoader());
-            const hideItem = item;
-
-            await dispatch(hideCategory(hideItem)).then(() => {
-              dispatch(endLoader());
-            });
+          onPress: () => {
+            dispatch(hideCategoryAction(item));
           },
         },
       ],

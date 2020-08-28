@@ -18,7 +18,6 @@ export const tagReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case GET_TAG:
-      console.log("case GET_TAG:");
       return {
         ...state,
         tags: payload,
@@ -26,7 +25,6 @@ export const tagReducer = (state = initialState, action) => {
         error: null,
       };
     case CREATE_TAG:
-      console.log("case CREATE_TAG:");
       return {
         ...state,
         tags: [payload, ...state.tags],
@@ -34,7 +32,6 @@ export const tagReducer = (state = initialState, action) => {
         error: null,
       };
     case UPDATE_TAG:
-      console.log("case UPDATE_TAG:");
       return {
         ...state,
         tags: state.tags.map((tag) => (tag.id === payload.id ? payload : tag)),
@@ -42,7 +39,6 @@ export const tagReducer = (state = initialState, action) => {
         error: null,
       };
     case DELETE_TAG:
-      console.log("case DELETE_TAG:");
       return {
         ...state,
         tags: state.tags.filter((tag) => tag.id !== payload),
@@ -50,7 +46,6 @@ export const tagReducer = (state = initialState, action) => {
         error: null,
       };
     case CLEAR_TAG:
-      console.log("case CLEAR_TAG:");
       return {
         ...state,
         tags: [],
@@ -58,8 +53,6 @@ export const tagReducer = (state = initialState, action) => {
         error: null,
       };
     case LOADING_TAG:
-      console.log("==========================");
-      console.log("case LOADING_TAG:");
       return {
         ...state,
         loading: true,
@@ -67,7 +60,6 @@ export const tagReducer = (state = initialState, action) => {
       };
 
     case ERROR_TAG:
-      console.log("ERROR_TAG : " + payload);
       return {
         ...state,
         loading: false,

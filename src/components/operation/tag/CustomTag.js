@@ -3,8 +3,7 @@ import { StyleSheet, ScrollView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Autocomplete, Layout, Text } from "@ui-kitten/components";
 
-import { startLoader, endLoader } from "../../../store/actions/apiAction";
-import { createTag } from "../../../store/actions/tagAction";
+import { createTagAction } from "../../../store/actions/apiAction";
 
 import { AddSmallIcon } from "../../../themes/icons";
 
@@ -37,22 +36,13 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
       setTagList([...tagList, data.find((el) => el.title === title)]);
   };
 
-  const addTag = async () => {
+  const addTag = () => {
     tagInput.current.blur();
 
     if (tags.map((el) => el.tag_name).includes(value)) {
       onSelect({ title: value });
     } else if (value.trim().length !== 0 && !loader) {
-      dispatch(startLoader());
-
-      try {
-        await dispatch(
-          createTag({
-            tag_name: value,
-          })
-        );
-      } catch (error) {}
-      dispatch(endLoader());
+      dispatch(createTagAction({ tag_name: value }));
     } else {
       onChangeText("");
     }

@@ -16,87 +16,99 @@ import moment from "moment";
 export const getTransaction = () => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .get(`${endpointAPI}/transaction/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      const transaction = res.data;
+    return axios
+      .get(`${endpointAPI}/transaction/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        const transaction = res.data;
 
-      dispatch({
-        type: GET_TRANSACTION,
-        payload: transaction,
+        dispatch({
+          type: GET_TRANSACTION,
+          payload: transaction,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(transactionFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(transactionFail(error));
-    });
+  } catch (error) {
+    dispatch(transactionFail(error));
+  }
 };
 
 // Create transaction from server
 export const createTransaction = (transaction) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  await axios
-    .post(
-      `${endpointAPI}/transaction/`,
-      {
-        ...transaction,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .post(
+        `${endpointAPI}/transaction/`,
+        {
+          ...transaction,
         },
-      }
-    )
-    .then((res) => {
-      const transaction = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const transaction = res.data;
 
-      if (transaction["last_updated"] == undefined) {
-        transaction["last_updated"] = moment();
-      }
+        if (transaction["last_updated"] == undefined) {
+          transaction["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: CREATE_TRANSACTION,
-        payload: transaction,
+        dispatch({
+          type: CREATE_TRANSACTION,
+          payload: transaction,
+        });
+      })
+      .catch((error) => {
+        dispatch(transactionFail(error));
       });
-    })
-    .catch((error) => {
-      dispatch(transactionFail(error));
-    });
+  } catch (error) {
+    dispatch(transactionFail(error));
+  }
 };
 
 // Delete transaction from server
 export const hideTransaction = (transaction) => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .delete(`${endpointAPI}/transaction/${transaction}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then(() => {
-      dispatch({
-        type: DELETE_TRANSACTION,
-        payload: transaction,
+    return axios
+      .delete(`${endpointAPI}/transaction/${transaction}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: DELETE_TRANSACTION,
+          payload: transaction,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(transactionFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(transactionFail(error));
-    });
+  } catch (error) {
+    dispatch(transactionFail(error));
+  }
 };
 
 export const transactionFail = (error) => (dispatch) => {
@@ -153,8 +165,6 @@ export const transactionFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_TRANSACTION,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_TRANSACTION,
+});

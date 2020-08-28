@@ -17,7 +17,7 @@ export const getCompany = () => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
+    return axios
       .get(`${endpointAPI}/company/`, {
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const createCompany = (company) => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return await axios
+    return axios
       .post(
         `${endpointAPI}/company/`,
         {
@@ -126,40 +126,56 @@ export const companyFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_COMPANY,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_COMPANY,
+});
 
 // Invite Profile To Company
-export const joinProfileToCompany = async (profile_id, profile_phone) =>
-  axios.post(
-    `${endpointAPI}/join-profile-to-company/`,
-    {
-      profile_id,
-      profile_phone,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + (await AsyncStorage.getItem("AUTH_TOKEN")),
+export const joinProfileToCompany = async (profile_id, profile_phone) => {
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    return axios.post(
+      `${endpointAPI}/join-profile-to-company/`,
+      {
+        profile_id,
+        profile_phone,
       },
-    }
-  );
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      }
+    );
+  } catch (error) {
+    Alert.alert("Статус запроса", error.message, [{ text: "OK" }], {
+      cancelable: false,
+    });
+  }
+};
 
 // Remove Profile To Company
-export const removeProfileFromCompany = async (profile_id, profile_phone) =>
-  axios.post(
-    `${endpointAPI}/remove-profile-from-company/`,
-    {
-      profile_id,
-      profile_phone,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + (await AsyncStorage.getItem("AUTH_TOKEN")),
+export const removeProfileFromCompany = async (profile_id, profile_phone) => {
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    return axios.post(
+      `${endpointAPI}/remove-profile-from-company/`,
+      {
+        profile_id,
+        profile_phone,
       },
-    }
-  );
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      }
+    );
+  } catch (error) {
+    Alert.alert("Статус запроса", error.message, [{ text: "OK" }], {
+      cancelable: false,
+    });
+  }
+};

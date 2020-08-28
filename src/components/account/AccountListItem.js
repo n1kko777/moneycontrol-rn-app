@@ -10,9 +10,7 @@ import { splitToDigits } from "../../splitToDigits";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 
-import { hideAccount } from "../../store/actions/accountAction";
-
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { hideAccountAction } from "../../store/actions/apiAction";
 
 export const AccountListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
@@ -55,13 +53,8 @@ export const AccountListItem = ({ item, index, dataList, navigation }) => {
         },
         {
           text: "Удалить",
-          onPress: async () => {
-            dispatch(startLoader());
-            const hideItem = item;
-
-            await dispatch(hideAccount(hideItem)).then(() => {
-              dispatch(endLoader());
-            });
+          onPress: () => {
+            dispatch(hideAccountAction(item));
           },
         },
       ],

@@ -12,11 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { getShortName } from "../getShortName";
 
-import {
-  getDataDispatcher,
-  startLoader,
-  endLoader,
-} from "../store/actions/apiAction";
+import { getDataDispatcher } from "../store/actions/apiAction";
 
 import { ReportFilter } from "../components/report/ReportFilter";
 import { ChartCompany } from "../components/report/ChartCompany";
@@ -397,10 +393,8 @@ export const ReportScreen = ({ navigation }) => {
         : 0,
   };
 
-  const refreshData = async () => {
-    dispatch(startLoader());
-    await dispatch(getDataDispatcher());
-    dispatch(endLoader());
+  const refreshData = () => {
+    dispatch(getDataDispatcher());
   };
 
   const onReset = () => {

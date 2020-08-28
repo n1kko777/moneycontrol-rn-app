@@ -7,10 +7,7 @@ import { DeleteIcon, TagIcon } from "../../themes/icons";
 
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
-
-import { hideTag } from "../../store/actions/tagAction";
-
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { hideTagAction } from "../../store/actions/apiAction";
 
 export const TagListItem = ({ item, index, dataList, navigation }) => {
   const dispatch = useDispatch();
@@ -35,13 +32,8 @@ export const TagListItem = ({ item, index, dataList, navigation }) => {
         },
         {
           text: "Удалить",
-          onPress: async () => {
-            dispatch(startLoader());
-            const hideItem = item;
-
-            await dispatch(hideTag(hideItem)).then(() => {
-              dispatch(endLoader());
-            });
+          onPress: () => {
+            dispatch(hideTagAction(item));
           },
         },
       ],

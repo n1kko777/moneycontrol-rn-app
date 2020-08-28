@@ -11,10 +11,8 @@ import { CompanyProfileList } from "../../components/company/CompanyProfileList"
 
 import { View, Clipboard, Alert } from "react-native";
 import { THEME } from "../../themes/themes";
-import { startLoader, endLoader } from "../../store/actions/apiAction";
-import { getCompany } from "../../store/actions/companyAction";
+import { companyRefreshAction } from "../../store/actions/apiAction";
 import { logout } from "../../store/actions/authAction";
-import { getAccount } from "../../store/actions/accountAction";
 
 export const TeamsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -38,11 +36,8 @@ export const TeamsScreen = ({ navigation }) => {
         : company.profiles
       : [];
 
-  const onCompanyRefresh = async () => {
-    dispatch(startLoader());
-    await dispatch(getCompany());
-    await dispatch(getAccount());
-    dispatch(endLoader());
+  const onCompanyRefresh = () => {
+    dispatch(companyRefreshAction());
   };
 
   const inviteToTeam = () => {

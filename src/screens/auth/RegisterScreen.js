@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { authSignUp } from "../../store/actions/authAction";
 
 import {
   Layout,
@@ -21,7 +20,7 @@ import {
   showIconPassword,
 } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import { authSignUpAction } from "../../store/actions/apiAction";
 
 export const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -52,11 +51,10 @@ export const RegisterScreen = ({ navigation }) => {
   };
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
-      dispatch(startLoader());
-      await dispatch(
-        authSignUp({
+      dispatch(
+        authSignUpAction({
           first_name,
           last_name,
           email,
@@ -64,7 +62,6 @@ export const RegisterScreen = ({ navigation }) => {
           password2,
         })
       );
-      dispatch(endLoader());
     }
   };
 

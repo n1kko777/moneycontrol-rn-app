@@ -12,20 +12,13 @@ import {
 } from "../../themes/icons";
 import { logout } from "../../store/actions/authAction";
 import { useDispatch } from "react-redux";
-import {
-  startLoader,
-  getDataDispatcher,
-  endLoader,
-} from "../../store/actions/apiAction";
+import { getDataDispatcher } from "../../store/actions/apiAction";
 
 export const TopMenuOptions = ({ navigation }) => {
   const dispatch = useDispatch();
 
-  const getData = async () => {
-    dispatch(startLoader());
-    await dispatch(getDataDispatcher()).then(() => {
-      dispatch(endLoader());
-    });
+  const getData = () => {
+    dispatch(getDataDispatcher());
   };
 
   const themeContext = React.useContext(ThemeContext);

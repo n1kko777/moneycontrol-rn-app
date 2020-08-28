@@ -15,7 +15,11 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import { startLoader, endLoader } from "../../store/actions/apiAction";
+import {
+  startLoader,
+  endLoader,
+  updateTagAction,
+} from "../../store/actions/apiAction";
 import { updateTag } from "../../store/actions/tagAction";
 import { Keyboard } from "react-native";
 
@@ -32,24 +36,18 @@ export const UpdateTagScreen = ({ route, navigation }) => {
   };
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!loader) {
       Keyboard.dismiss();
-      dispatch(startLoader());
-
-      try {
-        await dispatch(
-          updateTag(tag.id, {
+      dispatch(
+        updateTagAction(
+          {
+            id: tag.id,
             tag_name,
-          })
-        );
-      } catch (error) {}
-
-      if (tagError === null) {
-        navigateBack();
-      }
-
-      dispatch(endLoader());
+          },
+          navigateBack
+        )
+      );
     }
   };
 

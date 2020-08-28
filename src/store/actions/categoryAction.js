@@ -29,120 +29,135 @@ export const clearCurrentCategory = () => ({
 export const getCategory = () => async (dispatch) => {
   dispatch(setLoading());
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .get(`${endpointAPI}/category/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      const category = res.data.filter((elem) => elem.is_active);
+    return axios
+      .get(`${endpointAPI}/category/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        const category = res.data.filter((elem) => elem.is_active);
 
-      dispatch({
-        type: GET_CATEGORY,
-        payload: category,
+        dispatch({
+          type: GET_CATEGORY,
+          payload: category,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(categoryFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(categoryFail(error));
-    });
+  } catch (error) {
+    dispatch(categoryFail(error));
+  }
 };
 
 // Create category from server
 export const createCategory = (category) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .post(
-      `${endpointAPI}/category/`,
-      {
-        ...category,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .post(
+        `${endpointAPI}/category/`,
+        {
+          ...category,
         },
-      }
-    )
-    .then((res) => {
-      const category = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const category = res.data;
 
-      if (category["last_updated"] == undefined) {
-        category["last_updated"] = moment();
-      }
+        if (category["last_updated"] == undefined) {
+          category["last_updated"] = moment();
+        }
 
-      dispatch({
-        type: CREATE_CATEGORY,
-        payload: category,
+        dispatch({
+          type: CREATE_CATEGORY,
+          payload: category,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(categoryFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(categoryFail(error));
-    });
+  } catch (error) {
+    dispatch(categoryFail(error));
+  }
 };
 
 // Update category from server
-export const updateCategory = (id, category) => async (dispatch) => {
+export const updateCategory = ({ id, category_name }) => async (dispatch) => {
   dispatch(setLoading());
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  return await axios
-    .put(
-      `${endpointAPI}/category/${id}/`,
-      {
-        ...category,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
+    return axios
+      .put(
+        `${endpointAPI}/category/${id}/`,
+        {
+          category_name,
         },
-      }
-    )
-    .then((res) => {
-      const updatedCategory = res.data;
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const updatedCategory = res.data;
 
-      dispatch({
-        type: UPDATE_CATEGORY,
-        payload: updatedCategory,
+        dispatch({
+          type: UPDATE_CATEGORY,
+          payload: updatedCategory,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(categoryFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(categoryFail(error));
-    });
+  } catch (error) {
+    dispatch(categoryFail(error));
+  }
 };
 
 // Delete category from server
 export const hideCategory = (category) => async (dispatch) => {
   dispatch(setLoading());
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-  const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    axios
+      .delete(`${endpointAPI}/category/${category.id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => {
+        dispatch({
+          type: DELETE_CATEGORY,
+          payload: category.id,
+        });
+      })
 
-  return await axios
-    .delete(`${endpointAPI}/category/${category.id}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    .then((res) => {
-      dispatch({
-        type: DELETE_CATEGORY,
-        payload: category.id,
+      .catch((error) => {
+        dispatch(categoryFail(error));
       });
-    })
-
-    .catch((error) => {
-      dispatch(categoryFail(error));
-    });
+  } catch (error) {
+    dispatch(categoryFail(error));
+  }
 };
 
 export const categoryFail = (error) => (dispatch) => {
@@ -199,8 +214,6 @@ export const categoryFail = (error) => (dispatch) => {
 };
 
 // Set loading to true
-export const setLoading = () => (dispatch) => {
-  dispatch({
-    type: LOADING_CATEGORY,
-  });
-};
+export const setLoading = () => ({
+  type: LOADING_CATEGORY,
+});

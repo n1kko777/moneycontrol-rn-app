@@ -21,19 +21,16 @@ export const categoryReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case SET_CURRENT_CATEGORY:
-      console.log("case SET_CURRENT_CATEGORY:");
       return {
         ...state,
         current: payload,
       };
     case CLEAR_CURRENT_CATEGORY:
-      console.log("case CLEAR_CURRENT_CATEGORY:");
       return {
         ...state,
         current: null,
       };
     case GET_CATEGORY:
-      console.log("case GET_CATEGORY:");
       return {
         ...state,
         categories: payload,
@@ -41,7 +38,6 @@ export const categoryReducer = (state = initialState, action) => {
         error: null,
       };
     case CREATE_CATEGORY:
-      console.log("case CREATE_CATEGORY:");
       return {
         ...state,
         categories: [payload, ...state.categories],
@@ -50,7 +46,6 @@ export const categoryReducer = (state = initialState, action) => {
         error: null,
       };
     case UPDATE_CATEGORY:
-      console.log("case UPDATE_CATEGORY:");
       return {
         ...state,
         categories: state.categories.map((category) =>
@@ -60,7 +55,6 @@ export const categoryReducer = (state = initialState, action) => {
         error: null,
       };
     case DELETE_CATEGORY:
-      console.log("case DELETE_CATEGORY:");
       return {
         ...state,
         categories: state.categories.filter(
@@ -70,7 +64,6 @@ export const categoryReducer = (state = initialState, action) => {
         error: null,
       };
     case CLEAR_CATEGORY:
-      console.log("case CLEAR_CATEGORY:");
       return {
         ...state,
         categories: [],
@@ -79,8 +72,6 @@ export const categoryReducer = (state = initialState, action) => {
         error: null,
       };
     case LOADING_CATEGORY:
-      console.log("==========================");
-      console.log("case LOADING_CATEGORY:");
       return {
         ...state,
         loading: true,
@@ -88,7 +79,6 @@ export const categoryReducer = (state = initialState, action) => {
       };
 
     case ERROR_CATEGORY:
-      console.log("ERROR_CATEGORY : " + payload);
       return {
         ...state,
         loading: false,
