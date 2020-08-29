@@ -6,14 +6,11 @@ import { StyleSheet, View } from "react-native";
 export const LoadingSpinner = () => {
   const { loader } = useSelector((store) => store.api);
 
-  const renderModalElement = () => (
-    <View style={styles.modalView}>
-      <Spinner status="primary" />
-    </View>
-  );
   return (
     <Modal backdropStyle={styles.centeredView} visible={loader}>
-      {renderModalElement()}
+      <View style={styles.modalView}>
+        <Spinner status="primary" />
+      </View>
     </Modal>
   );
 };
