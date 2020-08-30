@@ -1,19 +1,15 @@
 import React from "react";
-import { Spinner, Modal, Layout } from "@ui-kitten/components";
-import { useSelector } from "react-redux";
+import { Spinner, Modal } from "@ui-kitten/components";
+import { useSelector, connect } from "react-redux";
 import { StyleSheet, View } from "react-native";
 
-export const LoadingSpinner = () => {
-  const { loader } = useSelector((store) => store.api);
-
-  return (
-    <Modal backdropStyle={styles.centeredView} visible={loader}>
-      <View style={styles.modalView}>
-        <Spinner status="primary" />
-      </View>
-    </Modal>
-  );
-};
+const LoadingSpinner = ({ loader }) => (
+  <Modal backdropStyle={styles.centeredView} visible={loader}>
+    <View style={styles.modalView}>
+      <Spinner status="primary" />
+    </View>
+  </Modal>
+);
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -38,3 +34,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 });
+
+const mapStateToProps = (store) => ({
+  loader: store.api.loader,
+});
+
+export default connect(mapStateToProps)(LoadingSpinner);

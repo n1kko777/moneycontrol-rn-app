@@ -11,7 +11,7 @@ import { mapping, light, dark } from "@eva-design/eva";
 import { useColorScheme } from "react-native-appearance";
 
 import { AppNavigator } from "../navigations/AppNavigator";
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const themes = { light, dark };
 
