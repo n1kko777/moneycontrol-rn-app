@@ -25,7 +25,7 @@ export const getCompany = () => async (dispatch) => {
         },
       })
       .then((res) => {
-        const company = res.data[0];
+        const company = res.data.length > 0 ? res.data[0] : {};
 
         dispatch({
           type: GET_COMPANY,
