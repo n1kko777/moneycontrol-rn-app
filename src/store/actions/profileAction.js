@@ -5,11 +5,13 @@ import {
   UPDATE_PROFILE,
   LOADING_PROFILE,
   ERROR_PROFILE,
+  CLEAR_PROFILE,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
+import { logout } from "./authAction";
 
 // Get profile from server
 export const getProfile = () => async (dispatch) => {
@@ -152,6 +154,30 @@ export const updateImageProfile = (profile, id) => async (dispatch) => {
         });
       })
 
+      .catch((error) => {
+        dispatch(profileFail(error));
+      });
+  } catch (error) {
+    dispatch(profileFail(error));
+  }
+};
+
+// Delete profile from server
+export const hideProfile = (id, navigation) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    return axios
+      .delete(`${endpointAPI}/profile/${id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      })
+      .then(() => {
+        dispatch(logout(navigation));
+      })
       .catch((error) => {
         dispatch(profileFail(error));
       });

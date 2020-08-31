@@ -9,6 +9,7 @@ import {
   createProfile,
   updateImageProfile,
   updateProfile,
+  hideProfile,
 } from "./profileAction";
 import {
   getAccount,
@@ -294,6 +295,12 @@ export const updateTagAction = (updatedItem, onSuccess) => async (
 };
 
 // Hide/delete
+export const hideProfileAction = (hideItem, navigation) => async (dispatch) => {
+  dispatch(startLoader());
+  await Promise.all([dispatch(hideProfile(hideItem, navigation))]);
+  dispatch(endLoader());
+};
+
 export const hideAccountAction = (hideItem) => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(hideAccount(hideItem))]);

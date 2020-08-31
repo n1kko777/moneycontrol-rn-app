@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import {
   Layout,
   TopNavigation,
@@ -12,11 +12,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { THEME } from "../../themes/themes";
 
-import { BackIcon } from "../../themes/icons";
+import { BackIcon, DeleteIcon } from "../../themes/icons";
 
 import {
   updateImageProfileAction,
   updateProfileAction,
+  hideProfileAction,
 } from "../../store/actions/apiAction";
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
 
@@ -25,10 +26,18 @@ export const ProfileScreen = ({ navigation }) => {
   const profileStore = useSelector((store) => store.profile);
   const { profile } = profileStore;
 
-  const [first_name, setFirstName] = React.useState(profile.first_name);
-  const [last_name, setLastName] = React.useState(profile.last_name);
-  const [phone, setPhone] = React.useState(profile.phone);
-  const [imageUrl, setImageUrl] = React.useState(profile.image);
+  const [first_name, setFirstName] = React.useState(
+    profile !== null ? profile.first_name : ""
+  );
+  const [last_name, setLastName] = React.useState(
+    profile !== null ? profile.last_name : ""
+  );
+  const [phone, setPhone] = React.useState(
+    profile !== null ? profile.phone : ""
+  );
+  const [imageUrl, setImageUrl] = React.useState(
+    profile !== null ? profile.image : null
+  );
 
   const [isEdit, setIsEdit] = React.useState(false);
   const loader = useSelector((store) => store.api.loader);
@@ -94,6 +103,34 @@ export const ProfileScreen = ({ navigation }) => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
+  const deleteProfileHandler = () => {
+    Alert.alert(
+      "Удаление профиля",
+      profile.is_admin
+        ? "Вы уверены, что хотите удалить компанию и все данные принадлежащие ей, а также удалить текущий профиль?"
+        : "Вы уверены, что хотите выйти из компании и удалить текущий профиль?",
+      [
+        {
+          text: "Отмена",
+          style: "cancel",
+        },
+        {
+          text: "Удалить профиль",
+          onPress: () => {
+            dispatch(hideProfileAction(profile.id, navigation));
+          },
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
+  };
+
+  const DeleteProfileAction = () => (
+    <TopNavigationAction icon={DeleteIcon} onPress={deleteProfileHandler} />
+  );
+
   return (
     <ScreenTemplate>
       <>
@@ -101,6 +138,7 @@ export const ProfileScreen = ({ navigation }) => {
           title="Профиль"
           alignment="center"
           leftControl={BackAction()}
+          rightControls={DeleteProfileAction()}
         />
         <Layout
           style={{

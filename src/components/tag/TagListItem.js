@@ -24,7 +24,7 @@ export const TagListItem = ({ item, index, dataList, navigation }) => {
     close();
     Alert.alert(
       "Удаление тега",
-      `Вы уверены что хотите удалить тег ${item.tag_name}?`,
+      `Вы уверены, что хотите удалить тег ${item.tag_name}?`,
       [
         {
           text: "Отмена",

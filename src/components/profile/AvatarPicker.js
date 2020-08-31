@@ -42,7 +42,7 @@ export const AvatarPicker = ({ isEdit, imageUrl, setImageUrl }) => {
     imageUrl !== null &&
       Alert.alert(
         "Кдаление аватар",
-        "Вы уверены что хотите удалить аватар?",
+        "Вы уверены, что хотите удалить аватар?",
         [
           {
             text: "Отмена",

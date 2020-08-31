@@ -25,7 +25,7 @@ export const CategoryListItem = ({ item, index, dataList, navigation }) => {
 
     Alert.alert(
       "Удаление категории",
-      `Вы уверены что хотите удалить категорию ${item.category_name}?`,
+      `Вы уверены, что хотите удалить категорию ${item.category_name}?`,
       [
         {
           text: "Отмена",

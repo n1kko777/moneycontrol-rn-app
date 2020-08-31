@@ -76,7 +76,7 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
   const onDeleteMember = () => {
     Alert.alert(
       "Удаление сотрудника",
-      `Вы уверены что хотите удалить сотрудника ${
+      `Вы уверены, что хотите удалить сотрудника ${
         profile.first_name + " " + profile.last_name
       }?`,
       [

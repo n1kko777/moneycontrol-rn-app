@@ -69,7 +69,7 @@ export const TopMenuOptions = ({ navigation }) => {
   const navigateLogout = () => {
     Alert.alert(
       "Выход",
-      "Вы уверены что хотите выйти из учетной записи?",
+      "Вы уверены, что хотите выйти из учетной записи?",
       [
         {
           text: "Отмена",

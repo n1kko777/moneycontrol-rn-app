@@ -84,7 +84,7 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
     close();
     Alert.alert(
       "Удаление категории",
-      `Вы уверены что хотите удалить операцию?`,
+      `Вы уверены, что хотите удалить операцию?`,
       [
         {
           text: "Отмена",

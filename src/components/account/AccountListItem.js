@@ -45,7 +45,7 @@ export const AccountListItem = ({ item, index, dataList, navigation }) => {
     close();
     Alert.alert(
       "Удаление счета",
-      `Вы уверены что хотите удалить счет ${item.account_name}?`,
+      `Вы уверены, что хотите удалить счет ${item.account_name}?`,
       [
         {
           text: "Отмена",
