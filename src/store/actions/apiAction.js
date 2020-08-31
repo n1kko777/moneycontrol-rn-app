@@ -128,11 +128,10 @@ export const createProfileAction = (newItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(createProfile(newItem))]);
-  const profile = getState().profile;
-  profile.error === null &&
-    profile.profile.hasOwnProperty("company") &&
-    onSuccess();
   dispatch(endLoader());
+
+  const profile = getState().profile;
+  profile.error === null && profile.profile.company !== null && onSuccess();
 };
 
 export const createCompanyAction = (newItem, onSuccess) => async (
@@ -141,8 +140,9 @@ export const createCompanyAction = (newItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(createCompany(newItem), dispatch(getProfile()))]);
-  getState().profile.profile.company !== null && onSuccess();
   dispatch(endLoader());
+
+  getState().profile.profile.company !== null && onSuccess();
 };
 
 export const createAccountAction = (newItem, onSuccess) => async (
@@ -151,8 +151,9 @@ export const createAccountAction = (newItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(createAccount(newItem))]);
-  getState().account.error === null && onSuccess();
   dispatch(endLoader());
+
+  getState().account.error === null && onSuccess();
 };
 
 export const createCategoryAction = (newItem, onSuccess) => async (
@@ -161,8 +162,9 @@ export const createCategoryAction = (newItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(createCategory(newItem))]);
-  getState().category.error === null && onSuccess();
   dispatch(endLoader());
+
+  getState().category.error === null && onSuccess();
 };
 
 export const createTagAction = (newItem, onSuccess = () => {}) => async (
@@ -171,10 +173,9 @@ export const createTagAction = (newItem, onSuccess = () => {}) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(createTag(newItem))]);
+  dispatch(endLoader());
 
   getState().tag.error === null && onSuccess();
-
-  dispatch(endLoader());
 };
 
 export const createActionAction = (newItem, onSuccess) => async (
@@ -187,10 +188,9 @@ export const createActionAction = (newItem, onSuccess) => async (
     dispatch(getAction()),
     dispatch(getAccount()),
   ]);
+  dispatch(endLoader());
 
   getState().action.error === null && onSuccess();
-
-  dispatch(endLoader());
 };
 
 export const createTransactionAction = (newItem, onSuccess) => async (
@@ -203,10 +203,9 @@ export const createTransactionAction = (newItem, onSuccess) => async (
     dispatch(getTransaction()),
     dispatch(getAccount()),
   ]);
+  dispatch(endLoader());
 
   getState().transaction.error === null && onSuccess();
-
-  dispatch(endLoader());
 };
 
 export const createTransferAction = (newItem, onSuccess) => async (
@@ -219,10 +218,9 @@ export const createTransferAction = (newItem, onSuccess) => async (
     dispatch(getTransfer()),
     dispatch(getAccount()),
   ]);
+  dispatch(endLoader());
 
   getState().transfer.error === null && onSuccess();
-
-  dispatch(endLoader());
 };
 
 // Update
@@ -232,8 +230,9 @@ export const updateImageProfileAction = ({ data, id }, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(updateImageProfile(data, id))]);
-  getState().profile.error === null && onSuccess();
   dispatch(endLoader());
+
+  getState().profile.error === null && onSuccess();
 };
 
 export const updateAccountAction = (updatedItem, onSuccess) => async (
@@ -242,8 +241,9 @@ export const updateAccountAction = (updatedItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(updateAccount(updatedItem))]);
-  getState().account.error === null && onSuccess();
   dispatch(endLoader());
+
+  getState().account.error === null && onSuccess();
 };
 
 export const updateCategoryAction = (updatedItem, onSuccess) => async (
@@ -252,8 +252,9 @@ export const updateCategoryAction = (updatedItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(updateCategory(updatedItem))]);
-  getState().category.error === null && onSuccess();
   dispatch(endLoader());
+
+  getState().category.error === null && onSuccess();
 };
 
 export const updateTagAction = (updatedItem, onSuccess) => async (
@@ -262,8 +263,9 @@ export const updateTagAction = (updatedItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(updateTag(updatedItem))]);
-  getState().tag.error === null && onSuccess();
   dispatch(endLoader());
+
+  getState().tag.error === null && onSuccess();
 };
 
 // Hide/delete
