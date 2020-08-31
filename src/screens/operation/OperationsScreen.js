@@ -170,7 +170,7 @@ export const OperationsScreen = ({ navigation, route }) => {
 
   return (
     <ScreenTemplate>
-      {company !== undefined && (
+      {company !== null && (
         <Toolbar
           navigation={navigation}
           title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${

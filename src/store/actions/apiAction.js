@@ -59,7 +59,6 @@ export const authLoginAction = (email, password, onSuccess) => async (
   dispatch,
   getState
 ) => {
-  console.log("authLoginAction");
   dispatch(startLoader());
   await Promise.all([dispatch(authLogin(email, password))]);
   dispatch(endLoader());
@@ -71,15 +70,18 @@ export const authLoginAction = (email, password, onSuccess) => async (
 export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
   dispatch(startLoader());
 
-  dispatch(getProfile());
-  if (getState().profile.profile.company === null) {
+  await Promise.all([dispatch(getCompany()), dispatch(getProfile())]);
+
+  if (
+    getState().profile.profile === null ||
+    getState().company.company === null
+  ) {
     dispatch(logout(navigation));
     dispatch(endLoader());
     return;
   }
 
   await Promise.all([
-    dispatch(getCompany()),
     dispatch(getAccount()),
     dispatch(getTransaction()),
     dispatch(getAction()),
@@ -137,7 +139,7 @@ export const createProfileAction = (newItem, onSuccess) => async (
   dispatch(endLoader());
 
   const profile = getState().profile;
-  profile.error === null && profile.profile.company !== null && onSuccess();
+  profile.error === null && onSuccess(profile.profile);
 };
 
 export const createCompanyAction = (newItem, onSuccess) => async (
@@ -148,7 +150,8 @@ export const createCompanyAction = (newItem, onSuccess) => async (
   await Promise.all([dispatch(createCompany(newItem), dispatch(getProfile()))]);
   dispatch(endLoader());
 
-  getState().profile.profile.company !== null && onSuccess();
+  getState().profile.profile.company !== null &&
+    onSuccess(getState().company.company);
 };
 
 export const createAccountAction = (newItem, onSuccess) => async (

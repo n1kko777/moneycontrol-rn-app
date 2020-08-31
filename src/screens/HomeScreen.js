@@ -104,7 +104,7 @@ export const HomeScreen = ({ navigation }) => {
             ],
         }}
       >
-        {company !== undefined && (
+        {company !== null && (
           <Toolbar
             title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
               company.company_name

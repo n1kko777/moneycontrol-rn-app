@@ -24,7 +24,7 @@ export const TeamsScreen = ({ navigation }) => {
   const { company } = store.company;
 
   const companyProfileListData =
-    company !== undefined && company.hasOwnProperty("profiles")
+    company !== null && company.hasOwnProperty("profiles")
       ? profile !== null && profile.is_admin
         ? company.profiles.map((elem) => ({
             ...elem,
@@ -45,7 +45,7 @@ export const TeamsScreen = ({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      {company !== undefined && (
+      {company !== null && (
         <Toolbar
           navigation={navigation}
           title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${

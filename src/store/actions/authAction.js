@@ -144,8 +144,8 @@ export const authLogin = (email, password) => async (dispatch) => {
         email: email,
         password: password,
       })
-      .then((res) => {
-        dispatch(authSuccess(res.data));
+      .then(async (res) => {
+        await dispatch(authSuccess(res.data));
       })
       .catch((error) => {
         dispatch(authFail(error));

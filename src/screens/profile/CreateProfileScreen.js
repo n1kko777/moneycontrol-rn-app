@@ -20,9 +20,6 @@ import { createProfileAction } from "../../store/actions/apiAction";
 
 export const CreateProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const profileStore = useSelector((store) => store.profile);
-  const { profile } = profileStore;
-
   const inputRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -37,7 +34,7 @@ export const CreateProfileScreen = ({ navigation }) => {
 
   const loader = useSelector((store) => store.api.loader);
 
-  const onSuccess = () => {
+  const onSuccess = (profile) => {
     navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
   };
 

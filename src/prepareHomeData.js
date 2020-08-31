@@ -14,7 +14,7 @@ export const prepareHomeData = (
   const allOpprations = [];
   const homeListData = [];
 
-  if (company !== undefined) {
+  if (company !== null) {
     transactions.length !== 0 &&
       allOpprations.push(
         ...transactions.map((elem) => ({
@@ -77,7 +77,7 @@ export const prepareHomeData = (
       });
 
     const companyProfileListData =
-      company !== undefined && company.hasOwnProperty("profiles")
+      company !== null && company.hasOwnProperty("profiles")
         ? profile !== null && profile.is_admin
           ? company.profiles.map((elem) => ({
               ...elem,

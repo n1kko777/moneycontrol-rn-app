@@ -55,13 +55,15 @@ export const CompanyManagerScreen = ({ navigation }) => {
 
   const loader = useSelector((store) => store.api.loader);
 
-  const onSuccess = () => {
-    profile !== null && profile.company !== null && navigation.navigate("Home");
+  const onSuccessProfile = (successProfile) => {
+    successProfile !== null
+      ? successProfile.company !== null && navigation.navigate("Home")
+      : navigation.navigate("CreateProfile");
   };
 
   const updateProfileHandler = () => {
     if (!loader) {
-      dispatch(getProfileAction(onSuccess));
+      dispatch(getProfileAction(onSuccessProfile));
     }
   };
 
@@ -69,9 +71,13 @@ export const CompanyManagerScreen = ({ navigation }) => {
     <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
   );
 
+  const onSuccessCompany = (successCompany) => {
+    successCompany !== null && navigation.navigate("Home");
+  };
+
   const createCompanyHandler = () => {
     const company = { company_name: companyName };
-    dispatch(createCompanyAction(company, onSuccess));
+    dispatch(createCompanyAction(company, onSuccessCompany));
   };
 
   return (

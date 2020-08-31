@@ -28,7 +28,7 @@ export const getProfile = () => async (dispatch) => {
       .then((res) => {
         const profile =
           res.data.length === 0
-            ? {}
+            ? null
             : res.data.length > 1
             ? res.data.find((elem) => elem.is_admin)
             : res.data[0];
