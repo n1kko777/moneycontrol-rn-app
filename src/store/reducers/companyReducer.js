@@ -7,7 +7,7 @@ import {
 } from "../types";
 
 const initialState = {
-  company: {},
+  company: null,
   error: null,
   loading: false,
 };
@@ -32,7 +32,7 @@ export const companyReducer = (state = initialState, action) => {
     case CLEAR_COMPANY:
       return {
         ...state,
-        company: {},
+        company: null,
         loading: false,
         error: null,
       };

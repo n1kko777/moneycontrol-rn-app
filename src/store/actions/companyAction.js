@@ -64,10 +64,6 @@ export const createCompany = (company) => async (dispatch) => {
       .then((res) => {
         const company = res.data;
 
-        if (company["last_updated"] == undefined) {
-          company["last_updated"] = moment();
-        }
-
         dispatch({
           type: CREATE_COMPANY,
           payload: company,

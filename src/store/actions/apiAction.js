@@ -150,8 +150,7 @@ export const createCompanyAction = (newItem, onSuccess) => async (
   await Promise.all([dispatch(createCompany(newItem), dispatch(getProfile()))]);
   dispatch(endLoader());
 
-  getState().profile.profile.company !== null &&
-    onSuccess(getState().company.company);
+  getState().company.company !== null && onSuccess(getState().company.company);
 };
 
 export const createAccountAction = (newItem, onSuccess) => async (
