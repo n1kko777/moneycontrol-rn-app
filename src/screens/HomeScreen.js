@@ -20,7 +20,6 @@ import { CustomDatePicker } from "../components/CustomDatePicker";
 import { filterArrayByDate } from "../filterArrayByDate";
 
 import { getDataDispatcher } from "../store/actions/apiAction";
-import { logout } from "../store/actions/authAction";
 
 export const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -86,19 +85,12 @@ export const HomeScreen = ({ navigation }) => {
   }, [accounts, startDate]);
 
   const refreshData = () => {
-    dispatch(getDataDispatcher());
+    dispatch(getDataDispatcher(navigation));
   };
 
   React.useEffect(() => {
     refreshData();
   }, []);
-
-  React.useEffect(() => {
-    if (company === undefined) {
-      navigation.navigate("Login");
-      dispatch(logout());
-    }
-  }, [company]);
 
   homeListData.isNavigate = true;
 

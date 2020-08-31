@@ -18,7 +18,7 @@ export const TopMenuOptions = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const getData = () => {
-    dispatch(getDataDispatcher());
+    dispatch(getDataDispatcher(navigation));
   };
 
   const themeContext = React.useContext(ThemeContext);
@@ -40,8 +40,7 @@ export const TopMenuOptions = ({ navigation }) => {
   ];
 
   const logoutHandler = async () => {
-    await navigation.navigate("Login");
-    dispatch(logout());
+    dispatch(logout(navigation));
   };
 
   const toggleMenu = () => {

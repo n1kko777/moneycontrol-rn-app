@@ -53,8 +53,7 @@ export const CreateProfileScreen = ({ navigation }) => {
   };
 
   const logoutHandler = async () => {
-    await navigation.navigate("Login");
-    dispatch(logout());
+    dispatch(logout(navigation));
   };
 
   const navigateLogout = () => {

@@ -13,9 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/actions/authAction";
 import { Alert } from "react-native";
 
-import { LogoutIcon } from "../../themes/icons";
+import { LogoutIcon, UpdateIcon } from "../../themes/icons";
 
-import { createCompanyAction } from "../../store/actions/apiAction";
+import {
+  createCompanyAction,
+  getProfileAction,
+} from "../../store/actions/apiAction";
 
 export const CompanyManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,8 +29,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
   const [companyName, setCompanyName] = React.useState("");
 
   const logoutHandler = async () => {
-    await navigation.navigate("Login");
-    dispatch(logout());
+    dispatch(logout(navigation));
   };
 
   const navigateLogout = () => {
@@ -51,9 +53,22 @@ export const CompanyManagerScreen = ({ navigation }) => {
     <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
   );
 
+  const loader = useSelector((store) => store.api.loader);
+
   const onSuccess = () => {
-    navigation.navigate("Home");
+    profile !== null && profile.company !== null && navigation.navigate("Home");
   };
+
+  const updateProfileHandler = () => {
+    if (!loader) {
+      dispatch(getProfileAction());
+      onSuccess();
+    }
+  };
+
+  const RefreshProfileAction = () => (
+    <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
+  );
 
   const createCompanyHandler = () => {
     const company = { company_name: companyName };
@@ -67,6 +82,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
           title="Управление компаниями"
           alignment="center"
           leftControl={BackAction()}
+          rightControls={RefreshProfileAction()}
         />
         <Layout
           style={{

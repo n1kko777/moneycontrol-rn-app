@@ -97,7 +97,9 @@ export const authFail = (error) => (dispatch) => {
   });
 };
 
-export const logout = () => async (dispatch) => {
+export const logout = (navigation) => async (dispatch) => {
+  await navigation.navigate("Login");
+
   try {
     await AsyncStorage.clear();
   } catch (error) {
@@ -133,7 +135,7 @@ export const logout = () => async (dispatch) => {
   });
 };
 
-export const authLogin = (email, password, isRemindMe) => async (dispatch) => {
+export const authLogin = (email, password) => async (dispatch) => {
   dispatch(authStart());
 
   try {

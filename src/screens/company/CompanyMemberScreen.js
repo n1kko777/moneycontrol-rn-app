@@ -70,7 +70,7 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
   homeListData.isNavigate = false;
 
   const refreshData = () => {
-    dispatch(getDataDispatcher());
+    dispatch(getDataDispatcher(navigation));
   };
 
   const onDeleteMember = () => {

@@ -14,8 +14,7 @@ import { View } from "react-native";
 import { filterArrayByDate } from "../../filterArrayByDate";
 import { prepareOperationData } from "../../prepareOperationData";
 
-import { operationRefreshAction } from "../../store/actions/apiAction";
-import { logout } from "../../store/actions/authAction";
+import { getDataDispatcher } from "../../store/actions/apiAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
 import moment from "moment";
@@ -166,15 +165,8 @@ export const OperationsScreen = ({ navigation, route }) => {
   }, [isFiltered, startDate, accounts, operationListData]);
 
   const onOperationRefresh = () => {
-    dispatch(operationRefreshAction());
+    dispatch(getDataDispatcher(navigation));
   };
-
-  React.useEffect(() => {
-    if (company === undefined) {
-      navigation.navigate("Login");
-      dispatch(logout());
-    }
-  }, [company]);
 
   return (
     <ScreenTemplate>

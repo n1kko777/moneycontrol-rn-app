@@ -394,7 +394,7 @@ export const ReportScreen = ({ navigation }) => {
   };
 
   const refreshData = () => {
-    dispatch(getDataDispatcher());
+    dispatch(getDataDispatcher(navigation));
   };
 
   const onReset = () => {

@@ -9,10 +9,9 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 
-import { View, Clipboard, Alert } from "react-native";
+import { View } from "react-native";
 import { THEME } from "../../themes/themes";
-import { companyRefreshAction } from "../../store/actions/apiAction";
-import { logout } from "../../store/actions/authAction";
+import { getDataDispatcher } from "../../store/actions/apiAction";
 
 export const TeamsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -37,19 +36,12 @@ export const TeamsScreen = ({ navigation }) => {
       : [];
 
   const onCompanyRefresh = () => {
-    dispatch(companyRefreshAction());
+    dispatch(getDataDispatcher(navigation));
   };
 
   const inviteToTeam = () => {
     navigation.navigate("InviteMember");
   };
-
-  React.useEffect(() => {
-    if (company === undefined) {
-      navigation.navigate("Login");
-      dispatch(logout());
-    }
-  }, [company]);
 
   return (
     <ScreenTemplate>

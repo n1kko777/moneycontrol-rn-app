@@ -26,7 +26,7 @@ import {
 } from "./categoryAction";
 import { getTag, createTag, hideTag, updateTag } from "./tagAction";
 import { START_LOADER, END_LOADER } from "../types";
-import { authLogin, authSignUp, resetPass } from "./authAction";
+import { authLogin, authSignUp, resetPass, logout } from "./authAction";
 import { Alert } from "react-native";
 
 export const startLoader = () => ({
@@ -57,8 +57,16 @@ export const authLoginAction = (email, password) => async (dispatch) => {
 };
 
 // Get
-export const getDataDispatcher = () => async (dispatch) => {
+export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
   dispatch(startLoader());
+
+  dispatch(getProfile());
+  if (getState().profile.profile.company === null) {
+    dispatch(logout(navigation));
+    dispatch(endLoader());
+    return;
+  }
+
   await Promise.all([
     dispatch(getCompany()),
     dispatch(getAccount()),
@@ -71,26 +79,9 @@ export const getDataDispatcher = () => async (dispatch) => {
   dispatch(endLoader());
 };
 
-export const companyRefreshAction = () => async (dispatch) => {
-  dispatch(startLoader());
-  await Promise.all([dispatch(getCompany()), dispatch(getAccount())]);
-  dispatch(endLoader());
-};
-
 export const getProfileAction = () => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(getProfile())]);
-  dispatch(endLoader());
-};
-
-// Refresh
-export const operationRefreshAction = () => async (dispatch) => {
-  dispatch(startLoader());
-  await Promise.all([
-    dispatch(getAction()),
-    dispatch(getTransfer()),
-    dispatch(getTransaction()),
-  ]);
   dispatch(endLoader());
 };
 
