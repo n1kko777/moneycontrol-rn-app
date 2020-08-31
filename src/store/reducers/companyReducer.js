@@ -4,6 +4,7 @@ import {
   LOADING_COMPANY,
   ERROR_COMPANY,
   CLEAR_COMPANY,
+  UPDATE_COMPANY,
 } from "../types";
 
 const initialState = {
@@ -23,6 +24,13 @@ export const companyReducer = (state = initialState, action) => {
         error: null,
       };
     case CREATE_COMPANY:
+      return {
+        ...state,
+        company: payload,
+        loading: false,
+        error: null,
+      };
+    case UPDATE_COMPANY:
       return {
         ...state,
         company: payload,

@@ -4,11 +4,11 @@ import {
   CREATE_COMPANY,
   LOADING_COMPANY,
   ERROR_COMPANY,
+  UPDATE_COMPANY,
 } from "../types";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
-import moment from "moment";
 
 // Get company from server
 export const getCompany = () => async (dispatch) => {
@@ -66,6 +66,42 @@ export const createCompany = (company) => async (dispatch) => {
 
         dispatch({
           type: CREATE_COMPANY,
+          payload: company,
+        });
+      })
+
+      .catch((error) => {
+        dispatch(companyFail(error));
+      });
+  } catch (error) {
+    dispatch(companyFail(error));
+  }
+};
+// Update company from server
+export const updateCompany = (company) => async (dispatch) => {
+  dispatch(setLoading());
+
+  try {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+
+    return axios
+      .put(
+        `${endpointAPI}/company/${company.id}/`,
+        {
+          company_name: company.company_name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        }
+      )
+      .then((res) => {
+        const company = res.data;
+
+        dispatch({
+          type: UPDATE_COMPANY,
           payload: company,
         });
       })

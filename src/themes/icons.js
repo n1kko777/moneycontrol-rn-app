@@ -91,3 +91,4 @@ export const ActiveFilterIcon = (style) => (
 );
 
 export const CloseIcon = (style) => <Icon {...style} name="close" />;
+export const EditIcon = (style) => <Icon {...style} name="edit-2-outline" />;

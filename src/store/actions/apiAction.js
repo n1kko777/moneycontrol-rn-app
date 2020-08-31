@@ -3,6 +3,7 @@ import {
   createCompany,
   removeProfileFromCompany,
   joinProfileToCompany,
+  updateCompany,
 } from "./companyAction";
 import {
   getProfile,
@@ -259,6 +260,17 @@ export const updateImageProfileAction = ({ data, id }, onSuccess) => async (
   dispatch(endLoader());
 
   getState().profile.error === null && onSuccess();
+};
+
+export const updateCompanyAction = (updatedItem, onSuccess) => async (
+  dispatch,
+  getState
+) => {
+  dispatch(startLoader());
+  await Promise.all([dispatch(updateCompany(updatedItem))]);
+  dispatch(endLoader());
+
+  getState().company.error === null && onSuccess();
 };
 
 export const updateAccountAction = (updatedItem, onSuccess) => async (

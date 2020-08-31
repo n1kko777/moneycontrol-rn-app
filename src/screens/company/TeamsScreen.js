@@ -11,6 +11,7 @@ import { CompanyProfileList } from "../../components/company/CompanyProfileList"
 
 import { View } from "react-native";
 import { THEME } from "../../themes/themes";
+import { EditIcon, ProfileIcon } from "../../themes/icons";
 import { getDataDispatcher } from "../../store/actions/apiAction";
 
 export const TeamsScreen = ({ navigation }) => {
@@ -43,6 +44,10 @@ export const TeamsScreen = ({ navigation }) => {
     navigation.navigate("InviteMember");
   };
 
+  const onEditCompanyName = () => {
+    navigation.navigate("ChangeCompanyName");
+  };
+
   return (
     <ScreenTemplate>
       {company !== null && (
@@ -51,6 +56,16 @@ export const TeamsScreen = ({ navigation }) => {
           title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
             company.company_name
           }`}
+          TargetIcon={
+            profile !== null && profile.is_admin ? EditIcon : ProfileIcon
+          }
+          onTarget={
+            profile !== null && profile.is_admin
+              ? onEditCompanyName
+              : () => {
+                  navigation.navigate("Profile");
+                }
+          }
         />
       )}
       <Layout
