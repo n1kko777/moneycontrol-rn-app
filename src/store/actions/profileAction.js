@@ -85,7 +85,7 @@ export const createProfile = (profile) => async (dispatch) => {
 };
 
 // Update profile from server
-export const updateProfile = (profile) => async (dispatch) => {
+export const updateProfile = (profile, id) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -93,7 +93,7 @@ export const updateProfile = (profile) => async (dispatch) => {
 
     return axios
       .put(
-        `${endpointAPI}/profile/${profile.id}/`,
+        `${endpointAPI}/profile/${id}/`,
         {
           ...profile,
         },

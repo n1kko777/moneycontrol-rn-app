@@ -14,7 +14,10 @@ import { THEME } from "../../themes/themes";
 
 import { BackIcon } from "../../themes/icons";
 
-import { updateImageProfileAction } from "../../store/actions/apiAction";
+import {
+  updateImageProfileAction,
+  updateProfileAction,
+} from "../../store/actions/apiAction";
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
 
 export const ProfileScreen = ({ navigation }) => {
@@ -38,26 +41,45 @@ export const ProfileScreen = ({ navigation }) => {
 
   const onSubmit = () => {
     if (isEdit && !loader) {
-      let data = new FormData();
-      data.append("image", {
-        uri: imageUrl,
-        type: "image/jpeg",
-        name: `filename_${profile.id}.jpg`,
-      });
-      data.append("id", profile.id);
-      data.append("first_name", first_name);
-      data.append("last_name", last_name);
-      data.append("phone", phone);
+      if (imageUrl !== null) {
+        const data = new FormData();
 
-      dispatch(
-        updateImageProfileAction(
-          {
-            id: profile.id,
-            data,
-          },
-          onSuccess
-        )
-      );
+        data.append("image", {
+          uri: imageUrl,
+          type: "image/jpeg",
+          name: `filename_${profile.id}.jpg`,
+        });
+        data.append("first_name", first_name);
+        data.append("last_name", last_name);
+        data.append("phone", phone);
+
+        dispatch(
+          updateImageProfileAction(
+            {
+              id: profile.id,
+              data,
+            },
+            onSuccess
+          )
+        );
+      } else {
+        const data = {
+          image: null,
+          first_name,
+          last_name,
+          phone,
+        };
+
+        dispatch(
+          updateProfileAction(
+            {
+              id: profile.id,
+              data,
+            },
+            onSuccess
+          )
+        );
+      }
     } else {
       setIsEdit(true);
       inputRef.current.focus();

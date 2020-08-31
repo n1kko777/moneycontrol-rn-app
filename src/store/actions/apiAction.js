@@ -4,7 +4,12 @@ import {
   removeProfileFromCompany,
   joinProfileToCompany,
 } from "./companyAction";
-import { getProfile, createProfile, updateImageProfile } from "./profileAction";
+import {
+  getProfile,
+  createProfile,
+  updateImageProfile,
+  updateProfile,
+} from "./profileAction";
 import {
   getAccount,
   hideAccount,
@@ -50,10 +55,16 @@ export const resetPassAction = (userData, onSuccess) => async (dispatch) => {
   dispatch(endLoader());
 };
 
-export const authLoginAction = (email, password) => async (dispatch) => {
+export const authLoginAction = (email, password, onSuccess) => async (
+  dispatch,
+  getState
+) => {
+  console.log("authLoginAction");
   dispatch(startLoader());
   await Promise.all([dispatch(authLogin(email, password))]);
   dispatch(endLoader());
+
+  getState().auth.error === null && onSuccess();
 };
 
 // Get
@@ -79,10 +90,14 @@ export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
   dispatch(endLoader());
 };
 
-export const getProfileAction = () => async (dispatch) => {
+export const getProfileAction = (onSuccess) => async (dispatch, getState) => {
   dispatch(startLoader());
   await Promise.all([dispatch(getProfile())]);
   dispatch(endLoader());
+
+  getState().profile.error === null &&
+    getState().auth.error === null &&
+    onSuccess(getState().profile.profile);
 };
 
 // Create/join
@@ -215,12 +230,29 @@ export const createTransferAction = (newItem, onSuccess) => async (
 };
 
 // Update
+export const updateProfileAction = ({ data, id }, onSuccess) => async (
+  dispatch,
+  getState
+) => {
+  dispatch(startLoader());
+  await Promise.all([
+    dispatch(updateProfile(data, id)),
+    dispatch(getCompany()),
+  ]);
+  dispatch(endLoader());
+
+  getState().profile.error === null && onSuccess();
+};
+
 export const updateImageProfileAction = ({ data, id }, onSuccess) => async (
   dispatch,
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(updateImageProfile(data, id))]);
+  await Promise.all([
+    dispatch(updateImageProfile(data, id)),
+    dispatch(getCompany()),
+  ]);
   dispatch(endLoader());
 
   getState().profile.error === null && onSuccess();

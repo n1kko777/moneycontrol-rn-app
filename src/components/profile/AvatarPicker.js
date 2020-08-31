@@ -3,6 +3,8 @@ import { Button, Image, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Alert } from "react-native";
 
 export const AvatarPicker = ({ isEdit, imageUrl, setImageUrl }) => {
   const getPermissionAsync = async () => {
@@ -36,18 +38,44 @@ export const AvatarPicker = ({ isEdit, imageUrl, setImageUrl }) => {
     }
   };
 
+  const clearImage = () => {
+    imageUrl !== null &&
+      Alert.alert(
+        "Кдаление аватар",
+        "Вы уверены что хотите удалить аватар?",
+        [
+          {
+            text: "Отмена",
+            style: "cancel",
+          },
+          {
+            text: "Удалить",
+            onPress: () => {
+              setImageUrl(null);
+            },
+          },
+        ],
+        {
+          cancelable: false,
+        }
+      );
+  };
+
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
-      <Image
-        source={
-          imageUrl !== null
-            ? {
-                uri: imageUrl,
-              }
-            : require("../../../assets/icon.png")
-        }
-        style={{ width: 150, height: 150, borderRadius: 75 }}
-      />
+      <TouchableOpacity onPress={clearImage}>
+        <Image
+          source={
+            imageUrl !== null
+              ? {
+                  uri: imageUrl,
+                }
+              : require("../../../assets/icon.png")
+          }
+          style={{ width: 150, height: 150, borderRadius: 75 }}
+        />
+      </TouchableOpacity>
+
       {isEdit && <Button title="Выбрать аватар" onPress={_pickImage} />}
     </View>
   );

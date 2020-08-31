@@ -7,7 +7,7 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { THEME } from "../../themes/themes";
 import { hideIconPassword, showIconPassword } from "../../themes/icons";
 
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 
 import {
   getProfileAction,
@@ -15,42 +15,39 @@ import {
 } from ".././../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-export const LoginScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const store = useSelector((store) => store);
-  const { isAuth } = store.auth;
-  const { profile } = store.profile;
-
+const LoginScreen = ({
+  navigation,
+  loader,
+  getProfileDispatch,
+  authLoginDispatch,
+}) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
+  const onSuccess = (profile) => {
+    profile !== null
+      ? profile.company !== null
+        ? navigateHome()
+        : navigateCompanyManager()
+      : navigateCreateProfile();
+  };
+
   const isAuthHandler = async () => {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
     if (token !== null) {
-      dispatch(getProfileAction());
+      getProfileDispatch(onSuccess);
     }
   };
 
   useEffect(() => {
     isAuthHandler();
-  }, [dispatch, isAuth]);
-
-  useEffect(() => {
-    if (profile !== null) {
-      profile.hasOwnProperty("company")
-        ? profile.company !== null
-          ? navigateHome()
-          : navigateCompanyManager()
-        : navigateCreateProfile();
-    }
-  }, [profile]);
-  const loader = useSelector((store) => store.api.loader);
+  }, []);
 
   const onSubmit = () => {
     if (!loader) {
-      dispatch(authLoginAction(email, password));
+      authLoginDispatch(email, password, isAuthHandler);
     }
   };
 
@@ -156,3 +153,15 @@ export const LoginScreen = ({ navigation }) => {
     </ScreenTemplate>
   );
 };
+
+const mapStateToProps = (store) => ({
+  loader: store.api.loader,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getProfileDispatch: (onSuccess) => dispatch(getProfileAction(onSuccess)),
+  authLoginDispatch: (email, password, isAuthHandler) =>
+    dispatch(authLoginAction(email, password, isAuthHandler)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

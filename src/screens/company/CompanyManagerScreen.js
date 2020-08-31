@@ -61,8 +61,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
 
   const updateProfileHandler = () => {
     if (!loader) {
-      dispatch(getProfileAction());
-      onSuccess();
+      dispatch(getProfileAction(onSuccess));
     }
   };
 
