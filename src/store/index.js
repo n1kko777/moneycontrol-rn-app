@@ -13,9 +13,11 @@ import { transferReducer } from "./reducers/transferReducer";
 import { categoryReducer } from "./reducers/categoryReducer";
 import { tagReducer } from "./reducers/tagReducer";
 import { calendarReducer } from "./reducers/calendarReducer";
+import { layoutReducer } from "./reducers/layoutReducer";
 
 const rootReducer = combineReducers({
   api: apiReducer,
+  layout: layoutReducer,
   auth: authReducer,
   profile: profileReducer,
   company: companyReducer,

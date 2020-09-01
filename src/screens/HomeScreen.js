@@ -13,11 +13,7 @@ import { HomeList } from "../components/home/HomeList";
 import { Toolbar } from "../components/navigation/Toolbar";
 
 import { ScrollView, View, RefreshControl } from "react-native";
-
-import { prepareHomeData } from "../prepareHomeData";
 import { CustomDatePicker } from "../components/CustomDatePicker";
-
-import { filterArrayByDate } from "../filterArrayByDate";
 
 import { getDataDispatcher } from "../store/actions/apiAction";
 
@@ -28,27 +24,13 @@ export const HomeScreen = ({ navigation }) => {
   const kittenTheme = useTheme();
 
   const store = useSelector((store) => store);
+  const homeListData = store.layout.homeListData;
+  homeListData.isNavigate = true;
 
-  const { startDate, endDate } = store.calendar;
+  const { startDate } = store.calendar;
   const { profile } = store.profile;
   const { company } = store.company;
   const { accounts } = store.account;
-  const { transactions } = store.transaction;
-  const { actions } = store.action;
-  const { transfer } = store.transfer;
-  const { categories } = store.category;
-  const { tags } = store.tag;
-
-  const homeListData = prepareHomeData(
-    profile,
-    company,
-    accounts,
-    filterArrayByDate(transactions, startDate, endDate),
-    filterArrayByDate(actions, startDate, endDate),
-    filterArrayByDate(transfer, startDate, endDate),
-    categories,
-    tags
-  );
 
   const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
   const [totalActions, setTotalActions] = React.useState(parseFloat(0));
@@ -91,8 +73,6 @@ export const HomeScreen = ({ navigation }) => {
   React.useEffect(() => {
     refreshData();
   }, []);
-
-  homeListData.isNavigate = true;
 
   return (
     <ScreenTemplate>
