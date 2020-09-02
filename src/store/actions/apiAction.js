@@ -1,3 +1,5 @@
+import { Alert } from "react-native";
+import { START_LOADER, END_LOADER } from "../types";
 import {
   getCompany,
   createCompany,
@@ -32,10 +34,12 @@ import {
   updateCategory,
 } from "./categoryAction";
 import { getTag, createTag, hideTag, updateTag } from "./tagAction";
-import { START_LOADER, END_LOADER } from "../types";
 import { authLogin, authSignUp, resetPass, logout } from "./authAction";
-import { generateHomeData } from "./layoutAction";
-import { Alert } from "react-native";
+import {
+  updateLayouts,
+  setFilterParam,
+  clearFilterParam,
+} from "./layoutAction";
 
 export const startLoader = () => ({
   type: START_LOADER,
@@ -69,6 +73,13 @@ export const authLoginAction = (email, password, onSuccess) => async (
   getState().auth.error === null && onSuccess();
 };
 
+// Set
+export const setFilterParamAction = (filterParam) => async (dispatch) => {
+  dispatch(startLoader());
+  await Promise.all([dispatch(setFilterParam(filterParam))]);
+  dispatch(endLoader());
+};
+
 // Get
 export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
   dispatch(startLoader());
@@ -93,7 +104,7 @@ export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
     dispatch(getTag()),
   ]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 };
 
@@ -101,7 +112,7 @@ export const getProfileAction = (onSuccess) => async (dispatch, getState) => {
   dispatch(startLoader());
   await Promise.all([dispatch(getProfile())]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().profile.error === null &&
@@ -136,7 +147,7 @@ export const joinProfileToCompanyAction = (
       );
     });
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
 };
 
 export const createProfileAction = (newItem, onSuccess) => async (
@@ -146,7 +157,7 @@ export const createProfileAction = (newItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(createProfile(newItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   const profile = getState().profile;
@@ -160,7 +171,7 @@ export const createCompanyAction = (newItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(createCompany(newItem), dispatch(getProfile()))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().company.company !== null && onSuccess(getState().company.company);
@@ -173,7 +184,7 @@ export const createAccountAction = (newItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(createAccount(newItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().account.error === null && onSuccess();
@@ -186,7 +197,7 @@ export const createCategoryAction = (newItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(createCategory(newItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().category.error === null && onSuccess();
@@ -199,7 +210,7 @@ export const createTagAction = (newItem, onSuccess = () => {}) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(createTag(newItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().tag.error === null && onSuccess();
@@ -216,7 +227,7 @@ export const createActionAction = (newItem, onSuccess) => async (
     dispatch(getAccount()),
   ]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().action.error === null && onSuccess();
@@ -233,7 +244,7 @@ export const createTransactionAction = (newItem, onSuccess) => async (
     dispatch(getAccount()),
   ]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().transaction.error === null && onSuccess();
@@ -250,7 +261,7 @@ export const createTransferAction = (newItem, onSuccess) => async (
     dispatch(getAccount()),
   ]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().transfer.error === null && onSuccess();
@@ -267,7 +278,7 @@ export const updateProfileAction = ({ data, id }, onSuccess) => async (
     dispatch(getCompany()),
   ]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().profile.error === null && onSuccess();
@@ -283,7 +294,7 @@ export const updateImageProfileAction = ({ data, id }, onSuccess) => async (
     dispatch(getCompany()),
   ]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().profile.error === null && onSuccess();
@@ -296,7 +307,7 @@ export const updateCompanyAction = (updatedItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(updateCompany(updatedItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().company.error === null && onSuccess();
@@ -309,7 +320,7 @@ export const updateAccountAction = (updatedItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(updateAccount(updatedItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().account.error === null && onSuccess();
@@ -322,7 +333,7 @@ export const updateCategoryAction = (updatedItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(updateCategory(updatedItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().category.error === null && onSuccess();
@@ -335,7 +346,7 @@ export const updateTagAction = (updatedItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(updateTag(updatedItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 
   getState().tag.error === null && onSuccess();
@@ -346,7 +357,7 @@ export const hideProfileAction = (hideItem, navigation) => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(hideProfile(hideItem, navigation))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 };
 
@@ -354,7 +365,7 @@ export const hideAccountAction = (hideItem) => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(hideAccount(hideItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 };
 
@@ -362,7 +373,7 @@ export const hideCategoryAction = (hideItem) => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(hideCategory(hideItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 };
 
@@ -370,7 +381,7 @@ export const hideTagAction = (hideItem) => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(hideTag(hideItem))]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 };
 
@@ -394,7 +405,7 @@ export const hideOperationAction = (hideItem) => async (dispatch) => {
     dispatch(getAccount()),
   ]);
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
   dispatch(endLoader());
 };
 
@@ -420,5 +431,12 @@ export const removeProfileFromCompanyAction = (profile) => async (dispatch) => {
       );
     });
 
-  dispatch(generateHomeData());
+  dispatch(updateLayouts());
+};
+
+// Clear
+export const clearFilterParamAction = () => async (dispatch) => {
+  dispatch(startLoader());
+  await Promise.all([dispatch(clearFilterParam())]);
+  dispatch(endLoader());
 };

@@ -2,6 +2,8 @@ import React from "react";
 import { splitToDigits } from "../../splitToDigits";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Text } from "@ui-kitten/components";
+import { useDispatch } from "react-redux";
+import { setFilterParamAction } from "../../store/actions/apiAction";
 
 export const HomeCardItem = ({
   kittenTheme,
@@ -10,15 +12,18 @@ export const HomeCardItem = ({
   navigation,
 }) => {
   const { id, name, balance, type, style: color } = item;
+  const dispatch = useDispatch();
 
   const onFilterOperation = () => {
-    navigation.navigate("Operation", {
-      filterParam: {
+    navigation.navigate("Operation");
+
+    dispatch(
+      setFilterParamAction({
         name,
         type,
         id,
-      },
-    });
+      })
+    );
   };
 
   return (

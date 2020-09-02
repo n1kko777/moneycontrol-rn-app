@@ -11,126 +11,43 @@ import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { OperationList } from "../../components/operation/OperationList";
 import { View } from "react-native";
 
-import { filterArrayByDate } from "../../filterArrayByDate";
-import { prepareOperationData } from "../../prepareOperationData";
-
-import { getDataDispatcher } from "../../store/actions/apiAction";
+import {
+  getDataDispatcher,
+  clearFilterParamAction,
+} from "../../store/actions/apiAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
-import moment from "moment";
 
 export const OperationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const filterParam =
-    route.params !== undefined ? route.params.filterParam : null;
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
   const store = useSelector((store) => store);
+  const filterParam = store.layout.filterParam;
 
-  const { startDate, endDate } = store.calendar;
-
+  const { startDate } = store.calendar;
   const { profile } = store.profile;
   const { company } = store.company;
 
   const { accounts } = store.account;
 
-  const { transactions } = store.transaction;
-  const { actions } = store.action;
-  const { transfer } = store.transfer;
+  const operationListData = store.layout.operationListData;
+  const formatedOperationList = store.layout.formatedOperationList;
 
   const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
 
   const onFilterOperation = () => {
     if (isFiltered) {
       setIsFiltered(false);
-      navigation.setParams();
+      dispatch(clearFilterParamAction());
     }
   };
 
   React.useEffect(() => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
-
-  const operationListData = isFiltered
-    ? prepareOperationData(
-        company,
-        filterArrayByDate(transactions, startDate, endDate),
-        filterArrayByDate(actions, startDate, endDate),
-        filterArrayByDate(transfer, startDate, endDate)
-      ).filter((elem) => {
-        switch (filterParam.type) {
-          case "action":
-          case "transaction":
-          case "transfer":
-            return elem.type === filterParam.type;
-
-          case "tag":
-            return (
-              elem.tags !== undefined && elem.tags.includes(filterParam.id)
-            );
-
-          case "category":
-            return (
-              elem.category !== undefined && elem.category === filterParam.id
-            );
-          case "account":
-            return (
-              (elem.account !== undefined && elem.account === filterParam.id) ||
-              (elem.from_account !== undefined &&
-                parseInt(elem.from_account.split(" (pk=")[1]) ===
-                  filterParam.id) ||
-              (elem.to_account !== undefined &&
-                parseInt(elem.to_account.split(" (pk=")[1]) === filterParam.id)
-            );
-
-          case "profile":
-            break;
-
-          default:
-            break;
-        }
-
-        return elem;
-      })
-    : prepareOperationData(
-        company,
-        filterArrayByDate(transactions, startDate, endDate),
-        filterArrayByDate(actions, startDate, endDate),
-        filterArrayByDate(transfer, startDate, endDate)
-      );
-
-  const formatedOperationList = operationListData.reduce(
-    (arrDate, nextItem) => {
-      if (
-        arrDate
-          .map((el) => el.title)
-          .some(
-            (el) => el === moment(nextItem.last_updated).format("DD.MM.YYYY")
-          )
-      ) {
-        return arrDate.map((itemDay) => {
-          if (
-            itemDay.title === moment(nextItem.last_updated).format("DD.MM.YYYY")
-          ) {
-            itemDay.itemList = [...itemDay.itemList, nextItem];
-          }
-
-          return itemDay;
-        });
-      } else {
-        return [
-          ...arrDate,
-          {
-            title: moment(nextItem.last_updated).format("DD.MM.YYYY"),
-            itemList: [nextItem],
-          },
-        ];
-      }
-    },
-    []
-  );
 
   const [totalTransactions, setTotalTransactions] = React.useState(
     parseFloat(

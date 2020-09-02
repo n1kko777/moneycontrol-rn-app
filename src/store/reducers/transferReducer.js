@@ -26,7 +26,7 @@ export const transferReducer = (state = initialState, action) => {
     case CREATE_TRANSFER:
       return {
         ...state,
-        transfer: [...state.transfer, payload],
+        transfer: [payload, ...state.transfer],
         loading: false,
         error: null,
       };

@@ -1,6 +1,30 @@
-import { SET_HOME_DATA, CLEAR_HOME_DATA } from "../types";
+import {
+  SET_HOME_DATA,
+  SET_OPERATION_DATA,
+  SET_FILTER_PARAM,
+  CLEAR_FILTER_PARAM,
+} from "../types";
 import { prepareHomeData } from "../../prepareHomeData";
 import { filterArrayByDate } from "../../filterArrayByDate";
+import { prepareOperationData } from "../../prepareOperationData";
+import moment from "moment";
+
+export const setFilterParam = (filterParam) => async (dispatch) => {
+  dispatch({
+    type: SET_FILTER_PARAM,
+    payload: filterParam,
+  });
+
+  await dispatch(generateOperationData());
+};
+
+export const clearFilterParam = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_FILTER_PARAM,
+  });
+
+  await dispatch(generateOperationData());
+};
 
 export const generateHomeData = () => (dispatch, getState) => {
   const store = getState();
@@ -30,4 +54,111 @@ export const generateHomeData = () => (dispatch, getState) => {
     type: SET_HOME_DATA,
     payload: homeListData,
   });
+};
+
+export const generateOperationData = () => (dispatch, getState) => {
+  const store = getState();
+
+  const { startDate, endDate } = store.calendar;
+  const { company } = store.company;
+  const { transactions } = store.transaction;
+  const { actions } = store.action;
+  const { transfer } = store.transfer;
+
+  const { filterParam } = store.layout;
+
+  const operationListData =
+    filterParam !== null
+      ? prepareOperationData(
+          company,
+          filterArrayByDate(transactions, startDate, endDate),
+          filterArrayByDate(actions, startDate, endDate),
+          filterArrayByDate(transfer, startDate, endDate)
+        ).filter((elem) => {
+          switch (filterParam.type) {
+            case "action":
+            case "transaction":
+            case "transfer":
+              return elem.type === filterParam.type;
+
+            case "tag":
+              return (
+                elem.tags !== undefined && elem.tags.includes(filterParam.id)
+              );
+
+            case "category":
+              return (
+                elem.category !== undefined && elem.category === filterParam.id
+              );
+            case "account":
+              return (
+                (elem.account !== undefined &&
+                  elem.account === filterParam.id) ||
+                (elem.from_account !== undefined &&
+                  parseInt(elem.from_account.split(" (pk=")[1]) ===
+                    filterParam.id) ||
+                (elem.to_account !== undefined &&
+                  parseInt(elem.to_account.split(" (pk=")[1]) ===
+                    filterParam.id)
+              );
+
+            case "profile":
+              break;
+
+            default:
+              break;
+          }
+
+          return elem;
+        })
+      : prepareOperationData(
+          company,
+          filterArrayByDate(transactions, startDate, endDate),
+          filterArrayByDate(actions, startDate, endDate),
+          filterArrayByDate(transfer, startDate, endDate)
+        );
+
+  const formatedOperationList = operationListData.reduce(
+    (arrDate, nextItem) => {
+      if (
+        arrDate
+          .map((el) => el.title)
+          .some(
+            (el) => el === moment(nextItem.last_updated).format("DD.MM.YYYY")
+          )
+      ) {
+        return arrDate.map((itemDay) => {
+          if (
+            itemDay.title === moment(nextItem.last_updated).format("DD.MM.YYYY")
+          ) {
+            itemDay.itemList = [...itemDay.itemList, nextItem];
+          }
+
+          return itemDay;
+        });
+      } else {
+        return [
+          ...arrDate,
+          {
+            title: moment(nextItem.last_updated).format("DD.MM.YYYY"),
+            itemList: [nextItem],
+          },
+        ];
+      }
+    },
+    []
+  );
+
+  dispatch({
+    type: SET_OPERATION_DATA,
+    payload: {
+      operationListData,
+      formatedOperationList,
+    },
+  });
+};
+
+export const updateLayouts = () => (dispatch) => {
+  dispatch(generateHomeData());
+  dispatch(generateOperationData());
 };

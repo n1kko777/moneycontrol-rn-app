@@ -1,6 +1,10 @@
 // Layout
 export const SET_HOME_DATA = "SET_HOME_DATA";
 export const CLEAR_HOME_DATA = "CLEAR_HOME_DATA";
+export const SET_OPERATION_DATA = "SET_OPERATION_DATA";
+export const CLEAR_OPERATION_DATA = "CLEAR_OPERATION_DATA";
+export const SET_FILTER_PARAM = "SET_FILTER_PARAM";
+export const CLEAR_FILTER_PARAM = "CLEAR_FILTER_PARAM";
 
 // Loader
 export const START_LOADER = "START_LOADER";
