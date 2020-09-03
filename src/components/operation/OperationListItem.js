@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "react-native";
 import { hideOperationAction } from "../../store/actions/apiAction";
 
-export const OperationListItem = ({ item, index, dataList, navigation }) => {
+export const OperationListItem = ({ item, navigation }) => {
   const dispatch = useDispatch();
 
   const swipeableRow = React.useRef(null);
@@ -151,7 +151,7 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
   return (
     <WrapperComponent>
       <ListItem
-        title={`${item.name}`}
+        title={item.name}
         titleStyle={{
           fontSize: 16,
         }}
@@ -180,10 +180,6 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
         accessory={() => renderItemAccessory(item)}
         style={{
           paddingVertical: 15,
-          borderTopLeftRadius: index === 0 ? 10 : 0,
-          borderTopRightRadius: index === 0 ? 10 : 0,
-          borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
-          borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
         }}
       />
     </WrapperComponent>

@@ -1,12 +1,41 @@
 import React from "react";
-import { View, FlatList, RefreshControl } from "react-native";
+import { RefreshControl, SectionList } from "react-native";
 import { OperationListItem } from "./OperationListItem";
 import { Text } from "@ui-kitten/components";
-import { ScrollView } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { getDataDispatcher } from "../../store/actions/apiAction";
 
-export const OperationList = ({ dataList, navigation, onOperationRefresh }) => {
+export const OperationList = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const dataList = useSelector((store) => store.layout.formatedOperationList);
+
+  const onOperationRefresh = () => {
+    dispatch(getDataDispatcher(navigation));
+  };
+
   return (
-    <ScrollView
+    <SectionList
+      style={{ flex: 1, height: "100%" }}
+      scrollEnabled
+      stickySectionHeadersEnabled
+      initialNumToRender={3}
+      sections={dataList}
+      keyExtractor={(item, index) => item + index}
+      renderItem={({ item }) => (
+        <OperationListItem item={item} navigation={navigation} />
+      )}
+      renderSectionHeader={({ section: { title } }) => (
+        <Text
+          style={{
+            marginHorizontal: 8,
+            marginTop: 10,
+            marginBottom: 5,
+          }}
+          category="h5"
+        >
+          {title}
+        </Text>
+      )}
       refreshControl={
         <RefreshControl
           refreshing={false}
@@ -19,35 +48,11 @@ export const OperationList = ({ dataList, navigation, onOperationRefresh }) => {
         marginTop: 15,
       }}
       contentContainerStyle={{ paddingBottom: 30 }}
-    >
-      {dataList.map((listItem) => (
-        <View
-          style={{
-            marginBottom: 15,
-          }}
-          key={listItem.title}
-        >
-          <Text
-            style={{
-              marginHorizontal: 8,
-              marginTop: 15,
-              marginBottom: 5,
-            }}
-            category="h5"
-          >
-            {listItem.title}
-          </Text>
-          {listItem.itemList.map((item, index) => (
-            <OperationListItem
-              key={`${item.key}`}
-              item={item}
-              index={index}
-              dataList={dataList}
-              navigation={navigation}
-            />
-          ))}
-        </View>
-      ))}
-    </ScrollView>
+      ListEmptyComponent={
+        <Text style={{ marginTop: 15, textAlign: "center" }}>
+          Операции не найдены.
+        </Text>
+      }
+    />
   );
 };

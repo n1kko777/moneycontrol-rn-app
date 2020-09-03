@@ -13,15 +13,16 @@ import {
   IncreaseIcon,
   DecreaseIcon,
 } from "../../themes/icons";
+import { useSelector } from "react-redux";
 
-export const BalanceComponent = ({
-  balance = null,
-  transaction,
-  action,
-  isAdmin,
-}) => {
+export const BalanceComponent = ({ balance = null }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
+
+  const { profile, layout } = useSelector((store) => store);
+  const { totalActions, totalTransactions } = layout;
+
+  const isAdmin = profile.profile !== null && profile.profile.is_admin;
 
   const [isVisibleBalance, setIsVisibleBalance] = React.useState(true);
 
@@ -29,13 +30,10 @@ export const BalanceComponent = ({
     balance = splitToDigits(balance.toString().replace(/\s/g, ""));
   }
 
-  if (transaction !== 0) {
-    transaction = splitToDigits(transaction.toString().replace(/\s/g, ""));
-  }
-
-  if (action !== 0) {
-    action = splitToDigits(action.toString().replace(/\s/g, ""));
-  }
+  const action = splitToDigits(totalActions.toString().replace(/\s/g, ""));
+  const transaction = splitToDigits(
+    totalTransactions.toString().replace(/\s/g, "")
+  );
 
   const toggleVisibleBalance = () => {
     setIsVisibleBalance(!isVisibleBalance);
@@ -78,7 +76,7 @@ export const BalanceComponent = ({
             appearance="ghost"
             icon={!isVisibleBalance ? ShowIconBalance : HideIconBalance}
             onPress={toggleVisibleBalance}
-          ></Button>
+          />
         </View>
       )}
 

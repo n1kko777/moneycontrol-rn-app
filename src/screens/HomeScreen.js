@@ -24,12 +24,7 @@ export const HomeScreen = ({ navigation }) => {
   const kittenTheme = useTheme();
 
   const store = useSelector((store) => store);
-  const {
-    homeListData,
-    totalBalance,
-    totalActions,
-    totalTransactions,
-  } = store.layout;
+  const { homeListData, totalBalance } = store.layout;
   homeListData.isNavigate = true;
 
   const { profile } = store.profile;
@@ -79,12 +74,7 @@ export const HomeScreen = ({ navigation }) => {
         }}
       >
         <View onStartShouldSetResponder={() => true}>
-          <BalanceComponent
-            balance={totalBalance}
-            transaction={totalTransactions}
-            action={totalActions}
-            isAdmin={profile !== null && profile.is_admin}
-          />
+          <BalanceComponent balance={totalBalance} />
 
           <View style={{ height: 30, marginVertical: 10 }}>
             <CustomDatePicker />

@@ -11,10 +11,7 @@ import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { OperationList } from "../../components/operation/OperationList";
 import { View } from "react-native";
 
-import {
-  getDataDispatcher,
-  clearFilterParamAction,
-} from "../../store/actions/apiAction";
+import { clearFilterParamAction } from "../../store/actions/apiAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
 
@@ -26,19 +23,10 @@ export const OperationsScreen = ({ navigation, route }) => {
 
   const store = useSelector((store) => store);
 
-  const {
-    filterParam,
-    operationListData,
-    formatedOperationList,
-    totalActions,
-    totalTransactions,
-  } = store.layout;
+  const { filterParam } = store.layout;
 
-  const { startDate } = store.calendar;
   const { profile } = store.profile;
   const { company } = store.company;
-
-  const { accounts } = store.account;
 
   const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
 
@@ -53,22 +41,18 @@ export const OperationsScreen = ({ navigation, route }) => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
 
-  const onOperationRefresh = () => {
-    dispatch(getDataDispatcher(navigation));
-  };
-
   return (
     <ScreenTemplate>
-      {company !== null && (
+      {
         <Toolbar
           navigation={navigation}
           title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
-            company.company_name
+            company !== null ? company.company_name : ""
           }`}
           TargetIcon={isFiltered ? ActiveFilterIcon : FilterIcon}
           onTarget={onFilterOperation}
         />
-      )}
+      }
       <Layout
         style={{
           flex: 1,
@@ -78,29 +62,14 @@ export const OperationsScreen = ({ navigation, route }) => {
             ],
         }}
       >
-        <BalanceComponent
-          transaction={totalTransactions}
-          action={totalActions}
-          isAdmin={profile !== null && profile.is_admin}
-        />
-
+        <BalanceComponent />
         <View style={{ height: 30, marginTop: 10, marginBottom: 20 }}>
           <CustomDatePicker />
         </View>
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          {formatedOperationList.length !== 0 ? (
-            <OperationList
-              onOperationRefresh={onOperationRefresh}
-              dataList={formatedOperationList}
-              navigation={navigation}
-            />
-          ) : (
-            <Text style={{ marginTop: 15, textAlign: "center" }}>
-              Операции не найдены.
-            </Text>
-          )}
+          <OperationList navigation={navigation} />
         </Layout>
       </Layout>
     </ScreenTemplate>

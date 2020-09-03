@@ -175,7 +175,7 @@ export const generateOperationData = () => (dispatch, getState) => {
           if (
             itemDay.title === moment(nextItem.last_updated).format("DD.MM.YYYY")
           ) {
-            itemDay.itemList = [...itemDay.itemList, nextItem];
+            itemDay.data = [...itemDay.data, nextItem];
           }
 
           return itemDay;
@@ -185,7 +185,7 @@ export const generateOperationData = () => (dispatch, getState) => {
           ...arrDate,
           {
             title: moment(nextItem.last_updated).format("DD.MM.YYYY"),
-            itemList: [nextItem],
+            data: [nextItem],
           },
         ];
       }
