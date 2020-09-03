@@ -102,6 +102,7 @@ export const generateOperationData = () => (dispatch, getState) => {
 
   const { startDate, endDate } = store.calendar;
   const { company } = store.company;
+  const { accounts } = store.account;
   const { transactions } = store.transaction;
   const { actions } = store.action;
   const { transfer } = store.transfer;
@@ -112,6 +113,7 @@ export const generateOperationData = () => (dispatch, getState) => {
     filterParam !== null
       ? prepareOperationData(
           company,
+          accounts,
           filterArrayByDate(transactions, startDate, endDate),
           filterArrayByDate(actions, startDate, endDate),
           filterArrayByDate(transfer, startDate, endDate)
@@ -154,6 +156,7 @@ export const generateOperationData = () => (dispatch, getState) => {
         })
       : prepareOperationData(
           company,
+          accounts,
           filterArrayByDate(transactions, startDate, endDate),
           filterArrayByDate(actions, startDate, endDate),
           filterArrayByDate(transfer, startDate, endDate)

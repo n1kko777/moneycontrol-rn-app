@@ -2,6 +2,7 @@ import { getShortName } from "./getShortName";
 
 export const prepareOperationData = (
   company,
+  accounts,
   transactions,
   actions,
   transfer
@@ -13,7 +14,9 @@ export const prepareOperationData = (
       allOpprations.push(
         ...transactions.map((elem) => ({
           key: elem.last_updated,
-          name: getShortName(elem.profile_name.split("(pk=")[0]),
+          name: `${getShortName(elem.profile_name.split("(pk=")[0])} (${
+            accounts.find((acc) => acc.id === elem.account).account_name
+          })`,
           style: "color-danger-600",
           balance: elem.transaction_amount,
           tags: elem.tags,
@@ -29,7 +32,9 @@ export const prepareOperationData = (
       allOpprations.push(
         ...actions.map((elem) => ({
           key: elem.last_updated,
-          name: getShortName(elem.profile_name.split("(pk=")[0]),
+          name: `${getShortName(elem.profile_name.split("(pk=")[0])} (${
+            accounts.find((acc) => acc.id === elem.account).account_name
+          })`,
           style: "color-success-600",
           balance: elem.action_amount,
           tags: elem.tags,

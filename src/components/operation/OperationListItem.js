@@ -151,28 +151,28 @@ export const OperationListItem = ({ item, index, dataList, navigation }) => {
   return (
     <WrapperComponent>
       <ListItem
-        title={`${item.name}${
-          item.category !== undefined
-            ? " (" +
-              (categories.find((cat) => cat.id == item.category) !== undefined
-                ? categories.find((cat) => cat.id == item.category)
-                    .category_name
-                : "Удалено") +
-              ")"
-            : ""
-        }`}
+        title={`${item.name}`}
         titleStyle={{
           fontSize: 16,
         }}
-        description={
-          item.tags !== undefined
-            ? `${item.tags.map((elTag) =>
-                tags.find((tag) => tag.id == elTag) !== undefined
-                  ? `#${tags.find((tag) => tag.id == elTag).tag_name}`
-                  : "Удалено"
-              )}`
+        description={`${
+          item.category !== undefined
+            ? "– " +
+              (categories.find((cat) => cat.id == item.category) !== undefined
+                ? categories.find((cat) => cat.id == item.category)
+                    .category_name
+                : "Удалено")
             : ""
-        }
+        }${
+          item.tags !== undefined
+            ? "\n" +
+              item.tags.map((elTag) =>
+                tags.find((tag) => tag.id == elTag) !== undefined
+                  ? "#" + tags.find((tag) => tag.id == elTag).tag_name
+                  : "Удалено"
+              )
+            : ""
+        }`}
         descriptionStyle={{
           fontSize: 14,
         }}
