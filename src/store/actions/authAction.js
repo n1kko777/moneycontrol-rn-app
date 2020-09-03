@@ -17,6 +17,7 @@ import {
   RESET_SUCCESS,
   CLEAR_HOME_DATA,
   CLEAR_OPERATION_DATA,
+  CLEAR_LAYOUT,
 } from "../types";
 
 import { url } from "../constants";
@@ -112,10 +113,7 @@ export const logout = (navigation) => async (dispatch) => {
     type: AUTH_LOGOUT,
   });
   dispatch({
-    type: CLEAR_HOME_DATA,
-  });
-  dispatch({
-    type: CLEAR_OPERATION_DATA,
+    type: CLEAR_LAYOUT,
   });
   dispatch({
     type: CLEAR_PROFILE,

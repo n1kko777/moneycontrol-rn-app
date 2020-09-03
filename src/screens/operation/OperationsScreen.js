@@ -25,16 +25,20 @@ export const OperationsScreen = ({ navigation, route }) => {
   const kittenTheme = useTheme();
 
   const store = useSelector((store) => store);
-  const filterParam = store.layout.filterParam;
+
+  const {
+    filterParam,
+    operationListData,
+    formatedOperationList,
+    totalActions,
+    totalTransactions,
+  } = store.layout;
 
   const { startDate } = store.calendar;
   const { profile } = store.profile;
   const { company } = store.company;
 
   const { accounts } = store.account;
-
-  const operationListData = store.layout.operationListData;
-  const formatedOperationList = store.layout.formatedOperationList;
 
   const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
 
@@ -48,38 +52,6 @@ export const OperationsScreen = ({ navigation, route }) => {
   React.useEffect(() => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
-
-  const [totalTransactions, setTotalTransactions] = React.useState(
-    parseFloat(
-      operationListData
-        .filter((elem) => elem.type == "transaction")
-        .reduce((sum, next) => (sum += +next.balance), 0)
-    )
-  );
-  const [totalActions, setTotalActions] = React.useState(
-    parseFloat(
-      operationListData
-        .filter((elem) => elem.type == "action")
-        .reduce((sum, next) => (sum += +next.balance), 0)
-    )
-  );
-
-  React.useEffect(() => {
-    setTotalTransactions(
-      parseFloat(
-        operationListData
-          .filter((elem) => elem.type == "transaction")
-          .reduce((sum, next) => (sum += +next.balance), 0)
-      )
-    );
-    setTotalActions(
-      parseFloat(
-        operationListData
-          .filter((elem) => elem.type == "action")
-          .reduce((sum, next) => (sum += +next.balance), 0)
-      )
-    );
-  }, [isFiltered, startDate, accounts, operationListData]);
 
   const onOperationRefresh = () => {
     dispatch(getDataDispatcher(navigation));

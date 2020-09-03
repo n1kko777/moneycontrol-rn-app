@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -24,47 +24,16 @@ export const HomeScreen = ({ navigation }) => {
   const kittenTheme = useTheme();
 
   const store = useSelector((store) => store);
-  const homeListData = store.layout.homeListData;
+  const {
+    homeListData,
+    totalBalance,
+    totalActions,
+    totalTransactions,
+  } = store.layout;
   homeListData.isNavigate = true;
 
-  const { startDate } = store.calendar;
   const { profile } = store.profile;
   const { company } = store.company;
-  const { accounts } = store.account;
-
-  const [totalBalance, setTotalBalance] = React.useState(parseFloat(0));
-  const [totalActions, setTotalActions] = React.useState(parseFloat(0));
-  const [totalTransactions, setTotalTransactions] = React.useState(
-    parseFloat(0)
-  );
-
-  useEffect(() => {
-    setTotalActions(
-      parseFloat(
-        []
-          .concat(...homeListData.map((elem) => elem.data))
-          .filter((elem) => elem.type == "action")
-          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-      )
-    );
-
-    setTotalTransactions(
-      parseFloat(
-        []
-          .concat(...homeListData.map((elem) => elem.data))
-          .filter((elem) => elem.type == "transaction")
-          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-      )
-    );
-  }, [accounts, startDate, homeListData]);
-
-  useEffect(() => {
-    setTotalBalance(
-      parseFloat(
-        accounts.reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-      )
-    );
-  }, [accounts, startDate]);
 
   const refreshData = () => {
     dispatch(getDataDispatcher(navigation));

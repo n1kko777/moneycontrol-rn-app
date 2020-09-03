@@ -3,11 +3,48 @@ import {
   SET_OPERATION_DATA,
   SET_FILTER_PARAM,
   CLEAR_FILTER_PARAM,
+  SET_TOTAL_BALANCE,
+  SET_TOTAL_ACTIONS,
+  SET_TOTAL_TRANSACTIONS,
 } from "../types";
 import { prepareHomeData } from "../../prepareHomeData";
 import { filterArrayByDate } from "../../filterArrayByDate";
 import { prepareOperationData } from "../../prepareOperationData";
 import moment from "moment";
+
+export const setTotalBalance = () => (dispatch, getState) => {
+  dispatch({
+    type: SET_TOTAL_BALANCE,
+    payload: parseFloat(
+      getState().account.accounts.reduce(
+        (sum, nextAcc) => (sum += +nextAcc.balance),
+        0
+      )
+    ),
+  });
+};
+
+export const setTotalActions = () => (dispatch, getState) => {
+  dispatch({
+    type: SET_TOTAL_ACTIONS,
+    payload: parseFloat(
+      getState()
+        .layout.operationListData.filter((elem) => elem.type == "action")
+        .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
+    ),
+  });
+};
+
+export const setTotalTransactions = () => (dispatch, getState) => {
+  dispatch({
+    type: SET_TOTAL_TRANSACTIONS,
+    payload: parseFloat(
+      getState()
+        .layout.operationListData.filter((elem) => elem.type == "transaction")
+        .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
+    ),
+  });
+};
 
 export const setFilterParam = (filterParam) => async (dispatch) => {
   dispatch({
@@ -16,6 +53,8 @@ export const setFilterParam = (filterParam) => async (dispatch) => {
   });
 
   await dispatch(generateOperationData());
+  dispatch(setTotalActions());
+  dispatch(setTotalTransactions());
 };
 
 export const clearFilterParam = () => async (dispatch) => {
@@ -24,6 +63,8 @@ export const clearFilterParam = () => async (dispatch) => {
   });
 
   await dispatch(generateOperationData());
+  dispatch(setTotalActions());
+  dispatch(setTotalTransactions());
 };
 
 export const generateHomeData = () => (dispatch, getState) => {
@@ -161,4 +202,7 @@ export const generateOperationData = () => (dispatch, getState) => {
 export const updateLayouts = () => (dispatch) => {
   dispatch(generateHomeData());
   dispatch(generateOperationData());
+  dispatch(setTotalBalance());
+  dispatch(setTotalActions());
+  dispatch(setTotalTransactions());
 };

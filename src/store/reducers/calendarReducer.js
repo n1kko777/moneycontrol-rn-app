@@ -1,7 +1,10 @@
 import { SET_CALENDAR, CLEAR_CALENDAR } from "../types";
 
 const date = new Date();
-const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+const firstDay =
+  process.env.NODE_ENV === "production"
+    ? new Date(date.getFullYear(), date.getMonth(), 1)
+    : new Date(new Date().getFullYear(), 0, 1);
 const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
 const initialState = {
