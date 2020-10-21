@@ -1,12 +1,12 @@
 import { SET_CALENDAR, CLEAR_CALENDAR } from "../types";
-import { updateLayouts } from "./layoutAction";
+import { generateOperationData } from "./layoutAction";
 
 export const setCalendar = (range) => (dispatch) => {
   dispatch({
     type: SET_CALENDAR,
     payload: range,
   });
-  dispatch(updateLayouts());
+  dispatch(generateOperationData());
 };
 
 export const clearCalendar = () => (dispatch) => {
@@ -14,5 +14,5 @@ export const clearCalendar = () => (dispatch) => {
     type: CLEAR_CALENDAR,
   });
 
-  dispatch(updateLayouts());
+  dispatch(generateOperationData());
 };

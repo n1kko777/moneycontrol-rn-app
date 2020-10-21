@@ -53,9 +53,6 @@ export const TeamsScreen = ({ navigation }) => {
       {company !== null && (
         <Toolbar
           navigation={navigation}
-          title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
-            company.company_name
-          }`}
           TargetIcon={
             profile !== null && profile.is_admin ? EditIcon : ProfileIcon
           }

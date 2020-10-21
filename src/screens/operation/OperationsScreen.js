@@ -11,7 +11,10 @@ import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { OperationList } from "../../components/operation/OperationList";
 import { View } from "react-native";
 
-import { clearFilterParamAction } from "../../store/actions/apiAction";
+import {
+  clearFilterParamAction,
+  getDataDispatcher,
+} from "../../store/actions/apiAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
 
@@ -23,14 +26,15 @@ export const OperationsScreen = ({ navigation, route }) => {
 
   const store = useSelector((store) => store);
 
-  const { filterParam } = store.layout;
-
-  const { profile } = store.profile;
-  const { company } = store.company;
+  const {
+    filterParam,
+    operationListData,
+    filteredOperationListData,
+  } = store.layout;
 
   const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
 
-  const onFilterOperation = () => {
+  const onClearFilter = () => {
     if (isFiltered) {
       setIsFiltered(false);
       dispatch(clearFilterParamAction());
@@ -41,16 +45,17 @@ export const OperationsScreen = ({ navigation, route }) => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
 
+  const onRefreshHandler = () => {
+    dispatch(getDataDispatcher(navigator));
+  };
+
   return (
     <ScreenTemplate>
       {
         <Toolbar
           navigation={navigation}
-          title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
-            company !== null ? company.company_name : ""
-          }`}
           TargetIcon={isFiltered ? ActiveFilterIcon : FilterIcon}
-          onTarget={onFilterOperation}
+          onTarget={onClearFilter}
         />
       }
       <Layout
@@ -69,7 +74,13 @@ export const OperationsScreen = ({ navigation, route }) => {
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
         >
-          <OperationList navigation={navigation} />
+          <OperationList
+            navigation={navigation}
+            dataList={
+              isFiltered ? filteredOperationListData : operationListData
+            }
+            onOperationRefresh={onRefreshHandler}
+          />
         </Layout>
       </Layout>
     </ScreenTemplate>

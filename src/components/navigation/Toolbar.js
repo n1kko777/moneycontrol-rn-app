@@ -2,6 +2,7 @@ import React from "react";
 import { TopNavigation, TopNavigationAction } from "@ui-kitten/components";
 import { TopMenuOptions } from "./TopMenuOptions";
 import { ProfileIcon } from "../../themes/icons";
+import { useSelector } from "react-redux";
 
 export const Toolbar = ({
   title,
@@ -20,6 +21,8 @@ export const Toolbar = ({
   );
 
   const renderProfileAction = () => <ProfileAction onPress={onTarget} />;
+  const { profile } = useSelector((store) => store.profile);
+  const { company } = useSelector((store) => store.company);
 
   return (
     <TopNavigation
@@ -28,7 +31,13 @@ export const Toolbar = ({
         position: "relative",
         zIndex: 10,
       }}
-      title={title}
+      title={
+        title
+          ? title
+          : profile !== null && company !== null
+          ? `${profile.is_admin ? "⭐️ " : ""}${company.company_name}`
+          : ""
+      }
       alignment="center"
       leftControl={renderProfileAction()}
       rightControls={isMenu && renderMenuAction()}

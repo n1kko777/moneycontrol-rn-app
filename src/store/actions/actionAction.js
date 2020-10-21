@@ -7,6 +7,8 @@ import {
   DELETE_ACTION,
 } from "../types";
 
+import { updateLayouts } from "./layoutAction";
+
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
@@ -68,6 +70,7 @@ export const createAction = (action) => async (dispatch) => {
           action["last_updated"] = moment();
         }
 
+        dispatch(updateLayouts());
         dispatch({
           type: CREATE_ACTION,
           payload: action,
@@ -96,6 +99,7 @@ export const hideAction = (action) => async (dispatch) => {
         },
       })
       .then(() => {
+        dispatch(updateLayouts());
         dispatch({
           type: DELETE_ACTION,
           payload: action,

@@ -27,9 +27,6 @@ export const HomeScreen = ({ navigation }) => {
   const { homeListData, totalBalance } = store.layout;
   homeListData.isNavigate = true;
 
-  const { profile } = store.profile;
-  const { company } = store.company;
-
   const refreshData = () => {
     dispatch(getDataDispatcher(navigation));
   };
@@ -48,14 +45,7 @@ export const HomeScreen = ({ navigation }) => {
             ],
         }}
       >
-        {company !== null && (
-          <Toolbar
-            title={`${profile !== null && profile.is_admin ? "⭐️ " : ""}${
-              company.company_name
-            }`}
-            navigation={navigation}
-          />
-        )}
+        <Toolbar navigation={navigation} />
       </Layout>
       <ScrollView
         refreshControl={

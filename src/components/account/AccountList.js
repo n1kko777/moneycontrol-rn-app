@@ -13,13 +13,8 @@ export const AccountList = ({ navigation }) => {
 
   const keyExtractor = (item) => item.id.toString();
 
-  const renderItem = ({ item, index }) => (
-    <AccountListItem
-      navigation={navigation}
-      item={item}
-      index={index}
-      dataList={dataList}
-    />
+  const renderItem = ({ item }) => (
+    <AccountListItem navigation={navigation} item={item} />
   );
 
   return (

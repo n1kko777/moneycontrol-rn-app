@@ -10,6 +10,8 @@ import {
   CLEAR_CURRENT_CATEGORY,
 } from "../types";
 
+import { generateHomeData } from "./layoutAction";
+
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
@@ -82,6 +84,7 @@ export const createCategory = (category) => async (dispatch) => {
           category["last_updated"] = moment();
         }
 
+        dispatch(generateHomeData());
         dispatch({
           type: CREATE_CATEGORY,
           payload: category,
@@ -118,6 +121,7 @@ export const updateCategory = ({ id, category_name }) => async (dispatch) => {
       .then((res) => {
         const updatedCategory = res.data;
 
+        dispatch(generateHomeData());
         dispatch({
           type: UPDATE_CATEGORY,
           payload: updatedCategory,
@@ -145,7 +149,8 @@ export const hideCategory = (category) => async (dispatch) => {
           Authorization: "Token " + token,
         },
       })
-      .then((res) => {
+      .then(() => {
+        dispatch(generateHomeData());
         dispatch({
           type: DELETE_CATEGORY,
           payload: category.id,

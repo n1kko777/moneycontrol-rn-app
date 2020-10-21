@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "react-native";
 import { hideOperationAction } from "../../store/actions/apiAction";
 
-export const OperationListItem = ({ item, navigation }) => {
+export const OperationListItem = React.memo(({ item, navigation }) => {
   const dispatch = useDispatch();
 
   const swipeableRow = React.useRef(null);
@@ -184,4 +184,4 @@ export const OperationListItem = ({ item, navigation }) => {
       />
     </WrapperComponent>
   );
-};
+});

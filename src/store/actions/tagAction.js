@@ -8,6 +8,8 @@ import {
   UPDATE_TAG,
 } from "../types";
 
+import { generateHomeData } from "./layoutAction";
+
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
@@ -29,6 +31,7 @@ export const getTag = () => async (dispatch) => {
       .then((res) => {
         const tag = res.data.filter((elem) => elem.is_active);
 
+        dispatch(generateHomeData());
         dispatch({
           type: GET_TAG,
           payload: tag,
@@ -69,6 +72,7 @@ export const createTag = (tag) => async (dispatch) => {
           tag["last_updated"] = moment();
         }
 
+        dispatch(generateHomeData());
         dispatch({
           type: CREATE_TAG,
           payload: tag,
@@ -109,6 +113,7 @@ export const updateTag = ({ id, tag_name }) => async (dispatch) => {
           updatedTag["last_updated"] = moment();
         }
 
+        dispatch(generateHomeData());
         dispatch({
           type: UPDATE_TAG,
           payload: updatedTag,
@@ -136,7 +141,8 @@ export const hideTag = (tag) => async (dispatch) => {
           Authorization: "Token " + token,
         },
       })
-      .then((res) => {
+      .then(() => {
+        dispatch(generateHomeData());
         dispatch({
           type: DELETE_TAG,
           payload: tag.id,

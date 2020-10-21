@@ -1,7 +1,4 @@
-let localhost =
-  process.env.NODE_ENV === "production"
-    ? "https://mncntrl.ru"
-    : "http://192.168.0.16:8000";
+let localhost = "https://mncntrl.ru";
 
 const apiURL = "/api/v1";
 

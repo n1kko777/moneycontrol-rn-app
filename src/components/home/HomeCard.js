@@ -53,19 +53,15 @@ export const HomeCard = ({ item, navigation, isNavigate }) => {
       </TouchableOpacity>
 
       <View>
-        {item.data
-          .filter((elem, index) =>
-            item.navigate == "Operation" ? index < 8 : elem
-          )
-          .map((elem) => (
-            <HomeCardItem
-              navigation={navigation}
-              kittenTheme={kittenTheme}
-              themeContext={themeContext}
-              key={`${elem.key}_${elem.key}`}
-              item={elem}
-            />
-          ))}
+        {item.data.map((elem) => (
+          <HomeCardItem
+            navigation={navigation}
+            kittenTheme={kittenTheme}
+            themeContext={themeContext}
+            key={elem.last_updated}
+            item={elem}
+          />
+        ))}
       </View>
     </Layout>
   );

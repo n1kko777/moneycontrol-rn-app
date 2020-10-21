@@ -5,8 +5,9 @@ import {
   LOADING_TRANSACTION,
   ERROR_TRANSACTION,
   DELETE_TRANSACTION,
-  UPDATE_TRANSACTION,
 } from "../types";
+
+import { updateLayouts } from "./layoutAction";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
@@ -69,6 +70,7 @@ export const createTransaction = (transaction) => async (dispatch) => {
           transaction["last_updated"] = moment();
         }
 
+        dispatch(updateLayouts());
         dispatch({
           type: CREATE_TRANSACTION,
           payload: transaction,
@@ -97,6 +99,7 @@ export const hideTransaction = (transaction) => async (dispatch) => {
         },
       })
       .then(() => {
+        dispatch(updateLayouts());
         dispatch({
           type: DELETE_TRANSACTION,
           payload: transaction,

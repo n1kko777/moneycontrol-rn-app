@@ -9,7 +9,7 @@ export const MenuList = ({ data }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const keyExtractor = item => item.title.toString();
+  const keyExtractor = (item) => item.title.toString();
   const renderItemAccessory = () => (
     <RightIcon
       fill={
@@ -19,7 +19,7 @@ export const MenuList = ({ data }) => {
       }
       style={{
         width: 30,
-        height: 30
+        height: 30,
       }}
     />
   );
@@ -29,20 +29,16 @@ export const MenuList = ({ data }) => {
       key={title}
       title={title}
       titleStyle={{
-        fontSize: 16
+        fontSize: 16,
       }}
       descriptionStyle={{
-        fontSize: 14
+        fontSize: 14,
       }}
       onPress={navLink}
       icon={icon}
       accessory={renderItemAccessory}
       style={{
         paddingVertical: 15,
-        borderTopLeftRadius: index === 0 ? 10 : 0,
-        borderTopRightRadius: index === 0 ? 10 : 0,
-        borderBottomLeftRadius: index === data.length - 1 ? 10 : 0,
-        borderBottomRightRadius: index === data.length - 1 ? 10 : 0
       }}
     />
   );

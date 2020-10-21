@@ -11,16 +11,12 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { HomeList } from "../../components/home/HomeList";
 import { Toolbar } from "../../components/navigation/Toolbar";
-
-import { prepareHomeData } from "../../prepareHomeData";
-
-import { filterArrayByDate } from "../../filterArrayByDate";
-
 import {
-  getDataDispatcher,
+  getProfileListData,
   removeProfileFromCompanyAction,
 } from "../../store/actions/apiAction";
 import { BackIcon } from "../../themes/icons";
+import { generateHomeData } from "../../store/actions/layoutAction";
 
 export const CompanyMemberScreen = ({ navigation, route }) => {
   const { profile } = route.params;
@@ -31,46 +27,20 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
   const kittenTheme = useTheme();
 
   const store = useSelector((store) => store);
-
-  const { startDate, endDate } = store.calendar;
-
-  const { company } = store.company;
   const { accounts } = store.account;
-  const { transactions } = store.transaction;
-  const { actions } = store.action;
-  const { transfer } = store.transfer;
+  const { homeListData: profileListData } = store.layout;
 
-  const homeListData = prepareHomeData(
-    profile,
-    company,
-    accounts,
-    filterArrayByDate(
-      transactions.filter(
-        (oper) => oper.profile_name.match(/\d+/).pop() == profile.id
-      ),
-      startDate,
-      endDate
-    ),
-    filterArrayByDate(
-      actions.filter(
-        (oper) => oper.profile_name.match(/\d+/).pop() == profile.id
-      ),
-      startDate,
-      endDate
-    ),
-    filterArrayByDate(
-      transfer.filter(
-        (oper) => oper.from_profile.match(/\d+/).pop() == profile.id
-      ),
-      startDate,
-      endDate
-    )
-  ).filter((elem) => elem.navigate !== "Team");
+  const homeListData = profileListData.filter(
+    (elem) =>
+      elem.navigate !== "Team" &&
+      elem.navigate !== "Tag" &&
+      elem.navigate !== "Category"
+  );
 
   homeListData.isNavigate = false;
 
   const refreshData = () => {
-    dispatch(getDataDispatcher(navigation));
+    dispatch(getProfileListData(profile.id));
   };
 
   const onDeleteMember = () => {
@@ -113,6 +83,11 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
     );
   };
 
+  const onBackHandler = () => {
+    dispatch(generateHomeData());
+    navigation.navigate("Home");
+  };
+
   return (
     <ScreenTemplate>
       <Layout
@@ -127,7 +102,7 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
           navigation={navigation}
           title={profile.first_name + " " + profile.last_name}
           TargetIcon={BackIcon}
-          onTarget={() => navigation.navigate("Home")}
+          onTarget={onBackHandler}
           isMenu={false}
         />
       </Layout>

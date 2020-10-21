@@ -9,7 +9,7 @@ import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 import { hideTagAction } from "../../store/actions/apiAction";
 
-export const TagListItem = ({ item, index, dataList, navigation }) => {
+export const TagListItem = React.memo(({ item, navigation }) => {
   const dispatch = useDispatch();
 
   const swipeableRow = React.useRef(null);
@@ -71,12 +71,8 @@ export const TagListItem = ({ item, index, dataList, navigation }) => {
         icon={renderIconItem}
         style={{
           paddingVertical: 15,
-          borderTopLeftRadius: index === 0 ? 10 : 0,
-          borderTopRightRadius: index === 0 ? 10 : 0,
-          borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
-          borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
         }}
       />
     </Swipeable>
   );
-};
+});

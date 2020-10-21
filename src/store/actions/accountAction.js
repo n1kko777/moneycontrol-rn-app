@@ -11,6 +11,7 @@ import {
 } from "../types";
 
 import { endpointAPI } from "../constants";
+import { generateHomeData } from "./layoutAction";
 import { Alert, AsyncStorage } from "react-native";
 import moment from "moment";
 
@@ -57,7 +58,7 @@ export const getAccount = () => async (dispatch) => {
 };
 
 // Create account from server
-export const createAccount = (account) => async (dispatch) => {
+export const createAccount = (account) => async (dispatch, getState) => {
   dispatch(setLoading());
 
   try {
@@ -83,6 +84,7 @@ export const createAccount = (account) => async (dispatch) => {
           account["last_updated"] = moment();
         }
 
+        dispatch(generateHomeData());
         dispatch({
           type: CREATE_ACCOUNT,
           payload: account,
@@ -126,6 +128,7 @@ export const updateAccount = ({ id, account_name, balance }) => async (
           updatedAccount["last_updated"] = moment();
         }
 
+        dispatch(generateHomeData());
         dispatch({
           type: UPDATE_ACCOUNT,
           payload: updatedAccount,
@@ -167,7 +170,8 @@ export const hideAccount = (account) => async (dispatch) => {
           Authorization: "Token " + token,
         },
       })
-      .then((res) => {
+      .then(() => {
+        dispatch(generateHomeData());
         dispatch({
           type: DELETE_ACCOUNT,
           payload: account.id,

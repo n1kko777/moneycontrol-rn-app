@@ -17,7 +17,7 @@ import {
 const initialState = {
   homeListData: [],
   operationListData: [],
-  formatedOperationList: [],
+  filteredOperationListData: [],
   filterParam: null,
   totalBalance: 0,
   totalActions: 0,
@@ -60,12 +60,16 @@ export const layoutReducer = (state = initialState, action) => {
     case SET_FILTER_PARAM:
       return {
         ...state,
-        filterParam: payload,
+        filterParam: payload.filterParam,
+        filteredOperationListData: payload.filteredOperationListData,
+        totalActions: payload.totalActions,
+        totalTransactions: payload.totalTransactions,
       };
     case CLEAR_FILTER_PARAM:
       return {
         ...state,
         filterParam: null,
+        filteredOperationListData: [],
       };
     case SET_HOME_DATA:
       return {
@@ -80,21 +84,20 @@ export const layoutReducer = (state = initialState, action) => {
     case SET_OPERATION_DATA:
       return {
         ...state,
-        operationListData: payload.operationListData,
-        formatedOperationList: payload.formatedOperationList,
+        operationListData: payload,
+        filterParam: null,
+        filteredOperationListData: [],
       };
     case CLEAR_OPERATION_DATA:
       return {
         ...state,
         operationListData: [],
-        formatedOperationList: [],
       };
     case CLEAR_LAYOUT:
       return {
         ...state,
         homeListData: [],
         operationListData: [],
-        formatedOperationList: [],
         filterParam: null,
         totalBalance: 0,
         totalActions: 0,

@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 
 import { hideAccountAction } from "../../store/actions/apiAction";
 
-export const AccountListItem = ({ item, index, dataList, navigation }) => {
+export const AccountListItem = React.memo(({ item, navigation }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
@@ -93,12 +93,8 @@ export const AccountListItem = ({ item, index, dataList, navigation }) => {
         accessory={() => renderItemAccessory(item)}
         style={{
           paddingVertical: 15,
-          borderTopLeftRadius: index === 0 ? 10 : 0,
-          borderTopRightRadius: index === 0 ? 10 : 0,
-          borderBottomLeftRadius: index === dataList.length - 1 ? 10 : 0,
-          borderBottomRightRadius: index === dataList.length - 1 ? 10 : 0,
         }}
       />
     </Swipeable>
   );
-};
+});

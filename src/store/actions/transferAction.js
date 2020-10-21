@@ -5,8 +5,8 @@ import {
   LOADING_TRANSFER,
   ERROR_TRANSFER,
   DELETE_TRANSFER,
-  UPDATE_TRANSFER,
 } from "../types";
+import { updateLayouts } from "./layoutAction";
 
 import { endpointAPI } from "../constants";
 import { Alert, AsyncStorage } from "react-native";
@@ -69,6 +69,7 @@ export const createTransfer = (transfer) => async (dispatch) => {
           transfer["last_updated"] = moment();
         }
 
+        dispatch(updateLayouts());
         dispatch({
           type: CREATE_TRANSFER,
           payload: transfer,
@@ -98,6 +99,7 @@ export const hideTransfer = (transfer) => async (dispatch) => {
         },
       })
       .then(() => {
+        dispatch(updateLayouts());
         dispatch({
           type: DELETE_TRANSFER,
           payload: transfer,

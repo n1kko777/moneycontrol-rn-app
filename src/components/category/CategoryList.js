@@ -10,13 +10,8 @@ export const CategoryList = ({ navigation }) => {
 
   const keyExtractor = (item) => item.id.toString();
 
-  const renderItem = ({ item, index }) => (
-    <CategoryListItem
-      navigation={navigation}
-      item={item}
-      index={index}
-      dataList={dataList}
-    />
+  const renderItem = ({ item }) => (
+    <CategoryListItem navigation={navigation} item={item} />
   );
 
   return (
