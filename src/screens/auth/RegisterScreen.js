@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo, useCallback, useEffect, useState, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,58 +22,59 @@ import {
 
 import { authSignUpAction } from "../../store/actions/apiAction";
 
-export const RegisterScreen = ({ navigation }) => {
+export const RegisterScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const store = useSelector((store) => store);
-  const { isRegister, error } = store.auth;
+  const { loader } = useSelector((store) => store.api);
 
-  useEffect(() => {
-    if (error === null && isRegister) {
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPassword1("");
-      setPassword2("");
-      navigation.navigate("Login");
-    }
-  }, [isRegister]);
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [isVisiblePassword1, setIsVisiblePassword1] = useState(false);
+  const [isVisiblePassword2, setIsVisiblePassword2] = useState(false);
 
-  const [first_name, setFirstName] = React.useState("");
-  const [last_name, setLastName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password1, setPassword1] = React.useState("");
-  const [password2, setPassword2] = React.useState("");
-  const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
-  const [isVisiblePassword2, setIsVisiblePassword2] = React.useState(false);
-
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  };
-  const loader = useSelector((store) => store.api.loader);
+  }, []);
 
-  const onSubmit = () => {
+  const onSuccess = useCallback(() => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword1("");
+    setPassword2("");
+    navigation.navigate("Login");
+  }, []);
+
+  const onSubmit = useCallback(() => {
     if (!loader) {
       dispatch(
-        authSignUpAction({
-          first_name,
-          last_name,
-          email,
-          password1,
-          password2,
-        })
+        authSignUpAction(
+          {
+            first_name,
+            last_name,
+            email,
+            password1,
+            password2,
+          },
+          onSuccess
+        )
       );
     }
-  };
+  }, [first_name, last_name, email, password1, password2]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
-  const inputRef = React.useRef(null);
+  const inputRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
-      inputRef.current.focus();
+      inputRef !== null &&
+        inputRef.current !== null &&
+        inputRef.current.focus();
     }, 100);
   }, []);
 
@@ -169,4 +170,4 @@ export const RegisterScreen = ({ navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

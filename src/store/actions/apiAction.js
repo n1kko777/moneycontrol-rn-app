@@ -51,10 +51,15 @@ export const endLoader = () => ({
 });
 
 // Auth
-export const authSignUpAction = (newUser) => async (dispatch) => {
+export const authSignUpAction = (newUser, onSuccess) => async (
+  dispatch,
+  getState
+) => {
   dispatch(startLoader());
   await Promise.all([dispatch(authSignUp(newUser))]);
   dispatch(endLoader());
+
+  getState().auth.error === null && onSuccess();
 };
 
 export const resetPassAction = (userData, onSuccess) => async (dispatch) => {
