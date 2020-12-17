@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { TouchableOpacity, View, Image, AsyncStorage } from "react-native";
 import { Layout, Button, Text, Input } from "@ui-kitten/components";
 
@@ -15,144 +15,121 @@ import {
 } from ".././../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-const LoginScreen = ({
-  navigation,
-  loader,
-  getProfileDispatch,
-  authLoginDispatch,
-}) => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+const LoginScreen = memo(
+  ({ navigation, loader, getProfileDispatch, authLoginDispatch }) => {
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
 
-  const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
+    const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
-  const onSuccess = (profile) => {
-    profile !== null
-      ? profile.company !== null
-        ? navigateHome()
-        : navigateCompanyManager()
-      : navigateCreateProfile();
-  };
+    const navigateToScreen = useCallback((name) => {
+      Keyboard.dismiss();
+      navigation.navigate(name);
+    }, []);
 
-  const isAuthHandler = async () => {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
-    if (token !== null) {
-      getProfileDispatch(onSuccess);
-    }
-  };
+    const onSuccess = useCallback((profile) => {
+      profile !== null
+        ? profile.company !== null
+          ? navigateToScreen("Home")
+          : navigateToScreen("CompanyManager")
+        : navigateToScreen("CreateProfile");
+    }, []);
 
-  useEffect(() => {
-    isAuthHandler();
-  }, []);
+    const isAuthHandler = useCallback(async () => {
+      const token = await AsyncStorage.getItem("AUTH_TOKEN");
+      if (token !== null) {
+        getProfileDispatch(onSuccess);
+      }
+    }, []);
 
-  const onSubmit = () => {
-    if (!loader) {
-      authLoginDispatch(email, password, isAuthHandler);
-    }
-  };
+    const onSubmit = useCallback(() => {
+      if (!loader) {
+        authLoginDispatch(email, password, isAuthHandler);
+      }
+    }, [email, password]);
 
-  const navigateHome = () => {
-    Keyboard.dismiss();
-    navigation.navigate("Home");
-  };
+    useEffect(() => {
+      isAuthHandler();
+    }, []);
 
-  const navigateCompanyManager = () => {
-    Keyboard.dismiss();
-    navigation.navigate("CompanyManager");
-  };
-
-  const navigateCreateProfile = () => {
-    Keyboard.dismiss();
-    navigation.navigate("CreateProfile");
-  };
-
-  const navigateRegister = () => {
-    Keyboard.dismiss();
-    navigation.navigate("Register");
-  };
-
-  const navigateReset = () => {
-    Keyboard.dismiss();
-    navigation.navigate("Reset");
-  };
-
-  return (
-    <ScreenTemplate>
-      <Layout
-        style={{
-          flex: 1,
-          justifyContent: "flex-start",
-          alignItems: "center",
-        }}
-      >
-        <View style={{ marginBottom: 50, marginTop: 70 }}>
-          <Image
-            style={{ width: 120, height: 120 }}
-            source={require("../../../assets/logo.png")}
-          />
-        </View>
-        <View
+    return (
+      <ScreenTemplate>
+        <Layout
           style={{
-            width: "85%",
-            maxWidth: 720,
-            manrginBottom: 25,
+            flex: 1,
+            justifyContent: "flex-start",
+            alignItems: "center",
           }}
         >
-          <Input
-            value={email}
-            autoCapitalize="none"
-            placeholder="Почта"
-            keyboardType="email-address"
-            autoCompleteType="email"
-            onChangeText={setEmail}
-            style={{ marginVertical: 10 }}
-          />
-          <Input
-            value={password}
-            placeholder="Пароль"
-            icon={!isVisiblePassword ? showIconPassword : hideIconPassword}
-            onIconPress={() => setIsVisiblePassword(!isVisiblePassword)}
-            secureTextEntry={!isVisiblePassword}
-            autoCompleteType="password"
-            onChangeText={setPassword}
-            style={{ marginVertical: 10 }}
-          />
-          <Button
+          <View style={{ marginBottom: 50, marginTop: 70 }}>
+            <Image
+              style={{ width: 120, height: 120 }}
+              source={require("../../../assets/logo.png")}
+            />
+          </View>
+          <View
             style={{
-              marginVertical: 25,
-              borderRadius: THEME.BUTTON_RADIUS,
-            }}
-            onPress={onSubmit}
-          >
-            Войти
-          </Button>
-        </View>
-        <TouchableOpacity onPress={navigateReset}>
-          <Text
-            style={{
-              marginVertical: 7,
-              borderRadius: THEME.BUTTON_RADIUS,
-              textDecorationLine: "underline",
+              width: "85%",
+              maxWidth: 720,
+              manrginBottom: 25,
             }}
           >
-            Забыли пароль?
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={navigateRegister}>
-          <Text
-            style={{
-              marginVertical: 7,
-              borderRadius: THEME.BUTTON_RADIUS,
-              textDecorationLine: "underline",
-            }}
-          >
-            Зарегистрироваться
-          </Text>
-        </TouchableOpacity>
-      </Layout>
-    </ScreenTemplate>
-  );
-};
+            <Input
+              value={email}
+              autoCapitalize="none"
+              placeholder="Почта"
+              keyboardType="email-address"
+              autoCompleteType="email"
+              onChangeText={setEmail}
+              style={{ marginVertical: 10 }}
+            />
+            <Input
+              value={password}
+              placeholder="Пароль"
+              icon={!isVisiblePassword ? showIconPassword : hideIconPassword}
+              onIconPress={() => setIsVisiblePassword(!isVisiblePassword)}
+              secureTextEntry={!isVisiblePassword}
+              autoCompleteType="password"
+              onChangeText={setPassword}
+              style={{ marginVertical: 10 }}
+            />
+            <Button
+              style={{
+                marginVertical: 25,
+                borderRadius: THEME.BUTTON_RADIUS,
+              }}
+              onPress={onSubmit}
+            >
+              Войти
+            </Button>
+          </View>
+          <TouchableOpacity onPress={() => navigateToScreen("Reset")}>
+            <Text
+              style={{
+                marginVertical: 7,
+                borderRadius: THEME.BUTTON_RADIUS,
+                textDecorationLine: "underline",
+              }}
+            >
+              Забыли пароль?
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigateToScreen("Register")}>
+            <Text
+              style={{
+                marginVertical: 7,
+                borderRadius: THEME.BUTTON_RADIUS,
+                textDecorationLine: "underline",
+              }}
+            >
+              Зарегистрироваться
+            </Text>
+          </TouchableOpacity>
+        </Layout>
+      </ScreenTemplate>
+    );
+  }
+);
 
 const mapStateToProps = (store) => ({
   loader: store.api.loader,
