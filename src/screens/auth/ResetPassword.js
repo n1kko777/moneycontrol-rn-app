@@ -1,4 +1,11 @@
-import React from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  memo,
+  useMemo,
+  useCallback,
+} from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,21 +23,21 @@ import { BackIcon } from "../../themes/icons";
 
 import { resetPassAction } from "../../store/actions/apiAction";
 
-export const ResetPassword = ({ navigation }) => {
+export const ResetPassword = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = React.useState("");
-
-  const navigateBack = () => {
-    navigation.goBack(null);
-  };
+  const [email, setEmail] = useState("");
   const loader = useSelector((store) => store.api.loader);
 
-  const onReset = () => {
+  const navigateBack = useCallback(() => {
+    navigation.goBack(null);
+  }, []);
+
+  const onReset = useCallback(() => {
     setEmail("");
     navigateBack();
-  };
+  }, []);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       dispatch(
         resetPassAction(
@@ -41,15 +48,15 @@ export const ResetPassword = ({ navigation }) => {
         )
       );
     }
-  };
+  }, [email]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
-  const inputRef = React.useRef(null);
+  const inputRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
       inputRef.current.focus();
     }, 100);
@@ -101,4 +108,4 @@ export const ResetPassword = ({ navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});
