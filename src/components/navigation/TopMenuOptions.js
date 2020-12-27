@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { TopNavigationAction, OverflowMenu } from "@ui-kitten/components";
 import { Alert } from "react-native";
 
@@ -14,12 +14,12 @@ import { logout } from "../../store/actions/authAction";
 import { useDispatch } from "react-redux";
 import { getDataDispatcher } from "../../store/actions/apiAction";
 
-export const TopMenuOptions = ({ navigation }) => {
+export const TopMenuOptions = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
-  const getData = () => {
+  const getData = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  };
+  }, []);
 
   const themeContext = React.useContext(ThemeContext);
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -39,34 +39,37 @@ export const TopMenuOptions = ({ navigation }) => {
     },
   ];
 
-  const logoutHandler = async () => {
+  const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
-  };
+  }, []);
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setMenuVisible(!menuVisible);
-  };
+  }, [menuVisible]);
 
-  const onMenuItemSelect = (index) => {
-    switch (index) {
-      case 0:
-        getData();
-        break;
-      case 1:
-        themeContext.toggleTheme();
-        break;
-      case 2:
-        navigateLogout();
-        break;
+  const onMenuItemSelect = useCallback(
+    (index) => {
+      switch (index) {
+        case 0:
+          getData();
+          break;
+        case 1:
+          themeContext.toggleTheme();
+          break;
+        case 2:
+          navigateLogout();
+          break;
 
-      default:
-        break;
-    }
+        default:
+          break;
+      }
 
-    setMenuVisible(false);
-  };
+      setMenuVisible(false);
+    },
+    [themeContext]
+  );
 
-  const navigateLogout = () => {
+  const navigateLogout = useCallback(() => {
     Alert.alert(
       "Выход",
       "Вы уверены, что хотите выйти из учетной записи?",
@@ -81,7 +84,7 @@ export const TopMenuOptions = ({ navigation }) => {
         cancelable: false,
       }
     );
-  };
+  }, []);
 
   return (
     <OverflowMenu
@@ -93,4 +96,4 @@ export const TopMenuOptions = ({ navigation }) => {
       <TopNavigationAction icon={MoreIconHorizontal} onPress={toggleMenu} />
     </OverflowMenu>
   );
-};
+});
