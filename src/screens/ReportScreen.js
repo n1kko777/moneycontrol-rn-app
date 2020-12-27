@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useTheme } from "@ui-kitten/components";
 
 import { ThemeContext } from "../themes/theme-context";
@@ -21,7 +21,7 @@ import moment from "moment";
 import "moment/locale/ru";
 moment.locale("ru");
 
-export const ReportScreen = ({ navigation }) => {
+export const ReportScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -587,4 +587,4 @@ export const ReportScreen = ({ navigation }) => {
       </ScrollView>
     </ScreenTemplate>
   );
-};
+});
