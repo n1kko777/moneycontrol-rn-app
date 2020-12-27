@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { StyleSheet, ScrollView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Autocomplete, Layout, Text } from "@ui-kitten/components";
@@ -10,12 +10,13 @@ import { AddSmallIcon } from "../../../themes/icons";
 import { TagItem } from "./TagItem";
 import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
 
-export const CustomTag = ({ tagData, tagList, setTagList }) => {
+export const CustomTag = memo(({ tagData, tagList, setTagList }) => {
   const dispatch = useDispatch();
   const tagInput = React.useRef(null);
-  const loader = useSelector((store) => store.api.loader);
 
-  const { tags } = useSelector((store) => store.tag);
+  const store = useSelector((store) => store);
+  const loader = store.api.loader;
+  const { tags } = store.tag;
 
   const [value, setValue] = React.useState("");
   const [data, setData] = React.useState(tagData);
@@ -36,7 +37,7 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
       setTagList([...tagList, data.find((el) => el.title === title)]);
   };
 
-  const addTag = () => {
+  const addTag = useCallback(() => {
     tagInput.current.blur();
 
     if (tags.map((el) => el.tag_name).includes(value)) {
@@ -46,11 +47,14 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
     } else {
       onChangeText("");
     }
-  };
+  }, [value]);
 
-  const deleteTag = (text) => {
-    setTagList(tagList.filter((el) => el.title !== text));
-  };
+  const deleteTag = useCallback(
+    (text) => {
+      setTagList(tagList.filter((el) => el.title !== text));
+    },
+    [tagList]
+  );
 
   React.useEffect(() => {
     setData(
@@ -94,13 +98,17 @@ export const CustomTag = ({ tagData, tagList, setTagList }) => {
       >
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
           {tagList.map((el) => (
-            <TagItem deleteTag={deleteTag} key={el.id} text={el.title} />
+            <TagItem
+              deleteTag={() => deleteTag(el.title)}
+              key={el.id}
+              text={el.title}
+            />
           ))}
         </View>
       </ScrollView>
     </Layout>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

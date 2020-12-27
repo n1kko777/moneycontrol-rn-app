@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { Keyboard } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -22,12 +22,13 @@ import { createTransferAction } from "../../store/actions/apiAction";
 import { clearCurrentAccount } from "../../store/actions/accountAction";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
 
-export const CreateTransferScreen = ({ route, navigation }) => {
+export const CreateTransferScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
-  const loader = useSelector((store) => store.api.loader);
+  const store = useSelector((store) => store);
+  const loader = store.api.loader;
 
-  const currentAccount = useSelector((store) => store.account.current);
+  const currentAccount = store.account.current;
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -37,9 +38,9 @@ export const CreateTransferScreen = ({ route, navigation }) => {
 
   const dispatch = useDispatch();
 
-  const { profile } = useSelector((store) => store.profile);
+  const { profile } = store.profile;
 
-  const { company } = useSelector((store) => store.company);
+  const { company } = store.company;
 
   const toAccountData = company.profiles.map((elem, index) => ({
     text: `${elem.is_admin ? "⭐️ " : ""}${elem.first_name} ${elem.last_name} ${
@@ -54,7 +55,7 @@ export const CreateTransferScreen = ({ route, navigation }) => {
   }));
 
   const [transfer_amount, setTransferAmount] = React.useState(
-    prevItem !== undefined ? prevItem.balance : ""
+    prevItem !== undefined ? prevItem.balance.toString() : ""
   );
   const [selectedFromAccountId, setSelectedFromAccountId] = React.useState(
     prevItem !== undefined
@@ -78,12 +79,12 @@ export const CreateTransferScreen = ({ route, navigation }) => {
   const isNotAmountEmpty = parseFloat(transfer_amount) > 0;
   const isNotToAccountEmpty = selectedToAccountOption !== null;
 
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     currentAccount !== null && dispatch(clearCurrentAccount());
     navigation.goBack(null);
-  };
+  }, [currentAccount]);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
 
@@ -100,15 +101,15 @@ export const CreateTransferScreen = ({ route, navigation }) => {
 
       dispatch(createTransferAction(newTransfer, navigateBack));
     }
-  };
+  }, [transfer_amount, selectedFromAccountId, selectedToAccountOption]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
-  const onToSelectAccount = React.useCallback((opt) => {
+  const onToSelectAccount = useCallback((opt) => {
     setSelectedToAccountOption(opt);
-  });
+  }, []);
 
   return (
     <ScreenTemplate>
@@ -185,4 +186,4 @@ export const CreateTransferScreen = ({ route, navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

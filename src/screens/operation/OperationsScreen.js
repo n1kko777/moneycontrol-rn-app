@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout, Text } from "@ui-kitten/components";
@@ -18,7 +18,7 @@ import {
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
 
-export const OperationsScreen = ({ navigation, route }) => {
+export const OperationsScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
@@ -34,20 +34,20 @@ export const OperationsScreen = ({ navigation, route }) => {
 
   const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
 
-  const onClearFilter = () => {
+  const onClearFilter = useCallback(() => {
     if (isFiltered) {
       setIsFiltered(false);
       dispatch(clearFilterParamAction());
     }
-  };
+  }, [isFiltered]);
 
   React.useEffect(() => {
     setIsFiltered(filterParam !== null);
   }, [filterParam]);
 
-  const onRefreshHandler = () => {
-    dispatch(getDataDispatcher(navigator));
-  };
+  const onRefreshHandler = useCallback(() => {
+    dispatch(getDataDispatcher(navigation));
+  }, []);
 
   return (
     <ScreenTemplate>
@@ -85,4 +85,4 @@ export const OperationsScreen = ({ navigation, route }) => {
       </Layout>
     </ScreenTemplate>
   );
-};
+});

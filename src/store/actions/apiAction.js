@@ -224,15 +224,14 @@ export const createActionAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(createAction(newItem)),
-    dispatch(getAction()),
-    dispatch(getAccount()),
-  ]);
-
+  await Promise.all([dispatch(createAction(newItem))]);
   dispatch(endLoader());
+  if (getState().action.error === null) {
+    onSuccess();
 
-  getState().action.error === null && onSuccess();
+    dispatch(getAction());
+    dispatch(getAccount());
+  }
 };
 
 export const createTransactionAction = (newItem, onSuccess) => async (
@@ -240,15 +239,15 @@ export const createTransactionAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(createTransaction(newItem)),
-    dispatch(getTransaction()),
-    dispatch(getAccount()),
-  ]);
-
+  await Promise.all([dispatch(createTransaction(newItem))]);
   dispatch(endLoader());
 
-  getState().transaction.error === null && onSuccess();
+  if (getState().transaction.error === null) {
+    onSuccess();
+
+    dispatch(getTransaction());
+    dispatch(getAccount());
+  }
 };
 
 export const createTransferAction = (newItem, onSuccess) => async (
@@ -256,15 +255,15 @@ export const createTransferAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(createTransfer(newItem)),
-    dispatch(getTransfer()),
-    dispatch(getAccount()),
-  ]);
-
+  await Promise.all([dispatch(createTransfer(newItem))]);
   dispatch(endLoader());
 
-  getState().transfer.error === null && onSuccess();
+  if (getState().transfer.error === null) {
+    onSuccess();
+
+    dispatch(getTransfer());
+    dispatch(getAccount());
+  }
 };
 
 // Update
@@ -390,12 +389,10 @@ const helperOperation = ({ type, id }) => {
 
 export const hideOperationAction = (hideItem) => async (dispatch) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(helperOperation(hideItem)),
-    dispatch(getAccount()),
-  ]);
-
+  await Promise.all([dispatch(helperOperation(hideItem))]);
   dispatch(endLoader());
+
+  dispatch(getAccount());
 };
 
 export const removeProfileFromCompanyAction = (profile) => async (dispatch) => {

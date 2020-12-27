@@ -1,14 +1,15 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, useTheme, Icon } from "@ui-kitten/components";
 
-export const TagItem = ({ text, deleteTag }) => {
+export const TagItem = memo(({ text, deleteTag }) => {
   const kittenTheme = useTheme();
 
   const { itemWrapper } = styles;
+
   return (
     <TouchableOpacity
-      onPress={() => deleteTag(text)}
+      onPress={deleteTag}
       style={{
         ...itemWrapper,
         flexDirection: "row",
@@ -29,7 +30,7 @@ export const TagItem = ({ text, deleteTag }) => {
       />
     </TouchableOpacity>
   );
-};
+});
 
 const styles = StyleSheet.create({
   itemWrapper: {
