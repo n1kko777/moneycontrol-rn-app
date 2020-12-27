@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,7 +18,7 @@ import { BackIcon } from "../../themes/icons";
 import { updateCompanyAction } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-export const ChangeCompanyNameScreen = ({ navigation }) => {
+export const ChangeCompanyNameScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const companyName = useSelector(
     (store) => store.company.company.company_name
@@ -26,15 +26,18 @@ export const ChangeCompanyNameScreen = ({ navigation }) => {
   const companyId = useSelector((store) => store.company.company.id);
 
   const [company_name, setCompanyName] = React.useState(companyName);
-  const navigateBack = () => {
-    navigation.goBack(null);
-  };
-  const loader = useSelector((store) => store.api.loader);
-  const onReset = () => {
-    navigateBack();
-  };
 
-  const onSubmit = () => {
+  const navigateBack = useCallback(() => {
+    navigation.goBack(null);
+  }, []);
+
+  const loader = useSelector((store) => store.api.loader);
+
+  const onReset = useCallback(() => {
+    navigateBack();
+  }, []);
+
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
       dispatch(
@@ -47,7 +50,7 @@ export const ChangeCompanyNameScreen = ({ navigation }) => {
         )
       );
     }
-  };
+  }, [company_name]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -105,4 +108,4 @@ export const ChangeCompanyNameScreen = ({ navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

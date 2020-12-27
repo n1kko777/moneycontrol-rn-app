@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { getShortName } from "../../getShortName";
 import { ListItem, useTheme, Avatar, Text } from "@ui-kitten/components";
 import { ProfileIcon } from "../../themes/icons";
@@ -7,11 +7,11 @@ import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
 
-export const CompanyProfileListItem = React.memo(({ item, onClick }) => {
+export const CompanyProfileListItem = memo(({ item, onClick }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const renderItemIcon = (item, style) => {
+  const renderItemIcon = useCallback((item, style) => {
     delete style.tintColor;
     return item.image !== null ? (
       <Avatar
@@ -37,7 +37,7 @@ export const CompanyProfileListItem = React.memo(({ item, onClick }) => {
         }}
       />
     );
-  };
+  }, []);
 
   const renderItemAccessory = (balance) => (
     <Text category="s1">{`${splitToDigits(balance)} ₽`}</Text>

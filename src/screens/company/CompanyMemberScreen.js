@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,7 +18,7 @@ import {
 import { BackIcon } from "../../themes/icons";
 import { generateHomeData } from "../../store/actions/layoutAction";
 
-export const CompanyMemberScreen = ({ navigation, route }) => {
+export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const { profile } = route.params;
 
   const dispatch = useDispatch();
@@ -39,11 +39,11 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
 
   homeListData.isNavigate = false;
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     dispatch(getProfileListData(profile.id));
-  };
+  }, []);
 
-  const onDeleteMember = () => {
+  const onDeleteMember = useCallback(() => {
     Alert.alert(
       "Удаление сотрудника",
       `Вы уверены, что хотите удалить сотрудника ${
@@ -81,12 +81,12 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
         cancelable: false,
       }
     );
-  };
+  }, []);
 
-  const onBackHandler = () => {
+  const onBackHandler = useCallback(() => {
     dispatch(generateHomeData());
     navigation.navigate("Home");
-  };
+  }, []);
 
   return (
     <ScreenTemplate>
@@ -137,4 +137,4 @@ export const CompanyMemberScreen = ({ navigation, route }) => {
       </ScrollView>
     </ScreenTemplate>
   );
-};
+});
