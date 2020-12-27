@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View } from "react-native";
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 
@@ -18,7 +18,7 @@ import { Toolbar } from "../components/navigation/Toolbar";
 import { MenuList } from "../components/menu/MenuList";
 import { ScreenTemplate } from "../components/ScreenTemplate";
 
-export const MenuScreen = ({ navigation }) => {
+export const MenuScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -55,9 +55,9 @@ export const MenuScreen = ({ navigation }) => {
     },
   ];
 
-  const navigateToReport = () => {
+  const navigateToReport = useCallback(() => {
     navigation.navigate("Report");
-  };
+  }, []);
 
   return (
     <ScreenTemplate>
@@ -92,4 +92,4 @@ export const MenuScreen = ({ navigation }) => {
       </Layout>
     </ScreenTemplate>
   );
-};
+});

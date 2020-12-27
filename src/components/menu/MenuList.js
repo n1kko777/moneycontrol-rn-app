@@ -1,11 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 import { ListItem, useTheme } from "@ui-kitten/components";
 import { FlatList } from "react-native";
 
 import { RightIcon } from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 
-export const MenuList = ({ data }) => {
+export const MenuList = memo(({ data }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -24,7 +24,7 @@ export const MenuList = ({ data }) => {
     />
   );
 
-  const renderItem = ({ item: { title, navLink, icon }, index }) => (
+  const renderItem = ({ item: { title, navLink, icon } }) => (
     <ListItem
       key={title}
       title={title}
@@ -52,4 +52,4 @@ export const MenuList = ({ data }) => {
       renderItem={renderItem}
     />
   );
-};
+});
