@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { ListItem, Text, useTheme, Button } from "@ui-kitten/components";
@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 
 import { hideAccountAction } from "../../store/actions/apiAction";
 
-export const AccountListItem = React.memo(({ item, navigation }) => {
+export const AccountListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
@@ -20,9 +20,9 @@ export const AccountListItem = React.memo(({ item, navigation }) => {
 
   const swipeableRow = React.useRef(null);
 
-  const close = () => {
+  const close = useCallback(() => {
     swipeableRow.current.close();
-  };
+  }, [swipeableRow]);
 
   const renderIconItem = (style) => <CardIcon {...style} />;
   const renderItemAccessory = ({ balance, style }) => (
@@ -41,7 +41,7 @@ export const AccountListItem = React.memo(({ item, navigation }) => {
     </Text>
   );
 
-  const deleteHandler = () => {
+  const deleteHandler = useCallback(() => {
     close();
     Alert.alert(
       "Удаление счета",
@@ -62,7 +62,7 @@ export const AccountListItem = React.memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  };
+  }, []);
 
   const RightAction = () => (
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
