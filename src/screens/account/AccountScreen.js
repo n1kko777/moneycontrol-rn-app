@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View } from "react-native";
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 
@@ -10,9 +10,15 @@ import { AccountList } from "../../components/account/AccountList";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { BackIcon } from "../../themes/icons";
 
-export const AccountScreen = ({ navigation }) => {
+export const AccountScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
+
+  const onNavigateHome = useCallback(() => navigation.navigate("Home"), []);
+  const onNavigateCreateAccount = useCallback(
+    () => navigation.navigate("CreateAccount"),
+    []
+  );
 
   return (
     <ScreenTemplate>
@@ -20,7 +26,7 @@ export const AccountScreen = ({ navigation }) => {
         navigation={navigation}
         title="Счета"
         TargetIcon={BackIcon}
-        onTarget={() => navigation.navigate("Home")}
+        onTarget={onNavigateHome}
       />
       <Layout
         style={{
@@ -39,7 +45,7 @@ export const AccountScreen = ({ navigation }) => {
               borderRadius: THEME.BUTTON_RADIUS,
             }}
             status="info"
-            onPress={() => navigation.navigate("CreateAccount")}
+            onPress={onNavigateCreateAccount}
           >
             Добавить счет
           </Button>
@@ -52,4 +58,4 @@ export const AccountScreen = ({ navigation }) => {
       </Layout>
     </ScreenTemplate>
   );
-};
+});
