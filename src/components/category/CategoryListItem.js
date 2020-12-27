@@ -42,7 +42,7 @@ export const CategoryListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, []);
+  }, [item]);
 
   const RightAction = () => (
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
@@ -52,7 +52,7 @@ export const CategoryListItem = memo(({ item, navigation }) => {
     navigation.navigate("UpdateCategory", {
       category: item,
     });
-  }, []);
+  }, [item]);
 
   return (
     <Swipeable

@@ -62,7 +62,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, []);
+  }, [item]);
 
   const RightAction = () => (
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
@@ -72,7 +72,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
     navigation.navigate("UpdateAccount", {
       account: item,
     });
-  }, []);
+  }, [item]);
 
   return (
     <Swipeable

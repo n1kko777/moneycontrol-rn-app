@@ -46,7 +46,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
         )
       );
     }
-  }, [account_name, balance]);
+  }, [account.id, account_name, balance]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

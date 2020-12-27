@@ -46,7 +46,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
         )
       );
     }
-  }, [category_name]);
+  }, [category.id, category_name]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

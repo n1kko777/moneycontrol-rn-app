@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
 import { TagListItem } from "./TagListItem";
 
-export const TagList = ({ navigation }) => {
+export const TagList = memo(({ navigation }) => {
   const { tags } = useSelector((store) => store.tag);
   const dataList = tags;
 
@@ -34,4 +34,4 @@ export const TagList = ({ navigation }) => {
       renderItem={renderItem}
     />
   );
-};
+});
