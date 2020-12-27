@@ -1,22 +1,28 @@
-import React from "react";
+import React, { memo, useMemo } from "react";
 import { View } from "react-native";
 
 import { HomeCard } from "./HomeCard";
 import { Text } from "@ui-kitten/components";
 
-export const HomeList = ({ navigation, dataList }) => {
+export const HomeList = memo(({ navigation, dataList }) => {
+  const renderHomeList = useMemo(
+    () =>
+      dataList.map((item, index) => (
+        <HomeCard
+          style={{ borderRadius: 10, marginHorizontal: 8, marginBottom: 20 }}
+          key={index}
+          item={item}
+          navigation={navigation}
+          isNavigate={dataList.isNavigate}
+        />
+      )),
+    [dataList]
+  );
+
   return (
     <View style={{ flex: 1, paddingBottom: 30 }}>
       {dataList.length !== 0 ? (
-        dataList.map((item, index) => (
-          <HomeCard
-            style={{ borderRadius: 10, marginHorizontal: 8, marginBottom: 20 }}
-            key={index}
-            item={item}
-            navigation={navigation}
-            isNavigate={dataList.isNavigate}
-          />
-        ))
+        renderHomeList
       ) : (
         <Text
           style={{
@@ -29,4 +35,4 @@ export const HomeList = ({ navigation, dataList }) => {
       )}
     </View>
   );
-};
+});
