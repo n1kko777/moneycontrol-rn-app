@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,7 +19,7 @@ import { createAccountAction } from "../../store/actions/apiAction";
 import { clearCurrentAccount } from "../../store/actions/accountAction";
 import { Keyboard } from "react-native";
 
-export const CreateAccountScreen = ({ navigation, route }) => {
+export const CreateAccountScreen = memo(({ navigation, route }) => {
   const prevItem = route.params;
 
   const dispatch = useDispatch();
@@ -30,18 +30,18 @@ export const CreateAccountScreen = ({ navigation, route }) => {
   );
   const [balance, setBalance] = React.useState("0");
 
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     prevItem === undefined && dispatch(clearCurrentAccount());
     navigation.goBack(null);
-  };
+  }, [prevItem]);
 
-  const onReset = () => {
+  const onReset = useCallback(() => {
     setAccountName("");
     setBalance("");
     navigateBack();
-  };
+  }, []);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
 
@@ -55,7 +55,7 @@ export const CreateAccountScreen = ({ navigation, route }) => {
         )
       );
     }
-  };
+  }, [account_name, balance]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -120,4 +120,4 @@ export const CreateAccountScreen = ({ navigation, route }) => {
       </>
     </ScreenTemplate>
   );
-};
+});
