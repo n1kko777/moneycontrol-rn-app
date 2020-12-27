@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, Text, useTheme } from "@ui-kitten/components";
 
@@ -15,7 +15,7 @@ import {
 } from "../../themes/icons";
 import { useSelector } from "react-redux";
 
-export const BalanceComponent = ({ balance = null }) => {
+export const BalanceComponent = memo(({ balance = null }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -35,9 +35,9 @@ export const BalanceComponent = ({ balance = null }) => {
     totalTransactions.toString().replace(/\s/g, "")
   );
 
-  const toggleVisibleBalance = () => {
+  const toggleVisibleBalance = useCallback(() => {
     setIsVisibleBalance(!isVisibleBalance);
-  };
+  }, [isVisibleBalance]);
 
   return (
     <View
@@ -144,7 +144,7 @@ export const BalanceComponent = ({ balance = null }) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   balanceContainer: {
