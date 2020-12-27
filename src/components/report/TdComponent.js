@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { Text } from "@ui-kitten/components";
 
-export const TdComponent = ({ text, bold }) => {
+export const TdComponent = memo(({ text, bold }) => {
   return (
     <Text
       style={{
@@ -14,4 +14,4 @@ export const TdComponent = ({ text, bold }) => {
       {text}
     </Text>
   );
-};
+});

@@ -1,15 +1,15 @@
-import React from "react";
+import React, { memo } from "react";
 import { Spinner, Modal } from "@ui-kitten/components";
 import { useSelector, connect } from "react-redux";
 import { StyleSheet, View } from "react-native";
 
-const LoadingSpinner = ({ loader }) => (
+const LoadingSpinner = memo(({ loader }) => (
   <Modal backdropStyle={styles.centeredView} visible={loader}>
     <View style={styles.modalView}>
       <Spinner status="primary" />
     </View>
   </Modal>
-);
+));
 
 const styles = StyleSheet.create({
   centeredView: {

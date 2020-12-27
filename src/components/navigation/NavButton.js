@@ -1,39 +1,34 @@
-import React from "react";
+import React, { memo } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button, Text } from "@ui-kitten/components";
 
-export const NavButton = ({
-  coordinate,
-  navigateHandlePress,
-  icon,
-  opacityValue,
-  status,
-  name,
-}) => {
-  return (
-    <Animated.View
-      style={
-        (styles.overlay,
-        {
-          alignSelf: "center",
-          transform: [coordinate],
-        })
-      }
-    >
-      <TouchableOpacity onPress={navigateHandlePress}>
-        <Button status={status} style={styles.secondaryButton} icon={icon} />
-      </TouchableOpacity>
+export const NavButton = memo(
+  ({ coordinate, navigateHandlePress, icon, opacityValue, status, name }) => {
+    return (
+      <Animated.View
+        style={
+          (styles.overlay,
+          {
+            alignSelf: "center",
+            transform: [coordinate],
+          })
+        }
+      >
+        <TouchableOpacity onPress={navigateHandlePress}>
+          <Button status={status} style={styles.secondaryButton} icon={icon} />
+        </TouchableOpacity>
 
-      <View style={{ opacity: opacityValue }}>
-        <Text style={{ marginTop: 5, textAlign: "center" }} category="c1">
-          {name}
-        </Text>
-      </View>
-    </Animated.View>
-  );
-};
+        <View style={{ opacity: opacityValue }}>
+          <Text style={{ marginTop: 5, textAlign: "center" }} category="c1">
+            {name}
+          </Text>
+        </View>
+      </Animated.View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   overlay: {

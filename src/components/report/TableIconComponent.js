@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { View } from "react-native";
 
-export const TableIconComponent = ({ colorTheme, IconName }) => {
+export const TableIconComponent = memo(({ colorTheme, IconName }) => {
   return (
     <View
       style={{
@@ -20,4 +20,4 @@ export const TableIconComponent = ({ colorTheme, IconName }) => {
       />
     </View>
   );
-};
+});

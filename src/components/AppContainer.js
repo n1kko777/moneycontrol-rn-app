@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -15,7 +15,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 
 const themes = { light, dark };
 
-export const AppContainer = () => {
+export const AppContainer = memo(() => {
   const colorScheme = useColorScheme();
   const [theme, setTheme] = React.useState(colorScheme);
 
@@ -37,4 +37,4 @@ export const AppContainer = () => {
       </ThemeContext.Provider>
     </>
   );
-};
+});

@@ -72,7 +72,7 @@ export const MenuScreen = memo(({ navigation }) => {
         }}
       >
         <View style={{ marginVertical: 20 }}>
-          <Button
+          {/* <Button
             style={{
               alignSelf: "center",
               paddingHorizontal: 20,
@@ -82,7 +82,7 @@ export const MenuScreen = memo(({ navigation }) => {
             onPress={navigateToReport}
           >
             Сформировать отчет
-          </Button>
+          </Button> */}
         </View>
         <Layout
           style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}

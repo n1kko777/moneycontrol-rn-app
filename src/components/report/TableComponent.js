@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { View } from "react-native";
 import { TrComponent } from "./TrComponent";
 import { TdComponent } from "./TdComponent";
@@ -7,7 +7,7 @@ import { ProfileIcon, PriceIcon, CalendarIcon } from "../../themes/icons";
 import moment from "moment";
 import { splitToDigits } from "../../splitToDigits";
 
-export const TableComponent = ({ colorTheme, tableData, accountData }) => {
+export const TableComponent = memo(({ colorTheme, tableData, accountData }) => {
   return (
     <View style={{ marginVertical: 20 }}>
       <TrComponent>
@@ -60,4 +60,4 @@ export const TableComponent = ({ colorTheme, tableData, accountData }) => {
         ))}
     </View>
   );
-};
+});
