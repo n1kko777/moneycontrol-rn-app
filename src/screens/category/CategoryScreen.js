@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { View } from "react-native";
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 
@@ -10,7 +10,7 @@ import { CategoryList } from "../../components/category/CategoryList";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { BackIcon } from "../../themes/icons";
 
-export const CategoryScreen = ({ navigation }) => {
+export const CategoryScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -52,4 +52,4 @@ export const CategoryScreen = ({ navigation }) => {
       </Layout>
     </ScreenTemplate>
   );
-};
+});

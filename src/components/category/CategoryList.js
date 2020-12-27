@@ -1,12 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
 import { CategoryListItem } from "./CategoryListItem";
 
-export const CategoryList = ({ navigation }) => {
+export const CategoryList = memo(({ navigation }) => {
   const { categories } = useSelector((store) => store.category);
-  const dataList = categories;
 
   const keyExtractor = (item) => item.id.toString();
 
@@ -25,8 +24,8 @@ export const CategoryList = ({ navigation }) => {
       }
       ListFooterComponentStyle={{ paddingBottom: 30 }}
       keyExtractor={keyExtractor}
-      data={dataList}
+      data={categories}
       renderItem={renderItem}
     />
   );
-};
+});

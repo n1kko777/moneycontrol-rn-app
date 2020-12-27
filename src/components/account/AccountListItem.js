@@ -68,11 +68,11 @@ export const AccountListItem = memo(({ item, navigation }) => {
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
   );
 
-  const updateHandler = () => {
+  const updateHandler = useCallback(() => {
     navigation.navigate("UpdateAccount", {
       account: item,
     });
-  };
+  }, []);
 
   return (
     <Swipeable
