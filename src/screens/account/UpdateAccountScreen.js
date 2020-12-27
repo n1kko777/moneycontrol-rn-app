@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,29 +15,24 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import {
-  startLoader,
-  endLoader,
-  updateAccountAction,
-} from "../../store/actions/apiAction";
-import { updateAccount } from "../../store/actions/accountAction";
+import { updateAccountAction } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-export const UpdateAccountScreen = ({ route, navigation }) => {
+export const UpdateAccountScreen = memo(({ route, navigation }) => {
   const { account } = route.params;
 
   const dispatch = useDispatch();
-  const { error: accountError } = useSelector((store) => store.account);
 
   const [account_name, setAccountName] = React.useState(account.account_name);
   const [balance, setBalance] = React.useState(account.balance);
 
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  };
+  }, []);
+
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
       dispatch(
@@ -51,7 +46,7 @@ export const UpdateAccountScreen = ({ route, navigation }) => {
         )
       );
     }
-  };
+  }, [account_name, balance]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -116,4 +111,4 @@ export const UpdateAccountScreen = ({ route, navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});
