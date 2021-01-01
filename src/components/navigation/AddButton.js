@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, { interpolate } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
@@ -14,13 +14,19 @@ import { useTransition } from "react-native-redash";
 
 import { NavButton } from "./NavButton";
 
-export const AddButton = ({ navigation }) => {
+export const AddButton = memo(({ navigation }) => {
   const [toggled, setToggle] = React.useState(false);
 
-  const toggleHandler = () => {
+  const toggleHandler = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setToggle((prev) => !prev);
-  };
+  }, []);
+
+  const navigateHandlePress = useCallback((navRoute = null) => {
+    toggleHandler();
+
+    navRoute !== null && navigation.navigate(navRoute);
+  }, []);
 
   const transition = useTransition(toggled, { duration: 150 });
   const rotate = interpolate(transition, {
@@ -57,17 +63,6 @@ export const AddButton = ({ navigation }) => {
     inputRange: [0, 1],
     outputRange: [-136, -188],
   });
-
-  const handlePress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setToggle((prev) => !prev);
-  };
-
-  const navigateHandlePress = (navRoute = null) => {
-    handlePress();
-
-    navRoute !== null && navigation.navigate(navRoute);
-  };
 
   return (
     <View style={{ width: 60, height: 60, marginTop: -35 }}>
@@ -124,7 +119,7 @@ export const AddButton = ({ navigation }) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   button: {

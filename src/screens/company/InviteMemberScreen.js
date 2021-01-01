@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -8,7 +8,7 @@ import { THEME } from "../../themes/themes";
 import { useDispatch, useSelector } from "react-redux";
 import { joinProfileToCompanyAction } from "../../store/actions/apiAction";
 
-export const InviteMemberScreen = ({ navigation }) => {
+export const InviteMemberScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
   const [profile_id, setProfileId] = React.useState("");
@@ -18,17 +18,19 @@ export const InviteMemberScreen = ({ navigation }) => {
   const isNotProfilePhoneEmpty = profile_phone && profile_phone.length > 0;
 
   const loader = useSelector((store) => store.api.loader);
-  const onReset = () => {
+
+  const onReset = useCallback(() => {
     setProfileId("");
     setProfilePhone("");
-  };
-  const onSubmit = () => {
+  }, []);
+
+  const onSubmit = useCallback(() => {
     if (!loader) {
       dispatch(
         joinProfileToCompanyAction({ profile_id, profile_phone }, onReset)
       );
     }
-  };
+  }, [profile_id, profile_phone]);
 
   const inputRef = React.useRef(null);
 
@@ -99,4 +101,4 @@ export const InviteMemberScreen = ({ navigation }) => {
       </Layout>
     </ScreenTemplate>
   );
-};
+});

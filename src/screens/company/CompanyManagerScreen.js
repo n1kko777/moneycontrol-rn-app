@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import {
   Layout,
   TopNavigation,
@@ -20,19 +20,17 @@ import {
   getProfileAction,
 } from "../../store/actions/apiAction";
 
-export const CompanyManagerScreen = ({ navigation }) => {
+export const CompanyManagerScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const store = useSelector((store) => store);
-  const { profile: profileStore } = store;
-  const { profile } = profileStore;
+  const profile = useSelector((store) => store.profile.profile);
 
   const [companyName, setCompanyName] = React.useState("");
 
-  const logoutHandler = async () => {
+  const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
-  };
+  }, []);
 
-  const navigateLogout = () => {
+  const navigateLogout = useCallback(() => {
     Alert.alert(
       "Выход",
       "Вы уверены, что хотите выйти из учетной записи?",
@@ -47,7 +45,7 @@ export const CompanyManagerScreen = ({ navigation }) => {
         cancelable: false,
       }
     );
-  };
+  }, []);
 
   const BackAction = () => (
     <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
@@ -55,36 +53,36 @@ export const CompanyManagerScreen = ({ navigation }) => {
 
   const loader = useSelector((store) => store.api.loader);
 
-  const onSuccessProfile = (successProfile) => {
+  const onSuccessProfile = useCallback((successProfile) => {
     successProfile !== null
       ? successProfile.company !== null && navigation.navigate("Home")
       : navigation.navigate("CreateProfile");
-  };
+  }, []);
 
-  const updateProfileHandler = () => {
+  const updateProfileHandler = useCallback(() => {
     if (!loader) {
       dispatch(getProfileAction(onSuccessProfile));
     }
-  };
+  }, []);
 
   const RefreshProfileAction = () => (
     <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
   );
 
-  const onSuccessCompany = (successCompany) => {
+  const onSuccessCompany = useCallback((successCompany) => {
     successCompany !== null && navigation.navigate("Home");
-  };
+  }, []);
 
-  const createCompanyHandler = () => {
+  const createCompanyHandler = useCallback(() => {
     const company = { company_name: companyName };
     dispatch(createCompanyAction(company, onSuccessCompany));
-  };
+  }, [companyName]);
 
   return (
     <ScreenTemplate>
       <>
         <TopNavigation
-          title="Управление компаниями"
+          title="Добавление компании"
           alignment="center"
           leftControl={BackAction()}
           rightControls={RefreshProfileAction()}
@@ -125,4 +123,4 @@ export const CompanyManagerScreen = ({ navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

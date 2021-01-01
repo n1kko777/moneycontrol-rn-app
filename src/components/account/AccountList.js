@@ -1,12 +1,16 @@
-import React from "react";
+import React, { memo, useMemo } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
 import { AccountListItem } from "./AccountListItem";
 
-export const AccountList = ({ navigation }) => {
-  const { profile } = useSelector((store) => store.profile);
-  const { accounts } = useSelector((store) => store.account);
+let renderCounter = 0;
+
+export const AccountList = memo(({ navigation }) => {
+  const store = useSelector((store) => store);
+  const { profile } = store.profile;
+  const { accounts } = store.account;
+
   const dataList = accounts.filter(
     (acc) => profile !== null && acc.profile == profile.id
   );
@@ -32,4 +36,4 @@ export const AccountList = ({ navigation }) => {
       renderItem={renderItem}
     />
   );
-};
+});

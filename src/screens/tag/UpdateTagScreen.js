@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,28 +15,23 @@ import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
-import {
-  startLoader,
-  endLoader,
-  updateTagAction,
-} from "../../store/actions/apiAction";
-import { updateTag } from "../../store/actions/tagAction";
+import { updateTagAction } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-export const UpdateTagScreen = ({ route, navigation }) => {
+export const UpdateTagScreen = memo(({ route, navigation }) => {
   const { tag } = route.params;
 
   const dispatch = useDispatch();
-  const { error: tagError } = useSelector((store) => store.tag);
 
   const [tag_name, setTagName] = React.useState(tag.tag_name);
 
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  };
+  }, []);
+
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
       dispatch(
@@ -49,7 +44,7 @@ export const UpdateTagScreen = ({ route, navigation }) => {
         )
       );
     }
-  };
+  }, [tag.id, tag_name]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -107,4 +102,4 @@ export const UpdateTagScreen = ({ route, navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

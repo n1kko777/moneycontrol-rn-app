@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View, Alert } from "react-native";
 import {
   Layout,
@@ -21,7 +21,7 @@ import {
 } from "../../store/actions/apiAction";
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
 
-export const ProfileScreen = ({ navigation }) => {
+export const ProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const profileStore = useSelector((store) => store.profile);
   const { profile } = profileStore;
@@ -95,15 +95,15 @@ export const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  };
+  }, []);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
-  const deleteProfileHandler = () => {
+  const deleteProfileHandler = useCallback(() => {
     Alert.alert(
       "Удаление профиля",
       profile.is_admin
@@ -125,7 +125,7 @@ export const ProfileScreen = ({ navigation }) => {
         cancelable: false,
       }
     );
-  };
+  }, [profile]);
 
   const DeleteProfileAction = () => (
     <TopNavigationAction icon={DeleteIcon} onPress={deleteProfileHandler} />
@@ -201,4 +201,4 @@ export const ProfileScreen = ({ navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

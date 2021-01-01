@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View, Keyboard } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,13 +22,14 @@ import { AccountSelector } from "../../components/operation/account/AccountSelec
 import { CategorySelector } from "../../components/operation/category/CategorySelector";
 import { clearCurrentCategory } from "../../store/actions/categoryAction";
 
-export const CreateActionScreen = ({ route, navigation }) => {
+export const CreateActionScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
-  const loader = useSelector((store) => store.api.loader);
+  const store = useSelector((store) => store);
+  const loader = store.api.loader;
 
-  const currentAccount = useSelector((store) => store.account.current);
-  const currentCateory = useSelector((store) => store.category.current);
+  const currentAccount = store.account.current;
+  const currentCateory = store.category.current;
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -37,11 +38,10 @@ export const CreateActionScreen = ({ route, navigation }) => {
   }, []);
 
   const dispatch = useDispatch();
-  const { error: actionError } = useSelector((store) => store.action);
 
   // Amount
   const [action_amount, setActionAmount] = React.useState(
-    prevItem !== undefined ? prevItem.balance : ""
+    prevItem !== undefined ? prevItem.balance.toString() : ""
   );
   const isNotAmountEmpty = parseFloat(action_amount) > 0;
 
@@ -58,7 +58,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
   const isNotCategoryEmpty = selectedCategoryId !== null;
 
   // Tag
-  const { tags } = useSelector((store) => store.tag);
+  const { tags } = store.tag;
 
   const tagData = tags.map((elem) => ({
     title: elem.tag_name,
@@ -71,7 +71,7 @@ export const CreateActionScreen = ({ route, navigation }) => {
       : []
   );
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
       const newAction = {
@@ -84,13 +84,13 @@ export const CreateActionScreen = ({ route, navigation }) => {
 
       dispatch(createActionAction(newAction, navigateBack));
     }
-  };
+  }, [action_amount, selectedAccountId, selectedCategoryId, tagList]);
 
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     currentAccount !== null && dispatch(clearCurrentAccount());
     currentCateory !== null && dispatch(clearCurrentCategory());
     navigation.goBack(null);
-  };
+  }, [currentAccount, currentCateory]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -164,4 +164,4 @@ export const CreateActionScreen = ({ route, navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

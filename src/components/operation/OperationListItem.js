@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { Text, ListItem, useTheme, Button } from "@ui-kitten/components";
@@ -16,53 +16,57 @@ import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "react-native";
 import { hideOperationAction } from "../../store/actions/apiAction";
 
-export const OperationListItem = React.memo(({ item, navigation }) => {
+export const OperationListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
 
   const swipeableRow = React.useRef(null);
 
-  const close = () => {
+  const close = useCallback(() => {
     swipeableRow.current.close();
-  };
+  }, [swipeableRow]);
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const { profile } = useSelector((store) => store.profile);
-  const { categories } = useSelector((store) => store.category);
-  const { tags } = useSelector((store) => store.tag);
+  const store = useSelector((store) => store);
+  const { accounts } = store.account;
+  const { categories } = store.category;
+  const { tags } = store.tag;
 
-  const renderIconItem = (style) => {
-    switch (item.type) {
-      case "action":
-        return (
-          <IncreaseIcon
-            style={{ width: 20, height: 20 }}
-            fill={kittenTheme[style]}
-          />
-        );
+  const renderIconItem = useCallback(
+    (style) => {
+      switch (item.type) {
+        case "action":
+          return (
+            <IncreaseIcon
+              style={{ width: 20, height: 20 }}
+              fill={kittenTheme[style]}
+            />
+          );
 
-      case "transaction":
-        return (
-          <DecreaseIcon
-            style={{ width: 20, height: 20 }}
-            fill={kittenTheme[style]}
-          />
-        );
+        case "transaction":
+          return (
+            <DecreaseIcon
+              style={{ width: 20, height: 20 }}
+              fill={kittenTheme[style]}
+            />
+          );
 
-      case "transfer":
-        return (
-          <ExchangeIcon
-            style={{ width: 20, height: 20 }}
-            fill={
-              kittenTheme[
-                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-              ]
-            }
-          />
-        );
-    }
-  };
+        case "transfer":
+          return (
+            <ExchangeIcon
+              style={{ width: 20, height: 20 }}
+              fill={
+                kittenTheme[
+                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+                ]
+              }
+            />
+          );
+      }
+    },
+    [item]
+  );
 
   const renderItemAccessory = ({ balance, style }) => (
     <Text
@@ -80,7 +84,7 @@ export const OperationListItem = React.memo(({ item, navigation }) => {
     </Text>
   );
 
-  const deleteHandler = () => {
+  const deleteHandler = useCallback(() => {
     close();
     Alert.alert(
       "Удаление категории",
@@ -101,9 +105,9 @@ export const OperationListItem = React.memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  };
+  }, [item]);
 
-  const copyHandler = () => {
+  const copyHandler = useCallback(() => {
     close();
     switch (item.type) {
       case "transaction":
@@ -113,7 +117,7 @@ export const OperationListItem = React.memo(({ item, navigation }) => {
         navigation.navigate("CreateAction", item);
         break;
       case "transfer":
-        if (!item.name.split("=>")[0].split(" ").includes(profile.last_name)) {
+        if (!accounts.map((acc) => acc.id).includes(item.from_account_id)) {
           Alert.alert(
             "Невозможно скопировать",
             `Вы не являетесь собственником операции.`
@@ -126,7 +130,7 @@ export const OperationListItem = React.memo(({ item, navigation }) => {
       default:
         break;
     }
-  };
+  }, [item]);
 
   const LeftAction = () => (
     <Button onPress={copyHandler} icon={CopyIcon} status="info" />
@@ -148,6 +152,28 @@ export const OperationListItem = React.memo(({ item, navigation }) => {
     </Swipeable>
   );
 
+  const renderDescription = useMemo(
+    () =>
+      `${
+        item.category !== undefined
+          ? "– " +
+            (categories.find((cat) => cat.id == item.category) !== undefined
+              ? categories.find((cat) => cat.id == item.category).category_name
+              : "Удалено")
+          : ""
+      }${
+        item.tags !== undefined
+          ? "\n" +
+            item.tags.map((elTag) =>
+              tags.find((tag) => tag.id == elTag) !== undefined
+                ? "#" + tags.find((tag) => tag.id == elTag).tag_name
+                : "Удалено"
+            )
+          : ""
+      }`,
+    [item]
+  );
+
   return (
     <WrapperComponent>
       <ListItem
@@ -155,24 +181,7 @@ export const OperationListItem = React.memo(({ item, navigation }) => {
         titleStyle={{
           fontSize: 16,
         }}
-        description={`${
-          item.category !== undefined
-            ? "– " +
-              (categories.find((cat) => cat.id == item.category) !== undefined
-                ? categories.find((cat) => cat.id == item.category)
-                    .category_name
-                : "Удалено")
-            : ""
-        }${
-          item.tags !== undefined
-            ? "\n" +
-              item.tags.map((elTag) =>
-                tags.find((tag) => tag.id == elTag) !== undefined
-                  ? "#" + tags.find((tag) => tag.id == elTag).tag_name
-                  : "Удалено"
-              )
-            : ""
-        }`}
+        description={renderDescription}
         descriptionStyle={{
           fontSize: 14,
         }}

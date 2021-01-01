@@ -1,19 +1,13 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import {
+  View,
   Modal,
   StyleSheet,
-  View,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 
-import {
-  useTheme,
-  RangeCalendar,
-  Button,
-  NativeDateService,
-  Text,
-} from "@ui-kitten/components";
+import { useTheme, RangeCalendar, Button, Text } from "@ui-kitten/components";
 
 import { displayDate } from "../dispayDate";
 import { ThemeContext } from "../themes/theme-context";
@@ -21,54 +15,9 @@ import { ThemeContext } from "../themes/theme-context";
 import { CalendarIcon } from "../themes/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setCalendar, clearCalendar } from "../store/actions/calendarAction";
-const i18n = {
-  dayNames: {
-    short: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
-    long: [
-      "Понедельник",
-      "Вторник",
-      "Среда",
-      "Четверг",
-      "Пятница",
-      "Суббота",
-      "Воскресенье",
-    ],
-  },
-  monthNames: {
-    short: [
-      "Янв",
-      "Февр",
-      "Марта",
-      "Фпр",
-      "Мая",
-      "Июня",
-      "Июля",
-      "Фвг",
-      "Сент",
-      "Окт",
-      "Нояб",
-      "Дек",
-    ],
-    long: [
-      "января",
-      "февраля",
-      "марта",
-      "апреля",
-      "мая",
-      "июня",
-      "июля",
-      "августа",
-      "сентября",
-      "октября",
-      "ноября",
-      "декабря",
-    ],
-  },
-};
+import { dateService } from "../dateService";
 
-const dateService = new NativeDateService("ru", { i18n });
-
-export const CustomDatePicker = () => {
+export const CustomDatePicker = memo(() => {
   const dispatch = useDispatch();
   const { startDate, endDate } = useSelector((store) => store.calendar);
 
@@ -88,28 +37,29 @@ export const CustomDatePicker = () => {
     });
   }, [startDate]);
 
-  const clearRangeHandler = (range) => {
-    dispatch(clearCalendar());
+  const onModalClose = useCallback(() => {
     setModalVisible(false);
-  };
+  }, []);
 
-  const selectRangeHandler = () => {
+  const clearRangeHandler = useCallback(() => {
+    dispatch(clearCalendar());
+    onModalClose();
+  }, []);
+
+  const selectRangeHandler = useCallback(() => {
     dispatch(setCalendar(range));
-    setModalVisible(false);
-  };
+    onModalClose();
+  }, [range]);
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
       <Modal
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={onModalClose}
         animationType="slide"
         transparent={true}
         visible={modalVisible}
       >
-        <TouchableOpacity
-          onPressOut={() => setModalVisible(false)}
-          style={styles.centeredView}
-        >
+        <TouchableOpacity onPressOut={onModalClose} style={styles.centeredView}>
           <View
             style={{
               ...styles.modalView,
@@ -178,7 +128,7 @@ export const CustomDatePicker = () => {
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   centeredView: {

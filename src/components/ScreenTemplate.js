@@ -1,16 +1,16 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   SafeAreaView,
   StatusBar,
   TouchableWithoutFeedback,
   Keyboard,
-  Platform
+  Platform,
 } from "react-native";
 import { ThemeContext } from "../themes/theme-context";
 
 import { THEME } from "../themes/themes";
 
-export const ScreenTemplate = ({ children }) => {
+export const ScreenTemplate = memo(({ children }) => {
   const themeContext = React.useContext(ThemeContext);
 
   return (
@@ -28,7 +28,7 @@ export const ScreenTemplate = ({ children }) => {
             backgroundColor:
               themeContext.theme === "light"
                 ? THEME.BACKGROUND_LIGHT
-                : THEME.BACKGROUND_DARK
+                : THEME.BACKGROUND_DARK,
           }}
         >
           {children}
@@ -36,4 +36,4 @@ export const ScreenTemplate = ({ children }) => {
       </TouchableWithoutFeedback>
     </>
   );
-};
+});

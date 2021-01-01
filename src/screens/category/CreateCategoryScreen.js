@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,23 +19,26 @@ import { createCategoryAction } from "../../store/actions/apiAction";
 import { clearCurrentCategory } from "../../store/actions/categoryAction";
 import { Keyboard } from "react-native";
 
-export const CreateCategoryScreen = ({ route, navigation }) => {
+export const CreateCategoryScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
   const dispatch = useDispatch();
 
   const [category_name, setCategoryName] = React.useState(
     prevItem !== undefined ? prevItem.category_name : ""
   );
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     prevItem === undefined && dispatch(clearCurrentCategory());
     navigation.goBack(null);
-  };
+  }, [prevItem]);
+
   const loader = useSelector((store) => store.api.loader);
-  const onReset = () => {
+
+  const onReset = useCallback(() => {
     setCategoryName("");
     navigateBack();
-  };
-  const onSubmit = () => {
+  }, []);
+
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
       dispatch(
@@ -47,7 +50,7 @@ export const CreateCategoryScreen = ({ route, navigation }) => {
         )
       );
     }
-  };
+  }, [category_name]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -105,4 +108,4 @@ export const CreateCategoryScreen = ({ route, navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

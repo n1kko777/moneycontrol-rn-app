@@ -1,16 +1,16 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { splitToDigits } from "../../splitToDigits";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Text } from "@ui-kitten/components";
 import { useDispatch } from "react-redux";
 import { setFilterParamAction } from "../../store/actions/apiAction";
 
-export const HomeCardItem = React.memo(
+export const HomeCardItem = memo(
   ({ kittenTheme, themeContext, item, navigation }) => {
     const { id, name, balance, type, style: color } = item;
     const dispatch = useDispatch();
 
-    const onFilterOperation = () => {
+    const onFilterOperation = useCallback(() => {
       navigation.navigate("Operation");
 
       dispatch(
@@ -20,7 +20,7 @@ export const HomeCardItem = React.memo(
           id,
         })
       );
-    };
+    }, [item]);
 
     return (
       <TouchableOpacity

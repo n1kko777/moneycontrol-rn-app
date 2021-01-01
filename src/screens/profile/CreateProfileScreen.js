@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { Alert, View } from "react-native";
 import {
   Layout,
@@ -18,7 +18,7 @@ import { LogoutIcon } from "../../themes/icons";
 
 import { createProfileAction } from "../../store/actions/apiAction";
 
-export const CreateProfileScreen = ({ navigation }) => {
+export const CreateProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const inputRef = React.useRef(null);
 
@@ -34,11 +34,11 @@ export const CreateProfileScreen = ({ navigation }) => {
 
   const loader = useSelector((store) => store.api.loader);
 
-  const onSuccess = (profile) => {
+  const onSuccess = useCallback((profile) => {
     navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
-  };
+  }, []);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       const newProfile = {
         first_name,
@@ -47,13 +47,13 @@ export const CreateProfileScreen = ({ navigation }) => {
       };
       dispatch(createProfileAction(newProfile, onSuccess));
     }
-  };
+  }, [first_name, last_name, phone]);
 
-  const logoutHandler = async () => {
+  const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
-  };
+  }, []);
 
-  const navigateLogout = () => {
+  const navigateLogout = useCallback(() => {
     Alert.alert(
       "Выход",
       "Вы уверены, что хотите выйти из учетной записи?",
@@ -68,7 +68,7 @@ export const CreateProfileScreen = ({ navigation }) => {
         cancelable: false,
       }
     );
-  };
+  }, []);
 
   const BackAction = () => (
     <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
@@ -133,4 +133,4 @@ export const CreateProfileScreen = ({ navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

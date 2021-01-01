@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -17,7 +17,7 @@ import { CustomDatePicker } from "../components/CustomDatePicker";
 
 import { getDataDispatcher } from "../store/actions/apiAction";
 
-export const HomeScreen = ({ navigation }) => {
+export const HomeScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
@@ -27,9 +27,9 @@ export const HomeScreen = ({ navigation }) => {
   const { homeListData, totalBalance } = store.layout;
   homeListData.isNavigate = true;
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  };
+  }, []);
 
   React.useEffect(() => {
     refreshData();
@@ -75,4 +75,4 @@ export const HomeScreen = ({ navigation }) => {
       </ScrollView>
     </ScreenTemplate>
   );
-};
+});

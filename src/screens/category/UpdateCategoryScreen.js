@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,22 +18,22 @@ import { BackIcon } from "../../themes/icons";
 import { updateCategoryAction } from "../../store/actions/apiAction";
 import { Keyboard } from "react-native";
 
-export const UpdateCategoryScreen = ({ route, navigation }) => {
+export const UpdateCategoryScreen = memo(({ route, navigation }) => {
   const { category } = route.params;
 
   const dispatch = useDispatch();
-  const { error: categoryError } = useSelector((store) => store.category);
 
   const [category_name, setCategoryName] = React.useState(
     category.category_name
   );
 
-  const navigateBack = () => {
+  const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  };
+  }, []);
+
   const loader = useSelector((store) => store.api.loader);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
       dispatch(
@@ -46,7 +46,7 @@ export const UpdateCategoryScreen = ({ route, navigation }) => {
         )
       );
     }
-  };
+  }, [category.id, category_name]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -104,4 +104,4 @@ export const UpdateCategoryScreen = ({ route, navigation }) => {
       </>
     </ScreenTemplate>
   );
-};
+});

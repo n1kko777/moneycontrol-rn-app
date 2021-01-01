@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { START_LOADER, END_LOADER, SET_HOME_DATA } from "../types";
+import { START_LOADER, END_LOADER } from "../types";
 import {
   getCompany,
   createCompany,
@@ -190,9 +190,8 @@ export const createAccountAction = (newItem, onSuccess) => async (
   await Promise.all([dispatch(createAccount(newItem))]);
 
   dispatch(endLoader());
-  if (getState().account.error === null) {
-    onSuccess();
-  }
+
+  getState().account.error === null && onSuccess();
 };
 
 export const createCategoryAction = (newItem, onSuccess) => async (
@@ -229,7 +228,6 @@ export const createActionAction = (newItem, onSuccess) => async (
     dispatch(getAction()),
     dispatch(getAccount()),
   ]);
-
   dispatch(endLoader());
 
   getState().action.error === null && onSuccess();
@@ -245,7 +243,6 @@ export const createTransactionAction = (newItem, onSuccess) => async (
     dispatch(getTransaction()),
     dispatch(getAccount()),
   ]);
-
   dispatch(endLoader());
 
   getState().transaction.error === null && onSuccess();
@@ -261,7 +258,6 @@ export const createTransferAction = (newItem, onSuccess) => async (
     dispatch(getTransfer()),
     dispatch(getAccount()),
   ]);
-
   dispatch(endLoader());
 
   getState().transfer.error === null && onSuccess();
@@ -390,12 +386,10 @@ const helperOperation = ({ type, id }) => {
 
 export const hideOperationAction = (hideItem) => async (dispatch) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(helperOperation(hideItem)),
-    dispatch(getAccount()),
-  ]);
-
+  await Promise.all([dispatch(helperOperation(hideItem))]);
   dispatch(endLoader());
+
+  dispatch(getAccount());
 };
 
 export const removeProfileFromCompanyAction = (profile) => async (dispatch) => {

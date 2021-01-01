@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { View } from "react-native";
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 
@@ -10,7 +10,7 @@ import { TagList } from "../../components/tag/TagList";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { BackIcon } from "../../themes/icons";
 
-export const TagScreen = ({ navigation }) => {
+export const TagScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -52,4 +52,4 @@ export const TagScreen = ({ navigation }) => {
       </Layout>
     </ScreenTemplate>
   );
-};
+});

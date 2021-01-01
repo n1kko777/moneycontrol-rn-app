@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { Layout, Text, useTheme } from "@ui-kitten/components";
 import { View } from "react-native";
 
@@ -8,13 +8,13 @@ import { HomeCardItem } from "./HomeCardItem";
 import { ThemeContext } from "../../themes/theme-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const HomeCard = ({ item, navigation, isNavigate }) => {
+export const HomeCard = memo(({ item, navigation, isNavigate }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const titleNavigationHandler = () => {
+  const titleNavigationHandler = useCallback(() => {
     navigation.navigate(item.navigate);
-  };
+  }, [item]);
 
   return (
     <Layout
@@ -65,4 +65,4 @@ export const HomeCard = ({ item, navigation, isNavigate }) => {
       </View>
     </Layout>
   );
-};
+});

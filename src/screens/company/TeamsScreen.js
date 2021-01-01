@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout, Button } from "@ui-kitten/components";
@@ -14,7 +14,7 @@ import { THEME } from "../../themes/themes";
 import { EditIcon, ProfileIcon } from "../../themes/icons";
 import { getDataDispatcher } from "../../store/actions/apiAction";
 
-export const TeamsScreen = ({ navigation }) => {
+export const TeamsScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -36,17 +36,17 @@ export const TeamsScreen = ({ navigation }) => {
         : company.profiles
       : [];
 
-  const onCompanyRefresh = () => {
+  const onCompanyRefresh = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  };
+  }, []);
 
-  const inviteToTeam = () => {
+  const inviteToTeam = useCallback(() => {
     navigation.navigate("InviteMember");
-  };
+  }, []);
 
-  const onEditCompanyName = () => {
+  const onEditCompanyName = useCallback(() => {
     navigation.navigate("ChangeCompanyName");
-  };
+  }, []);
 
   return (
     <ScreenTemplate>
@@ -108,4 +108,4 @@ export const TeamsScreen = ({ navigation }) => {
       </Layout>
     </ScreenTemplate>
   );
-};
+});

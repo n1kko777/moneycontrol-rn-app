@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { SafeAreaView } from "react-native";
 import {
   BottomNavigation,
@@ -16,13 +16,13 @@ import { ThemeContext } from "../../themes/theme-context";
 
 import { AddButton } from "./AddButton";
 
-export const BottomTabBar = ({ navigation, state }) => {
+export const BottomTabBar = memo(({ navigation, state }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onSelect = (index) => {
+  const onSelect = useCallback((index) => {
     navigation.navigate(state.routeNames[index]);
-  };
+  }, []);
 
   return (
     <SafeAreaView
@@ -47,4 +47,4 @@ export const BottomTabBar = ({ navigation, state }) => {
       </BottomNavigation>
     </SafeAreaView>
   );
-};
+});
