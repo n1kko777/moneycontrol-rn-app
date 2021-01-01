@@ -1,5 +1,11 @@
 import React, { memo, useCallback, useEffect } from "react";
-import { TouchableOpacity, View, Image, AsyncStorage } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Image,
+  AsyncStorage,
+  Clipboard,
+} from "react-native";
 import { Layout, Button, Text, Input } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
@@ -13,6 +19,7 @@ import {
   getProfileAction,
   authLoginAction,
 } from ".././../store/actions/apiAction";
+import { APP_VERSION } from "../../store/constants";
 import { Keyboard } from "react-native";
 
 const LoginScreen = memo(
@@ -21,6 +28,10 @@ const LoginScreen = memo(
     const [password, setPassword] = React.useState("");
 
     const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
+
+    const copyToClipboard = useCallback(() => {
+      Clipboard.setString(APP_VERSION);
+    }, [APP_VERSION]);
 
     const navigateToScreen = useCallback((name) => {
       Keyboard.dismiss();
@@ -123,6 +134,14 @@ const LoginScreen = memo(
               }}
             >
               Зарегистрироваться
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginTop: "auto" }}
+            onPress={copyToClipboard}
+          >
+            <Text style={{ opacity: 0.3, fontSize: 12 }}>
+              Версия: {APP_VERSION}
             </Text>
           </TouchableOpacity>
         </Layout>

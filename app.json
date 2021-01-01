@@ -1,41 +1,41 @@
 {
-    "expo": {
-        "name": "CMC",
-        "slug": "moneycontrol-rn-app",
-        "description": "Corporate Money Control – мобильное приложение для автоматизации профессиональной деятельности, существенно облегчает и автоматизирует экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
-        "privacy": "public",
-        "platforms": [
-            "ios",
-            "android"
-        ],
-        "version": "1.0.11",
-        "orientation": "portrait",
-        "icon": "./assets/logo.png",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "cover",
-            "backgroundColor": "#ffffff"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": [
-            "**/*"
-        ],
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "ru.mncntrl.n1kko777",
-            "buildNumber": "1.0.11"
-        },
-        "android": {
-            "package": "ru.mncntrl.n1kko777",
-            "versionCode": 11,
-            "permissions": [
-                "CAMERA",
-                "READ_EXTERNAL_STORAGE",
-                "VIBRATE",
-                "WRITE_EXTERNAL_STORAGE"
-            ]
-        }
+  "expo": {
+    "name": "CMC",
+    "slug": "moneycontrol-rn-app",
+    "description": "Corporate Money Control – мобильное приложение для автоматизации профессиональной деятельности, существенно облегчает и автоматизирует экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
+    "privacy": "public",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.0.12",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ru.mncntrl.n1kko777",
+      "buildNumber": "1.0.12"
+    },
+    "android": {
+      "package": "ru.mncntrl.n1kko777",
+      "versionCode": 12,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "VIBRATE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     }
+  }
 }
