@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { START_LOADER, END_LOADER, SET_HOME_DATA } from "../types";
+import { START_LOADER, END_LOADER } from "../types";
 import {
   getCompany,
   createCompany,
@@ -190,9 +190,8 @@ export const createAccountAction = (newItem, onSuccess) => async (
   await Promise.all([dispatch(createAccount(newItem))]);
 
   dispatch(endLoader());
-  if (getState().account.error === null) {
-    onSuccess();
-  }
+
+  getState().account.error === null && onSuccess();
 };
 
 export const createCategoryAction = (newItem, onSuccess) => async (
@@ -224,14 +223,14 @@ export const createActionAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(createAction(newItem))]);
+  await Promise.all([
+    dispatch(createAction(newItem)),
+    dispatch(getAction()),
+    dispatch(getAccount()),
+  ]);
   dispatch(endLoader());
-  if (getState().action.error === null) {
-    onSuccess();
 
-    dispatch(getAction());
-    dispatch(getAccount());
-  }
+  getState().action.error === null && onSuccess();
 };
 
 export const createTransactionAction = (newItem, onSuccess) => async (
@@ -239,15 +238,14 @@ export const createTransactionAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(createTransaction(newItem))]);
+  await Promise.all([
+    dispatch(createTransaction(newItem)),
+    dispatch(getTransaction()),
+    dispatch(getAccount()),
+  ]);
   dispatch(endLoader());
 
-  if (getState().transaction.error === null) {
-    onSuccess();
-
-    dispatch(getTransaction());
-    dispatch(getAccount());
-  }
+  getState().transaction.error === null && onSuccess();
 };
 
 export const createTransferAction = (newItem, onSuccess) => async (
@@ -255,15 +253,14 @@ export const createTransferAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(createTransfer(newItem))]);
+  await Promise.all([
+    dispatch(createTransfer(newItem)),
+    dispatch(getTransfer()),
+    dispatch(getAccount()),
+  ]);
   dispatch(endLoader());
 
-  if (getState().transfer.error === null) {
-    onSuccess();
-
-    dispatch(getTransfer());
-    dispatch(getAccount());
-  }
+  getState().transfer.error === null && onSuccess();
 };
 
 // Update
