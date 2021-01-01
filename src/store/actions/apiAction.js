@@ -187,8 +187,9 @@ export const createAccountAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(createAccount(newItem))]);
-
+  await Promise.all([dispatch(createAccount(newItem))]).then(() => {
+    dispatch(getCompany());
+  });
   dispatch(endLoader());
 
   getState().account.error === null && onSuccess();
@@ -311,8 +312,9 @@ export const updateAccountAction = (updatedItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(updateAccount(updatedItem))]);
-
+  await Promise.all([dispatch(updateAccount(updatedItem))]).then(() => {
+    dispatch(getCompany());
+  });
   dispatch(endLoader());
 
   getState().account.error === null && onSuccess();
@@ -352,8 +354,9 @@ export const hideProfileAction = (hideItem, navigation) => async (dispatch) => {
 
 export const hideAccountAction = (hideItem) => async (dispatch) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(hideAccount(hideItem))]);
-
+  await Promise.all([dispatch(hideAccount(hideItem))]).then(() => {
+    dispatch(getCompany());
+  });
   dispatch(endLoader());
 };
 
