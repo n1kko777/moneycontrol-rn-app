@@ -1,4 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 
 import { apiReducer } from "./reducers/apiReducer";
@@ -29,4 +30,7 @@ const rootReducer = combineReducers({
   calendar: calendarReducer,
 });
 
-export default createStore(rootReducer, applyMiddleware(thunk));
+export default createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);

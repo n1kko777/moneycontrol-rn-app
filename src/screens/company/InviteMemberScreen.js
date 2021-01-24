@@ -6,7 +6,10 @@ import { BackIcon } from "../../themes/icons";
 import { Layout, Input, Button } from "@ui-kitten/components";
 import { THEME } from "../../themes/themes";
 import { useDispatch, useSelector } from "react-redux";
-import { joinProfileToCompanyAction } from "../../store/actions/apiAction";
+import {
+  joinProfileToCompanyAction,
+  getDataDispatcher,
+} from "../../store/actions/apiAction";
 
 export const InviteMemberScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -19,18 +22,19 @@ export const InviteMemberScreen = memo(({ navigation }) => {
 
   const loader = useSelector((store) => store.api.loader);
 
-  const onReset = useCallback(() => {
+  const onSuccess = useCallback(() => {
     setProfileId("");
     setProfilePhone("");
+    dispatch(getDataDispatcher(navigation));
   }, []);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
       dispatch(
-        joinProfileToCompanyAction({ profile_id, profile_phone }, onReset)
+        joinProfileToCompanyAction({ profile_id, profile_phone }, onSuccess)
       );
     }
-  }, [profile_id, profile_phone]);
+  }, [profile_id, profile_phone, loader]);
 
   const inputRef = React.useRef(null);
 

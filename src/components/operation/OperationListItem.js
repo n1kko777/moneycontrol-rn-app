@@ -65,7 +65,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
           );
       }
     },
-    [item]
+    [item, themeContext]
   );
 
   const renderItemAccessory = ({ balance, style }) => (
@@ -188,7 +188,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
         icon={() => renderIconItem(item.style)}
         accessory={() => renderItemAccessory(item)}
         style={{
-          paddingVertical: 15,
+          paddingVertical: 8,
         }}
       />
     </WrapperComponent>

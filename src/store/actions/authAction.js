@@ -1,11 +1,11 @@
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   REGISTER_SUCCESS,
   AUTH_START,
   AUTH_SUCCESS,
   AUTH_FAIL,
   AUTH_LOGOUT,
-  REMIND_ME,
   CLEAR_PROFILE,
   CLEAR_COMPANY,
   CLEAR_ACCOUNT,
@@ -17,11 +17,13 @@ import {
   RESET_SUCCESS,
   CLEAR_HOME_DATA,
   CLEAR_OPERATION_DATA,
+  CLEAR_PROFILE_DATA,
   CLEAR_LAYOUT,
 } from "../types";
 
 import { url } from "../constants";
-import { Alert, AsyncStorage } from "react-native";
+import { Alert } from "react-native";
+import failHandler from "../failHandler";
 
 export const authStart = () => (dispatch) => {
   dispatch({
@@ -38,7 +40,7 @@ export const authSuccess = (user) => async (dispatch) => {
       payload: user,
     });
   } catch (error) {
-    dispatch(authFail(error));
+    dispatch(failHandler(error, AUTH_FAIL));
   }
 };
 export const registerSuccess = (user) => (dispatch) => {
@@ -57,56 +59,13 @@ export const registerSuccess = (user) => (dispatch) => {
   });
 };
 
-export const authFail = (error) => (dispatch) => {
-  const errorObject = {};
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    const keys = [];
-
-    for (const k in error.response.data) keys.push(k);
-
-    console.log(
-      `Код ошибки: ${error.response.status}. ${
-        error.response.data[keys[0]]
-      } Повторите попытку позже.`
-    );
-
-    errorObject.title = `Код ошибки: ${error.response.status}`;
-    errorObject.message =
-      error.response.status === 404
-        ? `${error.response.data}`
-        : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
-  } else if (error.request) {
-    // The request was made but no response was received
-    console.log("Не удалось соединиться с сервером. Повторите попытку позже.");
-
-    errorObject.title = `Не удалось соединиться с сервером`;
-    errorObject.message = `Повторите попытку позже`;
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log("Что-то пошло не так... Повторите попытку позже.");
-
-    errorObject.title = `Что-то пошло не так...`;
-    errorObject.message = `Повторите попытку позже`;
-  }
-
-  Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false,
-  });
-
-  dispatch({
-    type: AUTH_FAIL,
-    payload: error,
-  });
-};
-
 export const logout = (navigation) => async (dispatch) => {
   await navigation.navigate("Login");
 
   try {
     await AsyncStorage.clear();
   } catch (error) {
-    dispatch(authFail(error));
+    dispatch(failHandler(error, AUTH_FAIL));
   }
 
   dispatch({
@@ -139,6 +98,15 @@ export const logout = (navigation) => async (dispatch) => {
   dispatch({
     type: CLEAR_TAG,
   });
+  dispatch({
+    type: CLEAR_HOME_DATA,
+  });
+  dispatch({
+    type: CLEAR_OPERATION_DATA,
+  });
+  dispatch({
+    type: CLEAR_PROFILE_DATA,
+  });
 };
 
 export const authLogin = (email, password) => async (dispatch) => {
@@ -154,10 +122,10 @@ export const authLogin = (email, password) => async (dispatch) => {
         await dispatch(authSuccess(res.data));
       })
       .catch((error) => {
-        dispatch(authFail(error));
+        dispatch(failHandler(error, AUTH_FAIL));
       });
   } catch (error) {
-    dispatch(authFail(error));
+    dispatch(failHandler(error, AUTH_FAIL));
   }
 };
 
@@ -188,11 +156,11 @@ export const authSignUp = ({
         };
         dispatch(registerSuccess(authUser));
       })
-      .catch((err) => {
-        dispatch(authFail(err));
+      .catch((error) => {
+        dispatch(failHandler(error, AUTH_FAIL));
       });
   } catch (error) {
-    dispatch(authFail(err));
+    dispatch(failHandler(error, AUTH_FAIL));
   }
 };
 
@@ -211,10 +179,10 @@ export const resetPass = ({ email }, onSuccess) => async (dispatch) => {
         });
         dispatch({ type: RESET_SUCCESS });
       })
-      .catch((err) => {
-        dispatch(authFail(err));
+      .catch((error) => {
+        dispatch(failHandler(error, AUTH_FAIL));
       });
   } catch (error) {
-    dispatch(authFail(err));
+    dispatch(failHandler(error, AUTH_FAIL));
   }
 };

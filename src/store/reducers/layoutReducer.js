@@ -3,6 +3,8 @@ import {
   CLEAR_HOME_DATA,
   SET_OPERATION_DATA,
   CLEAR_OPERATION_DATA,
+  SET_PROFILE_DATA,
+  CLEAR_PROFILE_DATA,
   SET_FILTER_PARAM,
   CLEAR_FILTER_PARAM,
   SET_TOTAL_BALANCE,
@@ -17,7 +19,7 @@ import {
 const initialState = {
   homeListData: [],
   operationListData: [],
-  filteredOperationListData: [],
+  profileData: null,
   filterParam: null,
   totalBalance: 0,
   totalActions: 0,
@@ -61,7 +63,6 @@ export const layoutReducer = (state = initialState, action) => {
       return {
         ...state,
         filterParam: payload.filterParam,
-        filteredOperationListData: payload.filteredOperationListData,
         totalActions: payload.totalActions,
         totalTransactions: payload.totalTransactions,
       };
@@ -69,7 +70,6 @@ export const layoutReducer = (state = initialState, action) => {
       return {
         ...state,
         filterParam: null,
-        filteredOperationListData: [],
       };
     case SET_HOME_DATA:
       return {
@@ -81,12 +81,21 @@ export const layoutReducer = (state = initialState, action) => {
         ...state,
         homeListData: [],
       };
+    case SET_PROFILE_DATA:
+      return {
+        ...state,
+        profileData: payload,
+      };
+    case CLEAR_PROFILE_DATA:
+      return {
+        ...state,
+        profileData: null,
+      };
     case SET_OPERATION_DATA:
       return {
         ...state,
         operationListData: payload,
         filterParam: null,
-        filteredOperationListData: [],
       };
     case CLEAR_OPERATION_DATA:
       return {

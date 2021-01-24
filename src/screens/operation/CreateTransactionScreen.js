@@ -83,7 +83,13 @@ export const CreateTransactionScreen = memo(({ route, navigation }) => {
 
       dispatch(createTransactionAction(newTransaction, navigateBack));
     }
-  }, [transaction_amount, selectedAccountId, selectedCategoryId, tagList]);
+  }, [
+    transaction_amount,
+    selectedAccountId,
+    selectedCategoryId,
+    tagList,
+    loader,
+  ]);
 
   const navigateBack = useCallback(() => {
     currentAccount && dispatch(clearCurrentAccount());

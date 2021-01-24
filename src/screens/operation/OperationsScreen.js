@@ -26,11 +26,7 @@ export const OperationsScreen = memo(({ navigation }) => {
 
   const store = useSelector((store) => store);
 
-  const {
-    filterParam,
-    operationListData,
-    filteredOperationListData,
-  } = store.layout;
+  const { filterParam, operationListData } = store.layout;
 
   const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
 
@@ -76,9 +72,7 @@ export const OperationsScreen = memo(({ navigation }) => {
         >
           <OperationList
             navigation={navigation}
-            dataList={
-              isFiltered ? filteredOperationListData : operationListData
-            }
+            dataList={operationListData}
             onOperationRefresh={onRefreshHandler}
           />
         </Layout>

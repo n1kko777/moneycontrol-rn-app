@@ -44,7 +44,7 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
         )
       );
     }
-  }, [tag.id, tag_name]);
+  }, [tag.id, tag_name, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

@@ -48,7 +48,7 @@ export const ResetPassword = memo(({ navigation }) => {
         )
       );
     }
-  }, [email]);
+  }, [email, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

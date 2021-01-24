@@ -1,17 +1,18 @@
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from "moment";
+
 import {
   GET_PROFILE,
   CREATE_PROFILE,
   UPDATE_PROFILE,
   LOADING_PROFILE,
   ERROR_PROFILE,
-  CLEAR_PROFILE,
 } from "../types";
 
 import { endpointAPI } from "../constants";
-import { Alert, AsyncStorage } from "react-native";
-import moment from "moment";
 import { logout } from "./authAction";
+import failHandler from "../failHandler";
 
 // Get profile from server
 export const getProfile = () => async (dispatch) => {
@@ -42,10 +43,10 @@ export const getProfile = () => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(profileFail(error));
+        dispatch(failHandler(error, ERROR_PROFILE));
       });
   } catch (error) {
-    dispatch(profileFail(error));
+    dispatch(failHandler(error, ERROR_PROFILE));
   }
 };
 
@@ -79,10 +80,10 @@ export const createProfile = (profile) => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(profileFail(error));
+        dispatch(failHandler(error, ERROR_PROFILE));
       });
   } catch (error) {
-    dispatch(profileFail(error));
+    dispatch(failHandler(error, ERROR_PROFILE));
   }
 };
 
@@ -109,7 +110,7 @@ export const updateProfile = (profile, id) => async (dispatch) => {
       .then((res) => {
         const profile = res.data;
 
-        if (profile["last_updated"] == undefined) {
+        if (profile["last_updated"] === undefined) {
           profile["last_updated"] = moment();
         }
 
@@ -120,10 +121,10 @@ export const updateProfile = (profile, id) => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(profileFail(error));
+        dispatch(failHandler(error, ERROR_PROFILE));
       });
   } catch (error) {
-    dispatch(profileFail(error));
+    dispatch(failHandler(error, ERROR_PROFILE));
   }
 };
 
@@ -144,7 +145,7 @@ export const updateImageProfile = (profile, id) => async (dispatch) => {
       .then((res) => {
         const profile = res.data;
 
-        if (profile["last_updated"] == undefined) {
+        if (profile["last_updated"] === undefined) {
           profile["last_updated"] = moment();
         }
 
@@ -155,10 +156,10 @@ export const updateImageProfile = (profile, id) => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(profileFail(error));
+        dispatch(failHandler(error, ERROR_PROFILE));
       });
   } catch (error) {
-    dispatch(profileFail(error));
+    dispatch(failHandler(error, ERROR_PROFILE));
   }
 };
 
@@ -179,54 +180,11 @@ export const hideProfile = (id, navigation) => async (dispatch) => {
         dispatch(logout(navigation));
       })
       .catch((error) => {
-        dispatch(profileFail(error));
+        dispatch(failHandler(error, ERROR_PROFILE));
       });
   } catch (error) {
-    dispatch(profileFail(error));
+    dispatch(failHandler(error, ERROR_PROFILE));
   }
-};
-
-export const profileFail = (error) => (dispatch) => {
-  const errorObject = {};
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    const keys = [];
-
-    for (const k in error.response.data) keys.push(k);
-
-    console.log(
-      `Код ошибки: ${error.response.status}. ${
-        error.response.data[keys[0]]
-      } Повторите попытку позже.`
-    );
-
-    errorObject.title = `Код ошибки: ${error.response.status}`;
-    errorObject.message =
-      error.response.status === 404
-        ? `Не найдено`
-        : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
-  } else if (error.request) {
-    // The request was made but no response was received
-    console.log("Не удалось соединиться с сервером. Повторите попытку позже.");
-
-    errorObject.title = `Не удалось соединиться с сервером`;
-    errorObject.message = `Повторите попытку позже`;
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log("Что-то пошло не так... Повторите попытку позже.");
-
-    errorObject.title = `Что-то пошло не так...`;
-    errorObject.message = `Повторите попытку позже`;
-  }
-
-  Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false,
-  });
-
-  dispatch({
-    type: ERROR_PROFILE,
-    payload: error,
-  });
 };
 
 // Set loading to true

@@ -55,7 +55,7 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
         )
       );
     }
-  }, [account_name, balance]);
+  }, [account_name, balance, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

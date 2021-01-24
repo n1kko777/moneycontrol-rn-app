@@ -63,7 +63,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
     if (!loader) {
       dispatch(getProfileAction(onSuccessProfile));
     }
-  }, []);
+  }, [loader]);
 
   const RefreshProfileAction = () => (
     <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />

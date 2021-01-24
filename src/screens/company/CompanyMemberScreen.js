@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -12,11 +12,14 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { HomeList } from "../../components/home/HomeList";
 import { Toolbar } from "../../components/navigation/Toolbar";
 import {
+  clearProfileListData,
+  getDataDispatcher,
   getProfileListData,
   removeProfileFromCompanyAction,
 } from "../../store/actions/apiAction";
 import { BackIcon } from "../../themes/icons";
 import { generateHomeData } from "../../store/actions/layoutAction";
+import { splitToDigits } from "../../splitToDigits";
 
 export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const { profile } = route.params;
@@ -26,21 +29,31 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((store) => store);
-  const { accounts } = store.account;
-  const { homeListData: profileListData } = store.layout;
+  const profileData = useSelector((store) => store.layout.profileData);
 
-  const homeListData = profileListData.filter(
-    (elem) =>
-      elem.navigate !== "Team" &&
-      elem.navigate !== "Tag" &&
-      elem.navigate !== "Category"
-  );
+  const [homeListData, setHomeListData] = useState([]);
+  const [totalBalance, setTotalBalance] = useState(null);
+
+  useEffect(() => {
+    if (profileData !== null) {
+      const { data, balance } = profileData;
+      setHomeListData(data);
+      setTotalBalance(balance);
+    } else {
+      setHomeListData([]);
+      setTotalBalance(null);
+    }
+  }, [profileData]);
 
   homeListData.isNavigate = false;
 
   const refreshData = useCallback(() => {
     dispatch(getProfileListData(profile.id));
+  }, []);
+
+  const onSuccessDelete = useCallback(() => {
+    dispatch(clearProfileListData());
+    dispatch(getDataDispatcher(navigation));
   }, []);
 
   const onDeleteMember = useCallback(() => {
@@ -57,13 +70,11 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
         {
           text: "Удалить",
           onPress: () => {
-            if (
-              accounts
-                .filter((acc) => acc.profile == profile.id)
-                .reduce((sum, next) => (sum += +next.balance), 0) == 0
-            ) {
+            if (totalBalance === null || totalBalance === 0) {
               navigation.goBack(null);
-              dispatch(removeProfileFromCompanyAction(profile));
+              dispatch(
+                removeProfileFromCompanyAction(profile, onSuccessDelete)
+              );
             } else {
               Alert.alert(
                 "Невозможно удалить сотрудника",
@@ -84,8 +95,8 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
   }, []);
 
   const onBackHandler = useCallback(() => {
-    dispatch(generateHomeData());
     navigation.navigate("Home");
+    dispatch(clearProfileListData());
   }, []);
 
   return (
@@ -100,7 +111,11 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
       >
         <Toolbar
           navigation={navigation}
-          title={profile.first_name + " " + profile.last_name}
+          title={`${profile.first_name} ${
+            profile.last_name
+          } (Баланс: ${splitToDigits(
+            totalBalance !== null ? totalBalance : 0
+          )} ₽)`}
           TargetIcon={BackIcon}
           onTarget={onBackHandler}
           isMenu={false}

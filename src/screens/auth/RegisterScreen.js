@@ -62,7 +62,7 @@ export const RegisterScreen = memo(({ navigation }) => {
         )
       );
     }
-  }, [first_name, last_name, email, password1, password2]);
+  }, [first_name, last_name, email, password1, password2, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

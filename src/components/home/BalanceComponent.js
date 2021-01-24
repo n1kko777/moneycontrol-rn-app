@@ -49,7 +49,7 @@ export const BalanceComponent = memo(({ balance = null }) => {
           ],
       }}
     >
-      {balance !== null && (
+      {balance !== null ? (
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 12, textAlign: "center" }}>{`Баланс ${
             isAdmin ? "компании" : "счетов"
@@ -78,7 +78,7 @@ export const BalanceComponent = memo(({ balance = null }) => {
             onPress={toggleVisibleBalance}
           />
         </View>
-      )}
+      ) : null}
 
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <View style={styles.creaseItem}>

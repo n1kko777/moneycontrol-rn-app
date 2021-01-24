@@ -1,11 +1,7 @@
 import React, { memo, useCallback, useEffect } from "react";
-import {
-  TouchableOpacity,
-  View,
-  Image,
-  AsyncStorage,
-  Clipboard,
-} from "react-native";
+import { TouchableOpacity, View, Image } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Clipboard from "expo-clipboard";
 import { Layout, Button, Text, Input } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
@@ -57,7 +53,7 @@ const LoginScreen = memo(
       if (!loader) {
         authLoginDispatch(email, password, isAuthHandler);
       }
-    }, [email, password]);
+    }, [email, password, loader]);
 
     useEffect(() => {
       isAuthHandler();

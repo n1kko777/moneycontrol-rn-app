@@ -1,3 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Axios from "axios";
+import { endpointAPI } from "../constants";
+import moment from "moment";
+
 import {
   SET_HOME_DATA,
   SET_OPERATION_DATA,
@@ -6,12 +11,12 @@ import {
   SET_TOTAL_BALANCE,
   SET_TOTAL_ACTIONS,
   SET_TOTAL_TRANSACTIONS,
+  SET_PROFILE_DATA,
+  CLEAR_PROFILE_DATA,
+  ERROR_LAYOUT,
 } from "../types";
 
-import { AsyncStorage } from "react-native";
-import Axios from "axios";
-import { endpointAPI } from "../constants";
-import moment from "moment";
+import failHandler from "../failHandler";
 
 export const setFilterParam = (filterParam) => async (dispatch, getState) => {
   const filteredAray = JSON.parse(
@@ -57,7 +62,6 @@ export const setFilterParam = (filterParam) => async (dispatch, getState) => {
     type: SET_FILTER_PARAM,
     payload: {
       filterParam,
-      filteredOperationListData: filteredAray,
       totalActions: parseFloat(
         []
           .concat(...filteredAray.map((el) => el.data))
@@ -81,43 +85,49 @@ export const clearFilterParam = () => (dispatch) => {
   dispatch(generateOperationData());
 };
 
-export const generateHomeData = (profile_id = null) => async (
-  dispatch,
-  getState
-) => {
+export const clearProfileData = () => (dispatch) => {
+  dispatch({
+    type: CLEAR_PROFILE_DATA,
+  });
+};
+
+export const generateHomeData = (profile_id = null) => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return Axios.post(
-      `${endpointAPI}/home-list/`,
-      {
-        profile_id:
-          profile_id === null ? getState().profile.profile.id : profile_id,
+    return Axios.get(`${endpointAPI}/home-list/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
+      params: {
+        profile_id,
+      },
+    })
       .then((res) => {
         const { balance, data: homeListData } = res.data;
-        dispatch({
-          type: SET_TOTAL_BALANCE,
-          payload: balance,
-        });
-        dispatch({
-          type: SET_HOME_DATA,
-          payload: homeListData,
-        });
+        if (profile_id !== null) {
+          dispatch({
+            type: SET_PROFILE_DATA,
+            payload: { balance, data: homeListData },
+          });
+        } else {
+          dispatch({
+            type: SET_TOTAL_BALANCE,
+            payload: balance,
+          });
+          dispatch({
+            type: SET_HOME_DATA,
+            payload: homeListData,
+          });
+        }
       })
 
       .catch((error) => {
-        console.log("error :>> ", error);
+        dispatch(failHandler(error, ERROR_LAYOUT));
       });
   } catch (error) {
-    console.log("error :>> ", error);
+    dispatch(failHandler(error, ERROR_LAYOUT));
   }
 };
 
@@ -128,11 +138,12 @@ export const generateOperationData = (profile_id = null) => async (
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return Axios.post(
-      `${endpointAPI}/operation-list/`,
-      {
-        profile_id:
-          profile_id === null ? getState().profile.profile.id : profile_id,
+    return Axios.get(`${endpointAPI}/operation-list/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
+      },
+      params: {
         start_date:
           getState().calendar.startDate !== null
             ? getState().calendar.startDate
@@ -142,13 +153,7 @@ export const generateOperationData = (profile_id = null) => async (
             ? getState().calendar.endDate
             : moment(),
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
+    })
       .then((res) => {
         const {
           total_action,
@@ -170,10 +175,10 @@ export const generateOperationData = (profile_id = null) => async (
       })
 
       .catch((error) => {
-        console.log("error :>> ", error);
+        dispatch(failHandler(error, ERROR_LAYOUT));
       });
   } catch (error) {
-    console.log("error :>> ", error);
+    dispatch(failHandler(error, ERROR_LAYOUT));
   }
 };
 

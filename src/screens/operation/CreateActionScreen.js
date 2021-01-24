@@ -84,7 +84,14 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
 
       dispatch(createActionAction(newAction, navigateBack));
     }
-  }, [action_amount, selectedAccountId, selectedCategoryId, tagList]);
+  }, [
+    action_amount,
+    selectedAccountId,
+    selectedCategoryId,
+    tagList,
+    loader,
+    loader,
+  ]);
 
   const navigateBack = useCallback(() => {
     currentAccount !== null && dispatch(clearCurrentAccount());

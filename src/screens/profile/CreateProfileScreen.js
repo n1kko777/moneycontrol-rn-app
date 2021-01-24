@@ -47,7 +47,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
       };
       dispatch(createProfileAction(newProfile, onSuccess));
     }
-  }, [first_name, last_name, phone]);
+  }, [first_name, last_name, phone, loader]);
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
