@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useEffect, useState, useRef } from "react";
+import { FlexibleView } from "../../components/FlexibleView";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -80,7 +81,7 @@ export const RegisterScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Регистрация"
           alignment="center"
@@ -167,7 +168,7 @@ export const RegisterScreen = memo(({ navigation }) => {
             </Text>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

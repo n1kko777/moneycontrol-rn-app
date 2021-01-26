@@ -15,7 +15,7 @@ import { logout } from "./authAction";
 import failHandler from "../failHandler";
 
 // Get profile from server
-export const getProfile = () => async (dispatch) => {
+export const getProfile = (onSuccess = null) => async (dispatch) => {
   dispatch(setLoading());
 
   try {
@@ -40,8 +40,8 @@ export const getProfile = () => async (dispatch) => {
           type: GET_PROFILE,
           payload: profile,
         });
+        onSuccess !== null && onSuccess(profile);
       })
-
       .catch((error) => {
         dispatch(failHandler(error, ERROR_PROFILE));
       });

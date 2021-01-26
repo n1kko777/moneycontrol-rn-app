@@ -20,6 +20,7 @@ import {
   hideProfileAction,
 } from "../../store/actions/apiAction";
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const ProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -133,7 +134,7 @@ export const ProfileScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Профиль"
           alignment="center"
@@ -198,7 +199,7 @@ export const ProfileScreen = memo(({ navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

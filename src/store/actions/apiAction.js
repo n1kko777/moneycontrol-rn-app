@@ -117,10 +117,7 @@ export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
 
 export const getProfileAction = (onSuccess) => async (dispatch, getState) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(getProfile())]);
-  if (getState().profile.error === null && getState().auth.error === null) {
-    await Promise.all([onSuccess(getState().profile.profile)]);
-  }
+  await Promise.all([dispatch(getProfile(onSuccess))]);
   dispatch(endLoader());
 };
 
