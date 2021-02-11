@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { useTheme, Layout, Text } from "@ui-kitten/components";
+import { useTheme, Layout } from "@ui-kitten/components";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -11,10 +11,7 @@ import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { OperationList } from "../../components/operation/OperationList";
 import { View } from "react-native";
 
-import {
-  clearFilterParamAction,
-  getDataDispatcher,
-} from "../../store/actions/apiAction";
+import { getDataDispatcher } from "../../store/actions/apiAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
 
@@ -26,20 +23,11 @@ export const OperationsScreen = memo(({ navigation }) => {
 
   const store = useSelector((store) => store);
 
-  const { filterParam, operationListData } = store.layout;
+  const { operationListData, filterParams } = store.layout;
 
-  const [isFiltered, setIsFiltered] = React.useState(filterParam !== null);
-
-  const onClearFilter = useCallback(() => {
-    if (isFiltered) {
-      setIsFiltered(false);
-      dispatch(clearFilterParamAction());
-    }
-  }, [isFiltered]);
-
-  React.useEffect(() => {
-    setIsFiltered(filterParam !== null);
-  }, [filterParam]);
+  const navigateFilter = useCallback(() => {
+    navigation.navigate("FilterOperation");
+  }, []);
 
   const onRefreshHandler = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
@@ -47,13 +35,11 @@ export const OperationsScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      {
-        <Toolbar
-          navigation={navigation}
-          TargetIcon={isFiltered ? ActiveFilterIcon : FilterIcon}
-          onTarget={onClearFilter}
-        />
-      }
+      <Toolbar
+        navigation={navigation}
+        TargetIcon={filterParams !== null ? ActiveFilterIcon : FilterIcon}
+        onTarget={navigateFilter}
+      />
       <Layout
         style={{
           flex: 1,
@@ -68,7 +54,11 @@ export const OperationsScreen = memo(({ navigation }) => {
           <CustomDatePicker />
         </View>
         <Layout
-          style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
+          style={{
+            flex: 1,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+          }}
         >
           <OperationList
             navigation={navigation}

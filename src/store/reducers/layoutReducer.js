@@ -5,8 +5,6 @@ import {
   CLEAR_OPERATION_DATA,
   SET_PROFILE_DATA,
   CLEAR_PROFILE_DATA,
-  SET_FILTER_PARAM,
-  CLEAR_FILTER_PARAM,
   SET_TOTAL_BALANCE,
   SET_TOTAL_ACTIONS,
   SET_TOTAL_TRANSACTIONS,
@@ -14,13 +12,15 @@ import {
   CLEAR_TOTAL_ACTIONS,
   CLEAR_TOTAL_TRANSACTIONS,
   CLEAR_LAYOUT,
+  SET_FILTER_PARAMS,
+  CLEAR_FILTER_PARAMS,
 } from "../types";
 
 const initialState = {
   homeListData: [],
   operationListData: [],
   profileData: null,
-  filterParam: null,
+  filterParams: null,
   totalBalance: 0,
   totalActions: 0,
   totalTransactions: 0,
@@ -29,6 +29,16 @@ const initialState = {
 export const layoutReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
+    case SET_FILTER_PARAMS:
+      return {
+        ...state,
+        filterParams: payload,
+      };
+    case CLEAR_FILTER_PARAMS:
+      return {
+        ...state,
+        filterParams: null,
+      };
     case SET_TOTAL_BALANCE:
       return {
         ...state,
@@ -59,18 +69,6 @@ export const layoutReducer = (state = initialState, action) => {
         ...state,
         totalTransactions: 0,
       };
-    case SET_FILTER_PARAM:
-      return {
-        ...state,
-        filterParam: payload.filterParam,
-        totalActions: payload.totalActions,
-        totalTransactions: payload.totalTransactions,
-      };
-    case CLEAR_FILTER_PARAM:
-      return {
-        ...state,
-        filterParam: null,
-      };
     case SET_HOME_DATA:
       return {
         ...state,
@@ -95,7 +93,6 @@ export const layoutReducer = (state = initialState, action) => {
       return {
         ...state,
         operationListData: payload,
-        filterParam: null,
       };
     case CLEAR_OPERATION_DATA:
       return {
@@ -107,7 +104,7 @@ export const layoutReducer = (state = initialState, action) => {
         ...state,
         homeListData: [],
         operationListData: [],
-        filterParam: null,
+        filterParams: null,
         totalBalance: 0,
         totalActions: 0,
         totalTransactions: 0,

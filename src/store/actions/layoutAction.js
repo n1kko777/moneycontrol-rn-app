@@ -6,90 +6,30 @@ import moment from "moment";
 import {
   SET_HOME_DATA,
   SET_OPERATION_DATA,
-  SET_FILTER_PARAM,
-  CLEAR_FILTER_PARAM,
   SET_TOTAL_BALANCE,
   SET_TOTAL_ACTIONS,
   SET_TOTAL_TRANSACTIONS,
   SET_PROFILE_DATA,
   CLEAR_PROFILE_DATA,
   ERROR_LAYOUT,
+  SET_FILTER_PARAMS,
+  CLEAR_FILTER_PARAMS,
 } from "../types";
 
 import failHandler from "../failHandler";
 
-export const setFilterParam = (filterParam) => async (dispatch, getState) => {
-  const filteredAray = JSON.parse(
-    JSON.stringify(getState().layout.operationListData)
-  ).filter((elem) => {
-    switch (filterParam.type) {
-      case "action":
-      case "transaction":
-      case "transfer":
-        elem.data = elem.data.filter((item) => item.type === filterParam.type);
-        break;
-      case "tag":
-        elem.data = elem.data.filter(
-          (item) => item.tags !== undefined && item.tags === filterParam.id
-        );
-        break;
-      case "category":
-        elem.data = elem.data.filter(
-          (item) =>
-            item.category !== undefined && item.category === filterParam.id
-        );
-        break;
-      case "account":
-        elem.data = elem.data.filter(
-          (item) =>
-            (item.account !== undefined && item.account === filterParam.id) ||
-            (item.from_account !== undefined &&
-              parseInt(item.from_account_id) === filterParam.id) ||
-            (item.to_account !== undefined &&
-              parseInt(item.to_account_id) === filterParam.id)
-        );
-        break;
-      case "profile":
-        break;
+export const setFilterParams = (params) => ({
+  type: SET_FILTER_PARAMS,
+  payload: params,
+});
 
-      default:
-        break;
-    }
-    return elem.data.length !== 0;
-  });
+export const clearFilterParams = () => ({
+  type: CLEAR_FILTER_PARAMS,
+});
 
-  await dispatch({
-    type: SET_FILTER_PARAM,
-    payload: {
-      filterParam,
-      totalActions: parseFloat(
-        []
-          .concat(...filteredAray.map((el) => el.data))
-          .filter((elem) => elem.type === "action")
-          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-      ),
-      totalTransactions: parseFloat(
-        []
-          .concat(...filteredAray.map((el) => el.data))
-          .filter((elem) => elem.type === "transaction")
-          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-      ),
-    },
-  });
-};
-
-export const clearFilterParam = () => (dispatch) => {
-  dispatch({
-    type: CLEAR_FILTER_PARAM,
-  });
-  dispatch(generateOperationData());
-};
-
-export const clearProfileData = () => (dispatch) => {
-  dispatch({
-    type: CLEAR_PROFILE_DATA,
-  });
-};
+export const clearProfileData = () => ({
+  type: CLEAR_PROFILE_DATA,
+});
 
 export const generateHomeData = (profile_id = null) => async (dispatch) => {
   try {
@@ -131,12 +71,23 @@ export const generateHomeData = (profile_id = null) => async (dispatch) => {
   }
 };
 
-export const generateOperationData = (profile_id = null) => async (
+export const generateOperationData = (params = null, onSuccess) => async (
   dispatch,
   getState
 ) => {
+  dispatch(setFilterParams(params));
+
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const formatedParams = {};
+
+    if (params && params !== null) {
+      for (const [key, value] of Object.entries(params)) {
+        if (value.length) {
+          formatedParams[key] = value.map((el) => el.id).join(",");
+        }
+      }
+    }
 
     return Axios.get(`${endpointAPI}/operation-list/`, {
       headers: {
@@ -152,6 +103,7 @@ export const generateOperationData = (profile_id = null) => async (
           getState().calendar.endDate !== null
             ? getState().calendar.endDate
             : moment(),
+        ...formatedParams,
       },
     })
       .then((res) => {
@@ -172,8 +124,9 @@ export const generateOperationData = (profile_id = null) => async (
           type: SET_OPERATION_DATA,
           payload: operationListData,
         });
-      })
 
+        onSuccess && onSuccess();
+      })
       .catch((error) => {
         dispatch(failHandler(error, ERROR_LAYOUT));
       });

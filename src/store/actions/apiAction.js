@@ -32,8 +32,7 @@ import { getTag, createTag, hideTag, updateTag } from "./tagAction";
 import { authLogin, authSignUp, resetPass, logout } from "./authAction";
 import {
   updateLayouts,
-  setFilterParam,
-  clearFilterParam,
+  generateOperationData,
   generateHomeData,
   clearProfileData,
 } from "./layoutAction";
@@ -77,13 +76,6 @@ export const authLoginAction = (email, password, onSuccess) => async (
   dispatch(endLoader());
 };
 
-// Set
-export const setFilterParamAction = (filterParam) => async (dispatch) => {
-  dispatch(startLoader());
-  await Promise.all([dispatch(setFilterParam(filterParam))]);
-  dispatch(endLoader());
-};
-
 // Get
 export const getProfileListData = (profile_id = null) => async (dispatch) => {
   dispatch(startLoader());
@@ -118,6 +110,15 @@ export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
 export const getProfileAction = (onSuccess) => async (dispatch, getState) => {
   dispatch(startLoader());
   await Promise.all([dispatch(getProfile(onSuccess))]);
+  dispatch(endLoader());
+};
+
+export const getOperationAction = (params = null, onSuccess) => async (
+  dispatch,
+  getState
+) => {
+  dispatch(startLoader());
+  await Promise.all([dispatch(generateOperationData(params, onSuccess))]);
   dispatch(endLoader());
 };
 
@@ -410,12 +411,6 @@ export const removeProfileFromCompanyAction = (profile, onSuccess) => async (
 };
 
 // Clear
-export const clearFilterParamAction = () => async (dispatch) => {
-  dispatch(startLoader());
-  await Promise.all([dispatch(clearFilterParam())]);
-  dispatch(endLoader());
-};
-
 export const clearProfileListData = () => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(clearProfileData())]);

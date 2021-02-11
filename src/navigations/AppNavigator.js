@@ -24,6 +24,7 @@ import { CreateTagScreen } from "../screens/tag/CreateTagScreen";
 import { UpdateTagScreen } from "../screens/tag/UpdateTagScreen";
 
 import { CreateTransactionScreen } from "../screens/operation/CreateTransactionScreen";
+import { FilterOperationScreen } from "../screens/operation/FilterOperationScreen";
 import { CreateActionScreen } from "../screens/operation/CreateActionScreen";
 import { CreateTransferScreen } from "../screens/operation/CreateTransferScreen";
 import { ReportScreen } from "../screens/ReportScreen";
@@ -51,6 +52,7 @@ const HomeNavigator = () => (
       component={ChangeCompanyNameScreen}
     />
     <Stack.Screen name="InviteMember" component={InviteMemberScreen} />
+    <Stack.Screen name="FilterOperation" component={FilterOperationScreen} />
     <Stack.Screen
       name="CreateTransaction"
       component={CreateTransactionScreen}
