@@ -4,8 +4,6 @@ import { useSelector } from "react-redux";
 
 import { AccountListItem } from "./AccountListItem";
 
-let renderCounter = 0;
-
 export const AccountList = memo(({ navigation }) => {
   const store = useSelector((store) => store);
   const { profile } = store.profile;

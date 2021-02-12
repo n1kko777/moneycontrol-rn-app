@@ -2,7 +2,7 @@ import React, { memo, useCallback } from "react";
 import { Layout, Text, useTheme } from "@ui-kitten/components";
 import { View } from "react-native";
 
-import { RightIcon } from "../../themes/icons";
+import { AddSmallIcon, RightIcon } from "../../themes/icons";
 import { HomeCardItem } from "./HomeCardItem";
 
 import { ThemeContext } from "../../themes/theme-context";
@@ -16,6 +16,10 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
     navigation.navigate(item.navigate);
   }, [item]);
 
+  const navigateToAll = useCallback(() => {
+    navigation.navigate(item.navigate.replace("Create", ""));
+  }, [item]);
+
   return (
     <Layout
       style={{
@@ -27,41 +31,92 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
         paddingTop: 8,
       }}
     >
-      <TouchableOpacity
+      <View
         style={{
-          alignItems: "center",
           justifyContent: "space-between",
           flexDirection: "row",
           marginBottom: 20,
         }}
-        onPress={isNavigate ? () => titleNavigationHandler() : null}
       >
         <Text category="h5">{item.title}</Text>
         {isNavigate && (
-          <RightIcon
-            fill={
-              kittenTheme[
-                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-              ]
-            }
+          <TouchableOpacity
             style={{
-              width: 30,
-              height: 30,
+              marginTop: 5,
+              width: 24,
+              height: 24,
+              alignItems: "center",
+              justifyContent: "center",
+              alignSelf: "center",
             }}
-          />
+            onPress={() => titleNavigationHandler()}
+          >
+            {item.navigate !== "Operation" ? (
+              <AddSmallIcon
+                fill={
+                  kittenTheme[
+                    `color-primary-${
+                      themeContext.theme === "light" ? 800 : 100
+                    }`
+                  ]
+                }
+                width={24}
+                height={24}
+              />
+            ) : (
+              <RightIcon
+                fill={
+                  kittenTheme[
+                    `color-primary-${
+                      themeContext.theme === "light" ? 800 : 100
+                    }`
+                  ]
+                }
+                width={30}
+                height={30}
+              />
+            )}
+          </TouchableOpacity>
         )}
-      </TouchableOpacity>
+      </View>
 
       <View>
-        {item.data.map((elem) => (
-          <HomeCardItem
-            navigation={navigation}
-            kittenTheme={kittenTheme}
-            themeContext={themeContext}
-            key={elem.last_updated}
-            item={elem}
-          />
-        ))}
+        {item.data.length !== 0 ? (
+          item.data.map((elem) => (
+            <HomeCardItem
+              kittenTheme={kittenTheme}
+              themeContext={themeContext}
+              key={elem.last_updated}
+              item={elem}
+            />
+          ))
+        ) : (
+          <Text>Список пуст</Text>
+        )}
+      </View>
+      <View
+        style={{
+          alignSelf: "flex-start",
+          marginTop: 10,
+        }}
+      >
+        {isNavigate && (
+          <TouchableOpacity onPress={navigateToAll}>
+            <Text
+              style={{
+                fontWeight: "bold",
+                color:
+                  kittenTheme[
+                    `color-primary-${
+                      themeContext.theme === "light" ? 800 : 100
+                    }`
+                  ],
+              }}
+            >
+              Смотреть все
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </Layout>
   );

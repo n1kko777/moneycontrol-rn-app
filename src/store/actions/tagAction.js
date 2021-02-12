@@ -1,4 +1,6 @@
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from "moment";
 import {
   GET_TAG,
   CREATE_TAG,
@@ -8,11 +10,8 @@ import {
   UPDATE_TAG,
 } from "../types";
 
-import { generateHomeData } from "./layoutAction";
-
 import { endpointAPI } from "../constants";
-import { Alert, AsyncStorage } from "react-native";
-import moment from "moment";
+import failHandler from "../failHandler";
 
 // Get tag from server
 export const getTag = () => async (dispatch) => {
@@ -31,7 +30,6 @@ export const getTag = () => async (dispatch) => {
       .then((res) => {
         const tag = res.data.filter((elem) => elem.is_active);
 
-        dispatch(generateHomeData());
         dispatch({
           type: GET_TAG,
           payload: tag,
@@ -39,10 +37,10 @@ export const getTag = () => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(tagFail(error));
+        dispatch(failHandler(error, ERROR_TAG));
       });
   } catch (error) {
-    dispatch(tagFail(error));
+    dispatch(failHandler(error, ERROR_TAG));
   }
 };
 
@@ -68,11 +66,10 @@ export const createTag = (tag) => async (dispatch) => {
       .then((res) => {
         const tag = res.data;
 
-        if (tag["last_updated"] == undefined) {
+        if (tag["last_updated"] === undefined) {
           tag["last_updated"] = moment();
         }
 
-        dispatch(generateHomeData());
         dispatch({
           type: CREATE_TAG,
           payload: tag,
@@ -80,10 +77,10 @@ export const createTag = (tag) => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(tagFail(error));
+        dispatch(failHandler(error, ERROR_TAG));
       });
   } catch (error) {
-    dispatch(tagFail(error));
+    dispatch(failHandler(error, ERROR_TAG));
   }
 };
 
@@ -109,11 +106,10 @@ export const updateTag = ({ id, tag_name }) => async (dispatch) => {
       .then((res) => {
         const updatedTag = res.data;
 
-        if (updatedTag["last_updated"] == undefined) {
+        if (updatedTag["last_updated"] === undefined) {
           updatedTag["last_updated"] = moment();
         }
 
-        dispatch(generateHomeData());
         dispatch({
           type: UPDATE_TAG,
           payload: updatedTag,
@@ -121,10 +117,10 @@ export const updateTag = ({ id, tag_name }) => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(tagFail(error));
+        dispatch(failHandler(error, ERROR_TAG));
       });
   } catch (error) {
-    dispatch(tagFail(error));
+    dispatch(failHandler(error, ERROR_TAG));
   }
 };
 
@@ -142,7 +138,6 @@ export const hideTag = (tag) => async (dispatch) => {
         },
       })
       .then(() => {
-        dispatch(generateHomeData());
         dispatch({
           type: DELETE_TAG,
           payload: tag.id,
@@ -150,64 +145,11 @@ export const hideTag = (tag) => async (dispatch) => {
       })
 
       .catch((error) => {
-        dispatch(tagFail(error));
+        dispatch(failHandler(error, ERROR_TAG));
       });
   } catch (error) {
-    dispatch(tagFail(error));
+    dispatch(failHandler(error, ERROR_TAG));
   }
-};
-
-export const tagFail = (error) => (dispatch) => {
-  const errorObject = {};
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    const keys = [];
-
-    for (const k in error.response.data) keys.push(k);
-
-    console.log(
-      `Код ошибки: ${error.response.status}. ${
-        error.response.data[keys[0]]
-      } Повторите попытку позже.`
-    );
-
-    errorObject.title = `Код ошибки: ${error.response.status}`;
-    errorObject.message =
-      error.response.status === 404
-        ? `${error.response.data}`
-        : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
-    errorObject.message =
-      error.response.status === 405
-        ? `${error.response.data}`
-        : `${keys.join(",")}: ${error.response.data[keys[0]]}`;
-  } else if (error.request) {
-    // The request was made but no response was received
-    console.log("Не удалось соединиться с сервером. Повторите попытку позже.");
-
-    errorObject.title = `Не удалось соединиться с сервером`;
-    errorObject.message = `Повторите попытку позже`;
-  } else if (error.custom) {
-    // Something happened in setting up the request that triggered an Error
-    console.log("Что-то пошло не так... Повторите попытку позже.");
-
-    errorObject.title = error.custom.title;
-    errorObject.message = error.custom.message;
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log("Что-то пошло не так... Повторите попытку позже.");
-
-    errorObject.title = `Что-то пошло не так...`;
-    errorObject.message = `Повторите попытку позже`;
-  }
-
-  Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false,
-  });
-
-  dispatch({
-    type: ERROR_TAG,
-    payload: error,
-  });
 };
 
 // Set loading to true

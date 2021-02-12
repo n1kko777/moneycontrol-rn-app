@@ -101,7 +101,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
 
       dispatch(createTransferAction(newTransfer, navigateBack));
     }
-  }, [transfer_amount, selectedFromAccountId, selectedToAccountOption]);
+  }, [transfer_amount, selectedFromAccountId, selectedToAccountOption, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

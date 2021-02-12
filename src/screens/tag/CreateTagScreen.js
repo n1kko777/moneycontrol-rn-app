@@ -47,7 +47,7 @@ export const CreateTagScreen = memo(({ navigation }) => {
         )
       );
     }
-  }, [tag_name]);
+  }, [tag_name, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

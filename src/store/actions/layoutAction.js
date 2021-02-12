@@ -1,138 +1,100 @@
-import {
-  SET_HOME_DATA,
-  SET_OPERATION_DATA,
-  SET_FILTER_PARAM,
-  CLEAR_FILTER_PARAM,
-  SET_TOTAL_BALANCE,
-  SET_TOTAL_ACTIONS,
-  SET_TOTAL_TRANSACTIONS,
-} from "../types";
-
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Axios from "axios";
 import { endpointAPI } from "../constants";
 import moment from "moment";
 
-export const setFilterParam = (filterParam) => async (dispatch, getState) => {
-  const filteredAray = JSON.parse(
-    JSON.stringify(getState().layout.operationListData)
-  ).filter((elem) => {
-    switch (filterParam.type) {
-      case "action":
-      case "transaction":
-      case "transfer":
-        elem.data = elem.data.filter((item) => item.type === filterParam.type);
-        break;
-      case "tag":
-        elem.data = elem.data.filter(
-          (item) => item.tags !== undefined && item.tags === filterParam.id
-        );
-        break;
-      case "category":
-        elem.data = elem.data.filter(
-          (item) =>
-            item.category !== undefined && item.category === filterParam.id
-        );
-        break;
-      case "account":
-        elem.data = elem.data.filter(
-          (item) =>
-            (item.account !== undefined && item.account === filterParam.id) ||
-            (item.from_account !== undefined &&
-              parseInt(item.from_account_id) === filterParam.id) ||
-            (item.to_account !== undefined &&
-              parseInt(item.to_account_id) === filterParam.id)
-        );
-        break;
-      case "profile":
-        break;
+import {
+  SET_HOME_DATA,
+  SET_OPERATION_DATA,
+  SET_TOTAL_BALANCE,
+  SET_TOTAL_ACTIONS,
+  SET_TOTAL_TRANSACTIONS,
+  SET_PROFILE_DATA,
+  CLEAR_PROFILE_DATA,
+  ERROR_LAYOUT,
+  SET_FILTER_PARAMS,
+  CLEAR_FILTER_PARAMS,
+} from "../types";
 
-      default:
-        break;
-    }
-    return elem.data.length !== 0;
-  });
+import failHandler from "../failHandler";
 
-  await dispatch({
-    type: SET_FILTER_PARAM,
-    payload: {
-      filterParam,
-      filteredOperationListData: filteredAray,
-      totalActions: parseFloat(
-        []
-          .concat(...filteredAray.map((el) => el.data))
-          .filter((elem) => elem.type === "action")
-          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-      ),
-      totalTransactions: parseFloat(
-        []
-          .concat(...filteredAray.map((el) => el.data))
-          .filter((elem) => elem.type === "transaction")
-          .reduce((sum, nextAcc) => (sum += +nextAcc.balance), 0)
-      ),
-    },
-  });
-};
+export const setFilterParams = (params) => ({
+  type: SET_FILTER_PARAMS,
+  payload: params,
+});
 
-export const clearFilterParam = () => (dispatch) => {
-  dispatch({
-    type: CLEAR_FILTER_PARAM,
-  });
-  dispatch(generateOperationData());
-};
+export const clearFilterParams = () => ({
+  type: CLEAR_FILTER_PARAMS,
+});
 
-export const generateHomeData = (profile_id = null) => async (
-  dispatch,
-  getState
-) => {
+export const clearProfileData = () => ({
+  type: CLEAR_PROFILE_DATA,
+});
+
+export const generateHomeData = (profile_id = null) => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return Axios.post(
-      `${endpointAPI}/home-list/`,
-      {
-        profile_id:
-          profile_id === null ? getState().profile.profile.id : profile_id,
+    return Axios.get(`${endpointAPI}/home-list/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
+      params: {
+        profile_id,
+      },
+    })
       .then((res) => {
         const { balance, data: homeListData } = res.data;
-        dispatch({
-          type: SET_TOTAL_BALANCE,
-          payload: balance,
-        });
-        dispatch({
-          type: SET_HOME_DATA,
-          payload: homeListData,
-        });
+        if (profile_id !== null) {
+          dispatch({
+            type: SET_PROFILE_DATA,
+            payload: { balance, data: homeListData },
+          });
+        } else {
+          dispatch({
+            type: SET_TOTAL_BALANCE,
+            payload: balance,
+          });
+          dispatch({
+            type: SET_HOME_DATA,
+            payload: homeListData,
+          });
+        }
       })
 
       .catch((error) => {
-        console.log("error :>> ", error);
+        dispatch(failHandler(error, ERROR_LAYOUT));
       });
   } catch (error) {
-    console.log("error :>> ", error);
+    dispatch(failHandler(error, ERROR_LAYOUT));
   }
 };
 
-export const generateOperationData = (profile_id = null) => async (
+export const generateOperationData = (params = null, onSuccess) => async (
   dispatch,
   getState
 ) => {
+  dispatch(setFilterParams(params));
+
   try {
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const formatedParams = {};
 
-    return Axios.post(
-      `${endpointAPI}/operation-list/`,
-      {
-        profile_id:
-          profile_id === null ? getState().profile.profile.id : profile_id,
+    if (params && params !== null) {
+      for (const [key, value] of Object.entries(params)) {
+        if (value.length) {
+          formatedParams[key] = value.map((el) => el.id).join(",");
+        }
+      }
+    }
+
+    return Axios.get(`${endpointAPI}/operation-list/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + token,
+      },
+      params: {
         start_date:
           getState().calendar.startDate !== null
             ? getState().calendar.startDate
@@ -141,14 +103,9 @@ export const generateOperationData = (profile_id = null) => async (
           getState().calendar.endDate !== null
             ? getState().calendar.endDate
             : moment(),
+        ...formatedParams,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + token,
-        },
-      }
-    )
+    })
       .then((res) => {
         const {
           total_action,
@@ -167,13 +124,14 @@ export const generateOperationData = (profile_id = null) => async (
           type: SET_OPERATION_DATA,
           payload: operationListData,
         });
-      })
 
+        onSuccess && onSuccess();
+      })
       .catch((error) => {
-        console.log("error :>> ", error);
+        dispatch(failHandler(error, ERROR_LAYOUT));
       });
   } catch (error) {
-    console.log("error :>> ", error);
+    dispatch(failHandler(error, ERROR_LAYOUT));
   }
 };
 

@@ -50,7 +50,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
         )
       );
     }
-  }, [company_name]);
+  }, [company_name, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

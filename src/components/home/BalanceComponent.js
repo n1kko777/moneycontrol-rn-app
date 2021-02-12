@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, Text, useTheme } from "@ui-kitten/components";
 
@@ -15,6 +15,7 @@ import {
 } from "../../themes/icons";
 import { useSelector } from "react-redux";
 
+let FONT_SIZE = 22;
 export const BalanceComponent = memo(({ balance = null }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -35,6 +36,14 @@ export const BalanceComponent = memo(({ balance = null }) => {
     totalTransactions.toString().replace(/\s/g, "")
   );
 
+  useEffect(() => {
+    if (totalActions > 1000000 || totalTransactions > 1000000) {
+      FONT_SIZE = 20;
+    } else {
+      FONT_SIZE = 22;
+    }
+  }, [totalActions, totalTransactions]);
+
   const toggleVisibleBalance = useCallback(() => {
     setIsVisibleBalance(!isVisibleBalance);
   }, [isVisibleBalance]);
@@ -49,7 +58,7 @@ export const BalanceComponent = memo(({ balance = null }) => {
           ],
       }}
     >
-      {balance !== null && (
+      {balance !== null ? (
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 12, textAlign: "center" }}>{`Баланс ${
             isAdmin ? "компании" : "счетов"
@@ -78,7 +87,7 @@ export const BalanceComponent = memo(({ balance = null }) => {
             onPress={toggleVisibleBalance}
           />
         </View>
-      )}
+      ) : null}
 
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <View style={styles.creaseItem}>
@@ -94,8 +103,10 @@ export const BalanceComponent = memo(({ balance = null }) => {
                 style={{
                   fontWeight: "600",
                   color: kittenTheme["color-success-600"],
+                  fontWeight: "600",
+                  fontSize: FONT_SIZE,
+                  lineHeight: FONT_SIZE * 1.45,
                 }}
-                category="h5"
               >
                 {action} ₽
               </Text>
@@ -124,8 +135,10 @@ export const BalanceComponent = memo(({ balance = null }) => {
                 style={{
                   fontWeight: "600",
                   color: kittenTheme["color-danger-600"],
+                  fontWeight: "600",
+                  fontSize: FONT_SIZE,
+                  lineHeight: FONT_SIZE * 1.45,
                 }}
-                category="h5"
               >
                 {transaction} ₽
               </Text>

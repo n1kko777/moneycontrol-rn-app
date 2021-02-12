@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import { START_LOADER, END_LOADER } from "../types";
 import {
   getCompany,
@@ -20,13 +19,9 @@ import {
   createAccount,
   updateAccount,
 } from "./accountAction";
-import {
-  getTransaction,
-  hideTransaction,
-  createTransaction,
-} from "./transactionAction";
-import { getAction, hideAction, createAction } from "./actionAction";
-import { getTransfer, hideTransfer, createTransfer } from "./transferAction";
+import { hideTransaction, createTransaction } from "./transactionAction";
+import { hideAction, createAction } from "./actionAction";
+import { hideTransfer, createTransfer } from "./transferAction";
 import {
   getCategory,
   hideCategory,
@@ -37,9 +32,9 @@ import { getTag, createTag, hideTag, updateTag } from "./tagAction";
 import { authLogin, authSignUp, resetPass, logout } from "./authAction";
 import {
   updateLayouts,
-  setFilterParam,
-  clearFilterParam,
+  generateOperationData,
   generateHomeData,
+  clearProfileData,
 } from "./layoutAction";
 
 export const startLoader = () => ({
@@ -57,9 +52,10 @@ export const authSignUpAction = (newUser, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(authSignUp(newUser))]);
+  if (getState().auth.error === null) {
+    await Promise.all([onSuccess()]);
+  }
   dispatch(endLoader());
-
-  getState().auth.error === null && onSuccess();
 };
 
 export const resetPassAction = (userData, onSuccess) => async (dispatch) => {
@@ -74,15 +70,9 @@ export const authLoginAction = (email, password, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(authLogin(email, password))]);
-  dispatch(endLoader());
-
-  getState().auth.error === null && onSuccess();
-};
-
-// Set
-export const setFilterParamAction = (filterParam) => async (dispatch) => {
-  dispatch(startLoader());
-  await Promise.all([dispatch(setFilterParam(filterParam))]);
+  if (getState().auth.error === null) {
+    await Promise.all([onSuccess()]);
+  }
   dispatch(endLoader());
 };
 
@@ -119,42 +109,32 @@ export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
 
 export const getProfileAction = (onSuccess) => async (dispatch, getState) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(getProfile())]);
-
+  await Promise.all([dispatch(getProfile(onSuccess))]);
   dispatch(endLoader());
+};
 
-  getState().profile.error === null &&
-    getState().auth.error === null &&
-    onSuccess(getState().profile.profile);
+export const getOperationAction = (params = null, onSuccess) => async (
+  dispatch,
+  getState
+) => {
+  dispatch(startLoader());
+  await Promise.all([dispatch(generateOperationData(params, onSuccess))]);
+  dispatch(endLoader());
 };
 
 // Create/join
 export const joinProfileToCompanyAction = (
   { profile_id, profile_phone },
   onSuccess
-) => async (dispatch) => {
+) => async (dispatch, getState) => {
   dispatch(startLoader());
-  await joinProfileToCompany(profile_id, profile_phone)
-    .then((res) => {
-      onSuccess();
-      dispatch(getCompany());
-      dispatch(getAccount());
-      dispatch(endLoader());
-      Alert.alert("Статус запроса", res.data.detail, [{ text: "OK" }], {
-        cancelable: false,
-      });
-    })
-    .catch((error) => {
-      dispatch(endLoader());
-      Alert.alert(
-        "Статус запроса",
-        error.response.data.detail,
-        [{ text: "OK" }],
-        {
-          cancelable: false,
-        }
-      );
-    });
+  await Promise.all([
+    dispatch(joinProfileToCompany(profile_id, profile_phone)),
+  ]);
+  if (getState().company.error === null) {
+    await Promise.all([onSuccess()]);
+  }
+  dispatch(endLoader());
 };
 
 export const createProfileAction = (newItem, onSuccess) => async (
@@ -164,10 +144,11 @@ export const createProfileAction = (newItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(createProfile(newItem))]);
 
-  dispatch(endLoader());
-
   const profile = getState().profile;
-  profile.error === null && onSuccess(profile.profile);
+  if (profile.error === null) {
+    await Promise.all([onSuccess(profile.profile)]);
+  }
+  dispatch(endLoader());
 };
 
 export const createCompanyAction = (newItem, onSuccess) => async (
@@ -175,11 +156,14 @@ export const createCompanyAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(createCompany(newItem), dispatch(getProfile()))]);
-
+  await Promise.all([dispatch(createCompany(newItem))]);
+  if (getState().company.company !== null) {
+    await Promise.all([
+      dispatch(getProfile()),
+      onSuccess(getState().company.company),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().company.company !== null && onSuccess(getState().company.company);
 };
 
 export const createAccountAction = (newItem, onSuccess) => async (
@@ -187,12 +171,15 @@ export const createAccountAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(createAccount(newItem))]).then(() => {
-    dispatch(getCompany());
-  });
+  await Promise.all([dispatch(createAccount(newItem))]);
+  if (getState().account.error === null) {
+    await Promise.all([
+      dispatch(generateHomeData()),
+      dispatch(getCompany()),
+      onSuccess(),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().account.error === null && onSuccess();
 };
 
 export const createCategoryAction = (newItem, onSuccess) => async (
@@ -201,10 +188,10 @@ export const createCategoryAction = (newItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(createCategory(newItem))]);
-
+  if (getState().category.error === null) {
+    await Promise.all([dispatch(generateHomeData()), onSuccess()]);
+  }
   dispatch(endLoader());
-
-  getState().category.error === null && onSuccess();
 };
 
 export const createTagAction = (newItem, onSuccess = () => {}) => async (
@@ -213,10 +200,10 @@ export const createTagAction = (newItem, onSuccess = () => {}) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(createTag(newItem))]);
-
+  if (getState().tag.error === null) {
+    await Promise.all([dispatch(generateHomeData()), onSuccess()]);
+  }
   dispatch(endLoader());
-
-  getState().tag.error === null && onSuccess();
 };
 
 export const createActionAction = (newItem, onSuccess) => async (
@@ -224,14 +211,15 @@ export const createActionAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(createAction(newItem)),
-    dispatch(getAction()),
-    dispatch(getAccount()),
-  ]);
+  await Promise.all([dispatch(createAction(newItem))]);
+  if (getState().action.error === null) {
+    await Promise.all([
+      dispatch(updateLayouts()),
+      dispatch(getAccount()),
+      onSuccess(),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().action.error === null && onSuccess();
 };
 
 export const createTransactionAction = (newItem, onSuccess) => async (
@@ -239,14 +227,15 @@ export const createTransactionAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(createTransaction(newItem)),
-    dispatch(getTransaction()),
-    dispatch(getAccount()),
-  ]);
+  await Promise.all([dispatch(createTransaction(newItem))]);
+  if (getState().transaction.error === null) {
+    await Promise.all([
+      dispatch(updateLayouts()),
+      dispatch(getAccount()),
+      onSuccess(),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().transaction.error === null && onSuccess();
 };
 
 export const createTransferAction = (newItem, onSuccess) => async (
@@ -254,14 +243,15 @@ export const createTransferAction = (newItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(createTransfer(newItem)),
-    dispatch(getTransfer()),
-    dispatch(getAccount()),
-  ]);
+  await Promise.all([dispatch(createTransfer(newItem))]);
+  if (getState().transfer.error === null) {
+    await Promise.all([
+      dispatch(updateLayouts()),
+      dispatch(getAccount()),
+      onSuccess(),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().transfer.error === null && onSuccess();
 };
 
 // Update
@@ -270,14 +260,15 @@ export const updateProfileAction = ({ data, id }, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(updateProfile(data, id)),
-    dispatch(getCompany()),
-  ]);
-
+  await Promise.all([dispatch(updateProfile(data, id))]);
+  if (getState().profile.error === null) {
+    await Promise.all([
+      dispatch(updateLayouts()),
+      dispatch(getCompany()),
+      onSuccess(),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().profile.error === null && onSuccess();
 };
 
 export const updateImageProfileAction = ({ data, id }, onSuccess) => async (
@@ -285,14 +276,15 @@ export const updateImageProfileAction = ({ data, id }, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([
-    dispatch(updateImageProfile(data, id)),
-    dispatch(getCompany()),
-  ]);
-
+  await Promise.all([dispatch(updateImageProfile(data, id))]);
+  if (getState().profile.error === null) {
+    await Promise.all([
+      dispatch(updateLayouts()),
+      dispatch(getCompany()),
+      onSuccess(),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().profile.error === null && onSuccess();
 };
 
 export const updateCompanyAction = (updatedItem, onSuccess) => async (
@@ -301,10 +293,10 @@ export const updateCompanyAction = (updatedItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(updateCompany(updatedItem))]);
-
+  if (getState().company.error === null) {
+    await Promise.all([onSuccess()]);
+  }
   dispatch(endLoader());
-
-  getState().company.error === null && onSuccess();
 };
 
 export const updateAccountAction = (updatedItem, onSuccess) => async (
@@ -312,12 +304,15 @@ export const updateAccountAction = (updatedItem, onSuccess) => async (
   getState
 ) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(updateAccount(updatedItem))]).then(() => {
-    dispatch(getCompany());
-  });
+  await Promise.all([dispatch(updateAccount(updatedItem))]);
+  if (getState().account.error === null) {
+    await Promise.all([
+      dispatch(updateLayouts()),
+      dispatch(getCompany()),
+      onSuccess(),
+    ]);
+  }
   dispatch(endLoader());
-
-  getState().account.error === null && onSuccess();
 };
 
 export const updateCategoryAction = (updatedItem, onSuccess) => async (
@@ -326,10 +321,10 @@ export const updateCategoryAction = (updatedItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(updateCategory(updatedItem))]);
-
+  if (getState().category.error === null) {
+    await Promise.all([dispatch(updateLayouts()), onSuccess()]);
+  }
   dispatch(endLoader());
-
-  getState().category.error === null && onSuccess();
 };
 
 export const updateTagAction = (updatedItem, onSuccess) => async (
@@ -338,10 +333,10 @@ export const updateTagAction = (updatedItem, onSuccess) => async (
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(updateTag(updatedItem))]);
-
+  if (getState().tag.error === null) {
+    await Promise.all([dispatch(updateLayouts()), onSuccess()]);
+  }
   dispatch(endLoader());
-
-  getState().tag.error === null && onSuccess();
 };
 
 // Hide/delete
@@ -352,25 +347,30 @@ export const hideProfileAction = (hideItem, navigation) => async (dispatch) => {
   dispatch(endLoader());
 };
 
-export const hideAccountAction = (hideItem) => async (dispatch) => {
+export const hideAccountAction = (hideItem) => async (dispatch, getState) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(hideAccount(hideItem))]).then(() => {
-    dispatch(getCompany());
-  });
+  await Promise.all([dispatch(hideAccount(hideItem))]);
+  if (getState().account.error === null) {
+    await Promise.all([dispatch(updateLayouts()), dispatch(getCompany())]);
+  }
   dispatch(endLoader());
 };
 
-export const hideCategoryAction = (hideItem) => async (dispatch) => {
+export const hideCategoryAction = (hideItem) => async (dispatch, getState) => {
   dispatch(startLoader());
   await Promise.all([dispatch(hideCategory(hideItem))]);
-
+  if (getState().category.error === null) {
+    await Promise.all([dispatch(updateLayouts())]);
+  }
   dispatch(endLoader());
 };
 
-export const hideTagAction = (hideItem) => async (dispatch) => {
+export const hideTagAction = (hideItem) => async (dispatch, getState) => {
   dispatch(startLoader());
   await Promise.all([dispatch(hideTag(hideItem))]);
-
+  if (getState().tag.error === null) {
+    await Promise.all([dispatch(updateLayouts())]);
+  }
   dispatch(endLoader());
 };
 
@@ -387,40 +387,32 @@ const helperOperation = ({ type, id }) => {
   }
 };
 
-export const hideOperationAction = (hideItem) => async (dispatch) => {
+export const hideOperationAction = (hideItem) => async (dispatch, getState) => {
   dispatch(startLoader());
   await Promise.all([dispatch(helperOperation(hideItem))]);
+  if (getState()[hideItem.type].error === null) {
+    await Promise.all([dispatch(updateLayouts()), dispatch(getAccount())]);
+  }
   dispatch(endLoader());
-
-  dispatch(getAccount());
 };
 
-export const removeProfileFromCompanyAction = (profile) => async (dispatch) => {
+export const removeProfileFromCompanyAction = (profile, onSuccess) => async (
+  dispatch,
+  getState
+) => {
   dispatch(startLoader());
-  await removeProfileFromCompany(profile.id, profile.phone)
-    .then((res) => {
-      dispatch(getCompany());
-      dispatch(endLoader());
-      Alert.alert("Статус запроса", res.data.detail, [{ text: "OK" }], {
-        cancelable: false,
-      });
-    })
-    .catch((error) => {
-      dispatch(endLoader());
-      Alert.alert(
-        "Статус запроса",
-        error.response.data.detail,
-        [{ text: "OK" }],
-        {
-          cancelable: false,
-        }
-      );
-    });
+  await Promise.all([
+    dispatch(removeProfileFromCompany(profile.id, profile.phone)),
+  ]);
+  if (getState().company.error === null) {
+    await Promise.all([dispatch(updateLayouts()), onSuccess()]);
+  }
+  dispatch(endLoader());
 };
 
 // Clear
-export const clearFilterParamAction = () => async (dispatch) => {
+export const clearProfileListData = () => async (dispatch) => {
   dispatch(startLoader());
-  await Promise.all([dispatch(clearFilterParam())]);
+  await Promise.all([dispatch(clearProfileData())]);
   dispatch(endLoader());
 };

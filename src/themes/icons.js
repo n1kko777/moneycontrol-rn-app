@@ -8,10 +8,10 @@ export const ShowIconBalance = (style) => (
   <Icon {...style} name="eye-off-outline" />
 );
 export const IncreaseIcon = (style) => (
-  <Icon {...style} width={26} height={26} name="arrow-upward-outline" />
+  <Icon {...style} name="arrow-upward-outline" />
 );
 export const DecreaseIcon = (style) => (
-  <Icon {...style} width={26} height={26} name="arrow-downward-outline" />
+  <Icon {...style} name="arrow-downward-outline" />
 );
 
 export const MenuIcon = (style) => <Icon {...style} name="more-vertical" />;

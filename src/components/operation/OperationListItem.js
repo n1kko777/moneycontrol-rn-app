@@ -1,19 +1,13 @@
 import React, { memo, useCallback, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Alert } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { Text, ListItem, useTheme, Button } from "@ui-kitten/components";
-import {
-  ExchangeIcon,
-  IncreaseIcon,
-  DecreaseIcon,
-  DeleteIcon,
-  CopyIcon,
-} from "../../themes/icons";
+import { Text, Layout, useTheme, Button, Card } from "@ui-kitten/components";
+import { DeleteIcon, CopyIcon } from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
-import { useSelector, useDispatch } from "react-redux";
-import { Alert } from "react-native";
 import { hideOperationAction } from "../../store/actions/apiAction";
 
 export const OperationListItem = memo(({ item, navigation }) => {
@@ -32,57 +26,6 @@ export const OperationListItem = memo(({ item, navigation }) => {
   const { accounts } = store.account;
   const { categories } = store.category;
   const { tags } = store.tag;
-
-  const renderIconItem = useCallback(
-    (style) => {
-      switch (item.type) {
-        case "action":
-          return (
-            <IncreaseIcon
-              style={{ width: 20, height: 20 }}
-              fill={kittenTheme[style]}
-            />
-          );
-
-        case "transaction":
-          return (
-            <DecreaseIcon
-              style={{ width: 20, height: 20 }}
-              fill={kittenTheme[style]}
-            />
-          );
-
-        case "transfer":
-          return (
-            <ExchangeIcon
-              style={{ width: 20, height: 20 }}
-              fill={
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ]
-              }
-            />
-          );
-      }
-    },
-    [item]
-  );
-
-  const renderItemAccessory = ({ balance, style }) => (
-    <Text
-      style={{
-        fontSize: 16,
-        color:
-          kittenTheme[
-            style !== undefined
-              ? style
-              : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ],
-      }}
-    >
-      {balance !== "" && splitToDigits(balance.toString()) + " ₽"}
-    </Text>
-  );
 
   const deleteHandler = useCallback(() => {
     close();
@@ -152,45 +95,104 @@ export const OperationListItem = memo(({ item, navigation }) => {
     </Swipeable>
   );
 
-  const renderDescription = useMemo(
+  const renderCategory = useMemo(
     () =>
-      `${
-        item.category !== undefined
-          ? "– " +
-            (categories.find((cat) => cat.id == item.category) !== undefined
-              ? categories.find((cat) => cat.id == item.category).category_name
-              : "Удалено")
-          : ""
-      }${
-        item.tags !== undefined
-          ? "\n" +
-            item.tags.map((elTag) =>
-              tags.find((tag) => tag.id == elTag) !== undefined
-                ? "#" + tags.find((tag) => tag.id == elTag).tag_name
-                : "Удалено"
-            )
-          : ""
-      }`,
+      item.category !== undefined
+        ? categories.find((cat) => cat.id == item.category) !== undefined
+          ? categories.find((cat) => cat.id == item.category).category_name
+          : "Удалено"
+        : "",
     [item]
   );
 
+  const renderTag = useMemo(() => {
+    const tagList = (item.tags
+      ? item.tags.map((elTag) =>
+          tags.find((tag) => tag.id == elTag)
+            ? "#" + tags.find((tag) => tag.id == elTag).tag_name
+            : "Удалено"
+        )
+      : [""]
+    ).join(", ");
+
+    return `${
+      tagList.length > 17 ? tagList.substring(0, 17) + "..." : tagList
+    }`;
+  }, [item]);
+
   return (
     <WrapperComponent>
-      <ListItem
-        title={item.name}
-        titleStyle={{
-          fontSize: 16,
-        }}
-        description={renderDescription}
-        descriptionStyle={{
-          fontSize: 14,
-        }}
-        icon={() => renderIconItem(item.style)}
-        accessory={() => renderItemAccessory(item)}
-        style={{
-          paddingVertical: 15,
-        }}
-      />
+      <Card style={{ borderWidth: 0 }}>
+        <Layout
+          style={{
+            marginHorizontal: -12,
+            marginVertical: -12,
+          }}
+        >
+          <Layout
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+              }}
+            >
+              {item.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color:
+                  kittenTheme[
+                    item.style !== undefined
+                      ? item.style
+                      : `color-primary-${
+                          themeContext.theme === "light" ? 800 : 100
+                        }`
+                  ],
+              }}
+            >
+              {item.balance !== "" &&
+                splitToDigits(item.balance.toString()) + " ₽"}
+            </Text>
+          </Layout>
+          <Layout
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: 8,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color:
+                  kittenTheme[
+                    `color-basic-${themeContext.theme === "light" ? 700 : 600}`
+                  ],
+              }}
+            >
+              {renderCategory}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color:
+                  kittenTheme[
+                    `color-basic-${themeContext.theme === "light" ? 700 : 600}`
+                  ],
+              }}
+            >
+              {renderTag}
+            </Text>
+          </Layout>
+        </Layout>
+      </Card>
     </WrapperComponent>
   );
 });

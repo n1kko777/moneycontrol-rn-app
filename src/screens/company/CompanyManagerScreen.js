@@ -19,6 +19,7 @@ import {
   createCompanyAction,
   getProfileAction,
 } from "../../store/actions/apiAction";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CompanyManagerScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -63,7 +64,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
     if (!loader) {
       dispatch(getProfileAction(onSuccessProfile));
     }
-  }, []);
+  }, [loader]);
 
   const RefreshProfileAction = () => (
     <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
@@ -80,7 +81,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Добавление компании"
           alignment="center"
@@ -120,7 +121,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
             {profile !== null && profile.phone}
           </Text>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

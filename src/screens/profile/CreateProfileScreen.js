@@ -17,6 +17,7 @@ import { THEME } from "../../themes/themes";
 import { LogoutIcon } from "../../themes/icons";
 
 import { createProfileAction } from "../../store/actions/apiAction";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
       };
       dispatch(createProfileAction(newProfile, onSuccess));
     }
-  }, [first_name, last_name, phone]);
+  }, [first_name, last_name, phone, loader]);
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
@@ -76,7 +77,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"
@@ -130,7 +131,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

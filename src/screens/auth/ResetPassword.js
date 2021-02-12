@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
+import { FlexibleView } from "../../components/FlexibleView";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -48,7 +49,7 @@ export const ResetPassword = memo(({ navigation }) => {
         )
       );
     }
-  }, [email]);
+  }, [email, loader]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -64,7 +65,7 @@ export const ResetPassword = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Сброс пароля"
           alignment="center"
@@ -105,7 +106,7 @@ export const ResetPassword = memo(({ navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

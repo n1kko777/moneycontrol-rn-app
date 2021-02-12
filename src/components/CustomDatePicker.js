@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 
 import { useTheme, RangeCalendar, Button, Text } from "@ui-kitten/components";
@@ -147,6 +148,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    width: Dimensions.get("window").width - 24,
+    maxWidth: 600,
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,

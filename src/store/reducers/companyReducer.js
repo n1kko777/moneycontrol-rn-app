@@ -5,6 +5,8 @@ import {
   ERROR_COMPANY,
   CLEAR_COMPANY,
   UPDATE_COMPANY,
+  JOIN_PROFILE_TO_COMPANY,
+  REMOVE_PROFILE_FROM_COMPANY,
 } from "../types";
 
 const initialState = {
@@ -50,6 +52,12 @@ export const companyReducer = (state = initialState, action) => {
         loading: true,
       };
 
+    case JOIN_PROFILE_TO_COMPANY:
+    case REMOVE_PROFILE_FROM_COMPANY:
+      return {
+        ...state,
+        loading: false,
+      };
     case ERROR_COMPANY:
       return {
         ...state,

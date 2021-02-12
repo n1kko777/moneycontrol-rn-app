@@ -11,33 +11,36 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const renderItemIcon = useCallback((item, style) => {
-    delete style.tintColor;
-    return item.image !== null ? (
-      <Avatar
-        style={{
-          ...style,
-          width: 30,
-          height: 30,
-        }}
-        source={{
-          uri: item.image,
-        }}
-      />
-    ) : (
-      <ProfileIcon
-        fill={
-          kittenTheme[
-            `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ]
-        }
-        style={{
-          width: 30,
-          height: 30,
-        }}
-      />
-    );
-  }, []);
+  const renderItemIcon = useCallback(
+    (item, style) => {
+      delete style.tintColor;
+      return item.image !== null ? (
+        <Avatar
+          style={{
+            ...style,
+            width: 30,
+            height: 30,
+          }}
+          source={{
+            uri: item.image,
+          }}
+        />
+      ) : (
+        <ProfileIcon
+          fill={
+            kittenTheme[
+              `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ]
+          }
+          style={{
+            width: 30,
+            height: 30,
+          }}
+        />
+      );
+    },
+    [item, themeContext]
+  );
 
   const renderItemAccessory = (balance) => (
     <Text category="s1">{`${splitToDigits(balance)} ₽`}</Text>
