@@ -144,6 +144,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
               caption={
                 isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
               }
+              selectTextOnFocus
             />
             <AccountSelector
               selectedId={selectedFromAccountId}
