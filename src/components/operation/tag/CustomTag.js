@@ -7,7 +7,7 @@ const RefCustomSearchWithSelect = React.forwardRef((props, ref) => {
   return <CustomSearchWithSelect {...props} forwardedRef={ref} />;
 });
 
-export const CustomTag = memo(({ tagData, tagList, setTagList }) => {
+export const CustomTag = memo(({ tagData, tagList, setTagList, placeholder = 'Укажите теги' }) => {
   const dispatch = useDispatch();
   const tagInput = React.useRef(null);
 
@@ -42,7 +42,7 @@ export const CustomTag = memo(({ tagData, tagList, setTagList }) => {
       datasets={tagData}
       dataList={tagList}
       setDataList={setTagList}
-      placeholder="Укажите теги"
+      placeholder={placeholder}
       enableCreate={true}
       onIconPress={addTag}
       onSubmitEditing={addTag}

@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useState, useMemo, useEffect } from "react";
 import { StyleSheet, ScrollView, View } from "react-native";
 import { Autocomplete, Layout } from "@ui-kitten/components";
 import { CustomSearchWithSelectItem } from "./CustomSearchWithSelectItem";
@@ -7,8 +7,8 @@ import { AddSmallIcon } from "../../themes/icons";
 
 export const CustomSearchWithSelect = memo(
   ({ datasets = [], dataList, setDataList, enableCreate, ...props }) => {
-    const [value, setValue] = React.useState("");
-    const [data, setData] = React.useState(datasets);
+    const [value, setValue] = useState("");
+    const [data, setData] = useState(datasets);
 
     const onChangeText = useCallback(
       (query) => {
@@ -40,7 +40,7 @@ export const CustomSearchWithSelect = memo(
       [dataList]
     );
 
-    const memoDataList = React.useMemo(
+    const memoDataList = useMemo(
       () =>
         dataList.map((el) => (
           <CustomSearchWithSelectItem
@@ -52,7 +52,7 @@ export const CustomSearchWithSelect = memo(
       [dataList]
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (dataList.length) {
         setValue("");
         setData(
@@ -78,9 +78,11 @@ export const CustomSearchWithSelect = memo(
           ref={props.forwardedRef}
           {...props}
         />
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.view}>{memoDataList}</View>
-        </ScrollView>
+        {memoDataList.length ? (
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.view}>{memoDataList}</View>
+          </ScrollView>
+        ) : null}
       </Layout>
     );
   }
