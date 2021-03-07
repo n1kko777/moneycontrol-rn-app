@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\" && expo start"
+    "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\" && expo start --ios"
   },
   "dependencies": {
     "@eva-design/eva": "^1.4.0",

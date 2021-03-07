@@ -53,7 +53,22 @@ export default (error, ERROR_TYPE) => (dispatch) => {
     payload: error,
   });
 
-  Alert.alert(errorObject.title, errorObject.message, [{ text: "Закрыть" }], {
-    cancelable: false,
-  });
+  Alert.alert(
+    errorObject.title,
+    errorObject.message,
+    [
+      {
+        text: "Закрыть",
+        onPress: () => {
+          dispatch({
+            type: ERROR_TYPE,
+            payload: null,
+          });
+        },
+      },
+    ],
+    {
+      cancelable: false,
+    }
+  );
 };
