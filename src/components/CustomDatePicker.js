@@ -21,6 +21,7 @@ import { dateService } from "../dateService";
 export const CustomDatePicker = memo(() => {
   const dispatch = useDispatch();
   const { startDate, endDate } = useSelector((store) => store.calendar);
+  const profile = useSelector((store) => store.profile.profile);
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -52,6 +53,11 @@ export const CustomDatePicker = memo(() => {
     onModalClose();
   }, [range]);
 
+  const minDate =
+    profile !== null
+      ? new Date(profile.created)
+      : new Date(new Date().getFullYear() - 1, 0, 1);
+
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
       <Modal
@@ -76,6 +82,7 @@ export const CustomDatePicker = memo(() => {
                   dateService={dateService}
                   range={range}
                   onSelect={setRange}
+                  min={minDate}
                 />
                 <View
                   style={{
