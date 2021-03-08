@@ -1,17 +1,15 @@
-import React, { memo, useCallback } from "react";
+import React, { memo } from "react";
 import { View } from "react-native";
-import { useTheme, Layout, Button } from "@ui-kitten/components";
+import { useTheme, Layout } from "@ui-kitten/components";
 
 import {
   TeamIcon,
   CardIcon,
   CategoryIcon,
   TagIcon,
-  OperationIcon,
   OoperationIcon,
   ProfileIcon,
 } from "../themes/icons";
-import { THEME } from "../themes/themes";
 import { ThemeContext } from "../themes/theme-context";
 
 import { Toolbar } from "../components/navigation/Toolbar";
@@ -54,10 +52,6 @@ export const MenuScreen = memo(({ navigation }) => {
       icon: OoperationIcon,
     },
   ];
-
-  const navigateToReport = useCallback(() => {
-    navigation.navigate("Report");
-  }, []);
 
   return (
     <ScreenTemplate>

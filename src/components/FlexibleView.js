@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { ScrollView, Dimensions } from "react-native";
+
 const { height } = Dimensions.get("window");
 
 export const FlexibleView = memo(({ children }) => {

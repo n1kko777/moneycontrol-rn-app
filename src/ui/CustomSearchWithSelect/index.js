@@ -1,9 +1,10 @@
 import React, { memo, useCallback, useState, useMemo, useEffect } from "react";
-import { StyleSheet, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Autocomplete, Layout } from "@ui-kitten/components";
-import { CustomSearchWithSelectItem } from "./CustomSearchWithSelectItem";
 import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
+import { CustomSearchWithSelectItem } from "./CustomSearchWithSelectItem";
 import { AddSmallIcon } from "../../themes/icons";
+import styles from "./styles";
 
 export const CustomSearchWithSelect = memo(
   ({ datasets = [], dataList, setDataList, enableCreate, ...props }) => {
@@ -87,17 +88,3 @@ export const CustomSearchWithSelect = memo(
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 10,
-  },
-  scrollView: {
-    maxHeight: 108,
-    marginVertical: 10,
-  },
-  view: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-});

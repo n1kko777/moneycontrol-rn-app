@@ -10,13 +10,53 @@ import {
 
 import { useTheme, RangeCalendar, Button, Text } from "@ui-kitten/components";
 
+import { useDispatch, useSelector } from "react-redux";
 import { displayDate } from "../dispayDate";
 import { ThemeContext } from "../themes/theme-context";
 
 import { CalendarIcon } from "../themes/icons";
-import { useDispatch, useSelector } from "react-redux";
 import { setCalendar, clearCalendar } from "../store/actions/calendarAction";
 import { dateService } from "../dateService";
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+  modalView: {
+    margin: 20,
+    borderRadius: 10,
+    padding: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    width: Dimensions.get("window").width - 24,
+    maxWidth: 600,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+});
 
 export const CustomDatePicker = memo(() => {
   const dispatch = useDispatch();
@@ -37,7 +77,7 @@ export const CustomDatePicker = memo(() => {
       startDate,
       endDate,
     });
-  }, [startDate]);
+  }, [endDate, startDate]);
 
   const onModalClose = useCallback(() => {
     setModalVisible(false);
@@ -46,12 +86,12 @@ export const CustomDatePicker = memo(() => {
   const clearRangeHandler = useCallback(() => {
     dispatch(clearCalendar());
     onModalClose();
-  }, []);
+  }, [dispatch, onModalClose]);
 
   const selectRangeHandler = useCallback(() => {
     dispatch(setCalendar(range));
     onModalClose();
-  }, [range]);
+  }, [dispatch, onModalClose, range]);
 
   const minDate =
     profile !== null
@@ -63,7 +103,7 @@ export const CustomDatePicker = memo(() => {
       <Modal
         onRequestClose={onModalClose}
         animationType="slide"
-        transparent={true}
+        transparent
         visible={modalVisible}
       >
         <TouchableOpacity onPressOut={onModalClose} style={styles.centeredView}>
@@ -136,44 +176,4 @@ export const CustomDatePicker = memo(() => {
       </TouchableOpacity>
     </View>
   );
-});
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.4)",
-  },
-  modalView: {
-    margin: 20,
-    borderRadius: 10,
-    padding: 15,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    width: Dimensions.get("window").width - 24,
-    maxWidth: 600,
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
 });

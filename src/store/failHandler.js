@@ -6,9 +6,7 @@ export default (error, ERROR_TYPE) => (dispatch) => {
 
   if (error.response) {
     // The request was made and the server responded with a status code
-    const keys = [];
-
-    for (const k in error.response.data) keys.push(k);
+    const keys = [...Object.keys(error.response.data)];
 
     errorObject.title = `Код ошибки: ${error.response.status}`;
     errorObject.message =
@@ -20,7 +18,7 @@ export default (error, ERROR_TYPE) => (dispatch) => {
             .replace("\n\n", "\n")
             .replace(/^\n/, "")
             .replace(/.\n$/, ".")}`
-        : `${keys[0] === "detail" ? "" : keys.join(",") + ": "}${
+        : `${keys[0] === "detail" ? "" : `${keys.join(",")}: `}${
             error.response.data[keys[0]]
           }`;
   } else if (error.request) {

@@ -1,6 +1,7 @@
 import React, { memo, useCallback } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Text, useTheme, Icon } from "@ui-kitten/components";
+import styles from "./styles";
 
 export const CustomSearchWithSelectItem = memo(({ text, onDelete }) => {
   const kittenTheme = useTheme();
@@ -26,21 +27,4 @@ export const CustomSearchWithSelectItem = memo(({ text, onDelete }) => {
       />
     </TouchableOpacity>
   );
-});
-
-const styles = StyleSheet.create({
-  itemWrapper: {
-    flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
-    marginRight: 10,
-    marginBottom: 10,
-  },
-  iconStyle: {
-    width: 18,
-    height: 18,
-    marginTop: 3,
-    marginLeft: 5,
-  },
 });
