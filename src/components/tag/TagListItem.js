@@ -3,10 +3,9 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { ListItem, Button } from "@ui-kitten/components";
 
-import { DeleteIcon, TagIcon } from "../../themes/icons";
-
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
+import { DeleteIcon, TagIcon } from "../../themes/icons";
 import { hideTagAction } from "../../store/actions/apiAction";
 
 export const TagListItem = memo(({ item, navigation }) => {
@@ -41,7 +40,7 @@ export const TagListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, [item]);
+  }, [close, dispatch, item]);
 
   const RightAction = () => (
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
@@ -51,7 +50,7 @@ export const TagListItem = memo(({ item, navigation }) => {
     navigation.navigate("UpdateTag", {
       tag: item,
     });
-  }, [item]);
+  }, [item, navigation]);
 
   return (
     <Swipeable

@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from "react";
-import { splitToDigits } from "../../splitToDigits";
 import { Text } from "@ui-kitten/components";
 import { View } from "react-native";
+import { splitToDigits } from "../../splitToDigits";
 import {
   CardIcon,
   ExchangeIcon,
@@ -10,6 +10,7 @@ import {
   CategoryIcon,
   TagIcon,
 } from "../../themes/icons";
+
 export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
   const { name, balance, type, style: color } = item;
 
@@ -90,9 +91,11 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
               }
             />
           );
+        default:
+          return null;
       }
     },
-    [item, themeContext]
+    [kittenTheme, themeContext.theme, type]
   );
 
   return (
@@ -133,7 +136,7 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
         }}
       >
         {balance !== "" &&
-          splitToDigits(balance !== null ? balance.toString() : "0") + " ₽"}
+          `${splitToDigits(balance !== null ? balance.toString() : "0")} ₽`}
       </Text>
     </View>
   );

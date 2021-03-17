@@ -3,10 +3,9 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { ListItem, Button } from "@ui-kitten/components";
 
-import { DeleteIcon, CategoryIcon } from "../../themes/icons";
-
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
+import { DeleteIcon, CategoryIcon } from "../../themes/icons";
 import { hideCategoryAction } from "../../store/actions/apiAction";
 
 export const CategoryListItem = memo(({ item, navigation }) => {
@@ -42,7 +41,7 @@ export const CategoryListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, [item]);
+  }, [close, dispatch, item]);
 
   const RightAction = () => (
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
@@ -52,7 +51,7 @@ export const CategoryListItem = memo(({ item, navigation }) => {
     navigation.navigate("UpdateCategory", {
       category: item,
     });
-  }, [item]);
+  }, [item, navigation]);
 
   return (
     <Swipeable

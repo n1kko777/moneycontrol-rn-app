@@ -10,13 +10,12 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateTagAction } from "../../store/actions/apiAction";
-import { Keyboard } from "react-native";
 
 export const UpdateTagScreen = memo(({ route, navigation }) => {
   const { tag } = route.params;
@@ -27,7 +26,7 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
   const loader = useSelector((store) => store.api.loader);
 
@@ -44,7 +43,7 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
         )
       );
     }
-  }, [tag.id, tag_name, loader]);
+  }, [loader, dispatch, tag.id, tag_name, navigateBack]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

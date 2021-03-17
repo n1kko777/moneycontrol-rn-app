@@ -10,14 +10,13 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { createCategoryAction } from "../../store/actions/apiAction";
 import { clearCurrentCategory } from "../../store/actions/categoryAction";
-import { Keyboard } from "react-native";
 
 export const CreateCategoryScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -27,16 +26,19 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
     prevItem !== undefined ? prevItem.category_name : ""
   );
   const navigateBack = useCallback(() => {
-    prevItem === undefined && dispatch(clearCurrentCategory());
+    if (prevItem === undefined) {
+      dispatch(clearCurrentCategory());
+    }
+
     navigation.goBack(null);
-  }, [prevItem]);
+  }, [dispatch, navigation, prevItem]);
 
   const loader = useSelector((store) => store.api.loader);
 
   const onReset = useCallback(() => {
     setCategoryName("");
     navigateBack();
-  }, []);
+  }, [navigateBack]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -50,7 +52,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
         )
       );
     }
-  }, [category_name, loader]);
+  }, [category_name, dispatch, loader, onReset]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

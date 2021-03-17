@@ -4,19 +4,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Clipboard from "expo-clipboard";
 import { Layout, Button, Text, Input } from "@ui-kitten/components";
 
+import { connect } from "react-redux";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { THEME } from "../../themes/themes";
 import { hideIconPassword, showIconPassword } from "../../themes/icons";
 
-import { connect } from "react-redux";
-
 import {
   getProfileAction,
   authLoginAction,
-} from ".././../store/actions/apiAction";
+} from "../../store/actions/apiAction";
 import { APP_VERSION } from "../../store/constants";
 import { FlexibleView } from "../../components/FlexibleView";
+import LogoIcon from "../../../assets/logo.png";
 
 const LoginScreen = memo(
   ({ navigation, loader, getProfileDispatch, authLoginDispatch }) => {
@@ -27,37 +27,48 @@ const LoginScreen = memo(
 
     const copyToClipboard = useCallback(() => {
       Clipboard.setString(APP_VERSION);
-    }, [APP_VERSION]);
-
-    const navigateToScreen = useCallback((name) => {
-      Keyboard.dismiss();
-      navigation.navigate(name);
     }, []);
 
-    const onSuccess = useCallback((profile) => {
-      profile !== null
-        ? profile.company !== null
-          ? navigateToScreen("Home")
-          : navigateToScreen("CompanyManager")
-        : navigateToScreen("CreateProfile");
-    }, []);
+    const navigateToScreen = useCallback(
+      (name) => {
+        Keyboard.dismiss();
+        navigation.navigate(name);
+      },
+      [navigation]
+    );
+
+    const onSuccess = useCallback(
+      (profile) => {
+        if (profile !== null) {
+          if (profile.company !== null) {
+            navigateToScreen("Home");
+            return;
+          }
+
+          navigateToScreen("CompanyManager");
+          return;
+        }
+        navigateToScreen("CreateProfile");
+      },
+      [navigateToScreen]
+    );
 
     const isAuthHandler = useCallback(async () => {
       const token = await AsyncStorage.getItem("AUTH_TOKEN");
       if (token !== null) {
         getProfileDispatch(onSuccess);
       }
-    }, []);
+    }, [getProfileDispatch, onSuccess]);
 
     const onSubmit = useCallback(() => {
       if (!loader) {
         authLoginDispatch(email, password, isAuthHandler);
       }
-    }, [email, password, loader]);
+    }, [loader, authLoginDispatch, email, password, isAuthHandler]);
 
     useEffect(() => {
       isAuthHandler();
-    }, []);
+    }, [isAuthHandler]);
 
     return (
       <ScreenTemplate>
@@ -70,10 +81,7 @@ const LoginScreen = memo(
             }}
           >
             <View style={{ marginBottom: 50, marginTop: 70 }}>
-              <Image
-                style={{ width: 120, height: 120 }}
-                source={require("../../../assets/logo.png")}
-              />
+              <Image style={{ width: 120, height: 120 }} source={LogoIcon} />
               <TouchableOpacity
                 style={{ marginTop: 10, alignSelf: "center" }}
                 onPress={copyToClipboard}

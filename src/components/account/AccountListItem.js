@@ -3,12 +3,12 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { ListItem, Text, useTheme, Button } from "@ui-kitten/components";
 
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
 import { CardIcon, DeleteIcon } from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
-import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
 
 import { hideAccountAction } from "../../store/actions/apiAction";
 
@@ -37,7 +37,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
           ],
       }}
     >
-      {balance !== "" && splitToDigits(balance.toString()) + " ₽"}
+      {balance !== "" && `${splitToDigits(balance.toString())} ₽`}
     </Text>
   );
 
@@ -62,7 +62,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, [item]);
+  }, [close, dispatch, item]);
 
   const RightAction = () => (
     <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
@@ -72,7 +72,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
     navigation.navigate("UpdateAccount", {
       account: item,
     });
-  }, [item]);
+  }, [item, navigation]);
 
   return (
     <Swipeable

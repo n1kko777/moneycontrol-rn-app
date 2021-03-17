@@ -2,6 +2,7 @@ import React, { memo, useCallback } from "react";
 import { TopNavigationAction, OverflowMenu } from "@ui-kitten/components";
 import { Alert } from "react-native";
 
+import { useDispatch } from "react-redux";
 import { ThemeContext } from "../../themes/theme-context";
 import {
   MoreIconHorizontal,
@@ -11,7 +12,6 @@ import {
   UpdateIcon,
 } from "../../themes/icons";
 import { logout } from "../../store/actions/authAction";
-import { useDispatch } from "react-redux";
 import { getDataDispatcher } from "../../store/actions/apiAction";
 
 export const TopMenuOptions = memo(({ navigation }) => {
@@ -19,7 +19,7 @@ export const TopMenuOptions = memo(({ navigation }) => {
 
   const getData = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const themeContext = React.useContext(ThemeContext);
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -41,11 +41,28 @@ export const TopMenuOptions = memo(({ navigation }) => {
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const toggleMenu = useCallback(() => {
     setMenuVisible(!menuVisible);
   }, [menuVisible]);
+
+  const navigateLogout = useCallback(() => {
+    Alert.alert(
+      "Выход",
+      "Вы уверены, что хотите выйти из учетной записи?",
+      [
+        {
+          text: "Отмена",
+          style: "cancel",
+        },
+        { text: "Выйти", onPress: logoutHandler },
+      ],
+      {
+        cancelable: false,
+      }
+    );
+  }, [logoutHandler]);
 
   const onMenuItemSelect = useCallback(
     (index) => {
@@ -66,25 +83,8 @@ export const TopMenuOptions = memo(({ navigation }) => {
 
       setMenuVisible(false);
     },
-    [themeContext]
+    [getData, navigateLogout, themeContext]
   );
-
-  const navigateLogout = useCallback(() => {
-    Alert.alert(
-      "Выход",
-      "Вы уверены, что хотите выйти из учетной записи?",
-      [
-        {
-          text: "Отмена",
-          style: "cancel",
-        },
-        { text: "Выйти", onPress: logoutHandler },
-      ],
-      {
-        cancelable: false,
-      }
-    );
-  }, []);
 
   return (
     <OverflowMenu

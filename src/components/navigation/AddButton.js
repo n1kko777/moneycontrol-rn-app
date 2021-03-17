@@ -3,16 +3,28 @@ import { View, StyleSheet } from "react-native";
 import Animated, { interpolate } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
 
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTransition } from "react-native-redash";
 import {
   AddIcon,
   TrendingUpIcon,
   TrendingDownIcon,
   ExchangeIcon,
 } from "../../themes/icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useTransition } from "react-native-redash";
 
 import { NavButton } from "./NavButton";
+
+const styles = StyleSheet.create({
+  button: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    zIndex: 1000,
+  },
+});
 
 export const AddButton = memo(({ navigation }) => {
   const [toggled, setToggle] = React.useState(false);
@@ -22,11 +34,16 @@ export const AddButton = memo(({ navigation }) => {
     setToggle((prev) => !prev);
   }, []);
 
-  const navigateHandlePress = useCallback((navRoute = null) => {
-    toggleHandler();
+  const navigateHandlePress = useCallback(
+    (navRoute = null) => {
+      toggleHandler();
 
-    navRoute !== null && navigation.navigate(navRoute);
-  }, []);
+      if (navRoute !== null) {
+        navigation.navigate(navRoute);
+      }
+    },
+    [navigation, toggleHandler]
+  );
 
   const transition = useTransition(toggled, { duration: 150 });
   const rotate = interpolate(transition, {
@@ -119,16 +136,4 @@ export const AddButton = memo(({ navigation }) => {
       </View>
     </View>
   );
-});
-
-const styles = StyleSheet.create({
-  button: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    zIndex: 1000,
-  },
 });

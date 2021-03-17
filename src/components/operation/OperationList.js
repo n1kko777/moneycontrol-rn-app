@@ -1,8 +1,7 @@
 import React, { memo } from "react";
-import { RefreshControl, SectionList } from "react-native";
-import { OperationListItem } from "./OperationListItem";
+import { RefreshControl, SectionList, View } from "react-native";
 import { Text } from "@ui-kitten/components";
-import { View } from "react-native";
+import { OperationListItem } from "./OperationListItem";
 
 export const OperationList = memo(
   ({ navigation, dataList = [], onOperationRefresh }) => (
@@ -12,7 +11,7 @@ export const OperationList = memo(
       initialNumToRender={3}
       sections={dataList}
       keyExtractor={(item, index) => item + index}
-      nestedScrollEnabled={true}
+      nestedScrollEnabled
       renderItem={({ item }) => (
         <View style={{ marginVertical: 4 }}>
           <OperationListItem item={item} navigation={navigation} />

@@ -1,12 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  memo,
-  useMemo,
-  useCallback,
-} from "react";
-import { FlexibleView } from "../../components/FlexibleView";
+import React, { useState, useRef, useEffect, memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,8 +9,9 @@ import {
   Button,
 } from "@ui-kitten/components";
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { View } from "react-native";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { FlexibleView } from "../../components/FlexibleView";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
@@ -31,12 +24,12 @@ export const ResetPassword = memo(({ navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
   const onReset = useCallback(() => {
     setEmail("");
     navigateBack();
-  }, []);
+  }, [navigateBack]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -49,7 +42,7 @@ export const ResetPassword = memo(({ navigation }) => {
         )
       );
     }
-  }, [email, loader]);
+  }, [dispatch, email, loader, onReset]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

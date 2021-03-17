@@ -40,7 +40,7 @@ const operationTypeData = [
 const initialState = {
   homeListData: [],
   operationListData: [],
-  operationTypeData: operationTypeData,
+  operationTypeData,
   profileData: null,
   filterParams: null,
   totalBalance: 0,

@@ -1,11 +1,11 @@
 import React, { memo, useCallback } from "react";
 import { View } from "react-native";
+import { Layout, Input, Button } from "@ui-kitten/components";
+import { useDispatch, useSelector } from "react-redux";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { BackIcon } from "../../themes/icons";
-import { Layout, Input, Button } from "@ui-kitten/components";
 import { THEME } from "../../themes/themes";
-import { useDispatch, useSelector } from "react-redux";
 import {
   joinProfileToCompanyAction,
   getDataDispatcher,
@@ -26,7 +26,7 @@ export const InviteMemberScreen = memo(({ navigation }) => {
     setProfileId("");
     setProfilePhone("");
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -34,7 +34,7 @@ export const InviteMemberScreen = memo(({ navigation }) => {
         joinProfileToCompanyAction({ profile_id, profile_phone }, onSuccess)
       );
     }
-  }, [profile_id, profile_phone, loader]);
+  }, [loader, dispatch, profile_id, profile_phone, onSuccess]);
 
   const inputRef = React.useRef(null);
 
@@ -94,10 +94,7 @@ export const InviteMemberScreen = memo(({ navigation }) => {
               borderRadius: THEME.BUTTON_RADIUS,
             }}
             onPress={onSubmit}
-            disabled={
-              (!isNotProfileIdEmpty ? true : false) ||
-              (!isNotProfilePhoneEmpty ? true : false)
-            }
+            disabled={!isNotProfileIdEmpty || !isNotProfilePhoneEmpty}
           >
             Добавить сотрудника
           </Button>

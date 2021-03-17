@@ -107,15 +107,14 @@ export const getDataDispatcher = (navigation) => async (dispatch, getState) => {
   dispatch(endLoader());
 };
 
-export const getProfileAction = (onSuccess) => async (dispatch, getState) => {
+export const getProfileAction = (onSuccess) => async (dispatch) => {
   dispatch(startLoader());
   await Promise.all([dispatch(getProfile(onSuccess))]);
   dispatch(endLoader());
 };
 
 export const getOperationAction = (params = null, onSuccess) => async (
-  dispatch,
-  getState
+  dispatch
 ) => {
   dispatch(startLoader());
   await Promise.all([dispatch(generateOperationData(params, onSuccess))]);
@@ -144,7 +143,7 @@ export const createProfileAction = (newItem, onSuccess) => async (
   dispatch(startLoader());
   await Promise.all([dispatch(createProfile(newItem))]);
 
-  const profile = getState().profile;
+  const { profile } = getState();
   if (profile.error === null) {
     await Promise.all([onSuccess(profile.profile)]);
   }
@@ -384,6 +383,8 @@ const helperOperation = ({ type, id }) => {
 
     case "transfer":
       return hideTransfer(id);
+    default:
+      return null;
   }
 };
 

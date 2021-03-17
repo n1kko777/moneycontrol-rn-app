@@ -25,8 +25,8 @@ import { clearCurrentCategory } from "../../store/actions/categoryAction";
 export const CreateTransactionScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
-  const store = useSelector((store) => store);
-  const loader = store.api.loader;
+  const store = useSelector((elStore) => elStore);
+  const { loader } = store.api;
 
   const currentAccount = store.account.current;
   const currentCateory = store.category.current;
@@ -70,6 +70,16 @@ export const CreateTransactionScreen = memo(({ route, navigation }) => {
       : []
   );
 
+  const navigateBack = useCallback(() => {
+    if (currentAccount) {
+      dispatch(clearCurrentAccount());
+    }
+    if (currentCateory) {
+      dispatch(clearCurrentCategory());
+    }
+    navigation.goBack(null);
+  }, [currentAccount, currentCateory, dispatch, navigation]);
+
   const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
@@ -84,18 +94,14 @@ export const CreateTransactionScreen = memo(({ route, navigation }) => {
       dispatch(createTransactionAction(newTransaction, navigateBack));
     }
   }, [
+    loader,
     transaction_amount,
     selectedAccountId,
     selectedCategoryId,
     tagList,
-    loader,
+    dispatch,
+    navigateBack,
   ]);
-
-  const navigateBack = useCallback(() => {
-    currentAccount && dispatch(clearCurrentAccount());
-    currentCateory && dispatch(clearCurrentCategory());
-    navigation.goBack(null);
-  }, [currentAccount, currentCateory]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

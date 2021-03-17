@@ -10,14 +10,13 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { createAccountAction } from "../../store/actions/apiAction";
 import { clearCurrentAccount } from "../../store/actions/accountAction";
-import { Keyboard } from "react-native";
 
 export const CreateAccountScreen = memo(({ navigation, route }) => {
   const prevItem = route.params;
@@ -31,15 +30,17 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
   const [balance, setBalance] = React.useState("0");
 
   const navigateBack = useCallback(() => {
-    prevItem === undefined && dispatch(clearCurrentAccount());
+    if (prevItem === undefined) {
+      dispatch(clearCurrentAccount());
+    }
     navigation.goBack(null);
-  }, [prevItem]);
+  }, [dispatch, navigation, prevItem]);
 
   const onReset = useCallback(() => {
     setAccountName("");
     setBalance("");
     navigateBack();
-  }, []);
+  }, [navigateBack]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -55,7 +56,7 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
         )
       );
     }
-  }, [account_name, balance, loader]);
+  }, [account_name, balance, dispatch, loader, onReset]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

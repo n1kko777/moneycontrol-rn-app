@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useEffect, useState, useRef } from "react";
-import { FlexibleView } from "../../components/FlexibleView";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,8 +11,9 @@ import {
   Button,
 } from "@ui-kitten/components";
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { View } from "react-native";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { FlexibleView } from "../../components/FlexibleView";
 import { THEME } from "../../themes/themes";
 import {
   BackIcon,
@@ -37,7 +37,7 @@ export const RegisterScreen = memo(({ navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
   const onSuccess = useCallback(() => {
     setFirstName("");
@@ -46,7 +46,7 @@ export const RegisterScreen = memo(({ navigation }) => {
     setPassword1("");
     setPassword2("");
     navigation.navigate("Login");
-  }, []);
+  }, [navigation]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -63,7 +63,16 @@ export const RegisterScreen = memo(({ navigation }) => {
         )
       );
     }
-  }, [first_name, last_name, email, password1, password2, loader]);
+  }, [
+    loader,
+    dispatch,
+    first_name,
+    last_name,
+    email,
+    password1,
+    password2,
+    onSuccess,
+  ]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -73,9 +82,9 @@ export const RegisterScreen = memo(({ navigation }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      inputRef !== null &&
-        inputRef.current !== null &&
+      if (inputRef !== null && inputRef.current !== null) {
         inputRef.current.focus();
+      }
     }, 100);
   }, []);
 
@@ -163,8 +172,8 @@ export const RegisterScreen = memo(({ navigation }) => {
                 opacity: 0.7,
               }}
             >
-              Нажав кнопку "Зарегистрироваться", я соглашаюсь с условиями
-              предоставления услуг и политикой конфиденциальности
+              Нажав кнопку &quot;Зарегистрироваться&quot;, я соглашаюсь с
+              условиями предоставления услуг и политикой конфиденциальности
             </Text>
           </View>
         </Layout>

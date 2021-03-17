@@ -9,7 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import "moment/locale/ru";
-moment.locale("ru");
 
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -21,16 +20,24 @@ import { getOperationAction } from "../../store/actions/apiAction";
 import { clearCalendar } from "../../store/actions/calendarAction";
 import { CustomSearchWithSelect } from "../../ui/CustomSearchWithSelect";
 
+moment.locale("ru");
+
 const viewStyles = { marginHorizontal: 8 };
+
+const styles = StyleSheet.create({
+  flexOne: {
+    flex: 1,
+  },
+});
 
 export const FilterOperationScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const goBack = () => navigation.goBack();
+  const goBack = useCallback(() => navigation.goBack(), [navigation]);
 
-  const store = useSelector((store) => store);
+  const store = useSelector((elStore) => elStore);
 
   const { profile } = store.profile;
   const { company } = store.company;
@@ -41,34 +48,38 @@ export const FilterOperationScreen = memo(({ navigation }) => {
 
   const profileData = initProfileData.map((elem, index) => ({
     index,
-    text: getShortName(elem.first_name + " " + elem.last_name),
-    title: getShortName(elem.first_name + " " + elem.last_name),
+    text: getShortName(`${elem.first_name} ${elem.last_name}`),
+    title: getShortName(`${elem.first_name} ${elem.last_name}`),
     id: elem.id,
     is_admin: elem.is_admin,
   }));
 
-  const [profileList, setProfileList] = React.useState(
-    filterParams !== null
-      ? [...filterParams.profile]
-      : profileData.find((prof) => prof.id === profile.id)
-      ? [profileData.find((prof) => prof.id === profile.id)]
-      : []
-  );
+  const initProfileList = useCallback(() => {
+    if (filterParams !== null) {
+      return [...filterParams.profile];
+    }
+    if (profileData.find((prof) => prof.id === profile.id)) {
+      return [profileData.find((prof) => prof.id === profile.id)];
+    }
+    return [];
+  }, [filterParams, profile.id, profileData]);
 
-  const { accounts } = useSelector((store) => store.account);
+  const [profileList, setProfileList] = React.useState(initProfileList());
+
+  const { accounts } = useSelector((elStore) => elStore.account);
 
   const accountData = []
     .concat(
       ...profileList.map((selProf) =>
-        accounts.filter((acc) => acc.profile == selProf.id)
+        accounts.filter((acc) => acc.profile === selProf.id)
       )
     )
     .map((elem, index) => {
       const textTitle =
-        profileList.length == 1
+        profileList.length === 1
           ? `${elem.account_name}`
           : `${elem.account_name} (${
-              profileData.find((prof) => elem.profile == prof.id).text
+              profileData.find((prof) => elem.profile === prof.id).text
             })`;
 
       return {
@@ -85,7 +96,7 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     filterParams !== null ? [...filterParams.account] : []
   );
 
-  const { categories } = useSelector((store) => store.category);
+  const { categories } = useSelector((elStore) => elStore.category);
 
   const categoryData = categories.map((elem, index) => ({
     index,
@@ -98,7 +109,7 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     filterParams !== null ? [...filterParams.category] : []
   );
 
-  const { tags } = useSelector((store) => store.tag);
+  const { tags } = useSelector((elStore) => elStore.tag);
 
   const tagData = tags.map((elem, index) => ({
     index,
@@ -136,7 +147,15 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     };
 
     dispatch(getOperationAction(selectedFilters, goBack));
-  }, [profileList, accountList, categoryList, tagList, operationTypeList]);
+  }, [
+    profileList,
+    accountList,
+    categoryList,
+    tagList,
+    operationTypeList,
+    dispatch,
+    goBack,
+  ]);
 
   const mainLayoutStyles = {
     ...styles.flexOne,
@@ -237,10 +256,4 @@ export const FilterOperationScreen = memo(({ navigation }) => {
       </Layout>
     </ScreenTemplate>
   );
-});
-
-const styles = StyleSheet.create({
-  flexOne: {
-    flex: 1,
-  },
 });

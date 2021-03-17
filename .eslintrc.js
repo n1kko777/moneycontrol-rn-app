@@ -33,6 +33,7 @@ module.exports = {
     "react/prop-types": "off",
     "no-param-reassign": "off",
     "no-console": "off",
+    camelcase: "off",
     "linebreak-style": "off",
     "no-unused-vars": "warn",
     "react/require-default-props": "off",

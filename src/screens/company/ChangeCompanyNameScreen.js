@@ -10,13 +10,12 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateCompanyAction } from "../../store/actions/apiAction";
-import { Keyboard } from "react-native";
 
 export const ChangeCompanyNameScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -29,13 +28,13 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
   const loader = useSelector((store) => store.api.loader);
 
   const onReset = useCallback(() => {
     navigateBack();
-  }, []);
+  }, [navigateBack]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -50,7 +49,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
         )
       );
     }
-  }, [company_name, loader]);
+  }, [companyId, company_name, dispatch, loader, onReset]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

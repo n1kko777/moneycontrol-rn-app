@@ -2,11 +2,11 @@ import React, { memo, useCallback } from "react";
 import { Layout, Text, useTheme } from "@ui-kitten/components";
 import { View } from "react-native";
 
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { AddSmallIcon, RightIcon } from "../../themes/icons";
 import { HomeCardItem } from "./HomeCardItem";
 
 import { ThemeContext } from "../../themes/theme-context";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const HomeCard = memo(({ item, navigation, isNavigate }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -14,11 +14,11 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
 
   const titleNavigationHandler = useCallback(() => {
     navigation.navigate(item.navigate);
-  }, [item]);
+  }, [item.navigate, navigation]);
 
   const navigateToAll = useCallback(() => {
     navigation.navigate(item.navigate.replace("Create", ""));
-  }, [item]);
+  }, [item.navigate, navigation]);
 
   return (
     <Layout

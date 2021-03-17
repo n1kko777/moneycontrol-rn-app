@@ -98,7 +98,7 @@ export const ProfileScreen = memo(({ navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -126,7 +126,7 @@ export const ProfileScreen = memo(({ navigation }) => {
         cancelable: false,
       }
     );
-  }, [profile]);
+  }, [dispatch, navigation, profile.id, profile.is_admin]);
 
   const DeleteProfileAction = () => (
     <TopNavigationAction icon={DeleteIcon} onPress={deleteProfileHandler} />

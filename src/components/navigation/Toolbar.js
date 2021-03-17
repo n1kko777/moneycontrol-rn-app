@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { TopNavigation, TopNavigationAction } from "@ui-kitten/components";
+import { useSelector } from "react-redux";
 import { TopMenuOptions } from "./TopMenuOptions";
 import { ProfileIcon } from "../../themes/icons";
-import { useSelector } from "react-redux";
 
 export const Toolbar = memo(
   ({
@@ -33,11 +33,10 @@ export const Toolbar = memo(
           zIndex: 10,
         }}
         title={
-          title
-            ? title
-            : profile !== null && company !== null
+          title ||
+          (profile !== null && company !== null
             ? `${profile.is_admin ? "⭐️ " : ""}${company.company_name}`
-            : ""
+            : "")
         }
         alignment="center"
         leftControl={renderProfileAction()}

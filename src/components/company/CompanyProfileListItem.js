@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react";
-import { getShortName } from "../../getShortName";
 import { ListItem, useTheme, Avatar, Text } from "@ui-kitten/components";
+import { getShortName } from "../../getShortName";
 import { ProfileIcon } from "../../themes/icons";
 
 import { ThemeContext } from "../../themes/theme-context";
@@ -12,9 +12,9 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   const kittenTheme = useTheme();
 
   const renderItemIcon = useCallback(
-    (item, style) => {
+    (elItem, style) => {
       delete style.tintColor;
-      return item.image !== null ? (
+      return elItem.image !== null ? (
         <Avatar
           style={{
             ...style,
@@ -22,7 +22,7 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
             height: 30,
           }}
           source={{
-            uri: item.image,
+            uri: elItem.image,
           }}
         />
       ) : (
@@ -39,7 +39,7 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
         />
       );
     },
-    [item, themeContext]
+    [kittenTheme, themeContext.theme]
   );
 
   const renderItemAccessory = (balance) => (
@@ -47,7 +47,7 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   );
   return (
     <ListItem
-      title={`${getShortName(item.first_name + " " + item.last_name)} ${
+      title={`${getShortName(`${item.first_name} ${item.last_name}`)} ${
         item.is_admin ? "⭐️" : ""
       }`}
       titleStyle={{

@@ -2,6 +2,7 @@ import React, { memo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout, Button } from "@ui-kitten/components";
+import { View } from "react-native";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -9,7 +10,6 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { EditIcon, ProfileIcon } from "../../themes/icons";
 import { getDataDispatcher } from "../../store/actions/apiAction";
@@ -19,34 +19,52 @@ export const TeamsScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((store) => store);
+  const store = useSelector((elStore) => elStore);
   const { profile } = store.profile;
   const { accounts } = store.account;
   const { company } = store.company;
 
-  const companyProfileListData =
-    company !== null && company.hasOwnProperty("profiles")
-      ? profile !== null && profile.is_admin
-        ? company.profiles.map((elem) => ({
+  const companyProfileListData = useCallback(() => {
+    const innerListData = () => {
+      if (company !== null && "profiles" in company) {
+        if (profile !== null && profile.is_admin) {
+          return company.profiles.map((elem) => ({
             ...elem,
             balance: accounts
-              .filter((acc) => acc.profile == elem.id)
-              .reduce((sum, next) => (sum += +next.balance), 0),
-          }))
-        : company.profiles
-      : [];
+              .filter((acc) => acc.profile === elem.id)
+              .reduce((sum, next) => sum + +next.balance, 0),
+          }));
+        }
+        return company.profiles;
+      }
+      return [];
+    };
+
+    return innerListData().sort((a, b) => {
+      if (a.is_admin === b.is_admin) {
+        return 0;
+      }
+      if (a.is_admin) {
+        return -1;
+      }
+
+      return 1;
+    });
+  }, [accounts, company, profile]);
+
+  const companyList = companyProfileListData();
 
   const onCompanyRefresh = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const inviteToTeam = useCallback(() => {
     navigation.navigate("InviteMember");
-  }, []);
+  }, [navigation]);
 
   const onEditCompanyName = useCallback(() => {
     navigation.navigate("ChangeCompanyName");
-  }, []);
+  }, [navigation]);
 
   return (
     <ScreenTemplate>
@@ -99,9 +117,7 @@ export const TeamsScreen = memo(({ navigation }) => {
         >
           <CompanyProfileList
             onCompanyRefresh={onCompanyRefresh}
-            dataList={companyProfileListData.sort((a, b) =>
-              a.is_admin === b.is_admin ? 0 : a.is_admin ? -1 : 1
-            )}
+            dataList={companyList}
             navigation={navigation}
           />
         </Layout>

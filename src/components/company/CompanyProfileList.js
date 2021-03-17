@@ -10,13 +10,16 @@ export const CompanyProfileList = memo(
 
     const dispatch = useDispatch();
 
-    const onNavigateHandler = useCallback((item) => {
-      dispatch(getProfileListData(item.id)).then(() => {
-        navigation.navigate("CompanyMember", {
-          profile: item,
+    const onNavigateHandler = useCallback(
+      (item) => {
+        dispatch(getProfileListData(item.id)).then(() => {
+          navigation.navigate("CompanyMember", {
+            profile: item,
+          });
         });
-      });
-    }, []);
+      },
+      [dispatch, navigation]
+    );
 
     const renderItem = ({ item }) => (
       <CompanyProfileListItem onClick={onNavigateHandler} item={item} />

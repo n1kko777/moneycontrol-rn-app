@@ -14,18 +14,22 @@ import {
 import { endpointAPI } from "../constants";
 import failHandler from "../failHandler";
 
+// Set loading to true
+export const setLoading = () => ({
+  type: LOADING_COMPANY,
+});
+
 // Get company from server
 export const getCompany = () => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
       .get(`${endpointAPI}/company/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then((res) => {
@@ -42,14 +46,14 @@ export const getCompany = () => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_COMPANY));
+    return Promise.reject();
   }
 };
 
 // Create company from server
 export const createCompany = (company) => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -61,16 +65,16 @@ export const createCompany = (company) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
       .then((res) => {
-        const company = res.data;
+        const resCompany = res.data;
 
         dispatch({
           type: CREATE_COMPANY,
-          payload: company,
+          payload: resCompany,
         });
       })
 
@@ -79,13 +83,13 @@ export const createCompany = (company) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_COMPANY));
+    return Promise.reject();
   }
 };
 // Update company from server
 export const updateCompany = (company) => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -97,16 +101,16 @@ export const updateCompany = (company) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
       .then((res) => {
-        const company = res.data;
+        const resCompany = res.data;
 
         dispatch({
           type: UPDATE_COMPANY,
-          payload: company,
+          payload: resCompany,
         });
       })
       .catch((error) => {
@@ -114,21 +118,16 @@ export const updateCompany = (company) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_COMPANY));
+    return Promise.reject();
   }
 };
-
-// Set loading to true
-export const setLoading = () => ({
-  type: LOADING_COMPANY,
-});
 
 // Invite Profile To Company
 export const joinProfileToCompany = (profile_id, profile_phone) => async (
   dispatch
 ) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -141,7 +140,7 @@ export const joinProfileToCompany = (profile_id, profile_phone) => async (
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
@@ -159,6 +158,7 @@ export const joinProfileToCompany = (profile_id, profile_phone) => async (
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_COMPANY));
+    return Promise.reject();
   }
 };
 
@@ -167,6 +167,7 @@ export const removeProfileFromCompany = (profile_id, profile_phone) => async (
   dispatch
 ) => {
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -179,7 +180,7 @@ export const removeProfileFromCompany = (profile_id, profile_phone) => async (
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
@@ -197,5 +198,6 @@ export const removeProfileFromCompany = (profile_id, profile_phone) => async (
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_COMPANY));
+    return Promise.reject();
   }
 };

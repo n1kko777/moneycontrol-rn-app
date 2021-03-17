@@ -1,5 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 import {
   REGISTER_SUCCESS,
   AUTH_START,
@@ -22,7 +23,6 @@ import {
 } from "../types";
 
 import { url } from "../constants";
-import { Alert } from "react-native";
 import failHandler from "../failHandler";
 
 export const authStart = () => (dispatch) => {
@@ -110,13 +110,12 @@ export const logout = (navigation) => async (dispatch) => {
 };
 
 export const authLogin = (email, password) => async (dispatch) => {
-  dispatch(authStart());
-
   try {
+    dispatch(authStart());
     return axios
       .post(`${url}/dj-rest-auth/login/`, {
-        email: email,
-        password: password,
+        email,
+        password,
       })
       .then(async (res) => {
         await dispatch(authSuccess(res.data));
@@ -126,6 +125,7 @@ export const authLogin = (email, password) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, AUTH_FAIL));
+    return Promise.reject();
   }
 };
 
@@ -136,8 +136,8 @@ export const authSignUp = ({
   password1,
   password2,
 }) => async (dispatch) => {
-  dispatch(authStart());
   try {
+    dispatch(authStart());
     return axios
       .post(`${url}/dj-rest-auth/registration/`, {
         first_name,
@@ -161,12 +161,13 @@ export const authSignUp = ({
       });
   } catch (error) {
     dispatch(failHandler(error, AUTH_FAIL));
+    return Promise.reject();
   }
 };
 
 export const resetPass = ({ email }, onSuccess) => async (dispatch) => {
-  dispatch(authStart());
   try {
+    dispatch(authStart());
     return axios
       .post(`${url}/dj-rest-auth/password/reset/`, {
         email,
@@ -184,5 +185,6 @@ export const resetPass = ({ email }, onSuccess) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, AUTH_FAIL));
+    return Promise.reject();
   }
 };

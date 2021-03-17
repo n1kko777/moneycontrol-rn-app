@@ -10,13 +10,12 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateAccountAction } from "../../store/actions/apiAction";
-import { Keyboard } from "react-native";
 
 export const UpdateAccountScreen = memo(({ route, navigation }) => {
   const { account } = route.params;
@@ -28,7 +27,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
   const loader = useSelector((store) => store.api.loader);
 
@@ -46,7 +45,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
         )
       );
     }
-  }, [account.id, account_name, balance, loader]);
+  }, [account.id, account_name, balance, dispatch, loader, navigateBack]);
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />

@@ -2,6 +2,7 @@ import React, { memo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout } from "@ui-kitten/components";
+import { View } from "react-native";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -9,7 +10,6 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 
 import { OperationList } from "../../components/operation/OperationList";
-import { View } from "react-native";
 
 import { getDataDispatcher } from "../../store/actions/apiAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
@@ -21,17 +21,17 @@ export const OperationsScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((store) => store);
+  const store = useSelector((elStore) => elStore);
 
   const { operationListData, filterParams } = store.layout;
 
   const navigateFilter = useCallback(() => {
     navigation.navigate("FilterOperation");
-  }, []);
+  }, [navigation]);
 
   const onRefreshHandler = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   return (
     <ScreenTemplate>

@@ -31,14 +31,14 @@ export const CustomSearchWithSelect = memo(
           data.find((el) => el.title === title),
         ]);
       },
-      [data]
+      [data, onChangeText, setDataList]
     );
 
     const onDelete = useCallback(
       (text) => {
         setDataList(dataList.filter((el) => el.title !== text));
       },
-      [dataList]
+      [dataList, setDataList]
     );
 
     const memoDataList = useMemo(
@@ -50,7 +50,7 @@ export const CustomSearchWithSelect = memo(
             onDelete={onDelete}
           />
         )),
-      [dataList]
+      [dataList, onDelete]
     );
 
     useEffect(() => {
@@ -62,7 +62,7 @@ export const CustomSearchWithSelect = memo(
           )
         );
       }
-    }, [dataList]);
+    }, [dataList, datasets]);
 
     const isCreateIcon =
       Boolean(enableCreate) && value.trim().length !== 0 ? AddSmallIcon : null;

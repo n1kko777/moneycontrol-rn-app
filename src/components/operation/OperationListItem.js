@@ -22,7 +22,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((store) => store);
+  const store = useSelector((elStore) => elStore);
   const { accounts } = store.account;
   const { categories } = store.category;
   const { tags } = store.tag;
@@ -48,7 +48,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, [item]);
+  }, [close, dispatch, item]);
 
   const copyHandler = useCallback(() => {
     close();
@@ -73,7 +73,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
       default:
         break;
     }
-  }, [item]);
+  }, [accounts, close, item, navigation]);
 
   const LeftAction = () => (
     <Button onPress={copyHandler} icon={CopyIcon} status="info" />
@@ -95,30 +95,32 @@ export const OperationListItem = memo(({ item, navigation }) => {
     </Swipeable>
   );
 
-  const renderCategory = useMemo(
-    () =>
-      item.category !== undefined
-        ? categories.find((cat) => cat.id == item.category) !== undefined
-          ? categories.find((cat) => cat.id == item.category).category_name
-          : "Удалено"
-        : "",
-    [item]
-  );
+  const renderCategory = useMemo(() => {
+    if (item.category !== undefined) {
+      if (categories.find((cat) => cat.id === item.category) !== undefined) {
+        return categories.find((cat) => cat.id === item.category).category_name;
+      }
+
+      return "Удалено";
+    }
+
+    return "";
+  }, [categories, item.category]);
 
   const renderTag = useMemo(() => {
     const tagList = (item.tags
       ? item.tags.map((elTag) =>
-          tags.find((tag) => tag.id == elTag)
-            ? "#" + tags.find((tag) => tag.id == elTag).tag_name
+          tags.find((tag) => tag.id === elTag)
+            ? `#${tags.find((tag) => tag.id === elTag).tag_name}`
             : "Удалено"
         )
       : [""]
     ).join(", ");
 
     return `${
-      tagList.length > 17 ? tagList.substring(0, 17) + "..." : tagList
+      tagList.length > 17 ? `${tagList.substring(0, 17)}...` : tagList
     }`;
-  }, [item]);
+  }, [item.tags, tags]);
 
   return (
     <WrapperComponent>
@@ -158,7 +160,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
               }}
             >
               {item.balance !== "" &&
-                splitToDigits(item.balance.toString()) + " ₽"}
+                `${splitToDigits(item.balance.toString())} ₽`}
             </Text>
           </Layout>
           <Layout

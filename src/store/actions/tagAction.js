@@ -13,18 +13,22 @@ import {
 import { endpointAPI } from "../constants";
 import failHandler from "../failHandler";
 
+// Set loading to true
+export const setLoading = () => ({
+  type: LOADING_TAG,
+});
+
 // Get tag from server
 export const getTag = () => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
       .get(`${endpointAPI}/tag/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then((res) => {
@@ -41,6 +45,7 @@ export const getTag = () => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TAG));
+    return Promise.reject();
   }
 };
 
@@ -59,20 +64,20 @@ export const createTag = (tag) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
       .then((res) => {
-        const tag = res.data;
+        const resTag = res.data;
 
-        if (tag["last_updated"] === undefined) {
-          tag["last_updated"] = moment();
+        if (resTag.last_updated === undefined) {
+          resTag.last_updated = moment();
         }
 
         dispatch({
           type: CREATE_TAG,
-          payload: tag,
+          payload: resTag,
         });
       })
 
@@ -81,6 +86,7 @@ export const createTag = (tag) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TAG));
+    return Promise.reject();
   }
 };
 
@@ -99,15 +105,15 @@ export const updateTag = ({ id, tag_name }) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
       .then((res) => {
         const updatedTag = res.data;
 
-        if (updatedTag["last_updated"] === undefined) {
-          updatedTag["last_updated"] = moment();
+        if (updatedTag.last_updated === undefined) {
+          updatedTag.last_updated = moment();
         }
 
         dispatch({
@@ -121,6 +127,7 @@ export const updateTag = ({ id, tag_name }) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TAG));
+    return Promise.reject();
   }
 };
 
@@ -134,7 +141,7 @@ export const hideTag = (tag) => async (dispatch) => {
       .delete(`${endpointAPI}/tag/${tag.id}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then(() => {
@@ -149,10 +156,6 @@ export const hideTag = (tag) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TAG));
+    return Promise.reject();
   }
 };
-
-// Set loading to true
-export const setLoading = () => ({
-  type: LOADING_TAG,
-});

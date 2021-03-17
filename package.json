@@ -7,14 +7,22 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\" && expo start --ios",
-    "lint": "eslint src/**/*.js",
     "test": "lint-staged",
     "prepare": "husky install",
-    "relock": "rm -rf node_modules && rm package-lock.json && npm install --legacy-peer-deps"
+    "relock": "rm -rf node_modules && rm package-lock.json && npm install --legacy-peer-deps",
+    "lint": "eslint src/",
+    "lint:write": "eslint src/ --fix",
+    "prettier": "prettier --write src/**/*.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix --max-warnings 0"
+    "*.(js|jsx)": [
+      "npm run lint:write",
+      "git add"
     ]
   },
   "dependencies": {

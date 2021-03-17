@@ -20,7 +20,7 @@ export const CategoryList = memo(({ navigation }) => {
         marginTop: 15,
       }}
       ListFooterComponent={
-        <View style={{ marginHorizontal: 16, marginTop: 30 }}></View>
+        <View style={{ marginHorizontal: 16, marginTop: 30 }} />
       }
       ListFooterComponentStyle={{ paddingBottom: 30 }}
       keyExtractor={keyExtractor}

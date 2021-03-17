@@ -35,9 +35,12 @@ export const CreateProfileScreen = memo(({ navigation }) => {
 
   const loader = useSelector((store) => store.api.loader);
 
-  const onSuccess = useCallback((profile) => {
-    navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
-  }, []);
+  const onSuccess = useCallback(
+    (profile) => {
+      navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
+    },
+    [navigation]
+  );
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -48,11 +51,11 @@ export const CreateProfileScreen = memo(({ navigation }) => {
       };
       dispatch(createProfileAction(newProfile, onSuccess));
     }
-  }, [first_name, last_name, phone, loader]);
+  }, [loader, first_name, last_name, phone, dispatch, onSuccess]);
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const navigateLogout = useCallback(() => {
     Alert.alert(
@@ -69,7 +72,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
         cancelable: false,
       }
     );
-  }, []);
+  }, [logoutHandler]);
 
   const BackAction = () => (
     <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
