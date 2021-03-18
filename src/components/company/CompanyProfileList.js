@@ -6,7 +6,7 @@ import { CompanyProfileListItem } from "./CompanyProfileListItem";
 
 export const CompanyProfileList = memo(
   ({ dataList, onCompanyRefresh, navigation }) => {
-    const keyExtractor = (item) => item.id.toString();
+    const keyExtractor = useCallback((item) => item.id.toString(), []);
 
     const dispatch = useDispatch();
 
@@ -21,8 +21,11 @@ export const CompanyProfileList = memo(
       [dispatch, navigation]
     );
 
-    const renderItem = ({ item }) => (
-      <CompanyProfileListItem onClick={onNavigateHandler} item={item} />
+    const renderItem = useCallback(
+      ({ item }) => (
+        <CompanyProfileListItem onClick={onNavigateHandler} item={item} />
+      ),
+      [onNavigateHandler]
     );
 
     return (

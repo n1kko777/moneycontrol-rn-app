@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
@@ -8,15 +8,11 @@ export const TagList = memo(({ navigation }) => {
   const { tags } = useSelector((store) => store.tag);
   const dataList = tags;
 
-  const keyExtractor = (item) => item.id.toString();
+  const keyExtractor = useCallback((item) => item.id.toString(), []);
 
-  const renderItem = ({ item, index }) => (
-    <TagListItem
-      navigation={navigation}
-      item={item}
-      index={index}
-      dataList={dataList}
-    />
+  const renderItem = useCallback(
+    ({ item }) => <TagListItem item={item} navigation={navigation} />,
+    [navigation]
   );
 
   return (

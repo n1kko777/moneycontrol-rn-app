@@ -37,7 +37,7 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
     getPermissionAsync();
   }, [getPermissionAsync]);
 
-  const pickImage = async () => {
+  const pickImage = useCallback(async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -49,11 +49,29 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
         setImageUrl(result.uri);
       }
     } catch (E) {
-      console.log(E);
+      Alert.alert(
+        "Произошла ошибка",
+        "Что-то пошло не так, попробуйте еще раз.",
+        [
+          {
+            text: "Отмена",
+            style: "cancel",
+          },
+          {
+            text: "Повторить",
+            onPress: () => {
+              pickImage();
+            },
+          },
+        ],
+        {
+          cancelable: false,
+        }
+      );
     }
-  };
+  }, [setImageUrl]);
 
-  const clearImage = () => {
+  const clearImage = useCallback(() => {
     if (imageUrl !== null) {
       Alert.alert(
         "Удаление аватар",
@@ -75,11 +93,11 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
         }
       );
     }
-  };
+  }, [imageUrl, setImageUrl]);
 
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
-      <TouchableOpacity onPress={clearImage}>
+      <TouchableOpacity onPress={clearImage} disabled={!isEdit}>
         <Image
           source={
             imageUrl !== null
