@@ -3,12 +3,12 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { ListItem, Text, useTheme, Button } from "@ui-kitten/components";
 
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
 import { CardIcon, DeleteIcon } from "../../themes/icons";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
-import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
 
 import { hideAccountAction } from "../../store/actions/apiAction";
 
@@ -24,21 +24,24 @@ export const AccountListItem = memo(({ item, navigation }) => {
     swipeableRow.current.close();
   }, [swipeableRow]);
 
-  const renderIconItem = (style) => <CardIcon {...style} />;
-  const renderItemAccessory = ({ balance, style }) => (
-    <Text
-      style={{
-        fontSize: 16,
-        color:
-          kittenTheme[
-            style !== undefined
-              ? style
-              : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ],
-      }}
-    >
-      {balance !== "" && splitToDigits(balance.toString()) + " ₽"}
-    </Text>
+  const renderIconItem = useCallback((style) => <CardIcon {...style} />, []);
+  const renderItemAccessory = useCallback(
+    ({ balance, style }) => (
+      <Text
+        style={{
+          fontSize: 16,
+          color:
+            kittenTheme[
+              style !== undefined
+                ? style
+                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ],
+        }}
+      >
+        {balance !== "" && `${splitToDigits(balance.toString())} ₽`}
+      </Text>
+    ),
+    [kittenTheme, themeContext.theme]
   );
 
   const deleteHandler = useCallback(() => {
@@ -62,17 +65,18 @@ export const AccountListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, [item]);
+  }, [close, dispatch, item]);
 
-  const RightAction = () => (
-    <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
+  const RightAction = useCallback(
+    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    [deleteHandler]
   );
 
   const updateHandler = useCallback(() => {
     navigation.navigate("UpdateAccount", {
       account: item,
     });
-  }, [item]);
+  }, [item, navigation]);
 
   return (
     <Swipeable

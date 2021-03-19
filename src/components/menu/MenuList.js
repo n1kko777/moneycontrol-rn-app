@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { ListItem, useTheme } from "@ui-kitten/components";
 import { FlatList } from "react-native";
 
@@ -9,38 +9,44 @@ export const MenuList = memo(({ data }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const keyExtractor = (item) => item.title.toString();
-  const renderItemAccessory = () => (
-    <RightIcon
-      fill={
-        kittenTheme[
-          `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-        ]
-      }
-      style={{
-        width: 30,
-        height: 30,
-      }}
-    />
+  const keyExtractor = useCallback((item) => item.title.toString(), []);
+  const renderItemAccessory = useCallback(
+    () => (
+      <RightIcon
+        fill={
+          kittenTheme[
+            `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+          ]
+        }
+        style={{
+          width: 30,
+          height: 30,
+        }}
+      />
+    ),
+    [kittenTheme, themeContext.theme]
   );
 
-  const renderItem = ({ item: { title, navLink, icon } }) => (
-    <ListItem
-      key={title}
-      title={title}
-      titleStyle={{
-        fontSize: 16,
-      }}
-      descriptionStyle={{
-        fontSize: 14,
-      }}
-      onPress={navLink}
-      icon={icon}
-      accessory={renderItemAccessory}
-      style={{
-        paddingVertical: 15,
-      }}
-    />
+  const renderItem = useCallback(
+    ({ item: { title, navLink, icon } }) => (
+      <ListItem
+        key={title}
+        title={title}
+        titleStyle={{
+          fontSize: 16,
+        }}
+        descriptionStyle={{
+          fontSize: 14,
+        }}
+        onPress={navLink}
+        icon={icon}
+        accessory={renderItemAccessory}
+        style={{
+          paddingVertical: 15,
+        }}
+      />
+    ),
+    [renderItemAccessory]
   );
 
   return (

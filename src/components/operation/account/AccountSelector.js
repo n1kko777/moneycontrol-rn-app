@@ -1,20 +1,25 @@
 import React, { memo, useCallback } from "react";
 import { Autocomplete } from "@ui-kitten/components";
-import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
 import { useSelector } from "react-redux";
-import { splitToDigits } from "../../../splitToDigits";
+import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
+import { getAccountTitle } from "../../../getAccountTitle";
+import {
+  getAccounts,
+  getAccountCurrent,
+  getAccountDataList,
+} from "../../../store/selectors";
 
 export const AccountSelector = memo(
   ({ selectedId, setSelectedId, isNotEmpty, navigation }) => {
     const accountInput = React.useRef(null);
-    const { profile } = useSelector((store) => store.profile);
-    const { accounts, current } = useSelector((store) => store.account);
-    const accountData = accounts
-      .filter((elem) => elem.profile == profile.id)
-      .map((elem) => ({
-        title: `${elem.account_name} (${splitToDigits(elem.balance)} ₽)`,
-        id: elem.id,
-      }));
+
+    const accounts = useSelector(getAccounts);
+    const current = useSelector(getAccountCurrent);
+
+    const accountData = useSelector(getAccountDataList).map((elem) => ({
+      title: getAccountTitle(elem),
+      id: elem.id,
+    }));
 
     const [value, setValue] = React.useState(
       selectedId !== null
@@ -23,35 +28,40 @@ export const AccountSelector = memo(
     );
     const [data, setData] = React.useState(accountData);
 
-    const onSelect = (item) => {
-      setValue(item.title);
-      setSelectedId(item.id);
-    };
+    const onSelect = useCallback(
+      (item) => {
+        setValue(item.title);
+        setSelectedId(item.id);
+      },
+      [setSelectedId]
+    );
 
     React.useEffect(() => {
-      current !== null &&
+      if (current !== null) {
         onSelect({
-          title: `${current.account_name} (${splitToDigits(
-            current.balance
-          )} ₽)`,
+          title: getAccountTitle(current),
           id: current.id,
         });
-    }, [current]);
+      }
+    }, [current, onSelect]);
 
-    const onChangeText = (query) => {
-      setValue(query);
-      setData(
-        accountData.filter((item) =>
-          item.title.toLowerCase().includes(query.toLowerCase())
-        )
-      );
-    };
+    const onChangeText = useCallback(
+      (query) => {
+        setValue(query);
+        setData(
+          accountData.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+          )
+        );
+      },
+      [accountData]
+    );
 
     const clearInput = useCallback(() => {
       setValue("");
       setData(accountData);
       setSelectedId(null);
-    }, [accountData]);
+    }, [accountData, setSelectedId]);
 
     const addAccount = useCallback(() => {
       accountInput.current.blur();
@@ -63,7 +73,7 @@ export const AccountSelector = memo(
       } else {
         onChangeText("");
       }
-    }, [value]);
+    }, [accounts, navigation, onChangeText, onSelect, value]);
 
     return (
       <Autocomplete

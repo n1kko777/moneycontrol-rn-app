@@ -1,17 +1,14 @@
-import React, { memo, useCallback } from "react";
-import { View } from "react-native";
-import { useTheme, Layout, Button } from "@ui-kitten/components";
+import React, { memo } from "react";
+import { useTheme, Layout } from "@ui-kitten/components";
 
 import {
   TeamIcon,
   CardIcon,
   CategoryIcon,
   TagIcon,
-  OperationIcon,
   OoperationIcon,
   ProfileIcon,
 } from "../themes/icons";
-import { THEME } from "../themes/themes";
 import { ThemeContext } from "../themes/theme-context";
 
 import { Toolbar } from "../components/navigation/Toolbar";
@@ -55,10 +52,6 @@ export const MenuScreen = memo(({ navigation }) => {
     },
   ];
 
-  const navigateToReport = useCallback(() => {
-    navigation.navigate("Report");
-  }, []);
-
   return (
     <ScreenTemplate>
       <Toolbar navigation={navigation} title="Меню" />
@@ -71,21 +64,13 @@ export const MenuScreen = memo(({ navigation }) => {
             ],
         }}
       >
-        <View style={{ marginVertical: 20 }}>
-          {/* <Button
-            style={{
-              alignSelf: "center",
-              paddingHorizontal: 20,
-              borderRadius: THEME.BUTTON_RADIUS,
-            }}
-            status="info"
-            onPress={navigateToReport}
-          >
-            Сформировать отчет
-          </Button> */}
-        </View>
         <Layout
-          style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
+          style={{
+            flex: 1,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            marginTop: 40,
+          }}
         >
           <MenuList data={menuListData} />
         </Layout>

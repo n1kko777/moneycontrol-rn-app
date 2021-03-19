@@ -1,5 +1,7 @@
 import React from "react";
 import { Image } from "react-native";
+import LogoutIcon from "../assets/logout.png";
+import MoneyIcon from "../assets/ruble.png";
 
 const IconProvider = (source) => ({
   toReactElement: ({ animation, ...style }) => (
@@ -10,7 +12,7 @@ const IconProvider = (source) => ({
 export const AssetIconsPack = {
   name: "assets",
   icons: {
-    logout: IconProvider(require("../assets/logout.png")),
-    money: IconProvider(require("../assets/ruble.png")),
+    logout: IconProvider(LogoutIcon),
+    money: IconProvider(MoneyIcon),
   },
 };

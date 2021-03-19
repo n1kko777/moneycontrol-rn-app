@@ -16,9 +16,31 @@ import {
   CLEAR_FILTER_PARAMS,
 } from "../types";
 
+const operationTypeData = [
+  {
+    index: 0,
+    text: "Доход",
+    title: "Доход",
+    id: "action",
+  },
+  {
+    index: 1,
+    text: "Расход",
+    title: "Расход",
+    id: "transaction",
+  },
+  {
+    index: 2,
+    text: "Перевод",
+    title: "Перевод",
+    id: "transfer",
+  },
+];
+
 const initialState = {
   homeListData: [],
   operationListData: [],
+  operationTypeData,
   profileData: null,
   filterParams: null,
   totalBalance: 0,

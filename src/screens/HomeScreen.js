@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Layout, useTheme } from "@ui-kitten/components";
 
+import { ScrollView, View, RefreshControl } from "react-native";
 import { ThemeContext } from "../themes/theme-context";
 
 import { ScreenTemplate } from "../components/ScreenTemplate";
@@ -12,10 +13,10 @@ import { BalanceComponent } from "../components/home/BalanceComponent";
 import { HomeList } from "../components/home/HomeList";
 import { Toolbar } from "../components/navigation/Toolbar";
 
-import { ScrollView, View, RefreshControl } from "react-native";
 import { CustomDatePicker } from "../components/CustomDatePicker";
 
 import { getDataDispatcher } from "../store/actions/apiAction";
+import { getLayoutHomeListData } from "../store/selectors";
 
 export const HomeScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -23,17 +24,16 @@ export const HomeScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((store) => store);
-  const { homeListData, totalBalance } = store.layout;
+  const homeListData = useSelector(getLayoutHomeListData);
   homeListData.isNavigate = true;
 
   const refreshData = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   React.useEffect(() => {
     refreshData();
-  }, []);
+  }, [refreshData]);
 
   return (
     <ScreenTemplate>
@@ -64,7 +64,7 @@ export const HomeScreen = memo(({ navigation }) => {
         }}
       >
         <View onStartShouldSetResponder={() => true}>
-          <BalanceComponent balance={totalBalance} />
+          <BalanceComponent isBalance />
 
           <View style={{ height: 30, marginVertical: 10 }}>
             <CustomDatePicker />

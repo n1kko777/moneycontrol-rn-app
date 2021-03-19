@@ -10,10 +10,15 @@ import {
 import { endpointAPI } from "../constants";
 import failHandler from "../failHandler";
 
+// Set loading to true
+export const setLoading = () => ({
+  type: LOADING_TRANSACTION,
+});
+
 // Create transaction from server
 export const createTransaction = (transaction) => async (dispatch) => {
-  dispatch(setLoading());
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -25,7 +30,7 @@ export const createTransaction = (transaction) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
@@ -39,21 +44,21 @@ export const createTransaction = (transaction) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TRANSACTION));
+    return Promise.reject();
   }
 };
 
 // Delete transaction from server
 export const hideTransaction = (transaction) => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
       .delete(`${endpointAPI}/transaction/${transaction}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then(() => {
@@ -66,10 +71,6 @@ export const hideTransaction = (transaction) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TRANSACTION));
+    return Promise.reject();
   }
 };
-
-// Set loading to true
-export const setLoading = () => ({
-  type: LOADING_TRANSACTION,
-});

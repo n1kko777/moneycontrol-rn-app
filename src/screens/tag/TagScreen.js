@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { View } from "react-native";
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 
@@ -14,13 +14,22 @@ export const TagScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const onNavigateToHome = useCallback(() => navigation.navigate("Home"), [
+    navigation,
+  ]);
+
+  const onNavigateToCreateTag = useCallback(
+    () => navigation.navigate("CreateTag"),
+    [navigation]
+  );
+
   return (
     <ScreenTemplate>
       <Toolbar
         navigation={navigation}
         title="Теги"
         TargetIcon={BackIcon}
-        onTarget={() => navigation.navigate("Home")}
+        onTarget={onNavigateToHome}
       />
       <Layout
         style={{
@@ -39,7 +48,7 @@ export const TagScreen = memo(({ navigation }) => {
               borderRadius: THEME.BUTTON_RADIUS,
             }}
             status="info"
-            onPress={() => navigation.navigate("CreateTag")}
+            onPress={onNavigateToCreateTag}
           >
             Добавить тег
           </Button>

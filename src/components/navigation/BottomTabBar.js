@@ -20,9 +20,12 @@ export const BottomTabBar = memo(({ navigation, state }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onSelect = useCallback((index) => {
-    navigation.navigate(state.routeNames[index]);
-  }, []);
+  const onSelect = useCallback(
+    (index) => {
+      navigation.navigate(state.routeNames[index]);
+    },
+    [navigation, state.routeNames]
+  );
 
   return (
     <SafeAreaView

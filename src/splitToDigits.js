@@ -1,16 +1,16 @@
-export const splitToDigits = str => {
-  let parts = (str + "").split("."),
-    main = parts[0],
-    len = main.length,
-    output = "",
-    i = len - 1;
+export const splitToDigits = (str) => {
+  const parts = `${str}`.split(".");
+  const main = parts[0];
+  const len = main.length;
+  let output = "";
+  let i = len - 1;
 
   while (i >= 0) {
     output = main.charAt(i) + output;
     if ((len - i) % 3 === 0 && i > 0) {
-      output = " " + output;
+      output = ` ${output}`;
     }
-    --i;
+    i -= 1;
   }
 
   if (parts[1]) {
@@ -19,9 +19,12 @@ export const splitToDigits = str => {
 
   if (
     parts.length > 1 &&
-    parts[1].split("").reduce((sum, part) => (sum += part), 0) > 0
+    parts[1].split("").reduce((sum, part) => {
+      sum += part;
+      return sum;
+    }, 0) > 0
   ) {
-    output += "." + parts[1];
+    output += `.${parts[1]}`;
   }
   return output.slice(0, len + 4);
 };

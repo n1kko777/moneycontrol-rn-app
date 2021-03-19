@@ -10,10 +10,15 @@ import {
 import { endpointAPI } from "../constants";
 import failHandler from "../failHandler";
 
+// Set loading to true
+export const setLoading = () => ({
+  type: LOADING_ACTION,
+});
+
 // Create action from server
 export const createAction = (action) => async (dispatch) => {
-  dispatch(setLoading());
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -25,7 +30,7 @@ export const createAction = (action) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
@@ -40,20 +45,21 @@ export const createAction = (action) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_ACTION));
+    return Promise.reject();
   }
 };
 
 // Delete action from server
 export const hideAction = (action) => async (dispatch) => {
-  dispatch(setLoading());
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
       .delete(`${endpointAPI}/action/${action}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then(() => {
@@ -67,10 +73,6 @@ export const hideAction = (action) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_ACTION));
+    return Promise.reject();
   }
 };
-
-// Set loading to true
-export const setLoading = () => ({
-  type: LOADING_ACTION,
-});

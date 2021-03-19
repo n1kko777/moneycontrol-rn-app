@@ -1,5 +1,11 @@
-import React, { memo, useCallback, useEffect, useState, useRef } from "react";
-import { FlexibleView } from "../../components/FlexibleView";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,8 +18,9 @@ import {
   Button,
 } from "@ui-kitten/components";
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { View } from "react-native";
+import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { FlexibleView } from "../../components/FlexibleView";
 import { THEME } from "../../themes/themes";
 import {
   BackIcon,
@@ -22,10 +29,11 @@ import {
 } from "../../themes/icons";
 
 import { authSignUpAction } from "../../store/actions/apiAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const RegisterScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((store) => store.api);
+  const loader = useSelector(getApiLoading);
 
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
@@ -37,7 +45,7 @@ export const RegisterScreen = memo(({ navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
   const onSuccess = useCallback(() => {
     setFirstName("");
@@ -46,7 +54,7 @@ export const RegisterScreen = memo(({ navigation }) => {
     setPassword1("");
     setPassword2("");
     navigation.navigate("Login");
-  }, []);
+  }, [navigation]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -63,19 +71,29 @@ export const RegisterScreen = memo(({ navigation }) => {
         )
       );
     }
-  }, [first_name, last_name, email, password1, password2, loader]);
+  }, [
+    loader,
+    dispatch,
+    first_name,
+    last_name,
+    email,
+    password1,
+    password2,
+    onSuccess,
+  ]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = useRef(null);
 
   useEffect(() => {
     setTimeout(() => {
-      inputRef !== null &&
-        inputRef.current !== null &&
+      if (inputRef !== null && inputRef.current !== null) {
         inputRef.current.focus();
+      }
     }, 100);
   }, []);
 
@@ -85,7 +103,7 @@ export const RegisterScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Регистрация"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{
@@ -163,8 +181,8 @@ export const RegisterScreen = memo(({ navigation }) => {
                 opacity: 0.7,
               }}
             >
-              Нажав кнопку "Зарегистрироваться", я соглашаюсь с условиями
-              предоставления услуг и политикой конфиденциальности
+              Нажав кнопку &quot;Зарегистрироваться&quot;, я соглашаюсь с
+              условиями предоставления услуг и политикой конфиденциальности
             </Text>
           </View>
         </Layout>

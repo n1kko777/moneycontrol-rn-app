@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Alert, View } from "react-native";
 import {
   Layout,
@@ -18,6 +18,7 @@ import { LogoutIcon } from "../../themes/icons";
 
 import { createProfileAction } from "../../store/actions/apiAction";
 import { FlexibleView } from "../../components/FlexibleView";
+import { getApiLoading } from "../../store/selectors";
 
 export const CreateProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -33,11 +34,14 @@ export const CreateProfileScreen = memo(({ navigation }) => {
   const [last_name, setLastName] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
-  const onSuccess = useCallback((profile) => {
-    navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
-  }, []);
+  const onSuccess = useCallback(
+    (profile) => {
+      navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
+    },
+    [navigation]
+  );
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -48,11 +52,11 @@ export const CreateProfileScreen = memo(({ navigation }) => {
       };
       dispatch(createProfileAction(newProfile, onSuccess));
     }
-  }, [first_name, last_name, phone, loader]);
+  }, [loader, first_name, last_name, phone, dispatch, onSuccess]);
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const navigateLogout = useCallback(() => {
     Alert.alert(
@@ -69,10 +73,11 @@ export const CreateProfileScreen = memo(({ navigation }) => {
         cancelable: false,
       }
     );
-  }, []);
+  }, [logoutHandler]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />,
+    [navigateLogout]
   );
 
   return (
@@ -81,7 +86,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

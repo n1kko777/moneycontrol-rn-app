@@ -1,12 +1,32 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Layout, Text, useTheme } from "@ui-kitten/components";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { AddSmallIcon, RightIcon } from "../../themes/icons";
 import { HomeCardItem } from "./HomeCardItem";
 
 import { ThemeContext } from "../../themes/theme-context";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
+const { layoutStyle, viewStyle, otherViewStyle } = StyleSheet.create({
+  layoutStyle: {
+    borderRadius: 10,
+    marginHorizontal: 8,
+    marginTop: 15,
+    marginBottom: 30,
+    padding: 16,
+    paddingTop: 8,
+  },
+  viewStyle: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  otherViewStyle: {
+    alignSelf: "flex-start",
+    marginTop: 10,
+  },
+});
 
 export const HomeCard = memo(({ item, navigation, isNavigate }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -14,110 +34,104 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
 
   const titleNavigationHandler = useCallback(() => {
     navigation.navigate(item.navigate);
-  }, [item]);
+  }, [item.navigate, navigation]);
 
   const navigateToAll = useCallback(() => {
     navigation.navigate(item.navigate.replace("Create", ""));
-  }, [item]);
+  }, [item.navigate, navigation]);
+
+  const renderAdditionalButton = useMemo(
+    () =>
+      isNavigate && (
+        <TouchableOpacity
+          style={{
+            marginTop: 5,
+            width: 24,
+            height: 24,
+            alignItems: "center",
+            justifyContent: "center",
+            alignSelf: "center",
+          }}
+          onPress={() => titleNavigationHandler()}
+        >
+          {item.navigate !== "Operation" ? (
+            <AddSmallIcon
+              fill={
+                kittenTheme[
+                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+                ]
+              }
+              width={24}
+              height={24}
+            />
+          ) : (
+            <RightIcon
+              fill={
+                kittenTheme[
+                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+                ]
+              }
+              width={30}
+              height={30}
+            />
+          )}
+        </TouchableOpacity>
+      ),
+    [
+      isNavigate,
+      item.navigate,
+      kittenTheme,
+      themeContext.theme,
+      titleNavigationHandler,
+    ]
+  );
+
+  const memoHomeCardItem = useMemo(
+    () =>
+      item.data.length !== 0 ? (
+        item.data.map((elem) => (
+          <HomeCardItem
+            kittenTheme={kittenTheme}
+            themeContext={themeContext}
+            key={elem.last_updated}
+            item={elem}
+          />
+        ))
+      ) : (
+        <Text>Список пуст</Text>
+      ),
+    [item.data, kittenTheme, themeContext]
+  );
+
+  const renderToallItems = useMemo(
+    () =>
+      isNavigate && (
+        <TouchableOpacity onPress={navigateToAll}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              color:
+                kittenTheme[
+                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+                ],
+            }}
+          >
+            Смотреть все
+          </Text>
+        </TouchableOpacity>
+      ),
+    [isNavigate, kittenTheme, navigateToAll, themeContext.theme]
+  );
 
   return (
-    <Layout
-      style={{
-        borderRadius: 10,
-        marginHorizontal: 8,
-        marginTop: 15,
-        marginBottom: 30,
-        padding: 16,
-        paddingTop: 8,
-      }}
-    >
-      <View
-        style={{
-          justifyContent: "space-between",
-          flexDirection: "row",
-          marginBottom: 20,
-        }}
-      >
+    <Layout style={layoutStyle}>
+      <View style={viewStyle}>
         <Text category="h5">{item.title}</Text>
-        {isNavigate && (
-          <TouchableOpacity
-            style={{
-              marginTop: 5,
-              width: 24,
-              height: 24,
-              alignItems: "center",
-              justifyContent: "center",
-              alignSelf: "center",
-            }}
-            onPress={() => titleNavigationHandler()}
-          >
-            {item.navigate !== "Operation" ? (
-              <AddSmallIcon
-                fill={
-                  kittenTheme[
-                    `color-primary-${
-                      themeContext.theme === "light" ? 800 : 100
-                    }`
-                  ]
-                }
-                width={24}
-                height={24}
-              />
-            ) : (
-              <RightIcon
-                fill={
-                  kittenTheme[
-                    `color-primary-${
-                      themeContext.theme === "light" ? 800 : 100
-                    }`
-                  ]
-                }
-                width={30}
-                height={30}
-              />
-            )}
-          </TouchableOpacity>
-        )}
+        {renderAdditionalButton}
       </View>
 
-      <View>
-        {item.data.length !== 0 ? (
-          item.data.map((elem) => (
-            <HomeCardItem
-              kittenTheme={kittenTheme}
-              themeContext={themeContext}
-              key={elem.last_updated}
-              item={elem}
-            />
-          ))
-        ) : (
-          <Text>Список пуст</Text>
-        )}
-      </View>
-      <View
-        style={{
-          alignSelf: "flex-start",
-          marginTop: 10,
-        }}
-      >
-        {isNavigate && (
-          <TouchableOpacity onPress={navigateToAll}>
-            <Text
-              style={{
-                fontWeight: "bold",
-                color:
-                  kittenTheme[
-                    `color-primary-${
-                      themeContext.theme === "light" ? 800 : 100
-                    }`
-                  ],
-              }}
-            >
-              Смотреть все
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      <View>{memoHomeCardItem}</View>
+      <View style={otherViewStyle}>{renderToallItems}</View>
     </Layout>
   );
 });

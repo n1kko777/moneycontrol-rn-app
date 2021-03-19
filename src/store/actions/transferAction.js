@@ -11,10 +11,15 @@ import {
 import { endpointAPI } from "../constants";
 import failHandler from "../failHandler";
 
+// Set loading to true
+export const setLoading = () => ({
+  type: LOADING_TRANSFER,
+});
+
 // Create transfer from server
 export const createTransfer = (transfer) => async (dispatch) => {
-  dispatch(setLoading());
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -26,7 +31,7 @@ export const createTransfer = (transfer) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
@@ -40,21 +45,21 @@ export const createTransfer = (transfer) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TRANSFER));
+    return Promise.reject();
   }
 };
 
 // Delete transfer from server
 export const hideTransfer = (transfer) => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
       .delete(`${endpointAPI}/transfer/${transfer}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then(() => {
@@ -67,10 +72,6 @@ export const hideTransfer = (transfer) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_TRANSFER));
+    return Promise.reject();
   }
 };
-
-// Set loading to true
-export const setLoading = () => ({
-  type: LOADING_TRANSFER,
-});

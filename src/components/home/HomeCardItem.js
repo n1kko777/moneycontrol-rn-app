@@ -1,7 +1,7 @@
-import React, { memo, useCallback } from "react";
-import { splitToDigits } from "../../splitToDigits";
+import React, { memo, useMemo } from "react";
 import { Text } from "@ui-kitten/components";
 import { View } from "react-native";
+import { splitToDigits } from "../../splitToDigits";
 import {
   CardIcon,
   ExchangeIcon,
@@ -10,89 +10,49 @@ import {
   CategoryIcon,
   TagIcon,
 } from "../../themes/icons";
-export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
-  const { name, balance, type, style: color } = item;
 
-  const renderIconItem = useCallback(
-    (style) => {
-      switch (type) {
-        case "account":
-          return (
-            <CardIcon
-              style={{ width: 20, height: 20 }}
-              fill={
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ]
-              }
-            />
-          );
-        case "category":
-          return (
-            <CategoryIcon
-              style={{ width: 20, height: 20 }}
-              fill={
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ]
-              }
-            />
-          );
-        case "tag":
-          return (
-            <TagIcon
-              style={{ width: 20, height: 20 }}
-              fill={
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ]
-              }
-            />
-          );
-        case "action":
-          return (
-            <IncreaseIcon
-              style={{ width: 20, height: 20 }}
-              fill={
-                style
-                  ? kittenTheme[style]
-                  : kittenTheme[
-                      `color-primary-${
-                        themeContext.theme === "light" ? 800 : 100
-                      }`
-                    ]
-              }
-            />
-          );
-        case "transaction":
-          return (
-            <DecreaseIcon
-              style={{ width: 20, height: 20 }}
-              fill={
-                style
-                  ? kittenTheme[style]
-                  : kittenTheme[
-                      `color-primary-${
-                        themeContext.theme === "light" ? 800 : 100
-                      }`
-                    ]
-              }
-            />
-          );
-        case "transfer":
-          return (
-            <ExchangeIcon
-              style={{ width: 20, height: 20 }}
-              fill={
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ]
-              }
-            />
-          );
-      }
-    },
-    [item, themeContext]
+const avaiableTypes = {
+  account: CardIcon,
+  category: CategoryIcon,
+  tag: TagIcon,
+  action: IncreaseIcon,
+  transaction: DecreaseIcon,
+  transfer: ExchangeIcon,
+};
+
+const IconHOC = (Component, kittenTheme, themeContext, style) => () => (
+  <Component
+    style={{ width: 20, height: 20 }}
+    fill={
+      kittenTheme[
+        style || `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+      ]
+    }
+  />
+);
+
+export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
+  const { name, balance, type, style } = item;
+
+  const renderIconItem = useMemo(() => {
+    if (avaiableTypes[type]) {
+      const IconComponent = IconHOC(
+        avaiableTypes[type],
+        kittenTheme,
+        themeContext,
+        style
+      );
+      return <IconComponent />;
+    }
+
+    return null;
+  }, [kittenTheme, style, themeContext, type]);
+
+  const memoBalance = useMemo(
+    () =>
+      balance !== "" &&
+      `${splitToDigits(balance !== null ? balance.toString() : "0")} ₽`,
+    [balance]
   );
 
   return (
@@ -104,7 +64,7 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
         paddingVertical: 5,
       }}
     >
-      {renderIconItem(color)}
+      {renderIconItem}
       <Text
         style={{
           fontSize: 16,
@@ -112,9 +72,8 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
           marginLeft: 8,
           color:
             kittenTheme[
-              color !== undefined
-                ? color
-                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              style ||
+                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
             ],
         }}
         category="s1"
@@ -126,14 +85,12 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
           fontSize: 16,
           color:
             kittenTheme[
-              color !== undefined
-                ? color
-                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              style ||
+                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
             ],
         }}
       >
-        {balance !== "" &&
-          splitToDigits(balance !== null ? balance.toString() : "0") + " ₽"}
+        {memoBalance}
       </Text>
     </View>
   );

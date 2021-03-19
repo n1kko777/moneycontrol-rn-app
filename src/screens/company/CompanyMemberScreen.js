@@ -18,8 +18,8 @@ import {
   removeProfileFromCompanyAction,
 } from "../../store/actions/apiAction";
 import { BackIcon } from "../../themes/icons";
-import { generateHomeData } from "../../store/actions/layoutAction";
 import { splitToDigits } from "../../splitToDigits";
+import { getLayoutProfileData } from "../../store/selectors";
 
 export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const { profile } = route.params;
@@ -29,7 +29,7 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const profileData = useSelector((store) => store.layout.profileData);
+  const profileData = useSelector(getLayoutProfileData);
 
   const [homeListData, setHomeListData] = useState([]);
   const [totalBalance, setTotalBalance] = useState(null);
@@ -49,19 +49,17 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
 
   const refreshData = useCallback(() => {
     dispatch(getProfileListData(profile.id));
-  }, []);
+  }, [dispatch, profile.id]);
 
   const onSuccessDelete = useCallback(() => {
     dispatch(clearProfileListData());
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const onDeleteMember = useCallback(() => {
     Alert.alert(
       "Удаление сотрудника",
-      `Вы уверены, что хотите удалить сотрудника ${
-        profile.first_name + " " + profile.last_name
-      }?`,
+      `Вы уверены, что хотите удалить сотрудника ${`${profile.first_name} ${profile.last_name}`}?`,
       [
         {
           text: "Отмена",
@@ -92,12 +90,12 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
         cancelable: false,
       }
     );
-  }, []);
+  }, [dispatch, navigation, onSuccessDelete, profile, totalBalance]);
 
   const onBackHandler = useCallback(() => {
     navigation.navigate("Home");
     dispatch(clearProfileListData());
-  }, []);
+  }, [dispatch, navigation]);
 
   return (
     <ScreenTemplate>

@@ -1,15 +1,16 @@
 import React, { memo, useCallback } from "react";
 import { View } from "react-native";
+import { Layout, Input, Button } from "@ui-kitten/components";
+import { useDispatch, useSelector } from "react-redux";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { BackIcon } from "../../themes/icons";
-import { Layout, Input, Button } from "@ui-kitten/components";
 import { THEME } from "../../themes/themes";
-import { useDispatch, useSelector } from "react-redux";
 import {
   joinProfileToCompanyAction,
   getDataDispatcher,
 } from "../../store/actions/apiAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const InviteMemberScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -20,13 +21,13 @@ export const InviteMemberScreen = memo(({ navigation }) => {
   const isNotProfileIdEmpty = profile_id && profile_id.length > 0;
   const isNotProfilePhoneEmpty = profile_phone && profile_phone.length > 0;
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onSuccess = useCallback(() => {
     setProfileId("");
     setProfilePhone("");
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -34,7 +35,7 @@ export const InviteMemberScreen = memo(({ navigation }) => {
         joinProfileToCompanyAction({ profile_id, profile_phone }, onSuccess)
       );
     }
-  }, [profile_id, profile_phone, loader]);
+  }, [loader, dispatch, profile_id, profile_phone, onSuccess]);
 
   const inputRef = React.useRef(null);
 
@@ -94,10 +95,7 @@ export const InviteMemberScreen = memo(({ navigation }) => {
               borderRadius: THEME.BUTTON_RADIUS,
             }}
             onPress={onSubmit}
-            disabled={
-              (!isNotProfileIdEmpty ? true : false) ||
-              (!isNotProfilePhoneEmpty ? true : false)
-            }
+            disabled={!isNotProfileIdEmpty || !isNotProfilePhoneEmpty}
           >
             Добавить сотрудника
           </Button>

@@ -1,149 +1,143 @@
 import React, { memo, useCallback } from "react";
-import { useTheme, Select, Button, Layout } from "@ui-kitten/components";
-import { View } from "react-native";
+import { useTheme, Button, Layout } from "@ui-kitten/components";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import "moment/locale/ru";
-moment.locale("ru");
 
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { ThemeContext } from "../../themes/theme-context";
-import { getShortName } from "../../getShortName";
 import { BackIcon } from "../../themes/icons";
 import { getOperationAction } from "../../store/actions/apiAction";
 import { clearCalendar } from "../../store/actions/calendarAction";
+import { CustomSearchWithSelect } from "../../ui/CustomSearchWithSelect";
+import {
+  getAccounts,
+  getCategoriesList,
+  getLayoutFilterParams,
+  getLayoutOperationTypeData,
+  getProfile,
+  getProfilesList,
+  getTagsList,
+} from "../../store/selectors";
+
+moment.locale("ru");
+
+const viewStyles = { marginHorizontal: 8 };
+
+const styles = StyleSheet.create({
+  flexOne: {
+    flex: 1,
+  },
+});
+
+const secondaryLayoutStyles = {
+  ...styles.flexOne,
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  padding: 8,
+};
 
 export const FilterOperationScreen = memo(({ navigation }) => {
-  const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const goBack = () => navigation.goBack();
+  const mainLayoutStyles = {
+    ...styles.flexOne,
+    backgroundColor:
+      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
+  };
 
-  const store = useSelector((store) => store);
+  const mainViewStyles = {
+    height: 30,
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor:
+      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
+  };
 
-  const { profile } = store.profile;
-  const { company } = store.company;
-  const { filterParams } = store.layout;
+  const dispatch = useDispatch();
 
-  const initProfileData =
-    profile !== null && profile.is_admin ? company.profiles : [profile];
+  const goBack = useCallback(() => navigation.goBack(), [navigation]);
 
-  const profileData = initProfileData.map((elem, index) => ({
-    index,
-    text: getShortName(elem.first_name + " " + elem.last_name),
-    id: elem.id,
-    is_admin: elem.is_admin,
-  }));
+  const profile = useSelector(getProfile);
 
-  const [selectedProfileOption, setSelectedProfileOption] = React.useState(
-    filterParams !== null
-      ? [...filterParams.profile]
-      : profileData.find((prof) => prof.id === profile.id)
-      ? [profileData.find((prof) => prof.id === profile.id)]
-      : []
-  );
+  const filterParams = useSelector(getLayoutFilterParams);
+  const operationTypeData = useSelector(getLayoutOperationTypeData);
 
-  const { accounts } = useSelector((store) => store.account);
+  const profileData = useSelector(getProfilesList);
+
+  const initProfileList = useCallback(() => {
+    if (filterParams !== null) {
+      return [...filterParams.profile];
+    }
+    if (profileData.find((prof) => prof.id === profile.id)) {
+      return [profileData.find((prof) => prof.id === profile.id)];
+    }
+    return [];
+  }, [filterParams, profile.id, profileData]);
+
+  const [profileList, setProfileList] = React.useState(initProfileList());
+
+  const accounts = useSelector(getAccounts);
 
   const accountData = []
     .concat(
-      ...selectedProfileOption.map((selProf) =>
-        accounts.filter((acc) => acc.profile == selProf.id)
+      ...profileList.map((selProf) =>
+        accounts.filter((acc) => acc.profile === selProf.id)
       )
     )
-    .map((elem, index) => ({
-      index,
-      balance: elem.balance,
-      profile: elem.profile,
-      text:
-        selectedProfileOption.length == 1
+    .map((elem, index) => {
+      const textTitle =
+        profileList.length === 1
           ? `${elem.account_name}`
           : `${elem.account_name} (${
-              profileData.find((prof) => elem.profile == prof.id).text
-            })`,
-      id: elem.id,
-    }));
+              profileData.find((prof) => elem.profile === prof.id).text
+            })`;
 
-  const [selectedAccountOption, setSelectedAccountOption] = React.useState(
+      return {
+        index,
+        balance: elem.balance,
+        profile: elem.profile,
+        text: textTitle,
+        title: textTitle,
+        id: elem.id,
+      };
+    });
+
+  const [accountList, setAccountList] = React.useState(
     filterParams !== null ? [...filterParams.account] : []
   );
 
-  const { categories } = useSelector((store) => store.category);
+  const categoryData = useSelector(getCategoriesList);
 
-  const categoryData = categories.map((elem, index) => ({
-    index,
-    text: elem.category_name,
-    id: elem.id,
-  }));
-
-  const [selectedCategoryOption, setSelectedCategoryOption] = React.useState(
+  const [categoryList, setCategoryList] = React.useState(
     filterParams !== null ? [...filterParams.category] : []
   );
 
-  const { tags } = useSelector((store) => store.tag);
+  const tagData = useSelector(getTagsList);
 
-  const tagData = tags.map((elem, index) => ({
-    index,
-    text: elem.tag_name,
-    id: elem.id,
-  }));
-
-  const [selectedTagOption, setSelectedTagOption] = React.useState(
+  const [tagList, setTagList] = React.useState(
     filterParams !== null ? [...filterParams.tag] : []
   );
 
-  const operationTypeData = [
-    {
-      index: 0,
-      text: "Доход",
-      id: "action",
-    },
-    {
-      index: 1,
-      text: "Расход",
-      id: "transaction",
-    },
-    {
-      index: 2,
-      text: "Перевод",
-      id: "transfer",
-    },
-  ];
-
-  const [
-    selectedOperationTypeOption,
-    setSelectedOperationTypeOption,
-  ] = React.useState(filterParams !== null ? [...filterParams.type] : []);
-
-  const onSelectTag = React.useCallback((opt) => {
-    setSelectedTagOption(opt ? opt : []);
-  }, []);
-
-  const onSelectCategory = React.useCallback((opt) => {
-    setSelectedCategoryOption(opt ? opt : []);
-  }, []);
-
-  const onSelectAccount = React.useCallback((opt) => {
-    setSelectedAccountOption(opt ? opt : []);
-  }, []);
-
-  const onSelectProfile = React.useCallback((opt) => {
-    setSelectedProfileOption(opt ? opt : []);
-  }, []);
-
-  const onSelectOperationType = React.useCallback((opt) => {
-    setSelectedOperationTypeOption(opt ? opt : []);
-  }, []);
+  const [operationTypeList, setOperationTypeList] = React.useState(
+    filterParams !== null ? [...filterParams.type] : []
+  );
 
   const onReset = () => {
-    setSelectedProfileOption([]);
-    setSelectedAccountOption([]);
-    setSelectedCategoryOption([]);
-    setSelectedTagOption([]);
-    setSelectedOperationTypeOption([]);
+    setProfileList([]);
+    setAccountList([]);
+    setCategoryList([]);
+    setTagList([]);
+    setOperationTypeList([]);
 
     dispatch(clearCalendar());
     dispatch(getOperationAction(null, goBack));
@@ -151,19 +145,22 @@ export const FilterOperationScreen = memo(({ navigation }) => {
 
   const onSubmit = useCallback(() => {
     const selectedFilters = {
-      profile: selectedProfileOption,
-      account: selectedAccountOption,
-      category: selectedCategoryOption,
-      tag: selectedTagOption,
-      type: selectedOperationTypeOption,
+      profile: profileList,
+      account: accountList,
+      category: categoryList,
+      tag: tagList,
+      type: operationTypeList,
     };
 
     dispatch(getOperationAction(selectedFilters, goBack));
   }, [
-    selectedAccountOption,
-    selectedCategoryOption,
-    selectedTagOption,
-    selectedOperationTypeOption,
+    profileList,
+    accountList,
+    categoryList,
+    tagList,
+    operationTypeList,
+    dispatch,
+    goBack,
   ]);
 
   return (
@@ -175,112 +172,71 @@ export const FilterOperationScreen = memo(({ navigation }) => {
         onTarget={goBack}
         isMenu={false}
       />
-      <Layout
-        style={{
-          flex: 1,
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
-        }}
-      >
-        <View
-          style={{
-            height: 30,
-            marginTop: 20,
-            marginBottom: 20,
-            backgroundColor:
-              kittenTheme[
-                `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-              ],
-          }}
-        >
+      <Layout style={mainLayoutStyles}>
+        <View style={mainViewStyles}>
           <CustomDatePicker />
         </View>
-        <Layout
-          style={{
-            flex: 1,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            padding: 8,
-          }}
-        >
-          <Select
-            data={profileData}
-            placeholder="Укажите сотрудников"
-            selectedOption={profileData.filter((elem) =>
-              selectedProfileOption
-                .map((elem) => elem.index)
-                .includes(elem.index)
-            )}
-            onSelect={onSelectProfile}
-            style={{ marginVertical: 8, marginHorizontal: 8 }}
-            multiSelect={true}
-          />
-
-          <Select
-            data={accountData}
-            placeholder="Укажите аккаунт"
-            selectedOption={accountData.filter((elem) =>
-              selectedAccountOption
-                .map((elem) => elem.index)
-                .includes(elem.index)
-            )}
-            onSelect={onSelectAccount}
-            style={{ marginVertical: 8, marginHorizontal: 8 }}
-            multiSelect={true}
-          />
-
-          <Select
-            data={categoryData}
-            placeholder="Укажите категорию"
-            selectedOption={categoryData.filter((elem) =>
-              selectedCategoryOption
-                .map((elem) => elem.index)
-                .includes(elem.index)
-            )}
-            onSelect={onSelectCategory}
-            style={{ marginVertical: 8, marginHorizontal: 8 }}
-            multiSelect={true}
-          />
-
-          <Select
-            data={tagData}
-            placeholder="Укажите теги"
-            selectedOption={tagData.filter((elem) =>
-              selectedTagOption.map((elem) => elem.index).includes(elem.index)
-            )}
-            onSelect={onSelectTag}
-            style={{ marginVertical: 8, marginHorizontal: 8 }}
-            multiSelect={true}
-          />
-
-          <Select
-            data={operationTypeData}
-            placeholder="Укажите тип операции"
-            selectedOption={operationTypeData.filter((elem) =>
-              selectedOperationTypeOption
-                .map((elem) => elem.index)
-                .includes(elem.index)
-            )}
-            onSelect={onSelectOperationType}
-            style={{ marginVertical: 8, marginHorizontal: 8 }}
-            multiSelect={true}
-          />
-
-          <Button
-            style={{ marginTop: 24, marginHorizontal: 8 }}
-            onPress={onSubmit}
+        <Layout style={secondaryLayoutStyles}>
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={100}
           >
-            Применить
-          </Button>
-          <Button
-            style={{ marginVertical: 16, marginHorizontal: 8 }}
-            onPress={onReset}
-            appearance="outline"
-          >
-            Сбросить
-          </Button>
+            <ScrollView>
+              <View style={viewStyles}>
+                <CustomSearchWithSelect
+                  datasets={profileData}
+                  dataList={profileList}
+                  setDataList={setProfileList}
+                  placeholder="Укажите сотрудников"
+                />
+              </View>
+              <View style={viewStyles}>
+                <CustomSearchWithSelect
+                  datasets={accountData}
+                  dataList={accountList}
+                  setDataList={setAccountList}
+                  placeholder="Укажите аккаунт"
+                />
+              </View>
+              <View style={viewStyles}>
+                <CustomSearchWithSelect
+                  datasets={categoryData}
+                  dataList={categoryList}
+                  setDataList={setCategoryList}
+                  placeholder="Укажите категорию"
+                />
+              </View>
+              <View style={viewStyles}>
+                <CustomSearchWithSelect
+                  datasets={tagData}
+                  dataList={tagList}
+                  setDataList={setTagList}
+                  placeholder="Укажите теги"
+                />
+              </View>
+              <View style={viewStyles}>
+                <CustomSearchWithSelect
+                  datasets={operationTypeData}
+                  dataList={operationTypeList}
+                  setDataList={setOperationTypeList}
+                  placeholder="Укажите тип операции"
+                />
+              </View>
+              <Button
+                style={{ marginTop: 24, marginHorizontal: 8 }}
+                onPress={onSubmit}
+              >
+                Применить
+              </Button>
+              <Button
+                style={{ marginVertical: 16, marginHorizontal: 8 }}
+                onPress={onReset}
+                appearance="outline"
+              >
+                Сбросить
+              </Button>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </Layout>
       </Layout>
     </ScreenTemplate>

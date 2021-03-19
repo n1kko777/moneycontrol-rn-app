@@ -1,12 +1,15 @@
 import React, { memo, useCallback } from "react";
 import { Autocomplete } from "@ui-kitten/components";
-import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
 import { useSelector } from "react-redux";
+import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
+import { getCategories, getCategoryCurrent } from "../../../store/selectors";
 
 export const CategorySelector = memo(
   ({ selectedId, setSelectedId, isNotEmpty, navigation }) => {
     const categoryInput = React.useRef(null);
-    const { categories, current } = useSelector((store) => store.category);
+
+    const categories = useSelector(getCategories);
+    const current = useSelector(getCategoryCurrent);
 
     const categoriesData = categories.map((elem) => ({
       title: elem.category_name,
@@ -20,33 +23,40 @@ export const CategorySelector = memo(
     );
     const [data, setData] = React.useState(categoriesData);
 
-    const onSelect = (item) => {
-      setValue(item.title);
-      setSelectedId(item.id);
-    };
+    const onSelect = useCallback(
+      (item) => {
+        setValue(item.title);
+        setSelectedId(item.id);
+      },
+      [setSelectedId]
+    );
 
     React.useEffect(() => {
-      current !== null &&
+      if (current !== null) {
         onSelect({
           title: current.category_name,
           id: current.id,
         });
-    }, [current]);
+      }
+    }, [current, onSelect]);
 
-    const onChangeText = (query) => {
-      setValue(query);
-      setData(
-        categoriesData.filter((item) =>
-          item.title.toLowerCase().includes(query.toLowerCase())
-        )
-      );
-    };
+    const onChangeText = useCallback(
+      (query) => {
+        setValue(query);
+        setData(
+          categoriesData.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+          )
+        );
+      },
+      [categoriesData]
+    );
 
     const clearInput = useCallback(() => {
       setValue("");
       setData(categoriesData);
       setSelectedId(null);
-    }, [categoriesData]);
+    }, [categoriesData, setSelectedId]);
 
     const addCategory = useCallback(() => {
       categoryInput.current.blur();
@@ -58,7 +68,7 @@ export const CategorySelector = memo(
       } else {
         onChangeText("");
       }
-    }, [value]);
+    }, [categories, navigation, onChangeText, onSelect, value]);
 
     return (
       <Autocomplete

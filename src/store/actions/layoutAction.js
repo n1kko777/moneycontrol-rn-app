@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Axios from "axios";
-import { endpointAPI } from "../constants";
 import moment from "moment";
+import { endpointAPI } from "../constants";
 
 import {
   SET_HOME_DATA,
@@ -38,7 +38,7 @@ export const generateHomeData = (profile_id = null) => async (dispatch) => {
     return Axios.get(`${endpointAPI}/home-list/`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Token " + token,
+        Authorization: `Token ${token}`,
       },
       params: {
         profile_id,
@@ -68,6 +68,7 @@ export const generateHomeData = (profile_id = null) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_LAYOUT));
+    return Promise.reject();
   }
 };
 
@@ -75,30 +76,29 @@ export const generateOperationData = (params = null, onSuccess) => async (
   dispatch,
   getState
 ) => {
-  dispatch(setFilterParams(params));
-
   try {
+    dispatch(setFilterParams(params));
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
     const formatedParams = {};
 
     if (params && params !== null) {
-      for (const [key, value] of Object.entries(params)) {
+      Object.entries(params).forEach(([key, value]) => {
         if (value.length) {
           formatedParams[key] = value.map((el) => el.id).join(",");
         }
-      }
+      });
     }
 
     return Axios.get(`${endpointAPI}/operation-list/`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Token " + token,
+        Authorization: `Token ${token}`,
       },
       params: {
         start_date:
           getState().calendar.startDate !== null
             ? getState().calendar.startDate
-            : momentc(),
+            : moment(),
         end_date:
           getState().calendar.endDate !== null
             ? getState().calendar.endDate
@@ -125,13 +125,16 @@ export const generateOperationData = (params = null, onSuccess) => async (
           payload: operationListData,
         });
 
-        onSuccess && onSuccess();
+        if (onSuccess) {
+          onSuccess();
+        }
       })
       .catch((error) => {
         dispatch(failHandler(error, ERROR_LAYOUT));
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_LAYOUT));
+    return Promise.reject();
   }
 };
 

@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,20 +10,20 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { createAccountAction } from "../../store/actions/apiAction";
 import { clearCurrentAccount } from "../../store/actions/accountAction";
-import { Keyboard } from "react-native";
+import { getApiLoading } from "../../store/selectors";
 
 export const CreateAccountScreen = memo(({ navigation, route }) => {
   const prevItem = route.params;
 
   const dispatch = useDispatch();
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const [account_name, setAccountName] = React.useState(
     prevItem !== undefined ? prevItem.account_name : ""
@@ -31,15 +31,17 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
   const [balance, setBalance] = React.useState("0");
 
   const navigateBack = useCallback(() => {
-    prevItem === undefined && dispatch(clearCurrentAccount());
+    if (prevItem === undefined) {
+      dispatch(clearCurrentAccount());
+    }
     navigation.goBack(null);
-  }, [prevItem]);
+  }, [dispatch, navigation, prevItem]);
 
   const onReset = useCallback(() => {
     setAccountName("");
     setBalance("");
     navigateBack();
-  }, []);
+  }, [navigateBack]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -55,10 +57,11 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
         )
       );
     }
-  }, [account_name, balance, loader]);
+  }, [account_name, balance, dispatch, loader, onReset]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = React.useRef(null);
@@ -75,7 +78,7 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
         <TopNavigation
           title="Создание счета"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

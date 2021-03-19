@@ -1,4 +1,4 @@
-export const displayDate = date => {
+export const displayDate = (date) => {
   const newDate = new Date(date);
   newDate.setDate(date.getDate() + 1);
 

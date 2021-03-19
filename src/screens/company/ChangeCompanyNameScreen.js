@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,32 +10,29 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateCompanyAction } from "../../store/actions/apiAction";
-import { Keyboard } from "react-native";
+import { getApiLoading, getCompany } from "../../store/selectors";
 
 export const ChangeCompanyNameScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const companyName = useSelector(
-    (store) => store.company.company.company_name
-  );
-  const companyId = useSelector((store) => store.company.company.id);
+  const { company_name: companyName, id: companyId } = useSelector(getCompany);
 
   const [company_name, setCompanyName] = React.useState(companyName);
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onReset = useCallback(() => {
     navigateBack();
-  }, []);
+  }, [navigateBack]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -50,10 +47,11 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
         )
       );
     }
-  }, [company_name, loader]);
+  }, [companyId, company_name, dispatch, loader, onReset]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = React.useRef(null);
@@ -70,7 +68,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Изменение названия компании"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

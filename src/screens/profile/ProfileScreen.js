@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { View, Alert } from "react-native";
 import {
   Layout,
@@ -21,11 +21,13 @@ import {
 } from "../../store/actions/apiAction";
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
 import { FlexibleView } from "../../components/FlexibleView";
+import { getApiLoading, getProfile } from "../../store/selectors";
 
 export const ProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const profileStore = useSelector((store) => store.profile);
-  const { profile } = profileStore;
+
+  const loader = useSelector(getApiLoading);
+  const profile = useSelector(getProfile);
 
   const [first_name, setFirstName] = React.useState(
     profile !== null ? profile.first_name : ""
@@ -41,15 +43,14 @@ export const ProfileScreen = memo(({ navigation }) => {
   );
 
   const [isEdit, setIsEdit] = React.useState(false);
-  const loader = useSelector((store) => store.api.loader);
 
   const inputRef = React.useRef(null);
 
-  const onSuccess = () => {
+  const onSuccess = useCallback(() => {
     setIsEdit(false);
-  };
+  }, []);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (isEdit && !loader) {
       if (imageUrl !== null) {
         const data = new FormData();
@@ -94,14 +95,25 @@ export const ProfileScreen = memo(({ navigation }) => {
       setIsEdit(true);
       inputRef.current.focus();
     }
-  };
+  }, [
+    dispatch,
+    first_name,
+    imageUrl,
+    isEdit,
+    last_name,
+    loader,
+    onSuccess,
+    phone,
+    profile.id,
+  ]);
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const deleteProfileHandler = useCallback(() => {
@@ -126,10 +138,13 @@ export const ProfileScreen = memo(({ navigation }) => {
         cancelable: false,
       }
     );
-  }, [profile]);
+  }, [dispatch, navigation, profile.id, profile.is_admin]);
 
-  const DeleteProfileAction = () => (
-    <TopNavigationAction icon={DeleteIcon} onPress={deleteProfileHandler} />
+  const DeleteProfileAction = useMemo(
+    () => (
+      <TopNavigationAction icon={DeleteIcon} onPress={deleteProfileHandler} />
+    ),
+    [deleteProfileHandler]
   );
 
   return (
@@ -138,8 +153,8 @@ export const ProfileScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Профиль"
           alignment="center"
-          leftControl={BackAction()}
-          rightControls={DeleteProfileAction()}
+          leftControl={BackAction}
+          rightControls={DeleteProfileAction}
         />
         <Layout
           style={{

@@ -1,16 +1,18 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
+import { getCategories } from "../../store/selectors";
 
 import { CategoryListItem } from "./CategoryListItem";
 
 export const CategoryList = memo(({ navigation }) => {
-  const { categories } = useSelector((store) => store.category);
+  const categories = useSelector(getCategories);
 
-  const keyExtractor = (item) => item.id.toString();
+  const keyExtractor = useCallback((item) => item.id.toString(), []);
 
-  const renderItem = ({ item }) => (
-    <CategoryListItem navigation={navigation} item={item} />
+  const renderItem = useCallback(
+    ({ item }) => <CategoryListItem navigation={navigation} item={item} />,
+    [navigation]
   );
 
   return (
@@ -20,7 +22,7 @@ export const CategoryList = memo(({ navigation }) => {
         marginTop: 15,
       }}
       ListFooterComponent={
-        <View style={{ marginHorizontal: 16, marginTop: 30 }}></View>
+        <View style={{ marginHorizontal: 16, marginTop: 30 }} />
       }
       ListFooterComponentStyle={{ paddingBottom: 30 }}
       keyExtractor={keyExtractor}

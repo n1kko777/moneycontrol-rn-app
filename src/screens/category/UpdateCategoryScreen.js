@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,13 +10,13 @@ import {
   Button,
 } from "@ui-kitten/components";
 
+import { View, Keyboard } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateCategoryAction } from "../../store/actions/apiAction";
-import { Keyboard } from "react-native";
+import { getApiLoading } from "../../store/selectors";
 
 export const UpdateCategoryScreen = memo(({ route, navigation }) => {
   const { category } = route.params;
@@ -29,9 +29,9 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
-  }, []);
+  }, [navigation]);
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -46,10 +46,11 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
         )
       );
     }
-  }, [category.id, category_name, loader]);
+  }, [category.id, category_name, dispatch, loader, navigateBack]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = React.useRef(null);
@@ -66,7 +67,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Обновление категории"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

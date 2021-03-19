@@ -15,6 +15,11 @@ import {
 import { endpointAPI } from "../constants";
 import failHandler from "../failHandler";
 
+// Set loading to true
+export const setLoading = () => ({
+  type: LOADING_ACCOUNT,
+});
+
 // Set current account
 export const setCurrentAccount = (account) => ({
   type: SET_CURRENT_ACCOUNT,
@@ -28,16 +33,15 @@ export const clearCurrentAccount = () => ({
 
 // Get account from server
 export const getAccount = () => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
       .get(`${endpointAPI}/account/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then((res) => {
@@ -54,14 +58,14 @@ export const getAccount = () => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_ACCOUNT));
+    return Promise.reject();
   }
 };
 
 // Create account from server
 export const createAccount = (account) => async (dispatch) => {
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -73,20 +77,20 @@ export const createAccount = (account) => async (dispatch) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
       .then((res) => {
-        const account = res.data;
+        const resAccount = res.data;
 
-        if (account["last_updated"] === undefined) {
-          account["last_updated"] = moment();
+        if (resAccount.last_updated === undefined) {
+          resAccount.last_updated = moment();
         }
 
         dispatch({
           type: CREATE_ACCOUNT,
-          payload: account,
+          payload: resAccount,
         });
       })
 
@@ -95,6 +99,7 @@ export const createAccount = (account) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_ACCOUNT));
+    return Promise.reject();
   }
 };
 
@@ -102,8 +107,8 @@ export const createAccount = (account) => async (dispatch) => {
 export const updateAccount = ({ id, account_name, balance }) => async (
   dispatch
 ) => {
-  dispatch(setLoading());
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
@@ -116,15 +121,15 @@ export const updateAccount = ({ id, account_name, balance }) => async (
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Token " + token,
+            Authorization: `Token ${token}`,
           },
         }
       )
       .then((res) => {
         const updatedAccount = res.data;
 
-        if (updatedAccount["last_updated"] === undefined) {
-          updatedAccount["last_updated"] = moment();
+        if (updatedAccount.last_updated === undefined) {
+          updatedAccount.last_updated = moment();
         }
 
         dispatch({
@@ -138,37 +143,21 @@ export const updateAccount = ({ id, account_name, balance }) => async (
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_ACCOUNT));
+    return Promise.reject();
   }
 };
 
 // Delete account from server
 export const hideAccount = (account) => async (dispatch) => {
-  if (+account.balance !== 0) {
-    dispatch(
-      failHandler(
-        {
-          custom: {
-            title: "Баланс счета не равен 0!!",
-            message: "Пожалуйста, переведи средства на другой счет.",
-          },
-        },
-        ERROR_ACCOUNT
-      )
-    );
-
-    return;
-  }
-
-  dispatch(setLoading());
-
   try {
+    dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
     return axios
       .delete(`${endpointAPI}/account/${account.id}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + token,
+          Authorization: `Token ${token}`,
         },
       })
       .then(() => {
@@ -183,10 +172,6 @@ export const hideAccount = (account) => async (dispatch) => {
       });
   } catch (error) {
     dispatch(failHandler(error, ERROR_ACCOUNT));
+    return Promise.reject();
   }
 };
-
-// Set loading to true
-export const setLoading = () => ({
-  type: LOADING_ACCOUNT,
-});

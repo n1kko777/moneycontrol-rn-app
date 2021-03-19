@@ -9,6 +9,7 @@ import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
 import { hideOperationAction } from "../../store/actions/apiAction";
+import { getAccounts, getCategories, getTags } from "../../store/selectors";
 
 export const OperationListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
@@ -22,10 +23,9 @@ export const OperationListItem = memo(({ item, navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((store) => store);
-  const { accounts } = store.account;
-  const { categories } = store.category;
-  const { tags } = store.tag;
+  const accounts = useSelector(getAccounts);
+  const categories = useSelector(getCategories);
+  const tags = useSelector(getTags);
 
   const deleteHandler = useCallback(() => {
     close();
@@ -48,7 +48,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
         cancelable: false,
       }
     );
-  }, [item]);
+  }, [close, dispatch, item]);
 
   const copyHandler = useCallback(() => {
     close();
@@ -73,17 +73,46 @@ export const OperationListItem = memo(({ item, navigation }) => {
       default:
         break;
     }
-  }, [item]);
+  }, [accounts, close, item, navigation]);
 
-  const LeftAction = () => (
-    <Button onPress={copyHandler} icon={CopyIcon} status="info" />
+  const LeftAction = useCallback(
+    () => <Button onPress={copyHandler} icon={CopyIcon} status="info" />,
+    [copyHandler]
   );
 
-  const RightAction = () => (
-    <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
+  const RightAction = useCallback(
+    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    [deleteHandler]
   );
 
-  const WrapperComponent = ({ children }) => (
+  const renderCategory = useMemo(() => {
+    if (item.category !== undefined) {
+      if (categories.find((cat) => cat.id === item.category) !== undefined) {
+        return categories.find((cat) => cat.id === item.category).category_name;
+      }
+
+      return "Удалено";
+    }
+
+    return "";
+  }, [categories, item.category]);
+
+  const renderTag = useMemo(() => {
+    const tagList = (item.tags
+      ? item.tags.map((elTag) =>
+          tags.find((tag) => tag.id === elTag)
+            ? `#${tags.find((tag) => tag.id === elTag).tag_name}`
+            : "Удалено"
+        )
+      : [""]
+    ).join(", ");
+
+    return `${
+      tagList.length > 17 ? `${tagList.substring(0, 17)}...` : tagList
+    }`;
+  }, [item.tags, tags]);
+
+  return (
     <Swipeable
       ref={swipeableRow}
       overshootLeft={false}
@@ -91,37 +120,6 @@ export const OperationListItem = memo(({ item, navigation }) => {
       overshootRight={false}
       renderRightActions={RightAction}
     >
-      {children}
-    </Swipeable>
-  );
-
-  const renderCategory = useMemo(
-    () =>
-      item.category !== undefined
-        ? categories.find((cat) => cat.id == item.category) !== undefined
-          ? categories.find((cat) => cat.id == item.category).category_name
-          : "Удалено"
-        : "",
-    [item]
-  );
-
-  const renderTag = useMemo(() => {
-    const tagList = (item.tags
-      ? item.tags.map((elTag) =>
-          tags.find((tag) => tag.id == elTag)
-            ? "#" + tags.find((tag) => tag.id == elTag).tag_name
-            : "Удалено"
-        )
-      : [""]
-    ).join(", ");
-
-    return `${
-      tagList.length > 17 ? tagList.substring(0, 17) + "..." : tagList
-    }`;
-  }, [item]);
-
-  return (
-    <WrapperComponent>
       <Card style={{ borderWidth: 0 }}>
         <Layout
           style={{
@@ -149,16 +147,15 @@ export const OperationListItem = memo(({ item, navigation }) => {
                 fontWeight: "600",
                 color:
                   kittenTheme[
-                    item.style !== undefined
-                      ? item.style
-                      : `color-primary-${
-                          themeContext.theme === "light" ? 800 : 100
-                        }`
+                    item.style ||
+                      `color-primary-${
+                        themeContext.theme === "light" ? 800 : 100
+                      }`
                   ],
               }}
             >
               {item.balance !== "" &&
-                splitToDigits(item.balance.toString()) + " ₽"}
+                `${splitToDigits(item.balance.toString())} ₽`}
             </Text>
           </Layout>
           <Layout
@@ -193,6 +190,6 @@ export const OperationListItem = memo(({ item, navigation }) => {
           </Layout>
         </Layout>
       </Card>
-    </WrapperComponent>
+    </Swipeable>
   );
 });

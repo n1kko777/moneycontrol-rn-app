@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { ScrollView, Dimensions } from "react-native";
+
 const { height } = Dimensions.get("window");
 
 export const FlexibleView = memo(({ children }) => {
@@ -9,6 +10,7 @@ export const FlexibleView = memo(({ children }) => {
     // Save the content height in state
     setScreenHeight(contentHeight);
   }, []);
+
   const scrollEnabled = screenHeight > height;
 
   return (

@@ -1,30 +1,45 @@
-import React, { memo } from "react";
-import { Button, Image, View } from "react-native";
+import React, { memo, useCallback } from "react";
+import { Button, Image, View, Alert, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Alert } from "react-native";
+import DefaultIcon from "../../../assets/icon.png";
 
 export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
-  const getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
+  const getPermissionAsync = useCallback(async () => {
+    if (Platform.OS === "ios") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== "granted") {
-        alert(
-          "Извините, нам нужны разрешения на фотопленку, чтобы это сработало!"
+        Alert.alert(
+          "Доступ к камере",
+          "Извините, нам нужны разрешения на фотопленку, чтобы это сработало!",
+          [
+            {
+              text: "Отмена",
+              style: "cancel",
+            },
+            {
+              text: "Разрешить",
+              onPress: () => {
+                getPermissionAsync();
+              },
+            },
+          ],
+          {
+            cancelable: false,
+          }
         );
       }
     }
-  };
+  }, []);
 
   React.useEffect(() => {
     getPermissionAsync();
-  }, []);
+  }, [getPermissionAsync]);
 
-  const _pickImage = async () => {
+  const pickImage = useCallback(async () => {
     try {
-      let result = await ImagePicker.launchImageLibraryAsync({
+      const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 3],
@@ -34,12 +49,30 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
         setImageUrl(result.uri);
       }
     } catch (E) {
-      console.log(E);
+      Alert.alert(
+        "Произошла ошибка",
+        "Что-то пошло не так, попробуйте еще раз.",
+        [
+          {
+            text: "Отмена",
+            style: "cancel",
+          },
+          {
+            text: "Повторить",
+            onPress: () => {
+              pickImage();
+            },
+          },
+        ],
+        {
+          cancelable: false,
+        }
+      );
     }
-  };
+  }, [setImageUrl]);
 
-  const clearImage = () => {
-    imageUrl !== null &&
+  const clearImage = useCallback(() => {
+    if (imageUrl !== null) {
       Alert.alert(
         "Удаление аватар",
         "Вы уверены, что хотите удалить аватар?",
@@ -59,24 +92,25 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
           cancelable: false,
         }
       );
-  };
+    }
+  }, [imageUrl, setImageUrl]);
 
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
-      <TouchableOpacity onPress={clearImage}>
+      <TouchableOpacity onPress={clearImage} disabled={!isEdit}>
         <Image
           source={
             imageUrl !== null
               ? {
                   uri: imageUrl,
                 }
-              : require("../../../assets/icon.png")
+              : DefaultIcon
           }
           style={{ width: 150, height: 150, borderRadius: 75 }}
         />
       </TouchableOpacity>
 
-      {isEdit && <Button title="Выбрать аватар" onPress={_pickImage} />}
+      {isEdit && <Button title="Выбрать аватар" onPress={pickImage} />}
     </View>
   );
 });

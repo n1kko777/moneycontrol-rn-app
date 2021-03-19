@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export const apiReducer = (state = initialState, action) => {
-  const { type, payload } = action;
+  const { type } = action;
   switch (type) {
     case START_LOADER:
       return {

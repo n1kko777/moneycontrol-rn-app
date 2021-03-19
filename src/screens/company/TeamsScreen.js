@@ -1,7 +1,8 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout, Button } from "@ui-kitten/components";
+import { View } from "react-native";
 import { ThemeContext } from "../../themes/theme-context";
 
 import { Toolbar } from "../../components/navigation/Toolbar";
@@ -9,62 +10,56 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { CompanyProfileList } from "../../components/company/CompanyProfileList";
 
-import { View } from "react-native";
 import { THEME } from "../../themes/themes";
 import { EditIcon, ProfileIcon } from "../../themes/icons";
 import { getDataDispatcher } from "../../store/actions/apiAction";
+import { getCompanyList, getProfile } from "../../store/selectors";
 
 export const TeamsScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((store) => store);
-  const { profile } = store.profile;
-  const { accounts } = store.account;
-  const { company } = store.company;
+  const profile = useSelector(getProfile);
 
-  const companyProfileListData =
-    company !== null && company.hasOwnProperty("profiles")
-      ? profile !== null && profile.is_admin
-        ? company.profiles.map((elem) => ({
-            ...elem,
-            balance: accounts
-              .filter((acc) => acc.profile == elem.id)
-              .reduce((sum, next) => (sum += +next.balance), 0),
-          }))
-        : company.profiles
-      : [];
+  const companyList = useSelector(getCompanyList);
 
   const onCompanyRefresh = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
-  }, []);
+  }, [dispatch, navigation]);
 
   const inviteToTeam = useCallback(() => {
     navigation.navigate("InviteMember");
-  }, []);
+  }, [navigation]);
 
   const onEditCompanyName = useCallback(() => {
     navigation.navigate("ChangeCompanyName");
-  }, []);
+  }, [navigation]);
+
+  const onNavigateToProfile = useCallback(() => {
+    navigation.navigate("Profile");
+  }, [navigation]);
+
+  const memoTargetIcon = useMemo(
+    () => (profile !== null && profile.is_admin ? EditIcon : ProfileIcon),
+    [profile]
+  );
+
+  const onTargetIconPress = useCallback(
+    () =>
+      profile !== null && profile.is_admin
+        ? onEditCompanyName()
+        : onNavigateToProfile(),
+    [onEditCompanyName, onNavigateToProfile, profile]
+  );
 
   return (
     <ScreenTemplate>
-      {company !== null && (
-        <Toolbar
-          navigation={navigation}
-          TargetIcon={
-            profile !== null && profile.is_admin ? EditIcon : ProfileIcon
-          }
-          onTarget={
-            profile !== null && profile.is_admin
-              ? onEditCompanyName
-              : () => {
-                  navigation.navigate("Profile");
-                }
-          }
-        />
-      )}
+      <Toolbar
+        navigation={navigation}
+        TargetIcon={memoTargetIcon}
+        onTarget={onTargetIconPress}
+      />
       <Layout
         style={{
           flex: 1,
@@ -99,9 +94,7 @@ export const TeamsScreen = memo(({ navigation }) => {
         >
           <CompanyProfileList
             onCompanyRefresh={onCompanyRefresh}
-            dataList={companyProfileListData.sort((a, b) =>
-              a.is_admin === b.is_admin ? 0 : a.is_admin ? -1 : 1
-            )}
+            dataList={companyList}
             navigation={navigation}
           />
         </Layout>

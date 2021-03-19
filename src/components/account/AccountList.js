@@ -1,22 +1,18 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
+import { getAccountDataList } from "../../store/selectors";
 
 import { AccountListItem } from "./AccountListItem";
 
 export const AccountList = memo(({ navigation }) => {
-  const store = useSelector((store) => store);
-  const { profile } = store.profile;
-  const { accounts } = store.account;
+  const dataList = useSelector(getAccountDataList);
 
-  const dataList = accounts.filter(
-    (acc) => profile !== null && acc.profile == profile.id
-  );
+  const keyExtractor = useCallback((item) => item.id.toString(), []);
 
-  const keyExtractor = (item) => item.id.toString();
-
-  const renderItem = ({ item }) => (
-    <AccountListItem navigation={navigation} item={item} />
+  const renderItem = useCallback(
+    ({ item }) => <AccountListItem navigation={navigation} item={item} />,
+    [navigation]
   );
 
   return (
@@ -26,7 +22,7 @@ export const AccountList = memo(({ navigation }) => {
         marginTop: 15,
       }}
       ListFooterComponent={
-        <View style={{ marginHorizontal: 16, marginTop: 30 }}></View>
+        <View style={{ marginHorizontal: 16, marginTop: 30 }} />
       }
       ListFooterComponentStyle={{ paddingBottom: 30 }}
       keyExtractor={keyExtractor}
