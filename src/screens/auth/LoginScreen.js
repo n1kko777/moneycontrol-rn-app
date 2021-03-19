@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Clipboard from "expo-clipboard";
 import { Layout, Button, Text, Input } from "@ui-kitten/components";
 
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { THEME } from "../../themes/themes";
@@ -17,153 +17,154 @@ import {
 import { APP_VERSION } from "../../store/constants";
 import { FlexibleView } from "../../components/FlexibleView";
 import LogoIcon from "../../../assets/logo.png";
+import { getApiLoading } from "../../store/selectors";
 
-const LoginScreen = memo(
-  ({ navigation, loader, getProfileDispatch, authLoginDispatch }) => {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+const LoginScreen = memo(({ navigation }) => {
+  const dispatch = useDispatch();
 
-    const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
+  const loader = useSelector(getApiLoading);
 
-    const copyToClipboard = useCallback(() => {
-      Clipboard.setString(APP_VERSION);
-    }, []);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-    const navigateToScreen = useCallback(
-      (name) => {
-        Keyboard.dismiss();
-        navigation.navigate(name);
-      },
-      [navigation]
-    );
+  const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
-    const onSuccess = useCallback(
-      (profile) => {
-        if (profile !== null) {
-          if (profile.company !== null) {
-            navigateToScreen("Home");
-            return;
-          }
+  const copyToClipboard = useCallback(() => {
+    Clipboard.setString(APP_VERSION);
+  }, []);
 
-          navigateToScreen("CompanyManager");
+  const navigateToScreen = useCallback(
+    (name) => {
+      Keyboard.dismiss();
+      navigation.navigate(name);
+    },
+    [navigation]
+  );
+
+  const onSuccess = useCallback(
+    (profile) => {
+      if (profile !== null) {
+        if (profile.company !== null) {
+          navigateToScreen("Home");
           return;
         }
-        navigateToScreen("CreateProfile");
-      },
-      [navigateToScreen]
-    );
 
-    const isAuthHandler = useCallback(async () => {
-      const token = await AsyncStorage.getItem("AUTH_TOKEN");
-      if (token !== null) {
-        getProfileDispatch(onSuccess);
+        navigateToScreen("CompanyManager");
+        return;
       }
-    }, [getProfileDispatch, onSuccess]);
+      navigateToScreen("CreateProfile");
+    },
+    [navigateToScreen]
+  );
 
-    const onSubmit = useCallback(() => {
-      if (!loader) {
-        authLoginDispatch(email, password, isAuthHandler);
-      }
-    }, [loader, authLoginDispatch, email, password, isAuthHandler]);
+  const isAuthHandler = useCallback(async () => {
+    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    if (token !== null) {
+      dispatch(getProfileAction(onSuccess));
+    }
+  }, [dispatch, onSuccess]);
 
-    useEffect(() => {
-      isAuthHandler();
-    }, [isAuthHandler]);
+  const onSubmit = useCallback(() => {
+    if (!loader) {
+      dispatch(authLoginAction(email, password, isAuthHandler));
+    }
+  }, [loader, dispatch, email, password, isAuthHandler]);
 
-    return (
-      <ScreenTemplate>
-        <FlexibleView>
-          <Layout
+  useEffect(() => {
+    isAuthHandler();
+  }, [isAuthHandler]);
+
+  const onNavigateToReset = useCallback(() => navigateToScreen("Reset"), [
+    navigateToScreen,
+  ]);
+
+  const onNavigateToRegister = useCallback(() => navigateToScreen("Register"), [
+    navigateToScreen,
+  ]);
+
+  return (
+    <ScreenTemplate>
+      <FlexibleView>
+        <Layout
+          style={{
+            flex: 1,
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <View style={{ marginBottom: 50, marginTop: 70 }}>
+            <Image style={{ width: 120, height: 120 }} source={LogoIcon} />
+            <TouchableOpacity
+              style={{ marginTop: 10, alignSelf: "center" }}
+              onPress={copyToClipboard}
+            >
+              <Text style={{ opacity: 0.3, fontSize: 12 }}>
+                Версия: {APP_VERSION}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
             style={{
-              flex: 1,
-              justifyContent: "flex-start",
-              alignItems: "center",
+              width: "85%",
+              maxWidth: 720,
+              manrginBottom: 25,
             }}
           >
-            <View style={{ marginBottom: 50, marginTop: 70 }}>
-              <Image style={{ width: 120, height: 120 }} source={LogoIcon} />
-              <TouchableOpacity
-                style={{ marginTop: 10, alignSelf: "center" }}
-                onPress={copyToClipboard}
-              >
-                <Text style={{ opacity: 0.3, fontSize: 12 }}>
-                  Версия: {APP_VERSION}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View
+            <Input
+              value={email}
+              autoCapitalize="none"
+              placeholder="Почта"
+              keyboardType="email-address"
+              autoCompleteType="email"
+              onChangeText={setEmail}
+              style={{ marginVertical: 10 }}
+            />
+            <Input
+              value={password}
+              placeholder="Пароль"
+              icon={!isVisiblePassword ? showIconPassword : hideIconPassword}
+              onIconPress={() => setIsVisiblePassword(!isVisiblePassword)}
+              secureTextEntry={!isVisiblePassword}
+              autoCompleteType="password"
+              onChangeText={setPassword}
+              style={{ marginVertical: 10 }}
+            />
+            <Button
               style={{
-                width: "85%",
-                maxWidth: 720,
-                manrginBottom: 25,
+                marginVertical: 25,
+                borderRadius: THEME.BUTTON_RADIUS,
+              }}
+              onPress={onSubmit}
+            >
+              Войти
+            </Button>
+          </View>
+          <TouchableOpacity onPress={onNavigateToReset}>
+            <Text
+              style={{
+                marginVertical: 7,
+                borderRadius: THEME.BUTTON_RADIUS,
+                textDecorationLine: "underline",
               }}
             >
-              <Input
-                value={email}
-                autoCapitalize="none"
-                placeholder="Почта"
-                keyboardType="email-address"
-                autoCompleteType="email"
-                onChangeText={setEmail}
-                style={{ marginVertical: 10 }}
-              />
-              <Input
-                value={password}
-                placeholder="Пароль"
-                icon={!isVisiblePassword ? showIconPassword : hideIconPassword}
-                onIconPress={() => setIsVisiblePassword(!isVisiblePassword)}
-                secureTextEntry={!isVisiblePassword}
-                autoCompleteType="password"
-                onChangeText={setPassword}
-                style={{ marginVertical: 10 }}
-              />
-              <Button
-                style={{
-                  marginVertical: 25,
-                  borderRadius: THEME.BUTTON_RADIUS,
-                }}
-                onPress={onSubmit}
-              >
-                Войти
-              </Button>
-            </View>
-            <TouchableOpacity onPress={() => navigateToScreen("Reset")}>
-              <Text
-                style={{
-                  marginVertical: 7,
-                  borderRadius: THEME.BUTTON_RADIUS,
-                  textDecorationLine: "underline",
-                }}
-              >
-                Забыли пароль?
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigateToScreen("Register")}>
-              <Text
-                style={{
-                  marginVertical: 7,
-                  borderRadius: THEME.BUTTON_RADIUS,
-                  textDecorationLine: "underline",
-                }}
-              >
-                Зарегистрироваться
-              </Text>
-            </TouchableOpacity>
-          </Layout>
-        </FlexibleView>
-      </ScreenTemplate>
-    );
-  }
-);
-
-const mapStateToProps = (store) => ({
-  loader: store.api.loader,
+              Забыли пароль?
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onNavigateToRegister}>
+            <Text
+              style={{
+                marginVertical: 7,
+                borderRadius: THEME.BUTTON_RADIUS,
+                textDecorationLine: "underline",
+              }}
+            >
+              Зарегистрироваться
+            </Text>
+          </TouchableOpacity>
+        </Layout>
+      </FlexibleView>
+    </ScreenTemplate>
+  );
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  getProfileDispatch: (onSuccess) => dispatch(getProfileAction(onSuccess)),
-  authLoginDispatch: (email, password, isAuthHandler) =>
-    dispatch(authLoginAction(email, password, isAuthHandler)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default LoginScreen;

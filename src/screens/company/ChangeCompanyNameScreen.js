@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -16,13 +16,11 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateCompanyAction } from "../../store/actions/apiAction";
+import { getApiLoading, getCompany } from "../../store/selectors";
 
 export const ChangeCompanyNameScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const companyName = useSelector(
-    (store) => store.company.company.company_name
-  );
-  const companyId = useSelector((store) => store.company.company.id);
+  const { company_name: companyName, id: companyId } = useSelector(getCompany);
 
   const [company_name, setCompanyName] = React.useState(companyName);
 
@@ -30,7 +28,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
     navigation.goBack(null);
   }, [navigation]);
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onReset = useCallback(() => {
     navigateBack();
@@ -51,8 +49,9 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
     }
   }, [companyId, company_name, dispatch, loader, onReset]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = React.useRef(null);
@@ -69,7 +68,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Изменение названия компании"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

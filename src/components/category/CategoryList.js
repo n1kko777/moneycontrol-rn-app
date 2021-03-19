@@ -1,11 +1,12 @@
 import React, { memo, useCallback } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
+import { getCategories } from "../../store/selectors";
 
 import { CategoryListItem } from "./CategoryListItem";
 
 export const CategoryList = memo(({ navigation }) => {
-  const { categories } = useSelector((store) => store.category);
+  const categories = useSelector(getCategories);
 
   const keyExtractor = useCallback((item) => item.id.toString(), []);
 

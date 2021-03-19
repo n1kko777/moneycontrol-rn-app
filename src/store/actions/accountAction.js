@@ -149,22 +149,6 @@ export const updateAccount = ({ id, account_name, balance }) => async (
 
 // Delete account from server
 export const hideAccount = (account) => async (dispatch) => {
-  if (+account.balance !== 0) {
-    dispatch(
-      failHandler(
-        {
-          custom: {
-            title: "Баланс счета не равен 0!!",
-            message: "Пожалуйста, переведи средства на другой счет.",
-          },
-        },
-        ERROR_ACCOUNT
-      )
-    );
-
-    return Promise.reject();
-  }
-
   try {
     dispatch(setLoading());
     const token = await AsyncStorage.getItem("AUTH_TOKEN");

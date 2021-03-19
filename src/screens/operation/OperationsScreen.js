@@ -14,6 +14,10 @@ import { OperationList } from "../../components/operation/OperationList";
 import { getDataDispatcher } from "../../store/actions/apiAction";
 import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
 import { BalanceComponent } from "../../components/home/BalanceComponent";
+import {
+  getLayoutFilterParams,
+  getLayoutOperationListData,
+} from "../../store/selectors";
 
 export const OperationsScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -21,9 +25,8 @@ export const OperationsScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((elStore) => elStore);
-
-  const { operationListData, filterParams } = store.layout;
+  const operationListData = useSelector(getLayoutOperationListData);
+  const filterParams = useSelector(getLayoutFilterParams);
 
   const navigateFilter = useCallback(() => {
     navigation.navigate("FilterOperation");

@@ -1,4 +1,11 @@
-import React, { memo, useCallback, useEffect, useState, useRef } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,10 +29,11 @@ import {
 } from "../../themes/icons";
 
 import { authSignUpAction } from "../../store/actions/apiAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const RegisterScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((store) => store.api);
+  const loader = useSelector(getApiLoading);
 
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
@@ -74,8 +82,9 @@ export const RegisterScreen = memo(({ navigation }) => {
     onSuccess,
   ]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = useRef(null);
@@ -94,7 +103,7 @@ export const RegisterScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Регистрация"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

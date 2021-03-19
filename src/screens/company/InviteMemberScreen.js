@@ -10,6 +10,7 @@ import {
   joinProfileToCompanyAction,
   getDataDispatcher,
 } from "../../store/actions/apiAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const InviteMemberScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export const InviteMemberScreen = memo(({ navigation }) => {
   const isNotProfileIdEmpty = profile_id && profile_id.length > 0;
   const isNotProfilePhoneEmpty = profile_phone && profile_phone.length > 0;
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onSuccess = useCallback(() => {
     setProfileId("");

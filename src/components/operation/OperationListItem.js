@@ -9,6 +9,7 @@ import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
 import { hideOperationAction } from "../../store/actions/apiAction";
+import { getAccounts, getCategories, getTags } from "../../store/selectors";
 
 export const OperationListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
@@ -22,10 +23,9 @@ export const OperationListItem = memo(({ item, navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((elStore) => elStore);
-  const { accounts } = store.account;
-  const { categories } = store.category;
-  const { tags } = store.tag;
+  const accounts = useSelector(getAccounts);
+  const categories = useSelector(getCategories);
+  const tags = useSelector(getTags);
 
   const deleteHandler = useCallback(() => {
     close();
@@ -75,24 +75,14 @@ export const OperationListItem = memo(({ item, navigation }) => {
     }
   }, [accounts, close, item, navigation]);
 
-  const LeftAction = () => (
-    <Button onPress={copyHandler} icon={CopyIcon} status="info" />
+  const LeftAction = useCallback(
+    () => <Button onPress={copyHandler} icon={CopyIcon} status="info" />,
+    [copyHandler]
   );
 
-  const RightAction = () => (
-    <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
-  );
-
-  const WrapperComponent = ({ children }) => (
-    <Swipeable
-      ref={swipeableRow}
-      overshootLeft={false}
-      renderLeftActions={LeftAction}
-      overshootRight={false}
-      renderRightActions={RightAction}
-    >
-      {children}
-    </Swipeable>
+  const RightAction = useCallback(
+    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    [deleteHandler]
   );
 
   const renderCategory = useMemo(() => {
@@ -123,7 +113,13 @@ export const OperationListItem = memo(({ item, navigation }) => {
   }, [item.tags, tags]);
 
   return (
-    <WrapperComponent>
+    <Swipeable
+      ref={swipeableRow}
+      overshootLeft={false}
+      renderLeftActions={LeftAction}
+      overshootRight={false}
+      renderRightActions={RightAction}
+    >
       <Card style={{ borderWidth: 0 }}>
         <Layout
           style={{
@@ -151,11 +147,10 @@ export const OperationListItem = memo(({ item, navigation }) => {
                 fontWeight: "600",
                 color:
                   kittenTheme[
-                    item.style !== undefined
-                      ? item.style
-                      : `color-primary-${
-                          themeContext.theme === "light" ? 800 : 100
-                        }`
+                    item.style ||
+                      `color-primary-${
+                        themeContext.theme === "light" ? 800 : 100
+                      }`
                   ],
               }}
             >
@@ -195,6 +190,6 @@ export const OperationListItem = memo(({ item, navigation }) => {
           </Layout>
         </Layout>
       </Card>
-    </WrapperComponent>
+    </Swipeable>
   );
 });

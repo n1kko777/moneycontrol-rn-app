@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { createCategoryAction } from "../../store/actions/apiAction";
 import { clearCurrentCategory } from "../../store/actions/categoryAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const CreateCategoryScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -33,7 +34,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
     navigation.goBack(null);
   }, [dispatch, navigation, prevItem]);
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onReset = useCallback(() => {
     setCategoryName("");
@@ -54,8 +55,9 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
     }
   }, [category_name, dispatch, loader, onReset]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = React.useRef(null);
@@ -72,7 +74,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Создание категории"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

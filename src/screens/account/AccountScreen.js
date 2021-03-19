@@ -17,6 +17,7 @@ export const AccountScreen = memo(({ navigation }) => {
   const onNavigateHome = useCallback(() => navigation.navigate("Home"), [
     navigation,
   ]);
+
   const onNavigateCreateAccount = useCallback(
     () => navigation.navigate("CreateAccount"),
     [navigation]

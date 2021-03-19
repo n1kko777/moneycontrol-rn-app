@@ -2,11 +2,14 @@ import React, { memo, useCallback } from "react";
 import { Autocomplete } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
 import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
+import { getCategories, getCategoryCurrent } from "../../../store/selectors";
 
 export const CategorySelector = memo(
   ({ selectedId, setSelectedId, isNotEmpty, navigation }) => {
     const categoryInput = React.useRef(null);
-    const { categories, current } = useSelector((store) => store.category);
+
+    const categories = useSelector(getCategories);
+    const current = useSelector(getCategoryCurrent);
 
     const categoriesData = categories.map((elem) => ({
       title: elem.category_name,

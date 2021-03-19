@@ -1,6 +1,7 @@
 import React, { memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTagAction } from "../../../store/actions/apiAction";
+import { getApiLoading } from "../../../store/selectors";
 import { CustomSearchWithSelect } from "../../../ui/CustomSearchWithSelect";
 
 const RefCustomSearchWithSelect = React.forwardRef((props, ref) => (
@@ -12,7 +13,7 @@ export const CustomTag = memo(
     const dispatch = useDispatch();
     const tagInput = React.useRef(null);
 
-    const loader = useSelector((store) => store.api.loader);
+    const loader = useSelector(getApiLoading);
 
     const onSuccess = (targetValue) => {
       if (tagInput.current !== null) {

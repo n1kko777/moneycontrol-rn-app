@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -16,6 +16,7 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateAccountAction } from "../../store/actions/apiAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const UpdateAccountScreen = memo(({ route, navigation }) => {
   const { account } = route.params;
@@ -29,7 +30,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
     navigation.goBack(null);
   }, [navigation]);
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -47,8 +48,9 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
     }
   }, [account.id, account_name, balance, dispatch, loader, navigateBack]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = React.useRef(null);
@@ -65,7 +67,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Обновление счета"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

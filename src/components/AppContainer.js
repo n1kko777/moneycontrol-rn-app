@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -20,10 +20,10 @@ export const AppContainer = memo(() => {
 
   const currentTheme = { ...themes[theme], ...appTheme };
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const nextTheme = theme === "light" ? "dark" : "light";
     setTheme(nextTheme);
-  };
+  }, [theme]);
 
   return (
     <>

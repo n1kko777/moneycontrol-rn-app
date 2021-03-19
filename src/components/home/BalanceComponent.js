@@ -14,6 +14,12 @@ import {
   IncreaseIcon,
   DecreaseIcon,
 } from "../../themes/icons";
+import {
+  getLayoutTotalActions,
+  getLayoutTotalBalance,
+  getLayoutTotalTransactions,
+  getProfile,
+} from "../../store/selectors";
 
 let FONT_SIZE = 22;
 const styles = StyleSheet.create({
@@ -43,20 +49,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export const BalanceComponent = memo(({ balance = null }) => {
+export const BalanceComponent = memo(({ isBalance }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const { profile, layout } = useSelector((store) => store);
-  const { totalActions, totalTransactions } = layout;
+  const totalActions = useSelector(getLayoutTotalActions);
+  const totalTransactions = useSelector(getLayoutTotalTransactions);
+  const profile = useSelector(getProfile);
+  const balance = splitToDigits(
+    useSelector(getLayoutTotalBalance).toString().replace(/\s/g, "")
+  );
 
-  const isAdmin = profile.profile !== null && profile.profile.is_admin;
+  const isAdmin = profile !== null && profile.is_admin;
 
   const [isVisibleBalance, setIsVisibleBalance] = React.useState(true);
-
-  if (balance !== null && balance !== 0) {
-    balance = splitToDigits(balance.toString().replace(/\s/g, ""));
-  }
 
   const action = splitToDigits(totalActions.toString().replace(/\s/g, ""));
   const transaction = splitToDigits(
@@ -85,7 +91,7 @@ export const BalanceComponent = memo(({ balance = null }) => {
           ],
       }}
     >
-      {balance !== null ? (
+      {isBalance ? (
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 12, textAlign: "center" }}>{`Баланс ${
             isAdmin ? "компании" : "счетов"

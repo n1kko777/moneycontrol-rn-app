@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import {
   View,
   Modal,
@@ -17,6 +17,11 @@ import { ThemeContext } from "../themes/theme-context";
 import { CalendarIcon } from "../themes/icons";
 import { setCalendar, clearCalendar } from "../store/actions/calendarAction";
 import { dateService } from "../dateService";
+import {
+  getCalendarEndDate,
+  getCalendarMinDate,
+  getCalendarStartDate,
+} from "../store/selectors";
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -60,8 +65,11 @@ const styles = StyleSheet.create({
 
 export const CustomDatePicker = memo(() => {
   const dispatch = useDispatch();
-  const { startDate, endDate } = useSelector((store) => store.calendar);
-  const profile = useSelector((store) => store.profile.profile);
+
+  const startDate = useSelector(getCalendarStartDate);
+  const endDate = useSelector(getCalendarEndDate);
+
+  const minDate = useSelector(getCalendarMinDate);
 
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
@@ -79,6 +87,8 @@ export const CustomDatePicker = memo(() => {
     });
   }, [endDate, startDate]);
 
+  const onModalOpen = useCallback(() => setModalVisible(true), []);
+
   const onModalClose = useCallback(() => {
     setModalVisible(false);
   }, []);
@@ -93,10 +103,13 @@ export const CustomDatePicker = memo(() => {
     onModalClose();
   }, [dispatch, onModalClose, range]);
 
-  const minDate =
-    profile !== null
-      ? new Date(profile.created)
-      : new Date(new Date().getFullYear() - 1, 0, 1);
+  const memoDisplayDate = useMemo(
+    () =>
+      `${displayDate(startDate)} – ${displayDate(
+        endDate !== null ? endDate : startDate
+      )}`,
+    [endDate, startDate]
+  );
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
@@ -149,7 +162,7 @@ export const CustomDatePicker = memo(() => {
 
       <TouchableOpacity
         style={{ flexDirection: "row", alignItems: "center" }}
-        onPressOut={() => setModalVisible(true)}
+        onPressOut={onModalOpen}
       >
         <CalendarIcon
           fill={
@@ -169,9 +182,7 @@ export const CustomDatePicker = memo(() => {
           }}
           category="p1"
         >
-          {`${displayDate(startDate)} – ${displayDate(
-            endDate !== null ? endDate : startDate
-          )}`}
+          {memoDisplayDate}
         </Text>
       </TouchableOpacity>
     </View>

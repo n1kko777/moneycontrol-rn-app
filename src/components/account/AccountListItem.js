@@ -24,21 +24,24 @@ export const AccountListItem = memo(({ item, navigation }) => {
     swipeableRow.current.close();
   }, [swipeableRow]);
 
-  const renderIconItem = (style) => <CardIcon {...style} />;
-  const renderItemAccessory = ({ balance, style }) => (
-    <Text
-      style={{
-        fontSize: 16,
-        color:
-          kittenTheme[
-            style !== undefined
-              ? style
-              : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ],
-      }}
-    >
-      {balance !== "" && `${splitToDigits(balance.toString())} ₽`}
-    </Text>
+  const renderIconItem = useCallback((style) => <CardIcon {...style} />, []);
+  const renderItemAccessory = useCallback(
+    ({ balance, style }) => (
+      <Text
+        style={{
+          fontSize: 16,
+          color:
+            kittenTheme[
+              style !== undefined
+                ? style
+                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ],
+        }}
+      >
+        {balance !== "" && `${splitToDigits(balance.toString())} ₽`}
+      </Text>
+    ),
+    [kittenTheme, themeContext.theme]
   );
 
   const deleteHandler = useCallback(() => {
@@ -64,8 +67,9 @@ export const AccountListItem = memo(({ item, navigation }) => {
     );
   }, [close, dispatch, item]);
 
-  const RightAction = () => (
-    <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
+  const RightAction = useCallback(
+    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    [deleteHandler]
   );
 
   const updateHandler = useCallback(() => {

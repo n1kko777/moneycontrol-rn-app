@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import {
   SafeAreaView,
   StatusBar,
@@ -12,6 +12,15 @@ import { THEME } from "../themes/themes";
 
 export const ScreenTemplate = memo(({ children }) => {
   const themeContext = React.useContext(ThemeContext);
+  const onTouchablePress = useCallback(() => Keyboard.dismiss(), []);
+  const safeAreaStyle = {
+    flex: 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    backgroundColor:
+      themeContext.theme === "light"
+        ? THEME.BACKGROUND_LIGHT
+        : THEME.BACKGROUND_DARK,
+  };
 
   return (
     <>
@@ -20,19 +29,8 @@ export const ScreenTemplate = memo(({ children }) => {
           themeContext.theme === "light" ? "dark" : "light"
         }-content`}
       />
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-            backgroundColor:
-              themeContext.theme === "light"
-                ? THEME.BACKGROUND_LIGHT
-                : THEME.BACKGROUND_DARK,
-          }}
-        >
-          {children}
-        </SafeAreaView>
+      <TouchableWithoutFeedback onPress={onTouchablePress}>
+        <SafeAreaView style={safeAreaStyle}>{children}</SafeAreaView>
       </TouchableWithoutFeedback>
     </>
   );

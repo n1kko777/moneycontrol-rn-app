@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useTheme, Layout, Button } from "@ui-kitten/components";
@@ -13,46 +13,16 @@ import { CompanyProfileList } from "../../components/company/CompanyProfileList"
 import { THEME } from "../../themes/themes";
 import { EditIcon, ProfileIcon } from "../../themes/icons";
 import { getDataDispatcher } from "../../store/actions/apiAction";
+import { getCompanyList, getProfile } from "../../store/selectors";
 
 export const TeamsScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((elStore) => elStore);
-  const { profile } = store.profile;
-  const { accounts } = store.account;
-  const { company } = store.company;
+  const profile = useSelector(getProfile);
 
-  const companyProfileListData = useCallback(() => {
-    const innerListData = () => {
-      if (company !== null && "profiles" in company) {
-        if (profile !== null && profile.is_admin) {
-          return company.profiles.map((elem) => ({
-            ...elem,
-            balance: accounts
-              .filter((acc) => acc.profile === elem.id)
-              .reduce((sum, next) => sum + +next.balance, 0),
-          }));
-        }
-        return company.profiles;
-      }
-      return [];
-    };
-
-    return innerListData().sort((a, b) => {
-      if (a.is_admin === b.is_admin) {
-        return 0;
-      }
-      if (a.is_admin) {
-        return -1;
-      }
-
-      return 1;
-    });
-  }, [accounts, company, profile]);
-
-  const companyList = companyProfileListData();
+  const companyList = useSelector(getCompanyList);
 
   const onCompanyRefresh = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
@@ -66,23 +36,30 @@ export const TeamsScreen = memo(({ navigation }) => {
     navigation.navigate("ChangeCompanyName");
   }, [navigation]);
 
+  const onNavigateToProfile = useCallback(() => {
+    navigation.navigate("Profile");
+  }, [navigation]);
+
+  const memoTargetIcon = useMemo(
+    () => (profile !== null && profile.is_admin ? EditIcon : ProfileIcon),
+    [profile]
+  );
+
+  const onTargetIconPress = useCallback(
+    () =>
+      profile !== null && profile.is_admin
+        ? onEditCompanyName()
+        : onNavigateToProfile(),
+    [onEditCompanyName, onNavigateToProfile, profile]
+  );
+
   return (
     <ScreenTemplate>
-      {company !== null && (
-        <Toolbar
-          navigation={navigation}
-          TargetIcon={
-            profile !== null && profile.is_admin ? EditIcon : ProfileIcon
-          }
-          onTarget={
-            profile !== null && profile.is_admin
-              ? onEditCompanyName
-              : () => {
-                  navigation.navigate("Profile");
-                }
-          }
-        />
-      )}
+      <Toolbar
+        navigation={navigation}
+        TargetIcon={memoTargetIcon}
+        onTarget={onTargetIconPress}
+      />
       <Layout
         style={{
           flex: 1,

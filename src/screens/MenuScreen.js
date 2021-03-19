@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { View } from "react-native";
 import { useTheme, Layout } from "@ui-kitten/components";
 
 import {
@@ -65,21 +64,13 @@ export const MenuScreen = memo(({ navigation }) => {
             ],
         }}
       >
-        <View style={{ marginVertical: 20 }}>
-          {/* <Button
-            style={{
-              alignSelf: "center",
-              paddingHorizontal: 20,
-              borderRadius: THEME.BUTTON_RADIUS,
-            }}
-            status="info"
-            onPress={navigateToReport}
-          >
-            Сформировать отчет
-          </Button> */}
-        </View>
         <Layout
-          style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
+          style={{
+            flex: 1,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            marginTop: 40,
+          }}
         >
           <MenuList data={menuListData} />
         </Layout>

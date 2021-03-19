@@ -1,4 +1,11 @@
-import React, { useState, useRef, useEffect, memo, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  memo,
+  useCallback,
+  useMemo,
+} from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,11 +23,12 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { resetPassAction } from "../../store/actions/apiAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const ResetPassword = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
@@ -44,8 +52,9 @@ export const ResetPassword = memo(({ navigation }) => {
     }
   }, [dispatch, email, loader, onReset]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = useRef(null);
@@ -62,7 +71,7 @@ export const ResetPassword = memo(({ navigation }) => {
         <TopNavigation
           title="Сброс пароля"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

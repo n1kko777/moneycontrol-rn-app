@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { View } from "react-native";
 import { useTheme, Layout, Button } from "@ui-kitten/components";
 
@@ -14,13 +14,17 @@ export const CategoryScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const onNavigateHome = useCallback(() => navigation.navigate("Home"), [
+    navigation,
+  ]);
+
   return (
     <ScreenTemplate>
       <Toolbar
         navigation={navigation}
         title="Категории"
         TargetIcon={BackIcon}
-        onTarget={() => navigation.navigate("Home")}
+        onTarget={onNavigateHome}
       />
       <Layout
         style={{

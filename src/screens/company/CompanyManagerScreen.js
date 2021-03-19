@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import {
   Layout,
   TopNavigation,
@@ -20,10 +20,11 @@ import {
   getProfileAction,
 } from "../../store/actions/apiAction";
 import { FlexibleView } from "../../components/FlexibleView";
+import { getApiLoading, getProfile } from "../../store/selectors";
 
 export const CompanyManagerScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const profile = useSelector((store) => store.profile.profile);
+  const profile = useSelector(getProfile);
 
   const [companyName, setCompanyName] = React.useState("");
 
@@ -48,11 +49,12 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
     );
   }, [logoutHandler]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />,
+    [navigateLogout]
   );
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onSuccessProfile = useCallback(
     (successProfile) => {
@@ -72,8 +74,11 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
     }
   }, [dispatch, loader, onSuccessProfile]);
 
-  const RefreshProfileAction = () => (
-    <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
+  const RefreshProfileAction = useMemo(
+    () => (
+      <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
+    ),
+    [updateProfileHandler]
   );
 
   const onSuccessCompany = useCallback(
@@ -96,8 +101,8 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Добавление компании"
           alignment="center"
-          leftControl={BackAction()}
-          rightControls={RefreshProfileAction()}
+          leftControl={BackAction}
+          rightControls={RefreshProfileAction}
         />
         <Layout
           style={{

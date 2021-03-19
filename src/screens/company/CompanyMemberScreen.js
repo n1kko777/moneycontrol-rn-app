@@ -19,6 +19,7 @@ import {
 } from "../../store/actions/apiAction";
 import { BackIcon } from "../../themes/icons";
 import { splitToDigits } from "../../splitToDigits";
+import { getLayoutProfileData } from "../../store/selectors";
 
 export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const { profile } = route.params;
@@ -28,7 +29,7 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const profileData = useSelector((store) => store.layout.profileData);
+  const profileData = useSelector(getLayoutProfileData);
 
   const [homeListData, setHomeListData] = useState([]);
   const [totalBalance, setTotalBalance] = useState(null);

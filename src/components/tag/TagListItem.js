@@ -17,7 +17,7 @@ export const TagListItem = memo(({ item, navigation }) => {
     swipeableRow.current.close();
   }, [swipeableRow]);
 
-  const renderIconItem = (style) => <TagIcon {...style} />;
+  const renderIconItem = useCallback((style) => <TagIcon {...style} />, []);
 
   const deleteHandler = useCallback(() => {
     close();
@@ -42,8 +42,9 @@ export const TagListItem = memo(({ item, navigation }) => {
     );
   }, [close, dispatch, item]);
 
-  const RightAction = () => (
-    <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
+  const RightAction = useCallback(
+    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    [deleteHandler]
   );
 
   const updateHandler = useCallback(() => {

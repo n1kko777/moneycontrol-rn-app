@@ -14,11 +14,19 @@ import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { ThemeContext } from "../../themes/theme-context";
-import { getShortName } from "../../getShortName";
 import { BackIcon } from "../../themes/icons";
 import { getOperationAction } from "../../store/actions/apiAction";
 import { clearCalendar } from "../../store/actions/calendarAction";
 import { CustomSearchWithSelect } from "../../ui/CustomSearchWithSelect";
+import {
+  getAccounts,
+  getCategoriesList,
+  getLayoutFilterParams,
+  getLayoutOperationTypeData,
+  getProfile,
+  getProfilesList,
+  getTagsList,
+} from "../../store/selectors";
 
 moment.locale("ru");
 
@@ -30,29 +38,41 @@ const styles = StyleSheet.create({
   },
 });
 
+const secondaryLayoutStyles = {
+  ...styles.flexOne,
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  padding: 8,
+};
+
 export const FilterOperationScreen = memo(({ navigation }) => {
-  const dispatch = useDispatch();
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const mainLayoutStyles = {
+    ...styles.flexOne,
+    backgroundColor:
+      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
+  };
+
+  const mainViewStyles = {
+    height: 30,
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor:
+      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
+  };
+
+  const dispatch = useDispatch();
+
   const goBack = useCallback(() => navigation.goBack(), [navigation]);
 
-  const store = useSelector((elStore) => elStore);
+  const profile = useSelector(getProfile);
 
-  const { profile } = store.profile;
-  const { company } = store.company;
-  const { filterParams, operationTypeData } = store.layout;
+  const filterParams = useSelector(getLayoutFilterParams);
+  const operationTypeData = useSelector(getLayoutOperationTypeData);
 
-  const initProfileData =
-    profile !== null && profile.is_admin ? company.profiles : [profile];
-
-  const profileData = initProfileData.map((elem, index) => ({
-    index,
-    text: getShortName(`${elem.first_name} ${elem.last_name}`),
-    title: getShortName(`${elem.first_name} ${elem.last_name}`),
-    id: elem.id,
-    is_admin: elem.is_admin,
-  }));
+  const profileData = useSelector(getProfilesList);
 
   const initProfileList = useCallback(() => {
     if (filterParams !== null) {
@@ -66,7 +86,7 @@ export const FilterOperationScreen = memo(({ navigation }) => {
 
   const [profileList, setProfileList] = React.useState(initProfileList());
 
-  const { accounts } = useSelector((elStore) => elStore.account);
+  const accounts = useSelector(getAccounts);
 
   const accountData = []
     .concat(
@@ -96,27 +116,13 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     filterParams !== null ? [...filterParams.account] : []
   );
 
-  const { categories } = useSelector((elStore) => elStore.category);
-
-  const categoryData = categories.map((elem, index) => ({
-    index,
-    text: elem.category_name,
-    title: elem.category_name,
-    id: elem.id,
-  }));
+  const categoryData = useSelector(getCategoriesList);
 
   const [categoryList, setCategoryList] = React.useState(
     filterParams !== null ? [...filterParams.category] : []
   );
 
-  const { tags } = useSelector((elStore) => elStore.tag);
-
-  const tagData = tags.map((elem, index) => ({
-    index,
-    text: elem.tag_name,
-    title: elem.tag_name,
-    id: elem.id,
-  }));
+  const tagData = useSelector(getTagsList);
 
   const [tagList, setTagList] = React.useState(
     filterParams !== null ? [...filterParams.tag] : []
@@ -156,27 +162,6 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     dispatch,
     goBack,
   ]);
-
-  const mainLayoutStyles = {
-    ...styles.flexOne,
-    backgroundColor:
-      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
-  };
-
-  const mainViewStyles = {
-    height: 30,
-    marginTop: 20,
-    marginBottom: 20,
-    backgroundColor:
-      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
-  };
-
-  const secondaryLayoutStyles = {
-    ...styles.flexOne,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 8,
-  };
 
   return (
     <ScreenTemplate>

@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Keyboard, View } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -21,14 +21,19 @@ import { createTransferAction } from "../../store/actions/apiAction";
 
 import { clearCurrentAccount } from "../../store/actions/accountAction";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
+import {
+  getAccountCurrent,
+  getApiLoading,
+  getToAccountList,
+} from "../../store/selectors";
 
 export const CreateTransferScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
-  const store = useSelector((elStore) => elStore);
-  const { loader } = store.api;
 
-  const currentAccount = store.account.current;
+  const loader = useSelector(getApiLoading);
+
+  const currentAccount = useSelector(getAccountCurrent);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -38,21 +43,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
 
   const dispatch = useDispatch();
 
-  const { profile } = store.profile;
-
-  const { company } = store.company;
-
-  const toAccountData = company.profiles.map((elem, index) => ({
-    text: `${elem.is_admin ? "⭐️ " : ""}${elem.first_name} ${elem.last_name} ${
-      elem.id === profile.id ? "👈" : ""
-    }`,
-    items: elem.accounts.map((insideElem, insideIndex) => ({
-      parentIndex: index,
-      index: insideIndex,
-      text: insideElem.split("(pk=")[0],
-      id: insideElem.split("(pk=")[1].replace(")", ""),
-    })),
-  }));
+  const toAccountData = useSelector(getToAccountList);
 
   const [transfer_amount, setTransferAmount] = React.useState(
     prevItem !== undefined ? prevItem.balance.toString() : ""
@@ -114,8 +105,9 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
     navigateBack,
   ]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const onToSelectAccount = useCallback((opt) => {
@@ -128,7 +120,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Создание перевода"
           alignment="center"
-          leftControl={BackAction()}
+          leftControl={BackAction}
         />
         <Layout
           style={{

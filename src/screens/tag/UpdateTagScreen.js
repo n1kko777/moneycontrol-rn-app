@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -16,6 +16,7 @@ import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { updateTagAction } from "../../store/actions/apiAction";
+import { getApiLoading } from "../../store/selectors";
 
 export const UpdateTagScreen = memo(({ route, navigation }) => {
   const { tag } = route.params;
@@ -28,7 +29,7 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
     navigation.goBack(null);
   }, [navigation]);
 
-  const loader = useSelector((store) => store.api.loader);
+  const loader = useSelector(getApiLoading);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
@@ -45,8 +46,9 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
     }
   }, [loader, dispatch, tag.id, tag_name, navigateBack]);
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  const BackAction = useMemo(
+    () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
+    [navigateBack]
   );
 
   const inputRef = React.useRef(null);
@@ -59,46 +61,44 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
-        <TopNavigation
-          title="Обновление тега"
-          alignment="center"
-          leftControl={BackAction()}
-        />
-        <Layout
+      <TopNavigation
+        title="Обновление тега"
+        alignment="center"
+        leftControl={BackAction}
+      />
+      <Layout
+        style={{
+          flex: 1,
+          marginTop: 30,
+          alignItems: "center",
+        }}
+      >
+        <View
           style={{
-            flex: 1,
-            marginTop: 30,
-            alignItems: "center",
+            width: "85%",
+            maxWidth: 720,
+            manrginBottom: 25,
           }}
         >
-          <View
+          <Input
+            ref={inputRef}
+            value={tag_name}
+            placeholder="Название тега"
+            onChangeText={setTagName}
+            autoCompleteType="name"
+            style={{ marginVertical: 10 }}
+          />
+          <Button
             style={{
-              width: "85%",
-              maxWidth: 720,
-              manrginBottom: 25,
+              marginVertical: 25,
+              borderRadius: THEME.BUTTON_RADIUS,
             }}
+            onPress={onSubmit}
           >
-            <Input
-              ref={inputRef}
-              value={tag_name}
-              placeholder="Название тега"
-              onChangeText={setTagName}
-              autoCompleteType="name"
-              style={{ marginVertical: 10 }}
-            />
-            <Button
-              style={{
-                marginVertical: 25,
-                borderRadius: THEME.BUTTON_RADIUS,
-              }}
-              onPress={onSubmit}
-            >
-              Обновить
-            </Button>
-          </View>
-        </Layout>
-      </>
+            Обновить
+          </Button>
+        </View>
+      </Layout>
     </ScreenTemplate>
   );
 });

@@ -1,19 +1,12 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
+import { getAccountDataList } from "../../store/selectors";
 
 import { AccountListItem } from "./AccountListItem";
 
 export const AccountList = memo(({ navigation }) => {
-  const store = useSelector((selStore) => selStore);
-  const { profile } = store.profile;
-  const { accounts } = store.account;
-
-  const dataList = useMemo(
-    () =>
-      accounts.filter((acc) => profile !== null && acc.profile === profile.id),
-    [accounts, profile]
-  );
+  const dataList = useSelector(getAccountDataList);
 
   const keyExtractor = useCallback((item) => item.id.toString(), []);
 

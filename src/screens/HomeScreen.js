@@ -16,6 +16,7 @@ import { Toolbar } from "../components/navigation/Toolbar";
 import { CustomDatePicker } from "../components/CustomDatePicker";
 
 import { getDataDispatcher } from "../store/actions/apiAction";
+import { getLayoutHomeListData } from "../store/selectors";
 
 export const HomeScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -23,8 +24,7 @@ export const HomeScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const store = useSelector((selStore) => selStore);
-  const { homeListData, totalBalance } = store.layout;
+  const homeListData = useSelector(getLayoutHomeListData);
   homeListData.isNavigate = true;
 
   const refreshData = useCallback(() => {
@@ -64,7 +64,7 @@ export const HomeScreen = memo(({ navigation }) => {
         }}
       >
         <View onStartShouldSetResponder={() => true}>
-          <BalanceComponent balance={totalBalance} />
+          <BalanceComponent isBalance />
 
           <View style={{ height: 30, marginVertical: 10 }}>
             <CustomDatePicker />

@@ -14,6 +14,21 @@ import {
 import { logout } from "../../store/actions/authAction";
 import { getDataDispatcher } from "../../store/actions/apiAction";
 
+const getMenuData = (theme) => [
+  {
+    title: "Обновить",
+    icon: UpdateIcon,
+  },
+  {
+    title: `${theme === "light" ? "Темная" : "Светлая"} тема`,
+    icon: theme === "light" ? DarkIcon : LightIcon,
+  },
+  {
+    title: "Выйти",
+    icon: LogoutIcon,
+  },
+];
+
 export const TopMenuOptions = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
@@ -24,20 +39,7 @@ export const TopMenuOptions = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const [menuVisible, setMenuVisible] = React.useState(false);
 
-  const menuData = [
-    {
-      title: "Обновить",
-      icon: UpdateIcon,
-    },
-    {
-      title: `${themeContext.theme === "light" ? "Темная" : "Светлая"} тема`,
-      icon: themeContext.theme === "light" ? DarkIcon : LightIcon,
-    },
-    {
-      title: "Выйти",
-      icon: LogoutIcon,
-    },
-  ];
+  const menuData = getMenuData(themeContext.theme);
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));

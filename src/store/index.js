@@ -16,18 +16,18 @@ import { calendarReducer } from "./reducers/calendarReducer";
 import { layoutReducer } from "./reducers/layoutReducer";
 
 const rootReducer = combineReducers({
-  api: apiReducer,
-  layout: layoutReducer,
-  auth: authReducer,
-  profile: profileReducer,
-  company: companyReducer,
   account: accountReducer,
-  transaction: transactionReducer,
   action: actionReducer,
-  transfer: transferReducer,
-  category: categoryReducer,
-  tag: tagReducer,
+  api: apiReducer,
+  auth: authReducer,
   calendar: calendarReducer,
+  category: categoryReducer,
+  company: companyReducer,
+  layout: layoutReducer,
+  profile: profileReducer,
+  tag: tagReducer,
+  transaction: transactionReducer,
+  transfer: transferReducer,
 });
 
 export default createStore(

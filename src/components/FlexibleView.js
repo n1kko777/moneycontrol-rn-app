@@ -10,6 +10,7 @@ export const FlexibleView = memo(({ children }) => {
     // Save the content height in state
     setScreenHeight(contentHeight);
   }, []);
+
   const scrollEnabled = screenHeight > height;
 
   return (

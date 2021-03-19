@@ -43,8 +43,9 @@ export const CategoryListItem = memo(({ item, navigation }) => {
     );
   }, [close, dispatch, item]);
 
-  const RightAction = () => (
-    <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />
+  const RightAction = useCallback(
+    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    [deleteHandler]
   );
 
   const updateHandler = useCallback(() => {
