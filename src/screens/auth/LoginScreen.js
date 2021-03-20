@@ -1,14 +1,19 @@
 import React, { memo, useCallback, useEffect } from "react";
-import { TouchableOpacity, View, Image, Keyboard } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Image,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Clipboard from "expo-clipboard";
-import { Layout, Button, Text, Input } from "@ui-kitten/components";
+import { Icon, Layout, Button, Text, Input } from "@ui-kitten/components";
 
 import { useDispatch, useSelector } from "react-redux";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 
 import { THEME } from "../../themes/themes";
-import { hideIconPassword, showIconPassword } from "../../themes/icons";
 
 import {
   getProfileAction,
@@ -82,6 +87,23 @@ const LoginScreen = memo(({ navigation }) => {
     navigateToScreen,
   ]);
 
+  const onToggleVisibilityIcon = useCallback(
+    () => setIsVisiblePassword(!isVisiblePassword),
+    [isVisiblePassword]
+  );
+
+  const renderVisibilityIcon = useCallback(
+    (props) => (
+      <TouchableWithoutFeedback onPress={onToggleVisibilityIcon}>
+        <Icon
+          {...props}
+          name={isVisiblePassword ? "eye-off-outline" : "eye-outline"}
+        />
+      </TouchableWithoutFeedback>
+    ),
+    [isVisiblePassword, onToggleVisibilityIcon]
+  );
+
   return (
     <ScreenTemplate>
       <FlexibleView>
@@ -122,8 +144,7 @@ const LoginScreen = memo(({ navigation }) => {
             <Input
               value={password}
               placeholder="Пароль"
-              icon={!isVisiblePassword ? showIconPassword : hideIconPassword}
-              onIconPress={() => setIsVisiblePassword(!isVisiblePassword)}
+              accessoryRight={renderVisibilityIcon}
               secureTextEntry={!isVisiblePassword}
               autoCompleteType="password"
               onChangeText={setPassword}
