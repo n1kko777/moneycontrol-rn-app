@@ -116,7 +116,9 @@ export const BalanceComponent = memo(({ isBalance }) => {
           <Button
             size="large"
             appearance="ghost"
-            icon={!isVisibleBalance ? ShowIconBalance : HideIconBalance}
+            accessoryLeft={
+              !isVisibleBalance ? ShowIconBalance : HideIconBalance
+            }
             onPress={toggleVisibleBalance}
           />
         </View>
@@ -127,7 +129,7 @@ export const BalanceComponent = memo(({ isBalance }) => {
           <Button
             status="success"
             style={styles.creaseButton}
-            icon={IncreaseIcon}
+            accessoryLeft={IncreaseIcon}
           />
           <View>
             <Text style={{ fontSize: 12 }}>Доход</Text>
@@ -158,7 +160,7 @@ export const BalanceComponent = memo(({ isBalance }) => {
           <Button
             status="danger"
             style={styles.creaseButton}
-            icon={DecreaseIcon}
+            accessoryLeft={DecreaseIcon}
           />
           <View>
             <Text style={{ fontSize: 12 }}>Расход</Text>

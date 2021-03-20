@@ -36,7 +36,11 @@ export const NavButton = memo(
       }
     >
       <TouchableOpacity onPress={navigateHandlePress}>
-        <Button status={status} style={styles.secondaryButton} icon={icon} />
+        <Button
+          status={status}
+          style={styles.secondaryButton}
+          accessoryLeft={icon}
+        />
       </TouchableOpacity>
 
       <View style={{ opacity: opacityValue }}>

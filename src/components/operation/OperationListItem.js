@@ -76,12 +76,20 @@ export const OperationListItem = memo(({ item, navigation }) => {
   }, [accounts, close, item, navigation]);
 
   const LeftAction = useCallback(
-    () => <Button onPress={copyHandler} icon={CopyIcon} status="info" />,
+    () => (
+      <Button onPress={copyHandler} accessoryLeft={CopyIcon} status="info" />
+    ),
     [copyHandler]
   );
 
   const RightAction = useCallback(
-    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    () => (
+      <Button
+        onPress={deleteHandler}
+        accessoryLeft={DeleteIcon}
+        status="danger"
+      />
+    ),
     [deleteHandler]
   );
 

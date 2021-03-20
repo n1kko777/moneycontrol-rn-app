@@ -172,7 +172,6 @@ export const RegisterScreen = memo(({ navigation }) => {
             >
               Зарегистрироваться
             </Button>
-
             <Text
               style={{
                 alignSelf: "center",
