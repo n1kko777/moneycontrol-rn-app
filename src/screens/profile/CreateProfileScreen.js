@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { Alert, View } from "react-native";
 import {
   Layout,
@@ -75,7 +75,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
     );
   }, [logoutHandler]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />,
     [navigateLogout]
   );
@@ -86,7 +86,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

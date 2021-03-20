@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import {
   Layout,
   TopNavigation,
@@ -49,7 +49,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
     );
   }, [logoutHandler]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />,
     [navigateLogout]
   );
@@ -74,7 +74,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
     }
   }, [dispatch, loader, onSuccessProfile]);
 
-  const RefreshProfileAction = useMemo(
+  const RefreshProfileAction = useCallback(
     () => (
       <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
     ),
@@ -101,8 +101,8 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Добавление компании"
           alignment="center"
-          leftControl={BackAction}
-          rightControls={RefreshProfileAction}
+          accessoryLeft={BackAction}
+          accessoryRight={RefreshProfileAction}
         />
         <Layout
           style={{

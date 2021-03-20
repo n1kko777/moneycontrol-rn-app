@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -48,7 +48,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
     }
   }, [category.id, category_name, dispatch, loader, navigateBack]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -67,7 +67,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Обновление категории"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

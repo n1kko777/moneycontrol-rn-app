@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { View, Alert } from "react-native";
 import {
   Layout,
@@ -111,7 +111,7 @@ export const ProfileScreen = memo(({ navigation }) => {
     navigation.goBack(null);
   }, [navigation]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -140,7 +140,7 @@ export const ProfileScreen = memo(({ navigation }) => {
     );
   }, [dispatch, navigation, profile.id, profile.is_admin]);
 
-  const DeleteProfileAction = useMemo(
+  const DeleteProfileAction = useCallback(
     () => (
       <TopNavigationAction icon={DeleteIcon} onPress={deleteProfileHandler} />
     ),
@@ -153,8 +153,8 @@ export const ProfileScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Профиль"
           alignment="center"
-          leftControl={BackAction}
-          rightControls={DeleteProfileAction}
+          accessoryLeft={BackAction}
+          accessoryRight={DeleteProfileAction}
         />
         <Layout
           style={{

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -48,7 +48,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
     }
   }, [account.id, account_name, balance, dispatch, loader, navigateBack]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -67,7 +67,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Обновление счета"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

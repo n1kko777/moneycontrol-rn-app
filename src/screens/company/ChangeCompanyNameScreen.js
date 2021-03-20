@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -49,7 +49,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
     }
   }, [companyId, company_name, dispatch, loader, onReset]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -68,7 +68,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Изменение названия компании"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

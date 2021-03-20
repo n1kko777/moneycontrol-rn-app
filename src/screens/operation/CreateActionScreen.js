@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { View, Keyboard } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -106,7 +106,7 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
     navigateBack,
   ]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -116,7 +116,7 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
       <TopNavigation
         title="Создание дохода"
         alignment="center"
-        leftControl={BackAction}
+        accessoryLeft={BackAction}
       />
       <Layout
         style={{

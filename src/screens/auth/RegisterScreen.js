@@ -1,11 +1,4 @@
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-} from "react";
+import React, { memo, useCallback, useEffect, useState, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -79,7 +72,7 @@ export const RegisterScreen = memo(({ navigation }) => {
     onSuccess,
   ]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -134,7 +127,7 @@ export const RegisterScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Регистрация"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

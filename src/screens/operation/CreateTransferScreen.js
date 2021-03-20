@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { Keyboard, View } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -105,7 +105,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
     navigateBack,
   ]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -120,7 +120,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Создание перевода"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -59,7 +59,7 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
     }
   }, [account_name, balance, dispatch, loader, onReset]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -78,7 +78,7 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
         <TopNavigation
           title="Создание счета"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

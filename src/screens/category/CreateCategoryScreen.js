@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -55,7 +55,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
     }
   }, [category_name, dispatch, loader, onReset]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -74,7 +74,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
         <TopNavigation
           title="Создание категории"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

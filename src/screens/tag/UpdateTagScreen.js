@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -46,7 +46,7 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
     }
   }, [loader, dispatch, tag.id, tag_name, navigateBack]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -64,7 +64,7 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
       <TopNavigation
         title="Обновление тега"
         alignment="center"
-        leftControl={BackAction}
+        accessoryLeft={BackAction}
       />
       <Layout
         style={{

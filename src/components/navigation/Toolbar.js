@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { TopNavigation, TopNavigationAction } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
 import { TopMenuOptions } from "./TopMenuOptions";
@@ -16,10 +16,14 @@ export const Toolbar = memo(
     },
     isMenu = true,
   }) => {
-    const renderMenuAction = () => <TopMenuOptions navigation={navigation} />;
+    const renderMenuAction = useCallback(
+      () => <TopMenuOptions navigation={navigation} />,
+      [navigation]
+    );
 
-    const ProfileAction = (props) => (
-      <TopNavigationAction {...props} icon={TargetIcon} />
+    const ProfileAction = useCallback(
+      (props) => <TopNavigationAction {...props} icon={TargetIcon} />,
+      [TargetIcon]
     );
 
     const renderProfileAction = () => <ProfileAction onPress={onTarget} />;
@@ -34,8 +38,8 @@ export const Toolbar = memo(
         }}
         title={title || toolbarTitle}
         alignment="center"
-        leftControl={renderProfileAction()}
-        rightControls={isMenu && renderMenuAction()}
+        accessoryLeft={renderProfileAction}
+        accessoryRight={isMenu && renderMenuAction}
       />
     );
   }
