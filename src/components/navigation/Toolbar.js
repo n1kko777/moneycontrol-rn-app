@@ -39,7 +39,7 @@ export const Toolbar = memo(
         title={title || toolbarTitle}
         alignment="center"
         accessoryLeft={renderProfileAction}
-        accessoryRight={isMenu && renderMenuAction}
+        accessoryRight={isMenu ? renderMenuAction : null}
       />
     );
   }

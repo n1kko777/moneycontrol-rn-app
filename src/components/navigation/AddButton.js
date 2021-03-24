@@ -1,10 +1,6 @@
-import React, { memo, useCallback } from "react";
-import { View, StyleSheet } from "react-native";
-import Animated, { interpolate } from "react-native-reanimated";
+import React, { memo, useCallback, useRef } from "react";
+import { View, StyleSheet, Animated, TouchableOpacity } from "react-native";
 import * as Haptics from "expo-haptics";
-
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useTransition } from "react-native-redash";
 import {
   AddIcon,
   TrendingUpIcon,
@@ -24,15 +20,38 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     zIndex: 1000,
   },
+  plusButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#FFC300",
+  },
+  navButton: {
+    position: "absolute",
+    left: 6,
+    top: 6,
+  },
 });
 
 export const AddButton = memo(({ navigation }) => {
+  const animation = useRef(new Animated.Value(0)).current;
+
   const [toggled, setToggle] = React.useState(false);
 
   const toggleHandler = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setToggle((prev) => !prev);
-  }, []);
+    const toValue = toggled ? 0 : 1;
+
+    Animated.spring(animation, {
+      toValue,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+
+    setToggle(!toggled);
+  }, [animation, toggled]);
 
   const navigateHandlePress = useCallback(
     (navRoute = null) => {
@@ -45,95 +64,122 @@ export const AddButton = memo(({ navigation }) => {
     [navigation, toggleHandler]
   );
 
-  const transition = useTransition(toggled, { duration: 150 });
-  const rotate = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, 0.785398],
-  });
+  const onNavigateToCreateAction = useCallback(() => {
+    toggleHandler();
+    navigateHandlePress("CreateAction");
+  }, [navigateHandlePress, toggleHandler]);
 
-  const earnX = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, -94],
-  });
+  const onNavigateToCreateTransfer = useCallback(() => {
+    toggleHandler();
+    navigateHandlePress("CreateTransfer");
+  }, [navigateHandlePress, toggleHandler]);
 
-  const earnY = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, -50],
-  });
+  const onNavigateToCreateTransaction = useCallback(() => {
+    toggleHandler();
+    navigateHandlePress("CreateTransaction");
+  }, [navigateHandlePress, toggleHandler]);
 
-  const transferX = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, 0],
-  });
+  const rotation = {
+    transform: [
+      {
+        rotate: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: ["0deg", "45deg"],
+        }),
+      },
+    ],
+  };
 
-  const transferY = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [-63, -160],
-  });
+  const earnAnim = {
+    transform: [
+      {
+        translateX: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -95],
+        }),
+      },
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -55],
+        }),
+      },
+    ],
+  };
 
-  const spendX = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, 84],
-  });
+  const transferAnim = {
+    transform: [
+      {
+        translateX: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 0],
+        }),
+      },
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -100],
+        }),
+      },
+    ],
+  };
 
-  const spendY = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [-136, -188],
-  });
+  const spendAnim = {
+    transform: [
+      {
+        translateX: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 95],
+        }),
+      },
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -55],
+        }),
+      },
+    ],
+  };
 
   return (
     <View style={{ width: 60, height: 60, marginTop: -35 }}>
-      <NavButton
-        coordinate={{ translateX: earnX, translateY: earnY }}
-        navigateHandlePress={() => navigateHandlePress("CreateAction")}
-        icon={TrendingUpIcon}
-        opacityValue={toggled ? 1 : 0}
-        status="success"
-        name="Доход"
-      />
-      <NavButton
-        coordinate={{ translateX: transferX, translateY: transferY }}
-        navigateHandlePress={() => navigateHandlePress("CreateTransfer")}
-        icon={ExchangeIcon}
-        opacityValue={toggled ? 1 : 0}
-        status="info"
-        name="Перевод"
-      />
-      <NavButton
-        coordinate={{ translateX: spendX, translateY: spendY }}
-        navigateHandlePress={() => navigateHandlePress("CreateTransaction")}
-        icon={TrendingDownIcon}
-        opacityValue={toggled ? 1 : 0}
-        status="danger"
-        name="Расход"
-      />
-      <View
-        style={{
-          ...styles.button,
-        }}
-      >
-        <TouchableOpacity
-          onPress={toggleHandler}
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: "#FFC300",
-            borderColor: "#FFC300",
-          }}
-          activeOpacity={1}
-        >
-          <Animated.View
-            style={{
-              transform: [{ rotate }],
-            }}
-          >
-            <AddIcon style={{}} fill="#6B0848" />
+      <Animated.View style={[styles.navButton, earnAnim]}>
+        <NavButton
+          icon={TrendingUpIcon}
+          onPress={onNavigateToCreateAction}
+          opacityValue={toggled ? 1 : 0}
+          status="success"
+          name="Доход"
+        />
+      </Animated.View>
+
+      <Animated.View style={[styles.navButton, transferAnim]}>
+        <NavButton
+          icon={ExchangeIcon}
+          onPress={onNavigateToCreateTransfer}
+          opacityValue={toggled ? 1 : 0}
+          status="info"
+          name="Перевод"
+        />
+      </Animated.View>
+
+      <Animated.View style={[styles.navButton, spendAnim]}>
+        <NavButton
+          icon={TrendingDownIcon}
+          onPress={onNavigateToCreateTransaction}
+          opacityValue={toggled ? 1 : 0}
+          status="danger"
+          name="Расход"
+        />
+      </Animated.View>
+
+      <TouchableOpacity onPress={toggleHandler} activeOpacity={1}>
+        <View style={styles.plusButton}>
+          <Animated.View style={[styles.button, rotation]}>
+            <AddIcon fill="#6B0848" />
           </Animated.View>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 });
