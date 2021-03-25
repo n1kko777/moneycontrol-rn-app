@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Keyboard, View } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,9 @@ import {
   Input,
   Button,
   Select,
+  SelectGroup,
+  SelectItem,
+  IndexPath,
 } from "@ui-kitten/components";
 
 import { ScreenTemplate } from "../../components/ScreenTemplate";
@@ -48,27 +51,60 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
   const [transfer_amount, setTransferAmount] = React.useState(
     prevItem !== undefined ? prevItem.balance.toString() : ""
   );
+
+  const isNotAmountEmpty = parseFloat(transfer_amount) > 0;
+
   const [selectedFromAccountId, setSelectedFromAccountId] = React.useState(
     prevItem !== undefined
       ? parseInt(prevItem.from_account.split("pk=")[1], 10)
       : null
   );
+
   const isNotFromAccountEmpty = selectedFromAccountId !== null;
 
+  const copyToProfile = prevItem
+    ? Object.keys(toAccountData).find((profileKey) =>
+        Object.keys(toAccountData[profileKey].items).find(
+          (accountKey) =>
+            parseInt(toAccountData[profileKey].items[accountKey].id, 10) ===
+            parseInt(prevItem.to_account_id, 10)
+        )
+      )
+    : prevItem;
+
+  const copyToAccount = copyToProfile
+    ? Object.keys(toAccountData[copyToProfile].items).find(
+        (accountKey) =>
+          parseInt(toAccountData[copyToProfile].items[accountKey].id, 10) ===
+          parseInt(prevItem.to_account_id, 10)
+      )
+    : copyToProfile;
+
   const [selectedToAccountOption, setSelectedToAccountOption] = React.useState(
-    prevItem !== undefined
-      ? []
-          .concat(...toAccountData.map((elem) => elem.items))
-          .find(
-            (elem) =>
-              elem.id === prevItem.to_account.split("(pk=")[1].replace(")", "")
-          )
-      : null
+    copyToProfile && copyToAccount
+      ? new IndexPath(parseInt(copyToAccount, 10), parseInt(copyToProfile, 10))
+      : undefined
   );
 
-  // Validate
-  const isNotAmountEmpty = parseFloat(transfer_amount) > 0;
-  const isNotToAccountEmpty = selectedToAccountOption !== null;
+  const [selectedToAccountValue, setSelectedToAccountValue] = React.useState(
+    copyToProfile && copyToAccount
+      ? toAccountData[copyToProfile].items[copyToAccount].text
+      : ""
+  );
+
+  const onToSelectAccount = useCallback(
+    (index) => {
+      const profile = index.section;
+      const account = index.row;
+
+      setSelectedToAccountOption(index);
+      setSelectedToAccountValue(toAccountData[profile].items[account].text);
+    },
+    [toAccountData]
+  );
+
+  const isNotToAccountEmpty =
+    selectedToAccountOption && selectedToAccountOption !== null;
 
   const navigateBack = useCallback(() => {
     if (currentAccount !== null) {
@@ -81,15 +117,13 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
   const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
+      const toProfile = selectedToAccountOption.section;
+      const toAccount = selectedToAccountOption.row;
 
       const newTransfer = {
         transfer_amount: parseFloat(transfer_amount),
         from_account: selectedFromAccountId,
-        to_account:
-          selectedToAccountOption !== null &&
-          toAccountData[selectedToAccountOption.parentIndex].items[
-            selectedToAccountOption.index
-          ].id,
+        to_account: toAccountData[toProfile].items[toAccount].id,
         is_active: true,
       };
 
@@ -110,9 +144,23 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
     [navigateBack]
   );
 
-  const onToSelectAccount = useCallback((opt) => {
-    setSelectedToAccountOption(opt);
-  }, []);
+  const memoToAccountList = useMemo(
+    () =>
+      Object.keys(toAccountData).map((profile) => (
+        <SelectGroup
+          key={toAccountData[profile].text}
+          title={toAccountData[profile].text}
+        >
+          {Object.keys(toAccountData[profile].items).map((account) => (
+            <SelectItem
+              key={toAccountData[profile].items[account].id}
+              title={toAccountData[profile].items[account].text}
+            />
+          ))}
+        </SelectGroup>
+      )),
+    [toAccountData]
+  );
 
   return (
     <ScreenTemplate>
@@ -155,21 +203,18 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
               isNotEmpty={isNotFromAccountEmpty}
               navigation={navigation}
             />
+
             <Select
-              data={toAccountData}
-              placeholder="Укажите счет пополнения"
-              selectedOption={
-                selectedToAccountOption !== null &&
-                toAccountData[selectedToAccountOption.parentIndex] &&
-                toAccountData[selectedToAccountOption.parentIndex].items[
-                  selectedToAccountOption.index
-                ]
-              }
+              value={selectedToAccountValue}
+              selectedIndex={selectedToAccountOption}
               onSelect={onToSelectAccount}
+              placeholder="Укажите счет пополнения"
               style={{ marginVertical: 10 }}
               status={isNotToAccountEmpty ? "success" : "danger"}
               caption={isNotToAccountEmpty ? "" : "Поле не может быть пустым"}
-            />
+            >
+              {memoToAccountList}
+            </Select>
 
             <Button
               style={{
