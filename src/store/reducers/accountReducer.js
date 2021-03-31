@@ -9,6 +9,7 @@ import {
   SET_CURRENT_ACCOUNT,
   CLEAR_CURRENT_ACCOUNT,
 } from "../types";
+import { getAccountTitle } from "../../getAccountTitle";
 
 const initialState = {
   accounts: [],
@@ -41,7 +42,10 @@ export const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         accounts: [payload, ...state.accounts],
-        current: payload,
+        current: {
+          title: getAccountTitle(payload),
+          id: payload.id,
+        },
         loading: false,
         error: null,
       };

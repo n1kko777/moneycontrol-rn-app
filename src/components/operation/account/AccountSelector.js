@@ -1,49 +1,34 @@
-import React, { memo, useCallback } from "react";
-import { Autocomplete } from "@ui-kitten/components";
-import { useSelector } from "react-redux";
-import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
-import { getAccountTitle } from "../../../getAccountTitle";
-import {
-  getAccounts,
-  getAccountCurrent,
-  getAccountDataList,
-} from "../../../store/selectors";
+import React, { memo, useCallback, useMemo } from "react";
+import { TouchableWithoutFeedback } from "react-native";
+import { Autocomplete, AutocompleteItem, Icon } from "@ui-kitten/components";
 
 export const AccountSelector = memo(
-  ({ selectedId, setSelectedId, isNotEmpty, navigation }) => {
+  ({
+    current,
+    setCurrent,
+    clearCurrent,
+    accountData,
+    isNotEmpty,
+    navigation,
+  }) => {
     const accountInput = React.useRef(null);
 
-    const accounts = useSelector(getAccounts);
-    const current = useSelector(getAccountCurrent);
-
-    const accountData = useSelector(getAccountDataList).map((elem) => ({
-      title: getAccountTitle(elem),
-      id: elem.id,
-    }));
-
     const [value, setValue] = React.useState(
-      selectedId !== null
-        ? accountData.find((el) => el.id === selectedId).title
-        : ""
-    );
-    const [data, setData] = React.useState(accountData);
-
-    const onSelect = useCallback(
-      (item) => {
-        setValue(item.title);
-        setSelectedId(item.id);
-      },
-      [setSelectedId]
+      current !== null ? current.title : ""
     );
 
     React.useEffect(() => {
-      if (current !== null) {
-        onSelect({
-          title: getAccountTitle(current),
-          id: current.id,
-        });
-      }
-    }, [current, onSelect]);
+      setValue(current !== null ? current.title : "");
+    }, [current]);
+
+    const [data, setData] = React.useState(accountData || []);
+
+    const onSelect = useCallback(
+      (item) => {
+        setCurrent(data[item]);
+      },
+      [data, setCurrent]
+    );
 
     const onChangeText = useCallback(
       (query) => {
@@ -53,45 +38,72 @@ export const AccountSelector = memo(
             item.title.toLowerCase().includes(query.toLowerCase())
           )
         );
+        if (
+          query.trim().length === 0 ||
+          (current !== null && query !== current.title)
+        ) {
+          clearCurrent();
+        }
       },
-      [accountData]
+      [accountData, clearCurrent, current]
     );
 
     const clearInput = useCallback(() => {
-      setValue("");
-      setData(accountData);
-      setSelectedId(null);
-    }, [accountData, setSelectedId]);
+      onChangeText("");
+    }, [onChangeText]);
 
     const addAccount = useCallback(() => {
       accountInput.current.blur();
+      const findIndex = data.findIndex((elAcc) =>
+        new RegExp(value.toLowerCase(), "i").test(elAcc.title.toLowerCase())
+      );
 
-      if (accounts.map((el) => el.account_name).includes(value)) {
-        onSelect({ title: value });
+      if (findIndex !== -1) {
+        onSelect(findIndex);
       } else if (value.trim().length !== 0) {
         navigation.navigate("CreateAccount", { account_name: value });
       } else {
         onChangeText("");
       }
-    }, [accounts, navigation, onChangeText, onSelect, value]);
+    }, [data, navigation, onChangeText, onSelect, value]);
+
+    const renderIcon = useCallback(
+      (props) =>
+        value.trim().length !== 0 && (
+          <TouchableWithoutFeedback
+            onPress={current !== null ? clearInput : addAccount}
+          >
+            <Icon
+              {...props}
+              name={current !== null ? "close" : "plus-outline"}
+            />
+          </TouchableWithoutFeedback>
+        ),
+      [addAccount, clearInput, current, value]
+    );
+
+    const renderOption = useMemo(
+      () =>
+        data.map((item) => (
+          <AutocompleteItem key={item.id} title={item.title} />
+        )),
+      [data]
+    );
 
     return (
       <Autocomplete
         value={value}
-        data={data}
         onChangeText={onChangeText}
         onSelect={onSelect}
         placeholder="Укажите счет"
         style={{ marginVertical: 10 }}
-        icon={
-          value.trim().length !== 0 &&
-          (selectedId !== null ? CloseIcon : AddSmallIcon)
-        }
-        onIconPress={selectedId !== null ? clearInput : addAccount}
+        accessoryRight={renderIcon}
         onSubmitEditing={addAccount}
         ref={accountInput}
         status={isNotEmpty ? "success" : "danger"}
-      />
+      >
+        {renderOption}
+      </Autocomplete>
     );
   }
 );

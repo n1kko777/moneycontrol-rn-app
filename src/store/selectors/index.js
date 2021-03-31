@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import { getAccountTitle } from "../../getAccountTitle";
 import { getShortName } from "../../getShortName";
 
 /* Account */
@@ -137,6 +138,15 @@ export const getProfilesList = createSelector(
         is_admin: elem.is_admin,
       })
     )
+);
+
+export const getAccountList = createSelector(getAccounts, (accounts) =>
+  accounts.map((elem, index) => ({
+    index,
+    text: getAccountTitle(elem),
+    title: getAccountTitle(elem),
+    id: elem.id,
+  }))
 );
 
 export const getCategoriesList = createSelector(getCategories, (categories) =>
