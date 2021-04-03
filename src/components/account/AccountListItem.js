@@ -26,22 +26,21 @@ export const AccountListItem = memo(({ item, navigation }) => {
 
   const renderIconItem = useCallback((style) => <CardIcon {...style} />, []);
   const renderItemAccessory = useCallback(
-    ({ balance, style }) => (
+    () => (
       <Text
         style={{
           fontSize: 16,
           color:
             kittenTheme[
-              style !== undefined
-                ? style
-                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              item.style ||
+                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
             ],
         }}
       >
-        {balance !== "" && `${splitToDigits(balance.toString())} ₽`}
+        {splitToDigits(item.balance.toString() || "0")} ₽
       </Text>
     ),
-    [kittenTheme, themeContext.theme]
+    [item.balance, item.style, kittenTheme, themeContext.theme]
   );
 
   const deleteHandler = useCallback(() => {
@@ -102,8 +101,8 @@ export const AccountListItem = memo(({ item, navigation }) => {
       <ListItem
         onPress={updateHandler}
         title={renderListTitle}
-        icon={renderIconItem}
-        accessory={() => renderItemAccessory(item)}
+        accessoryLeft={renderIconItem}
+        accessoryRight={renderItemAccessory}
         style={{
           paddingVertical: 15,
         }}

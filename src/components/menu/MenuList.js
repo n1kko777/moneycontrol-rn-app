@@ -10,22 +10,6 @@ export const MenuList = memo(({ data }) => {
   const kittenTheme = useTheme();
 
   const keyExtractor = useCallback((item) => item.title.toString(), []);
-  const renderItemAccessory = useCallback(
-    () => (
-      <RightIcon
-        fill={
-          kittenTheme[
-            `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ]
-        }
-        style={{
-          width: 30,
-          height: 30,
-        }}
-      />
-    ),
-    [kittenTheme, themeContext.theme]
-  );
 
   const renderItem = useCallback(
     ({ item: { title, navLink, icon } }) => {
@@ -35,20 +19,34 @@ export const MenuList = memo(({ data }) => {
         </Text>
       );
 
+      const renderItemAccessory = () => (
+        <RightIcon
+          fill={
+            kittenTheme[
+              `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ]
+          }
+          style={{
+            width: 30,
+            height: 30,
+          }}
+        />
+      );
+
       return (
         <ListItem
           key={title}
           title={renderListTitle}
           onPress={navLink}
-          icon={icon}
-          accessory={renderItemAccessory}
+          accessoryLeft={icon}
+          accessoryRight={renderItemAccessory}
           style={{
             paddingVertical: 15,
           }}
         />
       );
     },
-    [renderItemAccessory]
+    [kittenTheme, themeContext.theme]
   );
 
   return (

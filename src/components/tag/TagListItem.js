@@ -77,7 +77,7 @@ export const TagListItem = memo(({ item, navigation }) => {
       <ListItem
         onPress={updateHandler}
         title={renderListTitle}
-        icon={renderIconItem}
+        accessoryLeft={renderIconItem}
         style={{
           paddingVertical: 15,
         }}

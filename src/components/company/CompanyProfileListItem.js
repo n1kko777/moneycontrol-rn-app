@@ -11,18 +11,19 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const onHandleClick = useCallback(
+    () => item.is_admin && item.balance && onClick(item),
+    [item, onClick]
+  );
+
   const renderItemIcon = useCallback(
-    (elItem, style) => {
-      delete style.tintColor;
-      return elItem.image !== null ? (
+    () =>
+      item.image !== null ? (
         <Avatar
-          style={{
-            ...style,
-            width: 30,
-            height: 30,
-          }}
+          shape="round"
+          size="small"
           source={{
-            uri: elItem.image,
+            uri: item.image,
           }}
         />
       ) : (
@@ -37,13 +38,13 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
             height: 30,
           }}
         />
-      );
-    },
-    [kittenTheme, themeContext.theme]
+      ),
+    [item.image, kittenTheme, themeContext.theme]
   );
 
-  const renderItemAccessory = (balance) => (
-    <Text category="s1">{`${splitToDigits(balance)} ₽`}</Text>
+  const renderItemAccessory = useCallback(
+    () => <Text category="s1">{`${splitToDigits(item.balance)} ₽`}</Text>,
+    [item.balance]
   );
 
   const renderListTitle = useCallback(
@@ -59,16 +60,12 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   return (
     <ListItem
       title={renderListTitle}
-      icon={(style) => renderItemIcon(item, style)}
-      accessory={
-        item.balance !== undefined
-          ? () => renderItemAccessory(item.balance.toString())
-          : null
-      }
+      accessoryLeft={renderItemIcon}
+      accessoryRight={renderItemAccessory}
       style={{
         paddingVertical: 15,
       }}
-      onPress={item.balance !== undefined && (() => onClick(item))}
+      onPress={onHandleClick}
     />
   );
 });
