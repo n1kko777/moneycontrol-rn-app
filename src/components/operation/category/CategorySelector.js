@@ -12,7 +12,6 @@ export const CategorySelector = memo(
     navigation,
   }) => {
     const categoryInput = React.useRef(null);
-
     const [value, setValue] = React.useState(
       current !== null ? current.title : ""
     );

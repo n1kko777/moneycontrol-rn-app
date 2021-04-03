@@ -41,7 +41,10 @@ export const categoryReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: [payload, ...state.categories],
-        current: payload,
+        current: {
+          title: payload.category_name,
+          id: payload.id,
+        },
         loading: false,
         error: null,
       };
