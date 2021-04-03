@@ -37,7 +37,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
             ],
         }}
       >
-        {splitToDigits(item.balance.toString() || "0")} ₽
+        {splitToDigits(item.balance)} ₽
       </Text>
     ),
     [item.balance, item.style, kittenTheme, themeContext.theme]

@@ -56,18 +56,14 @@ export const BalanceComponent = memo(({ isBalance }) => {
   const totalActions = useSelector(getLayoutTotalActions);
   const totalTransactions = useSelector(getLayoutTotalTransactions);
   const profile = useSelector(getProfile);
-  const balance = splitToDigits(
-    useSelector(getLayoutTotalBalance).toString().replace(/\s/g, "")
-  );
+  const balance = splitToDigits(useSelector(getLayoutTotalBalance));
 
   const isAdmin = profile !== null && profile.is_admin;
 
   const [isVisibleBalance, setIsVisibleBalance] = React.useState(true);
 
-  const action = splitToDigits(totalActions.toString().replace(/\s/g, ""));
-  const transaction = splitToDigits(
-    totalTransactions.toString().replace(/\s/g, "")
-  );
+  const action = splitToDigits(totalActions);
+  const transaction = splitToDigits(totalTransactions);
 
   useEffect(() => {
     if (totalActions > 1000000 || totalTransactions > 1000000) {

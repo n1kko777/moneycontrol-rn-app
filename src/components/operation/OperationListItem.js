@@ -202,8 +202,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
                   ],
               }}
             >
-              {item.balance !== "" &&
-                `${splitToDigits(item.balance.toString())} ₽`}
+              {`${splitToDigits(item.balance)} ₽`}
             </Text>
           </Layout>
           <Layout

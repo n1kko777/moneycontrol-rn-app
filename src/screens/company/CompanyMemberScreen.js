@@ -111,9 +111,7 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
           navigation={navigation}
           title={`${profile.first_name} ${
             profile.last_name
-          } (Баланс: ${splitToDigits(
-            totalBalance !== null ? totalBalance : 0
-          )} ₽)`}
+          } (Баланс: ${splitToDigits(totalBalance)} ₽)`}
           TargetIcon={BackIcon}
           onTarget={onBackHandler}
           isMenu={false}
