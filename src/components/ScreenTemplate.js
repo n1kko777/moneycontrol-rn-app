@@ -4,7 +4,6 @@ import {
   StatusBar,
   TouchableWithoutFeedback,
   Keyboard,
-  Platform,
 } from "react-native";
 import { ThemeContext } from "../themes/theme-context";
 
@@ -15,7 +14,6 @@ export const ScreenTemplate = memo(({ children }) => {
   const onTouchablePress = useCallback(() => Keyboard.dismiss(), []);
   const safeAreaStyle = {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     backgroundColor:
       themeContext.theme === "light"
         ? THEME.BACKGROUND_LIGHT
@@ -25,6 +23,11 @@ export const ScreenTemplate = memo(({ children }) => {
   return (
     <>
       <StatusBar
+        backgroundColor={
+          themeContext.theme === "light"
+            ? THEME.BACKGROUND_LIGHT
+            : THEME.BACKGROUND_DARK
+        }
         barStyle={`${
           themeContext.theme === "light" ? "dark" : "light"
         }-content`}
