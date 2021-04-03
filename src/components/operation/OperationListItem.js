@@ -185,7 +185,10 @@ export const OperationListItem = memo(({ item, navigation }) => {
               style={{
                 fontSize: 16,
                 fontWeight: "600",
+                flex: 1,
               }}
+              ellipsizeMode="tail"
+              numberOfLines={1}
             >
               {item.name}
             </Text>
@@ -219,7 +222,10 @@ export const OperationListItem = memo(({ item, navigation }) => {
                   kittenTheme[
                     `color-basic-${themeContext.theme === "light" ? 700 : 600}`
                   ],
+                flex: 1,
               }}
+              ellipsizeMode="tail"
+              numberOfLines={1}
             >
               {renderCategory}
             </Text>

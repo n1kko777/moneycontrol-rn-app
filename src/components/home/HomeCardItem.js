@@ -66,6 +66,7 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
       {renderIconItem}
       <Text
         style={{
+          flex: 1,
           fontSize: 16,
           marginRight: "auto",
           marginLeft: 8,
@@ -75,6 +76,8 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
                 `color-primary-${themeContext.theme === "light" ? 800 : 100}`
             ],
         }}
+        ellipsizeMode="tail"
+        numberOfLines={1}
         category="s1"
       >
         {name}
