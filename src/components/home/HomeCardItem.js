@@ -48,7 +48,11 @@ export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
     return null;
   }, [kittenTheme, style, themeContext, type]);
 
-  const memoBalance = useMemo(() => `${splitToDigits(balance)} ₽`, [balance]);
+  const memoBalance = useMemo(
+    () =>
+      type !== "category" && type !== "tag" && `${splitToDigits(balance)} ₽`,
+    [balance, type]
+  );
 
   return (
     <View
