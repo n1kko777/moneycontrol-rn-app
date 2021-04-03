@@ -1,9 +1,13 @@
 import React, { memo, useCallback, useState, useMemo, useEffect } from "react";
-import { ScrollView, View } from "react-native";
-import { Autocomplete, AutocompleteItem, Layout } from "@ui-kitten/components";
+import { ScrollView, View, TouchableWithoutFeedback } from "react-native";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Icon,
+  Layout,
+} from "@ui-kitten/components";
 import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
 import { CustomSearchWithSelectItem } from "./CustomSearchWithSelectItem";
-import { AddSmallIcon } from "../../themes/icons";
 import styles from "./styles";
 
 export const CustomSearchWithSelect = memo(
@@ -61,15 +65,23 @@ export const CustomSearchWithSelect = memo(
       }
     }, [dataList, datasets]);
 
-    const isCreateIcon =
-      Boolean(enableCreate) && value.trim().length !== 0 ? AddSmallIcon : null;
-
     const memoAutocompleteData = useMemo(
       () =>
         data.map((dataItem) => (
           <AutocompleteItem key={dataItem.id} title={dataItem.title} />
         )),
       [data]
+    );
+
+    const renderIcon = useCallback(
+      (iconProps) =>
+        Boolean(enableCreate) &&
+        value.trim().length !== 0 && (
+          <TouchableWithoutFeedback onPress={props.onSubmitEditing}>
+            <Icon {...iconProps} name="plus-outline" />
+          </TouchableWithoutFeedback>
+        ),
+      [enableCreate, props.onSubmitEditing, value]
     );
 
     return (
@@ -79,7 +91,7 @@ export const CustomSearchWithSelect = memo(
           onChangeText={onChangeText}
           onSelect={onSelect}
           value={value}
-          icon={isCreateIcon}
+          accessoryRight={renderIcon}
           ref={props.forwardedRef}
           {...props}
         >
