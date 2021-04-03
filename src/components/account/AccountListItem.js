@@ -84,6 +84,15 @@ export const AccountListItem = memo(({ item, navigation }) => {
     });
   }, [item, navigation]);
 
+  const renderListTitle = useCallback(
+    (evaProps) => (
+      <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+        {item.account_name}
+      </Text>
+    ),
+    [item.account_name]
+  );
+
   return (
     <Swipeable
       ref={swipeableRow}
@@ -92,13 +101,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
     >
       <ListItem
         onPress={updateHandler}
-        title={`${item.account_name}`}
-        titleStyle={{
-          fontSize: 16,
-        }}
-        descriptionStyle={{
-          fontSize: 14,
-        }}
+        title={renderListTitle}
         icon={renderIconItem}
         accessory={() => renderItemAccessory(item)}
         style={{

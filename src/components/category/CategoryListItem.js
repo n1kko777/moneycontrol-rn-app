@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from "react";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { ListItem, Button } from "@ui-kitten/components";
+import { ListItem, Button, Text } from "@ui-kitten/components";
 
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
@@ -60,6 +60,15 @@ export const CategoryListItem = memo(({ item, navigation }) => {
     });
   }, [item, navigation]);
 
+  const renderListTitle = useCallback(
+    (evaProps) => (
+      <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+        {item.category_name}
+      </Text>
+    ),
+    [item.category_name]
+  );
+
   return (
     <Swipeable
       ref={swipeableRow}
@@ -68,13 +77,7 @@ export const CategoryListItem = memo(({ item, navigation }) => {
     >
       <ListItem
         onPress={updateHandler}
-        title={`${item.category_name}`}
-        titleStyle={{
-          fontSize: 16,
-        }}
-        descriptionStyle={{
-          fontSize: 14,
-        }}
+        title={renderListTitle}
         icon={renderIconItem}
         style={{
           paddingVertical: 15,

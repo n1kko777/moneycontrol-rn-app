@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { ListItem, useTheme } from "@ui-kitten/components";
+import { ListItem, Text, useTheme } from "@ui-kitten/components";
 import { FlatList } from "react-native";
 
 import { RightIcon } from "../../themes/icons";
@@ -28,24 +28,26 @@ export const MenuList = memo(({ data }) => {
   );
 
   const renderItem = useCallback(
-    ({ item: { title, navLink, icon } }) => (
-      <ListItem
-        key={title}
-        title={title}
-        titleStyle={{
-          fontSize: 16,
-        }}
-        descriptionStyle={{
-          fontSize: 14,
-        }}
-        onPress={navLink}
-        icon={icon}
-        accessory={renderItemAccessory}
-        style={{
-          paddingVertical: 15,
-        }}
-      />
-    ),
+    ({ item: { title, navLink, icon } }) => {
+      const renderListTitle = (evaProps) => (
+        <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+          {title}
+        </Text>
+      );
+
+      return (
+        <ListItem
+          key={title}
+          title={renderListTitle}
+          onPress={navLink}
+          icon={icon}
+          accessory={renderItemAccessory}
+          style={{
+            paddingVertical: 15,
+          }}
+        />
+      );
+    },
     [renderItemAccessory]
   );
 

@@ -45,17 +45,20 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   const renderItemAccessory = (balance) => (
     <Text category="s1">{`${splitToDigits(balance)} ₽`}</Text>
   );
+
+  const renderListTitle = useCallback(
+    (evaProps) => (
+      <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+        {getShortName(`${item.first_name} ${item.last_name}`)}{" "}
+        {item.is_admin ? "⭐️" : ""}
+      </Text>
+    ),
+    [item.first_name, item.is_admin, item.last_name]
+  );
+
   return (
     <ListItem
-      title={`${getShortName(`${item.first_name} ${item.last_name}`)} ${
-        item.is_admin ? "⭐️" : ""
-      }`}
-      titleStyle={{
-        fontSize: 16,
-      }}
-      descriptionStyle={{
-        fontSize: 14,
-      }}
+      title={renderListTitle}
       icon={(style) => renderItemIcon(item, style)}
       accessory={
         item.balance !== undefined
