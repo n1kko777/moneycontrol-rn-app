@@ -61,7 +61,9 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
       if (successProfile !== null) {
         if (successProfile.company !== null) {
           navigation.navigate("Home");
+          return;
         }
+        return;
       }
       navigation.navigate("CreateProfile");
     },
