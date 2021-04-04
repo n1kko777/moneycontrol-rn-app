@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { View, Keyboard } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,7 +11,10 @@ import {
 } from "@ui-kitten/components";
 
 import { createActionAction } from "../../store/actions/apiAction";
-import { clearCurrentAccount } from "../../store/actions/accountAction";
+import {
+  clearCurrentAccount,
+  setCurrentAccount,
+} from "../../store/actions/accountAction";
 
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
@@ -20,30 +23,33 @@ import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { CustomTag } from "../../components/operation/tag/CustomTag";
 import { AccountSelector } from "../../components/operation/account/AccountSelector";
 import { CategorySelector } from "../../components/operation/category/CategorySelector";
-import { clearCurrentCategory } from "../../store/actions/categoryAction";
+import {
+  clearCurrentCategory,
+  setCurrentCategory,
+} from "../../store/actions/categoryAction";
 import {
   getApiLoading,
   getAccountCurrent,
   getCategoryCurrent,
   getTagsList,
+  getAccountList,
+  getCategoriesList,
 } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateActionScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
   const amountRef = React.useRef();
 
-  const loader = useSelector(getApiLoading);
+  const dispatch = useDispatch();
 
-  const currentAccount = useSelector(getAccountCurrent);
-  const currentCateory = useSelector(getCategoryCurrent);
+  const loader = useSelector(getApiLoading);
 
   React.useEffect(() => {
     setTimeout(() => {
       amountRef.current.focus();
     }, 100);
   }, []);
-
-  const dispatch = useDispatch();
 
   // Amount
   const [action_amount, setActionAmount] = React.useState(
@@ -52,16 +58,38 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
   const isNotAmountEmpty = parseFloat(action_amount) > 0;
 
   // Account
-  const [selectedAccountId, setSelectedAccountId] = React.useState(
-    prevItem !== undefined ? prevItem.account : null
+  const currentAccount = useSelector(getAccountCurrent);
+
+  const accountData = useSelector(getAccountList);
+
+  const isNotAccountEmpty = currentAccount !== null;
+
+  const onSelectCurrentAccount = useCallback(
+    (account) => {
+      dispatch(setCurrentAccount(account));
+    },
+    [dispatch]
   );
-  const isNotAccountEmpty = selectedAccountId !== null;
+  const onClearCurrentAccount = useCallback(() => {
+    dispatch(clearCurrentAccount());
+  }, [dispatch]);
 
   // Category
-  const [selectedCategoryId, setSelectedCategoryId] = React.useState(
-    prevItem !== undefined ? prevItem.category : null
+  const currentCategory = useSelector(getCategoryCurrent);
+
+  const categoryData = useSelector(getCategoriesList);
+
+  const isNotCategoryEmpty = currentCategory !== null;
+
+  const onSelectCurrentCategory = useCallback(
+    (category) => {
+      dispatch(setCurrentCategory(category));
+    },
+    [dispatch]
   );
-  const isNotCategoryEmpty = selectedCategoryId !== null;
+  const onClearCurrentCategory = useCallback(() => {
+    dispatch(clearCurrentCategory());
+  }, [dispatch]);
 
   // Tag
   const tagData = useSelector(getTagsList);
@@ -77,19 +105,19 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
       dispatch(clearCurrentAccount());
     }
 
-    if (currentCateory !== null) {
+    if (currentCategory !== null) {
       dispatch(clearCurrentCategory());
     }
     navigation.goBack(null);
-  }, [currentAccount, currentCateory, dispatch, navigation]);
+  }, [currentAccount, currentCategory, dispatch, navigation]);
 
   const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
       const newAction = {
         action_amount: parseFloat(action_amount),
-        account: selectedAccountId,
-        category: selectedCategoryId,
+        account: currentAccount !== null ? currentAccount.id : null,
+        category: currentCategory !== null ? currentCategory.id : null,
         tags: tagList.map((elem) => elem.id),
         is_active: true,
       };
@@ -99,83 +127,89 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
   }, [
     loader,
     action_amount,
-    selectedAccountId,
-    selectedCategoryId,
+    currentAccount,
+    currentCategory,
     tagList,
     dispatch,
     navigateBack,
   ]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
 
   return (
     <ScreenTemplate>
-      <TopNavigation
-        title="Создание дохода"
-        alignment="center"
-        leftControl={BackAction}
-      />
-      <Layout
-        style={{
-          flex: 1,
-          marginTop: 30,
-          alignItems: "center",
-        }}
-      >
-        <View
+      <FlexibleView>
+        <TopNavigation
+          title="Создание дохода"
+          alignment="center"
+          accessoryLeft={BackAction}
+        />
+        <Layout
           style={{
-            width: "85%",
-            maxWidth: 720,
-            manrginBottom: 25,
+            flex: 1,
+            marginTop: 30,
+            alignItems: "center",
           }}
         >
-          <Input
-            ref={amountRef}
-            value={action_amount}
-            placeholder="Сумма дохода"
-            keyboardType="decimal-pad"
-            onChangeText={setActionAmount}
-            style={{ marginVertical: 10 }}
-            status={isNotAmountEmpty ? "success" : "danger"}
-            caption={
-              isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
-            }
-            selectTextOnFocus
-          />
-          <AccountSelector
-            selectedId={selectedAccountId}
-            setSelectedId={setSelectedAccountId}
-            isNotEmpty={isNotAccountEmpty}
-            navigation={navigation}
-          />
-          <CategorySelector
-            selectedId={selectedCategoryId}
-            setSelectedId={setSelectedCategoryId}
-            isNotEmpty={isNotCategoryEmpty}
-            navigation={navigation}
-          />
-          <CustomTag
-            tagData={tagData}
-            tagList={tagList}
-            setTagList={setTagList}
-          />
-          <Button
+          <View
             style={{
-              marginVertical: 25,
-              borderRadius: THEME.BUTTON_RADIUS,
+              width: "85%",
+              maxWidth: 720,
+              manrginBottom: 25,
             }}
-            onPress={onSubmit}
-            disabled={
-              !isNotAmountEmpty || !isNotAccountEmpty || !isNotCategoryEmpty
-            }
           >
-            Создать
-          </Button>
-        </View>
-      </Layout>
+            <Input
+              ref={amountRef}
+              value={action_amount}
+              placeholder="Сумма дохода"
+              keyboardType="decimal-pad"
+              onChangeText={setActionAmount}
+              style={{ marginVertical: 10 }}
+              status={isNotAmountEmpty ? "success" : "danger"}
+              caption={
+                isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
+              }
+              selectTextOnFocus
+            />
+            <AccountSelector
+              current={currentAccount}
+              setCurrent={onSelectCurrentAccount}
+              clearCurrent={onClearCurrentAccount}
+              accountData={accountData}
+              isNotEmpty={isNotAccountEmpty}
+              navigation={navigation}
+            />
+            <CategorySelector
+              current={currentCategory}
+              setCurrent={onSelectCurrentCategory}
+              clearCurrent={onClearCurrentCategory}
+              categoryData={categoryData}
+              isNotEmpty={isNotCategoryEmpty}
+              navigation={navigation}
+            />
+            <CustomTag
+              tagData={tagData}
+              tagList={tagList}
+              setTagList={setTagList}
+            />
+            <Button
+              style={{
+                marginVertical: 25,
+                borderRadius: THEME.BUTTON_RADIUS,
+              }}
+              onPress={onSubmit}
+              disabled={
+                !isNotAmountEmpty || !isNotAccountEmpty || !isNotCategoryEmpty
+              }
+            >
+              Создать
+            </Button>
+          </View>
+        </Layout>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

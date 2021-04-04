@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  memo,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useRef, useEffect, memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,12 +11,12 @@ import {
 
 import { View } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { FlexibleView } from "../../components/FlexibleView";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { resetPassAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const ResetPassword = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -52,7 +45,7 @@ export const ResetPassword = memo(({ navigation }) => {
     }
   }, [dispatch, email, loader, onReset]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -71,7 +64,7 @@ export const ResetPassword = memo(({ navigation }) => {
         <TopNavigation
           title="Сброс пароля"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

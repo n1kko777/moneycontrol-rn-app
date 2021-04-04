@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { createTagAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateTagScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ export const CreateTagScreen = memo(({ navigation }) => {
     }
   }, [loader, dispatch, tag_name, onReset]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -64,44 +65,46 @@ export const CreateTagScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <TopNavigation
-        title="Создание тега"
-        alignment="center"
-        leftControl={BackAction}
-      />
-      <Layout
-        style={{
-          flex: 1,
-          marginTop: 30,
-          alignItems: "center",
-        }}
-      >
-        <View
+      <FlexibleView>
+        <TopNavigation
+          title="Создание тега"
+          alignment="center"
+          accessoryLeft={BackAction}
+        />
+        <Layout
           style={{
-            width: "85%",
-            maxWidth: 720,
-            manrginBottom: 25,
+            flex: 1,
+            marginTop: 30,
+            alignItems: "center",
           }}
         >
-          <Input
-            ref={inputRef}
-            value={tag_name}
-            placeholder="Название тега"
-            onChangeText={setTagName}
-            autoCompleteType="name"
-            style={{ marginVertical: 10 }}
-          />
-          <Button
+          <View
             style={{
-              marginVertical: 25,
-              borderRadius: THEME.BUTTON_RADIUS,
+              width: "85%",
+              maxWidth: 720,
+              manrginBottom: 25,
             }}
-            onPress={onSubmit}
           >
-            Создать
-          </Button>
-        </View>
-      </Layout>
+            <Input
+              ref={inputRef}
+              value={tag_name}
+              placeholder="Название тега"
+              onChangeText={setTagName}
+              autoCompleteType="name"
+              style={{ marginVertical: 10 }}
+            />
+            <Button
+              style={{
+                marginVertical: 25,
+                borderRadius: THEME.BUTTON_RADIUS,
+              }}
+              onPress={onSubmit}
+            >
+              Создать
+            </Button>
+          </View>
+        </Layout>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

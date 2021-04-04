@@ -26,22 +26,21 @@ export const AccountListItem = memo(({ item, navigation }) => {
 
   const renderIconItem = useCallback((style) => <CardIcon {...style} />, []);
   const renderItemAccessory = useCallback(
-    ({ balance, style }) => (
+    () => (
       <Text
         style={{
           fontSize: 16,
           color:
             kittenTheme[
-              style !== undefined
-                ? style
-                : `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              item.style ||
+                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
             ],
         }}
       >
-        {balance !== "" && `${splitToDigits(balance.toString())} ₽`}
+        {splitToDigits(item.balance)} ₽
       </Text>
     ),
-    [kittenTheme, themeContext.theme]
+    [item.balance, item.style, kittenTheme, themeContext.theme]
   );
 
   const deleteHandler = useCallback(() => {
@@ -68,7 +67,13 @@ export const AccountListItem = memo(({ item, navigation }) => {
   }, [close, dispatch, item]);
 
   const RightAction = useCallback(
-    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    () => (
+      <Button
+        onPress={deleteHandler}
+        accessoryLeft={DeleteIcon}
+        status="danger"
+      />
+    ),
     [deleteHandler]
   );
 
@@ -78,6 +83,15 @@ export const AccountListItem = memo(({ item, navigation }) => {
     });
   }, [item, navigation]);
 
+  const renderListTitle = useCallback(
+    (evaProps) => (
+      <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+        {item.account_name}
+      </Text>
+    ),
+    [item.account_name]
+  );
+
   return (
     <Swipeable
       ref={swipeableRow}
@@ -86,15 +100,9 @@ export const AccountListItem = memo(({ item, navigation }) => {
     >
       <ListItem
         onPress={updateHandler}
-        title={`${item.account_name}`}
-        titleStyle={{
-          fontSize: 16,
-        }}
-        descriptionStyle={{
-          fontSize: 14,
-        }}
-        icon={renderIconItem}
-        accessory={() => renderItemAccessory(item)}
+        title={renderListTitle}
+        accessoryLeft={renderIconItem}
+        accessoryRight={renderItemAccessory}
         style={{
           paddingVertical: 15,
         }}

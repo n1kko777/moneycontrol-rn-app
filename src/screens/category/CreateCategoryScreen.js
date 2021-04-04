@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,6 +18,7 @@ import { BackIcon } from "../../themes/icons";
 import { createCategoryAction } from "../../store/actions/apiAction";
 import { clearCurrentCategory } from "../../store/actions/categoryAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateCategoryScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -55,7 +56,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
     }
   }, [category_name, dispatch, loader, onReset]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -70,11 +71,11 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Создание категории"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{
@@ -109,7 +110,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

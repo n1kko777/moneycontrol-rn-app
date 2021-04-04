@@ -46,7 +46,6 @@ export const CustomTag = memo(
         setDataList={setTagList}
         placeholder={placeholder}
         enableCreate
-        onIconPress={addTag}
         onSubmitEditing={addTag}
         ref={tagInput}
       />

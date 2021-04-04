@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { updateCategoryAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const UpdateCategoryScreen = memo(({ route, navigation }) => {
   const { category } = route.params;
@@ -48,7 +49,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
     }
   }, [category.id, category_name, dispatch, loader, navigateBack]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -63,11 +64,11 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Обновление категории"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{
@@ -102,7 +103,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

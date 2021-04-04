@@ -1,15 +1,9 @@
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-} from "react";
+import React, { memo, useCallback, useEffect, useState, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+  Icon,
   Layout,
   Text,
   TopNavigation,
@@ -18,18 +12,14 @@ import {
   Button,
 } from "@ui-kitten/components";
 
-import { View } from "react-native";
+import { View, TouchableWithoutFeedback } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { FlexibleView } from "../../components/FlexibleView";
 import { THEME } from "../../themes/themes";
-import {
-  BackIcon,
-  hideIconPassword,
-  showIconPassword,
-} from "../../themes/icons";
+import { BackIcon } from "../../themes/icons";
 
 import { authSignUpAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const RegisterScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -82,7 +72,7 @@ export const RegisterScreen = memo(({ navigation }) => {
     onSuccess,
   ]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -97,13 +87,47 @@ export const RegisterScreen = memo(({ navigation }) => {
     }, 100);
   }, []);
 
+  const onToggleVisibilityIcon1 = useCallback(
+    () => setIsVisiblePassword1(!isVisiblePassword1),
+    [isVisiblePassword1]
+  );
+
+  const renderVisibilityIcon1 = useCallback(
+    (props) => (
+      <TouchableWithoutFeedback onPress={onToggleVisibilityIcon1}>
+        <Icon
+          {...props}
+          name={isVisiblePassword1 ? "eye-off-outline" : "eye-outline"}
+        />
+      </TouchableWithoutFeedback>
+    ),
+    [isVisiblePassword1, onToggleVisibilityIcon1]
+  );
+
+  const onToggleVisibilityIcon2 = useCallback(
+    () => setIsVisiblePassword2(!isVisiblePassword2),
+    [isVisiblePassword2]
+  );
+
+  const renderVisibilityIcon2 = useCallback(
+    (props) => (
+      <TouchableWithoutFeedback onPress={onToggleVisibilityIcon2}>
+        <Icon
+          {...props}
+          name={isVisiblePassword2 ? "eye-off-outline" : "eye-outline"}
+        />
+      </TouchableWithoutFeedback>
+    ),
+    [isVisiblePassword2, onToggleVisibilityIcon2]
+  );
+
   return (
     <ScreenTemplate>
       <FlexibleView>
         <TopNavigation
           title="Регистрация"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{
@@ -147,8 +171,7 @@ export const RegisterScreen = memo(({ navigation }) => {
               value={password1}
               placeholder="Пароль"
               autoCompleteType="password"
-              icon={!isVisiblePassword1 ? showIconPassword : hideIconPassword}
-              onIconPress={() => setIsVisiblePassword1(!isVisiblePassword1)}
+              accessoryRight={renderVisibilityIcon1}
               secureTextEntry={!isVisiblePassword1}
               onChangeText={setPassword1}
               style={{ marginVertical: 10 }}
@@ -157,8 +180,7 @@ export const RegisterScreen = memo(({ navigation }) => {
               value={password2}
               placeholder="Повторите пароль"
               autoCompleteType="password"
-              icon={!isVisiblePassword2 ? showIconPassword : hideIconPassword}
-              onIconPress={() => setIsVisiblePassword2(!isVisiblePassword2)}
+              accessoryRight={renderVisibilityIcon2}
               secureTextEntry={!isVisiblePassword2}
               onChangeText={setPassword2}
               style={{ marginVertical: 10 }}
@@ -172,7 +194,6 @@ export const RegisterScreen = memo(({ navigation }) => {
             >
               Зарегистрироваться
             </Button>
-
             <Text
               style={{
                 alignSelf: "center",

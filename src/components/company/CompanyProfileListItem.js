@@ -11,18 +11,19 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
+  const onHandleClick = useCallback(
+    () => item.is_admin && item.balance && onClick(item),
+    [item, onClick]
+  );
+
   const renderItemIcon = useCallback(
-    (elItem, style) => {
-      delete style.tintColor;
-      return elItem.image !== null ? (
+    () =>
+      item.image !== null ? (
         <Avatar
-          style={{
-            ...style,
-            width: 30,
-            height: 30,
-          }}
+          shape="round"
+          size="small"
           source={{
-            uri: elItem.image,
+            uri: item.image,
           }}
         />
       ) : (
@@ -37,35 +38,34 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
             height: 30,
           }}
         />
-      );
-    },
-    [kittenTheme, themeContext.theme]
+      ),
+    [item.image, kittenTheme, themeContext.theme]
   );
 
-  const renderItemAccessory = (balance) => (
-    <Text category="s1">{`${splitToDigits(balance)} ₽`}</Text>
+  const renderItemAccessory = useCallback(
+    () => <Text category="s1">{`${splitToDigits(item.balance)} ₽`}</Text>,
+    [item.balance]
   );
+
+  const renderListTitle = useCallback(
+    (evaProps) => (
+      <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+        {getShortName(`${item.first_name} ${item.last_name}`)}{" "}
+        {item.is_admin ? "⭐️" : ""}
+      </Text>
+    ),
+    [item.first_name, item.is_admin, item.last_name]
+  );
+
   return (
     <ListItem
-      title={`${getShortName(`${item.first_name} ${item.last_name}`)} ${
-        item.is_admin ? "⭐️" : ""
-      }`}
-      titleStyle={{
-        fontSize: 16,
-      }}
-      descriptionStyle={{
-        fontSize: 14,
-      }}
-      icon={(style) => renderItemIcon(item, style)}
-      accessory={
-        item.balance !== undefined
-          ? () => renderItemAccessory(item.balance.toString())
-          : null
-      }
+      title={renderListTitle}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={renderItemAccessory}
       style={{
         paddingVertical: 15,
       }}
-      onPress={item.balance !== undefined && (() => onClick(item))}
+      onPress={onHandleClick}
     />
   );
 });

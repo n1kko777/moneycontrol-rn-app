@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import { getAccountTitle } from "../../getAccountTitle";
 import { getShortName } from "../../getShortName";
 
 /* Account */
@@ -139,6 +140,15 @@ export const getProfilesList = createSelector(
     )
 );
 
+export const getAccountList = createSelector(getAccounts, (accounts) =>
+  accounts.map((elem, index) => ({
+    index,
+    text: getAccountTitle(elem),
+    title: getAccountTitle(elem),
+    id: elem.id,
+  }))
+);
+
 export const getCategoriesList = createSelector(getCategories, (categories) =>
   categories.map((elem, index) => ({
     index,
@@ -161,15 +171,29 @@ export const getToAccountList = createSelector(
   getCompany,
   getProfile,
   (company, profile) =>
-    company.profiles.map((elem, index) => ({
-      text: `${elem.is_admin ? "⭐️ " : ""}${elem.first_name} ${
-        elem.last_name
-      } ${elem.id === profile.id ? "👈" : ""}`,
-      items: elem.accounts.map((insideElem, insideIndex) => ({
-        parentIndex: index,
-        index: insideIndex,
-        text: insideElem.split("(pk=")[0],
-        id: insideElem.split("(pk=")[1].replace(")", ""),
-      })),
-    }))
+    profile !== null
+      ? company.profiles.reduce((profileObj, nextProfile, profileIndex) => {
+          profileObj[profileIndex] = {
+            text: `${nextProfile.is_admin ? "⭐️ " : ""}${
+              nextProfile.first_name
+            } ${nextProfile.last_name} ${
+              nextProfile.id === profile.id ? "👈" : ""
+            }`,
+            id: nextProfile.id,
+            items: nextProfile.accounts.reduce(
+              (accountObj, nextAccount, accountIndex) => {
+                accountObj[accountIndex] = {
+                  text: nextAccount.split("(pk=")[0],
+                  id: nextAccount.split("(pk=")[1].replace(")", ""),
+                };
+
+                return accountObj;
+              },
+              {}
+            ),
+          };
+
+          return profileObj;
+        }, {})
+      : []
 );

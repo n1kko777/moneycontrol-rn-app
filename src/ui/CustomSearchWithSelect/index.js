@@ -1,9 +1,13 @@
 import React, { memo, useCallback, useState, useMemo, useEffect } from "react";
-import { ScrollView, View } from "react-native";
-import { Autocomplete, Layout } from "@ui-kitten/components";
+import { ScrollView, View, TouchableWithoutFeedback } from "react-native";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Icon,
+  Layout,
+} from "@ui-kitten/components";
 import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
 import { CustomSearchWithSelectItem } from "./CustomSearchWithSelectItem";
-import { AddSmallIcon } from "../../themes/icons";
 import styles from "./styles";
 
 export const CustomSearchWithSelect = memo(
@@ -24,12 +28,9 @@ export const CustomSearchWithSelect = memo(
     );
 
     const onSelect = useCallback(
-      ({ title }) => {
+      (item) => {
         onChangeText("");
-        setDataList((prevState) => [
-          ...prevState,
-          data.find((el) => el.title === title),
-        ]);
+        setDataList((prevState) => [...prevState, data[item]]);
       },
       [data, onChangeText, setDataList]
     );
@@ -64,8 +65,24 @@ export const CustomSearchWithSelect = memo(
       }
     }, [dataList, datasets]);
 
-    const isCreateIcon =
-      Boolean(enableCreate) && value.trim().length !== 0 ? AddSmallIcon : null;
+    const memoAutocompleteData = useMemo(
+      () =>
+        data.map((dataItem) => (
+          <AutocompleteItem key={dataItem.id} title={dataItem.title} />
+        )),
+      [data]
+    );
+
+    const renderIcon = useCallback(
+      (iconProps) =>
+        Boolean(enableCreate) &&
+        value.trim().length !== 0 && (
+          <TouchableWithoutFeedback onPress={props.onSubmitEditing}>
+            <Icon {...iconProps} name="plus-outline" />
+          </TouchableWithoutFeedback>
+        ),
+      [enableCreate, props.onSubmitEditing, value]
+    );
 
     return (
       <Layout style={styles.container}>
@@ -74,11 +91,12 @@ export const CustomSearchWithSelect = memo(
           onChangeText={onChangeText}
           onSelect={onSelect}
           value={value}
-          data={data}
-          icon={isCreateIcon}
+          accessoryRight={renderIcon}
           ref={props.forwardedRef}
           {...props}
-        />
+        >
+          {memoAutocompleteData}
+        </Autocomplete>
         {memoDataList.length ? (
           <ScrollView style={styles.scrollView}>
             <View style={styles.view}>{memoDataList}</View>

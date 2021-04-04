@@ -1,8 +1,7 @@
 import React, { memo } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button, Text } from "@ui-kitten/components";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   overlay: {
@@ -25,25 +24,21 @@ const styles = StyleSheet.create({
 });
 
 export const NavButton = memo(
-  ({ coordinate, navigateHandlePress, icon, opacityValue, status, name }) => (
-    <Animated.View
-      style={
-        (styles.overlay,
-        {
-          alignSelf: "center",
-          transform: [coordinate],
-        })
-      }
-    >
-      <TouchableOpacity onPress={navigateHandlePress}>
-        <Button status={status} style={styles.secondaryButton} icon={icon} />
-      </TouchableOpacity>
+  ({ icon, opacityValue, status, name, onPress }) => (
+    <TouchableOpacity onPress={onPress} activeOpacity={1}>
+      <View>
+        <Button
+          status={status}
+          style={styles.secondaryButton}
+          accessoryLeft={icon}
+        />
 
-      <View style={{ opacity: opacityValue }}>
-        <Text style={{ marginTop: 5, textAlign: "center" }} category="c1">
-          {name}
-        </Text>
+        <View style={{ opacity: opacityValue }}>
+          <Text style={{ marginTop: 5, textAlign: "center" }} category="c1">
+            {name}
+          </Text>
+        </View>
       </View>
-    </Animated.View>
+    </TouchableOpacity>
   )
 );

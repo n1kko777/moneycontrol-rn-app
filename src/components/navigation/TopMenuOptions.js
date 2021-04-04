@@ -1,5 +1,9 @@
 import React, { memo, useCallback } from "react";
-import { TopNavigationAction, OverflowMenu } from "@ui-kitten/components";
+import {
+  TopNavigationAction,
+  OverflowMenu,
+  MenuItem,
+} from "@ui-kitten/components";
 import { Alert } from "react-native";
 
 import { useDispatch } from "react-redux";
@@ -14,21 +18,6 @@ import {
 import { logout } from "../../store/actions/authAction";
 import { getDataDispatcher } from "../../store/actions/apiAction";
 
-const getMenuData = (theme) => [
-  {
-    title: "Обновить",
-    icon: UpdateIcon,
-  },
-  {
-    title: `${theme === "light" ? "Темная" : "Светлая"} тема`,
-    icon: theme === "light" ? DarkIcon : LightIcon,
-  },
-  {
-    title: "Выйти",
-    icon: LogoutIcon,
-  },
-];
-
 export const TopMenuOptions = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
@@ -38,8 +27,6 @@ export const TopMenuOptions = memo(({ navigation }) => {
 
   const themeContext = React.useContext(ThemeContext);
   const [menuVisible, setMenuVisible] = React.useState(false);
-
-  const menuData = getMenuData(themeContext.theme);
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
@@ -66,36 +53,50 @@ export const TopMenuOptions = memo(({ navigation }) => {
     );
   }, [logoutHandler]);
 
-  const onMenuItemSelect = useCallback(
-    (index) => {
-      switch (index) {
-        case 0:
-          getData();
-          break;
-        case 1:
-          themeContext.toggleTheme();
-          break;
-        case 2:
-          navigateLogout();
-          break;
-
-        default:
-          break;
-      }
-
-      setMenuVisible(false);
-    },
-    [getData, navigateLogout, themeContext]
+  const renderAnchor = useCallback(
+    () => (
+      <TopNavigationAction icon={MoreIconHorizontal} onPress={toggleMenu} />
+    ),
+    [toggleMenu]
   );
+
+  const onUpdatePress = useCallback(() => {
+    getData();
+    toggleMenu();
+  }, [getData, toggleMenu]);
+
+  const onChangeThemePress = useCallback(() => {
+    themeContext.toggleTheme();
+    toggleMenu();
+  }, [themeContext, toggleMenu]);
+
+  const onExitPress = useCallback(() => {
+    navigateLogout();
+    toggleMenu();
+  }, [navigateLogout, toggleMenu]);
 
   return (
     <OverflowMenu
       visible={menuVisible}
-      data={menuData}
-      onSelect={onMenuItemSelect}
+      anchor={renderAnchor}
       onBackdropPress={toggleMenu}
+      style={{ width: 180 }}
     >
-      <TopNavigationAction icon={MoreIconHorizontal} onPress={toggleMenu} />
+      <MenuItem
+        title="Обновить"
+        accessoryLeft={UpdateIcon}
+        onPress={onUpdatePress}
+      />
+      <MenuItem
+        title={`${themeContext.theme === "light" ? "Темная" : "Светлая"} тема`}
+        accessoryLeft={themeContext.theme === "light" ? DarkIcon : LightIcon}
+        onPress={onChangeThemePress}
+      />
+      <MenuItem
+        title="Выйти"
+        accessoryLeft={LogoutIcon}
+        onPress={onExitPress}
+      />
     </OverflowMenu>
   );
 });

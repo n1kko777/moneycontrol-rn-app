@@ -1,5 +1,5 @@
 export const splitToDigits = (str) => {
-  const parts = `${str}`.split(".");
+  const parts = `${str || "0"}`.split(".");
   const main = parts[0];
   const len = main.length;
   let output = "";

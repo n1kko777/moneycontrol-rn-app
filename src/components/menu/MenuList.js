@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { ListItem, useTheme } from "@ui-kitten/components";
+import { ListItem, Text, useTheme } from "@ui-kitten/components";
 import { FlatList } from "react-native";
 
 import { RightIcon } from "../../themes/icons";
@@ -10,43 +10,43 @@ export const MenuList = memo(({ data }) => {
   const kittenTheme = useTheme();
 
   const keyExtractor = useCallback((item) => item.title.toString(), []);
-  const renderItemAccessory = useCallback(
-    () => (
-      <RightIcon
-        fill={
-          kittenTheme[
-            `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-          ]
-        }
-        style={{
-          width: 30,
-          height: 30,
-        }}
-      />
-    ),
-    [kittenTheme, themeContext.theme]
-  );
 
   const renderItem = useCallback(
-    ({ item: { title, navLink, icon } }) => (
-      <ListItem
-        key={title}
-        title={title}
-        titleStyle={{
-          fontSize: 16,
-        }}
-        descriptionStyle={{
-          fontSize: 14,
-        }}
-        onPress={navLink}
-        icon={icon}
-        accessory={renderItemAccessory}
-        style={{
-          paddingVertical: 15,
-        }}
-      />
-    ),
-    [renderItemAccessory]
+    ({ item: { title, navLink, icon } }) => {
+      const renderListTitle = (evaProps) => (
+        <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+          {title}
+        </Text>
+      );
+
+      const renderItemAccessory = () => (
+        <RightIcon
+          fill={
+            kittenTheme[
+              `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+            ]
+          }
+          style={{
+            width: 30,
+            height: 30,
+          }}
+        />
+      );
+
+      return (
+        <ListItem
+          key={title}
+          title={renderListTitle}
+          onPress={navLink}
+          accessoryLeft={icon}
+          accessoryRight={renderItemAccessory}
+          style={{
+            paddingVertical: 15,
+          }}
+        />
+      );
+    },
+    [kittenTheme, themeContext.theme]
   );
 
   return (

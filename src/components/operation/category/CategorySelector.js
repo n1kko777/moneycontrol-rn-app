@@ -1,92 +1,108 @@
-import React, { memo, useCallback } from "react";
-import { Autocomplete } from "@ui-kitten/components";
-import { useSelector } from "react-redux";
-import { CloseIcon, AddSmallIcon } from "../../../themes/icons";
-import { getCategories, getCategoryCurrent } from "../../../store/selectors";
+import React, { memo, useCallback, useMemo } from "react";
+import { TouchableWithoutFeedback } from "react-native";
+import { Autocomplete, AutocompleteItem, Icon } from "@ui-kitten/components";
 
 export const CategorySelector = memo(
-  ({ selectedId, setSelectedId, isNotEmpty, navigation }) => {
+  ({
+    current,
+    setCurrent,
+    clearCurrent,
+    categoryData,
+    isNotEmpty,
+    navigation,
+  }) => {
     const categoryInput = React.useRef(null);
-
-    const categories = useSelector(getCategories);
-    const current = useSelector(getCategoryCurrent);
-
-    const categoriesData = categories.map((elem) => ({
-      title: elem.category_name,
-      id: elem.id,
-    }));
-
     const [value, setValue] = React.useState(
-      selectedId !== null
-        ? categoriesData.find((el) => el.id === selectedId).title
-        : ""
-    );
-    const [data, setData] = React.useState(categoriesData);
-
-    const onSelect = useCallback(
-      (item) => {
-        setValue(item.title);
-        setSelectedId(item.id);
-      },
-      [setSelectedId]
+      current !== null ? current.title : ""
     );
 
     React.useEffect(() => {
-      if (current !== null) {
-        onSelect({
-          title: current.category_name,
-          id: current.id,
-        });
-      }
-    }, [current, onSelect]);
+      setValue(current !== null ? current.title : "");
+    }, [current]);
+
+    const [data, setData] = React.useState(categoryData || []);
+
+    const onSelect = useCallback(
+      (item) => {
+        setCurrent(data[item]);
+      },
+      [data, setCurrent]
+    );
 
     const onChangeText = useCallback(
       (query) => {
         setValue(query);
         setData(
-          categoriesData.filter((item) =>
+          categoryData.filter((item) =>
             item.title.toLowerCase().includes(query.toLowerCase())
           )
         );
+        if (
+          query.trim().length === 0 ||
+          (current !== null && query !== current.title)
+        ) {
+          clearCurrent();
+        }
       },
-      [categoriesData]
+      [categoryData, clearCurrent, current]
     );
 
     const clearInput = useCallback(() => {
-      setValue("");
-      setData(categoriesData);
-      setSelectedId(null);
-    }, [categoriesData, setSelectedId]);
+      onChangeText("");
+    }, [onChangeText]);
 
     const addCategory = useCallback(() => {
       categoryInput.current.blur();
+      const findIndex = data.findIndex((elAcc) =>
+        new RegExp(value.toLowerCase(), "i").test(elAcc.title.toLowerCase())
+      );
 
-      if (categories.map((el) => el.category_name).includes(value)) {
-        onSelect({ title: value });
+      if (findIndex !== -1) {
+        onSelect(findIndex);
       } else if (value.trim().length !== 0) {
         navigation.navigate("CreateCategory", { category_name: value });
       } else {
         onChangeText("");
       }
-    }, [categories, navigation, onChangeText, onSelect, value]);
+    }, [data, navigation, onChangeText, onSelect, value]);
+
+    const renderIcon = useCallback(
+      (props) =>
+        value.trim().length !== 0 && (
+          <TouchableWithoutFeedback
+            onPress={current !== null ? clearInput : addCategory}
+          >
+            <Icon
+              {...props}
+              name={current !== null ? "close" : "plus-outline"}
+            />
+          </TouchableWithoutFeedback>
+        ),
+      [addCategory, clearInput, current, value]
+    );
+
+    const renderOption = useMemo(
+      () =>
+        data.map((item) => (
+          <AutocompleteItem key={item.id} title={item.title} />
+        )),
+      [data]
+    );
 
     return (
       <Autocomplete
         value={value}
-        data={data}
         onChangeText={onChangeText}
         onSelect={onSelect}
         placeholder="Укажите категорию"
         style={{ marginVertical: 10 }}
-        icon={
-          value.trim().length !== 0 &&
-          (selectedId !== null ? CloseIcon : AddSmallIcon)
-        }
-        onIconPress={selectedId !== null ? clearInput : addCategory}
+        accessoryRight={renderIcon}
         onSubmitEditing={addCategory}
         ref={categoryInput}
         status={isNotEmpty ? "success" : "danger"}
-      />
+      >
+        {renderOption}
+      </Autocomplete>
     );
   }
 );

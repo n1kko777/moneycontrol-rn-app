@@ -18,6 +18,11 @@ export const CategoryScreen = memo(({ navigation }) => {
     navigation,
   ]);
 
+  const onNavigateCreateCategory = useCallback(
+    () => navigation.navigate("CreateCategory"),
+    [navigation]
+  );
+
   return (
     <ScreenTemplate>
       <Toolbar
@@ -43,7 +48,7 @@ export const CategoryScreen = memo(({ navigation }) => {
               borderRadius: THEME.BUTTON_RADIUS,
             }}
             status="info"
-            onPress={() => navigation.navigate("CreateCategory")}
+            onPress={onNavigateCreateCategory}
           >
             Добавить категорию
           </Button>

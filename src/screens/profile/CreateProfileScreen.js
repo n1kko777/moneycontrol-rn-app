@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { Alert, View } from "react-native";
 import {
   Layout,
@@ -17,8 +17,8 @@ import { THEME } from "../../themes/themes";
 import { LogoutIcon } from "../../themes/icons";
 
 import { createProfileAction } from "../../store/actions/apiAction";
-import { FlexibleView } from "../../components/FlexibleView";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -75,7 +75,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
     );
   }, [logoutHandler]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />,
     [navigateLogout]
   );
@@ -86,7 +86,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
         <TopNavigation
           title="Создание профиля сотрудника"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{

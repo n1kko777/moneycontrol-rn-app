@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { updateCompanyAction } from "../../store/actions/apiAction";
 import { getApiLoading, getCompany } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const ChangeCompanyNameScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
     }
   }, [companyId, company_name, dispatch, loader, onReset]);
 
-  const BackAction = useMemo(
+  const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
     [navigateBack]
   );
@@ -64,11 +65,11 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Изменение названия компании"
           alignment="center"
-          leftControl={BackAction}
+          accessoryLeft={BackAction}
         />
         <Layout
           style={{
@@ -103,7 +104,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

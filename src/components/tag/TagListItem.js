@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from "react";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { ListItem, Button } from "@ui-kitten/components";
+import { ListItem, Button, Text } from "@ui-kitten/components";
 
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
@@ -43,7 +43,13 @@ export const TagListItem = memo(({ item, navigation }) => {
   }, [close, dispatch, item]);
 
   const RightAction = useCallback(
-    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    () => (
+      <Button
+        onPress={deleteHandler}
+        accessoryLeft={DeleteIcon}
+        status="danger"
+      />
+    ),
     [deleteHandler]
   );
 
@@ -53,6 +59,15 @@ export const TagListItem = memo(({ item, navigation }) => {
     });
   }, [item, navigation]);
 
+  const renderListTitle = useCallback(
+    (evaProps) => (
+      <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
+        {item.tag_name}
+      </Text>
+    ),
+    [item.tag_name]
+  );
+
   return (
     <Swipeable
       ref={swipeableRow}
@@ -61,14 +76,8 @@ export const TagListItem = memo(({ item, navigation }) => {
     >
       <ListItem
         onPress={updateHandler}
-        title={`${item.tag_name}`}
-        titleStyle={{
-          fontSize: 16,
-        }}
-        descriptionStyle={{
-          fontSize: 14,
-        }}
-        icon={renderIconItem}
+        title={renderListTitle}
+        accessoryLeft={renderIconItem}
         style={{
           paddingVertical: 15,
         }}

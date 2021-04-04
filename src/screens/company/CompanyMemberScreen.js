@@ -20,6 +20,7 @@ import {
 import { BackIcon } from "../../themes/icons";
 import { splitToDigits } from "../../splitToDigits";
 import { getLayoutProfileData } from "../../store/selectors";
+import { logout } from "../../store/actions/authAction";
 
 export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const { profile } = route.params;
@@ -48,8 +49,12 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
   homeListData.isNavigate = false;
 
   const refreshData = useCallback(() => {
-    dispatch(getProfileListData(profile.id));
-  }, [dispatch, profile.id]);
+    if (profile !== null) {
+      dispatch(getProfileListData(profile.id));
+    } else {
+      dispatch(logout(navigation));
+    }
+  }, [dispatch, navigation, profile]);
 
   const onSuccessDelete = useCallback(() => {
     dispatch(clearProfileListData());
@@ -111,9 +116,7 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
           navigation={navigation}
           title={`${profile.first_name} ${
             profile.last_name
-          } (Баланс: ${splitToDigits(
-            totalBalance !== null ? totalBalance : 0
-          )} ₽)`}
+          } (Баланс: ${splitToDigits(totalBalance)} ₽)`}
           TargetIcon={BackIcon}
           onTarget={onBackHandler}
           isMenu={false}

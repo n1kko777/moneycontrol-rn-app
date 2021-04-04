@@ -56,18 +56,14 @@ export const BalanceComponent = memo(({ isBalance }) => {
   const totalActions = useSelector(getLayoutTotalActions);
   const totalTransactions = useSelector(getLayoutTotalTransactions);
   const profile = useSelector(getProfile);
-  const balance = splitToDigits(
-    useSelector(getLayoutTotalBalance).toString().replace(/\s/g, "")
-  );
+  const balance = splitToDigits(useSelector(getLayoutTotalBalance));
 
   const isAdmin = profile !== null && profile.is_admin;
 
   const [isVisibleBalance, setIsVisibleBalance] = React.useState(true);
 
-  const action = splitToDigits(totalActions.toString().replace(/\s/g, ""));
-  const transaction = splitToDigits(
-    totalTransactions.toString().replace(/\s/g, "")
-  );
+  const action = splitToDigits(totalActions);
+  const transaction = splitToDigits(totalTransactions);
 
   useEffect(() => {
     if (totalActions > 1000000 || totalTransactions > 1000000) {
@@ -116,7 +112,9 @@ export const BalanceComponent = memo(({ isBalance }) => {
           <Button
             size="large"
             appearance="ghost"
-            icon={!isVisibleBalance ? ShowIconBalance : HideIconBalance}
+            accessoryLeft={
+              !isVisibleBalance ? ShowIconBalance : HideIconBalance
+            }
             onPress={toggleVisibleBalance}
           />
         </View>
@@ -127,7 +125,7 @@ export const BalanceComponent = memo(({ isBalance }) => {
           <Button
             status="success"
             style={styles.creaseButton}
-            icon={IncreaseIcon}
+            accessoryLeft={IncreaseIcon}
           />
           <View>
             <Text style={{ fontSize: 12 }}>Доход</Text>
@@ -158,7 +156,7 @@ export const BalanceComponent = memo(({ isBalance }) => {
           <Button
             status="danger"
             style={styles.creaseButton}
-            icon={DecreaseIcon}
+            accessoryLeft={DecreaseIcon}
           />
           <View>
             <Text style={{ fontSize: 12 }}>Расход</Text>

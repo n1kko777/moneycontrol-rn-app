@@ -10,6 +10,9 @@ import { ThemeContext } from "../../themes/theme-context";
 import { splitToDigits } from "../../splitToDigits";
 import { hideOperationAction } from "../../store/actions/apiAction";
 import { getAccounts, getCategories, getTags } from "../../store/selectors";
+import { setCurrentAccount } from "../../store/actions/accountAction";
+import { getAccountTitle } from "../../getAccountTitle";
+import { setCurrentCategory } from "../../store/actions/categoryAction";
 
 export const OperationListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
@@ -52,11 +55,48 @@ export const OperationListItem = memo(({ item, navigation }) => {
 
   const copyHandler = useCallback(() => {
     close();
+    const copyAccount = accounts.find(
+      (accEl) => accEl.id === (item.account || item.from_account_id)
+    );
+    const copyCategory = categories.find((catEl) => catEl.id === item.category);
+    dispatch(
+      setCurrentAccount(
+        copyAccount
+          ? {
+              title: getAccountTitle(copyAccount),
+              id: copyAccount.id,
+            }
+          : null
+      )
+    );
+
     switch (item.type) {
       case "transaction":
+        dispatch(
+          setCurrentCategory(
+            copyCategory
+              ? {
+                  title: copyCategory.category_name,
+                  id: copyCategory.id,
+                }
+              : null
+          )
+        );
+
         navigation.navigate("CreateTransaction", item);
         break;
       case "action":
+        dispatch(
+          setCurrentCategory(
+            copyCategory
+              ? {
+                  title: copyCategory.category_name,
+                  id: copyCategory.id,
+                }
+              : null
+          )
+        );
+
         navigation.navigate("CreateAction", item);
         break;
       case "transfer":
@@ -73,15 +113,23 @@ export const OperationListItem = memo(({ item, navigation }) => {
       default:
         break;
     }
-  }, [accounts, close, item, navigation]);
+  }, [accounts, categories, close, dispatch, item, navigation]);
 
   const LeftAction = useCallback(
-    () => <Button onPress={copyHandler} icon={CopyIcon} status="info" />,
+    () => (
+      <Button onPress={copyHandler} accessoryLeft={CopyIcon} status="info" />
+    ),
     [copyHandler]
   );
 
   const RightAction = useCallback(
-    () => <Button onPress={deleteHandler} icon={DeleteIcon} status="danger" />,
+    () => (
+      <Button
+        onPress={deleteHandler}
+        accessoryLeft={DeleteIcon}
+        status="danger"
+      />
+    ),
     [deleteHandler]
   );
 
@@ -137,7 +185,10 @@ export const OperationListItem = memo(({ item, navigation }) => {
               style={{
                 fontSize: 16,
                 fontWeight: "600",
+                flex: 1,
               }}
+              ellipsizeMode="tail"
+              numberOfLines={1}
             >
               {item.name}
             </Text>
@@ -154,8 +205,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
                   ],
               }}
             >
-              {item.balance !== "" &&
-                `${splitToDigits(item.balance.toString())} ₽`}
+              {`${splitToDigits(item.balance)} ₽`}
             </Text>
           </Layout>
           <Layout
@@ -172,7 +222,10 @@ export const OperationListItem = memo(({ item, navigation }) => {
                   kittenTheme[
                     `color-basic-${themeContext.theme === "light" ? 700 : 600}`
                   ],
+                flex: 1,
               }}
+              ellipsizeMode="tail"
+              numberOfLines={1}
             >
               {renderCategory}
             </Text>
