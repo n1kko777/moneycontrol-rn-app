@@ -17,8 +17,8 @@ import { THEME } from "../../themes/themes";
 import { LogoutIcon } from "../../themes/icons";
 
 import { createProfileAction } from "../../store/actions/apiAction";
-import { FlexibleView } from "../../components/FlexibleView";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();

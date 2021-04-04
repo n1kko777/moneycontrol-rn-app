@@ -35,6 +35,7 @@ import {
   getAccountList,
   getCategoriesList,
 } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateTransactionScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -140,73 +141,75 @@ export const CreateTransactionScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <TopNavigation
-        title="Создание расхода"
-        alignment="center"
-        accessoryLeft={BackAction}
-      />
-      <Layout
-        style={{
-          flex: 1,
-          marginTop: 30,
-          alignItems: "center",
-        }}
-      >
-        <View
+      <FlexibleView>
+        <TopNavigation
+          title="Создание расхода"
+          alignment="center"
+          accessoryLeft={BackAction}
+        />
+        <Layout
           style={{
-            width: "85%",
-            maxWidth: 720,
-            manrginBottom: 25,
+            flex: 1,
+            marginTop: 30,
+            alignItems: "center",
           }}
         >
-          <Input
-            ref={amountRef}
-            value={transaction_amount}
-            placeholder="Сумма расхода"
-            keyboardType="decimal-pad"
-            onChangeText={setTransactionAmount}
-            style={{ marginVertical: 10 }}
-            status={isNotAmountEmpty ? "success" : "danger"}
-            caption={
-              isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
-            }
-            selectTextOnFocus
-          />
-          <AccountSelector
-            current={currentAccount}
-            setCurrent={onSelectCurrentAccount}
-            clearCurrent={onClearCurrentAccount}
-            accountData={accountData}
-            isNotEmpty={isNotAccountEmpty}
-            navigation={navigation}
-          />
-          <CategorySelector
-            current={currentCategory}
-            setCurrent={onSelectCurrentCategory}
-            clearCurrent={onClearCurrentCategory}
-            categoryData={categoryData}
-            isNotEmpty={isNotCategoryEmpty}
-            navigation={navigation}
-          />
-          <CustomTag
-            tagData={tagData}
-            tagList={tagList}
-            setTagList={setTagList}
-          />
-          <Button
+          <View
             style={{
-              marginVertical: 25,
-              borderRadius: THEME.BUTTON_RADIUS,
+              width: "85%",
+              maxWidth: 720,
+              manrginBottom: 25,
             }}
-            onPress={onSubmit}
-            disabled={
-              !isNotAmountEmpty || !isNotAccountEmpty || !isNotCategoryEmpty
-            }
           >
-            Создать
-          </Button>
-        </View>
-      </Layout>
+            <Input
+              ref={amountRef}
+              value={transaction_amount}
+              placeholder="Сумма расхода"
+              keyboardType="decimal-pad"
+              onChangeText={setTransactionAmount}
+              style={{ marginVertical: 10 }}
+              status={isNotAmountEmpty ? "success" : "danger"}
+              caption={
+                isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
+              }
+              selectTextOnFocus
+            />
+            <AccountSelector
+              current={currentAccount}
+              setCurrent={onSelectCurrentAccount}
+              clearCurrent={onClearCurrentAccount}
+              accountData={accountData}
+              isNotEmpty={isNotAccountEmpty}
+              navigation={navigation}
+            />
+            <CategorySelector
+              current={currentCategory}
+              setCurrent={onSelectCurrentCategory}
+              clearCurrent={onClearCurrentCategory}
+              categoryData={categoryData}
+              isNotEmpty={isNotCategoryEmpty}
+              navigation={navigation}
+            />
+            <CustomTag
+              tagData={tagData}
+              tagList={tagList}
+              setTagList={setTagList}
+            />
+            <Button
+              style={{
+                marginVertical: 25,
+                borderRadius: THEME.BUTTON_RADIUS,
+              }}
+              onPress={onSubmit}
+              disabled={
+                !isNotAmountEmpty || !isNotAccountEmpty || !isNotCategoryEmpty
+              }
+            >
+              Создать
+            </Button>
+          </View>
+        </Layout>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

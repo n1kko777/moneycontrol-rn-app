@@ -18,6 +18,7 @@ import { BackIcon } from "../../themes/icons";
 import { createAccountAction } from "../../store/actions/apiAction";
 import { clearCurrentAccount } from "../../store/actions/accountAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateAccountScreen = memo(({ navigation, route }) => {
   const prevItem = route.params;
@@ -74,7 +75,7 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Создание счета"
           alignment="center"
@@ -120,7 +121,7 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

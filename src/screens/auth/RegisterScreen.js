@@ -14,12 +14,12 @@ import {
 
 import { View, TouchableWithoutFeedback } from "react-native";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { FlexibleView } from "../../components/FlexibleView";
 import { THEME } from "../../themes/themes";
 import { BackIcon } from "../../themes/icons";
 
 import { authSignUpAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const RegisterScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();

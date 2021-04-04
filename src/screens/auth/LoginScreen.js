@@ -20,9 +20,9 @@ import {
   authLoginAction,
 } from "../../store/actions/apiAction";
 import { APP_VERSION } from "../../store/constants";
-import { FlexibleView } from "../../components/FlexibleView";
 import LogoIcon from "../../../assets/logo.png";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 const LoginScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();

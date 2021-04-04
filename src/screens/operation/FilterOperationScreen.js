@@ -1,11 +1,6 @@
 import React, { memo, useCallback } from "react";
 import { useTheme, Button, Layout } from "@ui-kitten/components";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import "moment/locale/ru";
@@ -27,6 +22,7 @@ import {
   getProfilesList,
   getTagsList,
 } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 moment.locale("ru");
 
@@ -165,80 +161,75 @@ export const FilterOperationScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <Toolbar
-        navigation={navigation}
-        title="Фильтр операций"
-        TargetIcon={BackIcon}
-        onTarget={goBack}
-        isMenu={false}
-      />
-      <Layout style={mainLayoutStyles}>
-        <View style={mainViewStyles}>
-          <CustomDatePicker />
-        </View>
-        <Layout style={secondaryLayoutStyles}>
-          <KeyboardAvoidingView
-            behavior="position"
-            keyboardVerticalOffset={100}
-          >
-            <ScrollView>
-              <View style={viewStyles}>
-                <CustomSearchWithSelect
-                  datasets={profileData}
-                  dataList={profileList}
-                  setDataList={setProfileList}
-                  placeholder="Укажите сотрудников"
-                />
-              </View>
-              <View style={viewStyles}>
-                <CustomSearchWithSelect
-                  datasets={accountData}
-                  dataList={accountList}
-                  setDataList={setAccountList}
-                  placeholder="Укажите аккаунт"
-                />
-              </View>
-              <View style={viewStyles}>
-                <CustomSearchWithSelect
-                  datasets={categoryData}
-                  dataList={categoryList}
-                  setDataList={setCategoryList}
-                  placeholder="Укажите категорию"
-                />
-              </View>
-              <View style={viewStyles}>
-                <CustomSearchWithSelect
-                  datasets={tagData}
-                  dataList={tagList}
-                  setDataList={setTagList}
-                  placeholder="Укажите теги"
-                />
-              </View>
-              <View style={viewStyles}>
-                <CustomSearchWithSelect
-                  datasets={operationTypeData}
-                  dataList={operationTypeList}
-                  setDataList={setOperationTypeList}
-                  placeholder="Укажите тип операции"
-                />
-              </View>
-              <Button
-                style={{ marginTop: 24, marginHorizontal: 8 }}
-                onPress={onSubmit}
-              >
-                Применить
-              </Button>
-              <Button
-                style={{ marginVertical: 16, marginHorizontal: 8 }}
-                onPress={onReset}
-                appearance="outline"
-              >
-                Сбросить
-              </Button>
-            </ScrollView>
-          </KeyboardAvoidingView>
+      <FlexibleView>
+        <Toolbar
+          navigation={navigation}
+          title="Фильтр операций"
+          TargetIcon={BackIcon}
+          onTarget={goBack}
+          isMenu={false}
+        />
+        <Layout style={mainLayoutStyles}>
+          <View style={mainViewStyles}>
+            <CustomDatePicker />
+          </View>
+          <Layout style={secondaryLayoutStyles}>
+            <View style={viewStyles}>
+              <CustomSearchWithSelect
+                datasets={profileData}
+                dataList={profileList}
+                setDataList={setProfileList}
+                placeholder="Укажите сотрудников"
+              />
+            </View>
+            <View style={viewStyles}>
+              <CustomSearchWithSelect
+                datasets={accountData}
+                dataList={accountList}
+                setDataList={setAccountList}
+                placeholder="Укажите аккаунт"
+              />
+            </View>
+            <View style={viewStyles}>
+              <CustomSearchWithSelect
+                datasets={categoryData}
+                dataList={categoryList}
+                setDataList={setCategoryList}
+                placeholder="Укажите категорию"
+              />
+            </View>
+            <View style={viewStyles}>
+              <CustomSearchWithSelect
+                datasets={tagData}
+                dataList={tagList}
+                setDataList={setTagList}
+                placeholder="Укажите теги"
+              />
+            </View>
+            <View style={viewStyles}>
+              <CustomSearchWithSelect
+                datasets={operationTypeData}
+                dataList={operationTypeList}
+                setDataList={setOperationTypeList}
+                placeholder="Укажите тип операции"
+              />
+            </View>
+            <Button
+              style={{ marginTop: 24, marginHorizontal: 8 }}
+              onPress={onSubmit}
+            >
+              Применить
+            </Button>
+            <Button
+              style={{ marginVertical: 16, marginHorizontal: 8 }}
+              onPress={onReset}
+              appearance="outline"
+            >
+              Сбросить
+            </Button>
+          </Layout>
         </Layout>
-      </Layout>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

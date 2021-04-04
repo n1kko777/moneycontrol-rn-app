@@ -19,8 +19,8 @@ import {
   createCompanyAction,
   getProfileAction,
 } from "../../store/actions/apiAction";
-import { FlexibleView } from "../../components/FlexibleView";
 import { getApiLoading, getProfile } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CompanyManagerScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();

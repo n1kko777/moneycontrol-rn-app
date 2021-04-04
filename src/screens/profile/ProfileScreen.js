@@ -20,8 +20,8 @@ import {
   hideProfileAction,
 } from "../../store/actions/apiAction";
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
-import { FlexibleView } from "../../components/FlexibleView";
 import { getApiLoading, getProfile } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const ProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();

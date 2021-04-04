@@ -18,6 +18,7 @@ import { BackIcon } from "../../themes/icons";
 import { createCategoryAction } from "../../store/actions/apiAction";
 import { clearCurrentCategory } from "../../store/actions/categoryAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateCategoryScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -70,7 +71,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Создание категории"
           alignment="center"
@@ -109,7 +110,7 @@ export const CreateCategoryScreen = memo(({ route, navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

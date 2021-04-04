@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { updateCompanyAction } from "../../store/actions/apiAction";
 import { getApiLoading, getCompany } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const ChangeCompanyNameScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Изменение названия компании"
           alignment="center"
@@ -103,7 +104,7 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

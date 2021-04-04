@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { updateCategoryAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const UpdateCategoryScreen = memo(({ route, navigation }) => {
   const { category } = route.params;
@@ -63,7 +64,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Обновление категории"
           alignment="center"
@@ -102,7 +103,7 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

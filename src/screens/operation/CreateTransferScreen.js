@@ -33,6 +33,7 @@ import {
   getApiLoading,
   getToAccountList,
 } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const CreateTransferScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -175,7 +176,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Создание перевода"
           alignment="center"
@@ -243,7 +244,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

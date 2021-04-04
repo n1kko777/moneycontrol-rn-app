@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { updateAccountAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const UpdateAccountScreen = memo(({ route, navigation }) => {
   const { account } = route.params;
@@ -63,7 +64,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <>
+      <FlexibleView>
         <TopNavigation
           title="Обновление счета"
           alignment="center"
@@ -109,7 +110,7 @@ export const UpdateAccountScreen = memo(({ route, navigation }) => {
             </Button>
           </View>
         </Layout>
-      </>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });

@@ -17,6 +17,7 @@ import { BackIcon } from "../../themes/icons";
 
 import { updateTagAction } from "../../store/actions/apiAction";
 import { getApiLoading } from "../../store/selectors";
+import { FlexibleView } from "../../components/FlexibleView";
 
 export const UpdateTagScreen = memo(({ route, navigation }) => {
   const { tag } = route.params;
@@ -61,44 +62,46 @@ export const UpdateTagScreen = memo(({ route, navigation }) => {
 
   return (
     <ScreenTemplate>
-      <TopNavigation
-        title="Обновление тега"
-        alignment="center"
-        accessoryLeft={BackAction}
-      />
-      <Layout
-        style={{
-          flex: 1,
-          marginTop: 30,
-          alignItems: "center",
-        }}
-      >
-        <View
+      <FlexibleView>
+        <TopNavigation
+          title="Обновление тега"
+          alignment="center"
+          accessoryLeft={BackAction}
+        />
+        <Layout
           style={{
-            width: "85%",
-            maxWidth: 720,
-            manrginBottom: 25,
+            flex: 1,
+            marginTop: 30,
+            alignItems: "center",
           }}
         >
-          <Input
-            ref={inputRef}
-            value={tag_name}
-            placeholder="Название тега"
-            onChangeText={setTagName}
-            autoCompleteType="name"
-            style={{ marginVertical: 10 }}
-          />
-          <Button
+          <View
             style={{
-              marginVertical: 25,
-              borderRadius: THEME.BUTTON_RADIUS,
+              width: "85%",
+              maxWidth: 720,
+              manrginBottom: 25,
             }}
-            onPress={onSubmit}
           >
-            Обновить
-          </Button>
-        </View>
-      </Layout>
+            <Input
+              ref={inputRef}
+              value={tag_name}
+              placeholder="Название тега"
+              onChangeText={setTagName}
+              autoCompleteType="name"
+              style={{ marginVertical: 10 }}
+            />
+            <Button
+              style={{
+                marginVertical: 25,
+                borderRadius: THEME.BUTTON_RADIUS,
+              }}
+              onPress={onSubmit}
+            >
+              Обновить
+            </Button>
+          </View>
+        </Layout>
+      </FlexibleView>
     </ScreenTemplate>
   );
 });
