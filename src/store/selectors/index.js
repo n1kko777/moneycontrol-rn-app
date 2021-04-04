@@ -171,25 +171,29 @@ export const getToAccountList = createSelector(
   getCompany,
   getProfile,
   (company, profile) =>
-    company.profiles.reduce((profileObj, nextProfile, profileIndex) => {
-      profileObj[profileIndex] = {
-        text: `${nextProfile.is_admin ? "⭐️ " : ""}${nextProfile.first_name} ${
-          nextProfile.last_name
-        } ${nextProfile.id === profile.id ? "👈" : ""}`,
-        id: nextProfile.id,
-        items: nextProfile.accounts.reduce(
-          (accountObj, nextAccount, accountIndex) => {
-            accountObj[accountIndex] = {
-              text: nextAccount.split("(pk=")[0],
-              id: nextAccount.split("(pk=")[1].replace(")", ""),
-            };
+    profile !== null
+      ? company.profiles.reduce((profileObj, nextProfile, profileIndex) => {
+          profileObj[profileIndex] = {
+            text: `${nextProfile.is_admin ? "⭐️ " : ""}${
+              nextProfile.first_name
+            } ${nextProfile.last_name} ${
+              nextProfile.id === profile.id ? "👈" : ""
+            }`,
+            id: nextProfile.id,
+            items: nextProfile.accounts.reduce(
+              (accountObj, nextAccount, accountIndex) => {
+                accountObj[accountIndex] = {
+                  text: nextAccount.split("(pk=")[0],
+                  id: nextAccount.split("(pk=")[1].replace(")", ""),
+                };
 
-            return accountObj;
-          },
-          {}
-        ),
-      };
+                return accountObj;
+              },
+              {}
+            ),
+          };
 
-      return profileObj;
-    }, {})
+          return profileObj;
+        }, {})
+      : []
 );

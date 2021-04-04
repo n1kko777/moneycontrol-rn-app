@@ -22,6 +22,7 @@ import {
 import { AvatarPicker } from "../../components/profile/AvatarPicker";
 import { getApiLoading, getProfile } from "../../store/selectors";
 import { FlexibleView } from "../../components/FlexibleView";
+import { logout } from "../../store/actions/authAction";
 
 export const ProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -58,21 +59,25 @@ export const ProfileScreen = memo(({ navigation }) => {
         data.append("image", {
           uri: imageUrl,
           type: "image/jpeg",
-          name: `filename_${profile.id}.jpg`,
+          name: profile !== null ? `filename_${profile.id}.jpg` : "",
         });
         data.append("first_name", first_name);
         data.append("last_name", last_name);
         data.append("phone", phone);
 
-        dispatch(
-          updateImageProfileAction(
-            {
-              id: profile.id,
-              data,
-            },
-            onSuccess
-          )
-        );
+        if (profile !== null) {
+          dispatch(
+            updateImageProfileAction(
+              {
+                id: profile.id,
+                data,
+              },
+              onSuccess
+            )
+          );
+        } else {
+          dispatch(logout(navigation));
+        }
       } else {
         const data = {
           image: null,
@@ -81,15 +86,19 @@ export const ProfileScreen = memo(({ navigation }) => {
           phone,
         };
 
-        dispatch(
-          updateProfileAction(
-            {
-              id: profile.id,
-              data,
-            },
-            onSuccess
-          )
-        );
+        if (profile !== null) {
+          dispatch(
+            updateProfileAction(
+              {
+                id: profile.id,
+                data,
+              },
+              onSuccess
+            )
+          );
+        } else {
+          dispatch(logout(navigation));
+        }
       }
     } else {
       setIsEdit(true);
@@ -102,9 +111,10 @@ export const ProfileScreen = memo(({ navigation }) => {
     isEdit,
     last_name,
     loader,
+    navigation,
     onSuccess,
     phone,
-    profile.id,
+    profile,
   ]);
 
   const navigateBack = useCallback(() => {
@@ -130,7 +140,11 @@ export const ProfileScreen = memo(({ navigation }) => {
         {
           text: "Удалить профиль",
           onPress: () => {
-            dispatch(hideProfileAction(profile.id, navigation));
+            if (profile !== null) {
+              dispatch(hideProfileAction(profile.id, navigation));
+            } else {
+              dispatch(logout(navigation));
+            }
           },
         },
       ],
@@ -138,7 +152,7 @@ export const ProfileScreen = memo(({ navigation }) => {
         cancelable: false,
       }
     );
-  }, [dispatch, navigation, profile.id, profile.is_admin]);
+  }, [dispatch, navigation, profile]);
 
   const DeleteProfileAction = useCallback(
     () => (

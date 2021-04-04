@@ -74,11 +74,14 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     if (filterParams !== null) {
       return [...filterParams.profile];
     }
-    if (profileData.find((prof) => prof.id === profile.id)) {
+    if (
+      profile !== null &&
+      profileData.find((prof) => prof.id === profile.id)
+    ) {
       return [profileData.find((prof) => prof.id === profile.id)];
     }
     return [];
-  }, [filterParams, profile.id, profileData]);
+  }, [filterParams, profile, profileData]);
 
   const [profileList, setProfileList] = React.useState(initProfileList());
 
