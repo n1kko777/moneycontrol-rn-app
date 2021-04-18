@@ -1,14 +1,16 @@
 import React, { memo, useCallback } from "react";
 import { Button, Image, View, Alert, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import * as Permissions from "expo-permissions";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DefaultIcon from "../../../assets/icon.png";
 
 export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
   const getPermissionAsync = useCallback(async () => {
-    if (Platform.OS === "ios") {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (Platform.OS !== "web") {
+      const {
+        status,
+      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
       if (status !== "granted") {
         Alert.alert(
           "Доступ к камере",
@@ -42,7 +44,7 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4, 3],
+        aspect: [4, 4],
         quality: 1,
       });
       if (!result.cancelled) {
