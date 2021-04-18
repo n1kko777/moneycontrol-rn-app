@@ -67,7 +67,7 @@ export const HomeScreen = memo(({ navigation }) => {
           <BalanceComponent isBalance />
 
           <View style={{ height: 30, marginVertical: 10 }}>
-            <CustomDatePicker />
+            <CustomDatePicker navigation={navigation} />
           </View>
 
           <HomeList navigation={navigation} dataList={homeListData} />
