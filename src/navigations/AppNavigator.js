@@ -27,6 +27,7 @@ import { CreateTransactionScreen } from "../screens/operation/CreateTransactionS
 import { FilterOperationScreen } from "../screens/operation/FilterOperationScreen";
 import { CreateActionScreen } from "../screens/operation/CreateActionScreen";
 import { CreateTransferScreen } from "../screens/operation/CreateTransferScreen";
+import { PeriodPickerScreen } from "../screens/PeriodPickerScreen";
 
 const Stack = createStackNavigator();
 
@@ -68,6 +69,7 @@ const HomeNavigator = () => (
     <Stack.Screen name="Tag" component={TagScreen} />
     <Stack.Screen name="CreateTag" component={CreateTagScreen} />
     <Stack.Screen name="UpdateTag" component={UpdateTagScreen} />
+    <Stack.Screen name="PeriodPicker" component={PeriodPickerScreen} />
   </Stack.Navigator>
 );
 

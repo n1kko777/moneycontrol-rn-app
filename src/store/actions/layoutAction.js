@@ -18,6 +18,8 @@ import {
 
 import failHandler from "../failHandler";
 
+const FORMAT_MASK = "YYYY-MM-DD";
+
 export const setFilterParams = (params) => ({
   type: SET_FILTER_PARAMS,
   payload: params,
@@ -97,12 +99,12 @@ export const generateOperationData = (params = null, onSuccess) => async (
       params: {
         start_date:
           getState().calendar.startDate !== null
-            ? getState().calendar.startDate
-            : moment(),
+            ? getState().calendar.startDate.format(FORMAT_MASK)
+            : moment().format(FORMAT_MASK),
         end_date:
           getState().calendar.endDate !== null
-            ? getState().calendar.endDate
-            : moment(),
+            ? getState().calendar.endDate.format(FORMAT_MASK)
+            : moment().format(FORMAT_MASK),
         ...formatedParams,
       },
     })

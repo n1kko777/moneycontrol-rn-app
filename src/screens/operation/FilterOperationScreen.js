@@ -5,13 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import "moment/locale/ru";
 
-import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { Toolbar } from "../../components/navigation/Toolbar";
 import { ScreenTemplate } from "../../components/ScreenTemplate";
 import { ThemeContext } from "../../themes/theme-context";
 import { BackIcon } from "../../themes/icons";
 import { getOperationAction } from "../../store/actions/apiAction";
-import { clearCalendar } from "../../store/actions/calendarAction";
 import { CustomSearchWithSelect } from "../../ui/CustomSearchWithSelect";
 import {
   getAccounts,
@@ -36,8 +34,6 @@ const styles = StyleSheet.create({
 
 const secondaryLayoutStyles = {
   ...styles.flexOne,
-  borderTopLeftRadius: 20,
-  borderTopRightRadius: 20,
   padding: 8,
 };
 
@@ -47,14 +43,6 @@ export const FilterOperationScreen = memo(({ navigation }) => {
 
   const mainLayoutStyles = {
     ...styles.flexOne,
-    backgroundColor:
-      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
-  };
-
-  const mainViewStyles = {
-    height: 30,
-    marginTop: 20,
-    marginBottom: 20,
     backgroundColor:
       kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
   };
@@ -138,7 +126,6 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     setTagList([]);
     setOperationTypeList([]);
 
-    dispatch(clearCalendar());
     dispatch(getOperationAction(null, goBack));
   };
 
@@ -173,9 +160,6 @@ export const FilterOperationScreen = memo(({ navigation }) => {
           isMenu={false}
         />
         <Layout style={mainLayoutStyles}>
-          <View style={mainViewStyles}>
-            <CustomDatePicker />
-          </View>
           <Layout style={secondaryLayoutStyles}>
             <View style={viewStyles}>
               <CustomSearchWithSelect

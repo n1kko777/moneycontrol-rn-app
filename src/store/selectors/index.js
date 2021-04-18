@@ -1,6 +1,8 @@
 import { createSelector } from "reselect";
+import moment from "moment";
 import { getAccountTitle } from "../../getAccountTitle";
 import { getShortName } from "../../getShortName";
+import { displayDate } from "../../dispayDate";
 
 /* Account */
 export const getAccounts = (state) => state.account.accounts;
@@ -88,8 +90,8 @@ export const getToolbarTitle = createSelector(
 
 export const getCalendarMinDate = createSelector(getProfile, (profile) =>
   profile !== null
-    ? new Date(profile.created)
-    : new Date(new Date().getFullYear() - 1, 0, 1)
+    ? moment(profile.created)
+    : moment().subtract(1, "years").startOf("year")
 );
 
 export const getCompanyList = createSelector(
@@ -196,4 +198,13 @@ export const getToAccountList = createSelector(
           return profileObj;
         }, {})
       : []
+);
+
+export const getDisplayDate = createSelector(
+  getCalendarStartDate,
+  getCalendarEndDate,
+  (startDate, endDate) =>
+    `${displayDate(startDate)} – ${displayDate(
+      endDate !== null ? endDate : startDate
+    )}`
 );

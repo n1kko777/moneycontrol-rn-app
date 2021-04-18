@@ -4,11 +4,8 @@
     "slug": "moneycontrol-rn-app",
     "description": "Corporate Money Control – мобильное приложение для автоматизации профессиональной деятельности, существенно облегчает и автоматизирует экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
     "privacy": "public",
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "version": "1.0.16",
+    "platforms": ["ios", "android"],
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -19,17 +16,15 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ru.mncntrl.n1kko777",
-      "buildNumber": "1.0.16"
+      "buildNumber": "1.1.0"
     },
     "android": {
       "package": "ru.mncntrl.n1kko777",
-      "versionCode": 16,
+      "versionCode": 110,
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
