@@ -51,7 +51,7 @@ export const generateHomeData = (profile_id = null) => async (dispatch) => {
         if (profile_id !== null) {
           dispatch({
             type: SET_PROFILE_DATA,
-            payload: { balance, data: homeListData },
+            payload: { balance, data: homeListData, id: profile_id },
           });
         } else {
           dispatch({

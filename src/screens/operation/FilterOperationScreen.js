@@ -59,7 +59,7 @@ export const FilterOperationScreen = memo(({ navigation }) => {
   const profileData = useSelector(getProfilesList);
 
   const initProfileList = useCallback(() => {
-    if (filterParams !== null) {
+    if (filterParams !== null && "profile" in filterParams) {
       return [...filterParams.profile];
     }
     if (
@@ -100,23 +100,29 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     });
 
   const [accountList, setAccountList] = React.useState(
-    filterParams !== null ? [...filterParams.account] : []
+    filterParams !== null && "account" in filterParams
+      ? [...filterParams.account]
+      : []
   );
 
   const categoryData = useSelector(getCategoriesList);
 
   const [categoryList, setCategoryList] = React.useState(
-    filterParams !== null ? [...filterParams.category] : []
+    filterParams !== null && "category" in filterParams
+      ? [...filterParams.category]
+      : []
   );
 
   const tagData = useSelector(getTagsList);
 
   const [tagList, setTagList] = React.useState(
-    filterParams !== null ? [...filterParams.tag] : []
+    filterParams !== null && "tag" in filterParams ? [...filterParams.tag] : []
   );
 
   const [operationTypeList, setOperationTypeList] = React.useState(
-    filterParams !== null ? [...filterParams.type] : []
+    filterParams !== null && "type" in filterParams
+      ? [...filterParams.type]
+      : []
   );
 
   const onReset = () => {
