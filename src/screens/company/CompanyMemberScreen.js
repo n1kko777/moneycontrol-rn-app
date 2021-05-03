@@ -21,6 +21,7 @@ import { BackIcon } from "../../themes/icons";
 import { splitToDigits } from "../../splitToDigits";
 import { getLayoutProfileData } from "../../store/selectors";
 import { logout } from "../../store/actions/authAction";
+import { clearFilterParams } from "../../store/actions/layoutAction";
 
 export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const { profile } = route.params;
@@ -99,6 +100,7 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
 
   const onBackHandler = useCallback(() => {
     navigation.navigate("Home");
+    dispatch(clearFilterParams());
     dispatch(clearProfileListData());
   }, [dispatch, navigation]);
 
