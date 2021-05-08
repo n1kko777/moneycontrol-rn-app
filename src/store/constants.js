@@ -5,4 +5,4 @@ const apiURL = "/api/v1";
 export const url = `${localhost}`;
 export const endpointAPI = `${url}${apiURL}`;
 
-export const APP_VERSION = "1.1.0";
+export const APP_VERSION = "1.1.1";

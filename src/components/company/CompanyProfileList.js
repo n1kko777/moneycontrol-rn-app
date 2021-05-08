@@ -1,24 +1,41 @@
 import React, { memo, useCallback } from "react";
 import { FlatList, RefreshControl } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getShortName } from "../../getShortName";
 import { getProfileListData } from "../../store/actions/apiAction";
+import { setFilterParams } from "../../store/actions/layoutAction";
+import { getLayoutFilterParams } from "../../store/selectors";
 import { CompanyProfileListItem } from "./CompanyProfileListItem";
 
 export const CompanyProfileList = memo(
   ({ dataList, onCompanyRefresh, navigation }) => {
     const keyExtractor = useCallback((item) => item.id.toString(), []);
 
+    const filteredParams = useSelector(getLayoutFilterParams);
+
     const dispatch = useDispatch();
 
     const onNavigateHandler = useCallback(
       (item) => {
         dispatch(getProfileListData(item.id)).then(() => {
+          const targetProfile = {
+            ...(filteredParams !== null ? filteredParams : {}),
+            profile: [
+              {
+                index: 0,
+                text: getShortName(`${item.first_name} ${item.last_name}`),
+                title: getShortName(`${item.first_name} ${item.last_name}`),
+                id: item.id,
+              },
+            ],
+          };
+          dispatch(setFilterParams(targetProfile));
           navigation.navigate("CompanyMember", {
             profile: item,
           });
         });
       },
-      [dispatch, navigation]
+      [dispatch, filteredParams, navigation]
     );
 
     const renderItem = useCallback(

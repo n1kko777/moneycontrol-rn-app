@@ -13,13 +13,17 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 
-import DatePicker from "@dietime/react-native-date-picker";
-
 import moment from "moment";
+import DatePicker from "../libs/react-native-date-picker";
 import { Toolbar } from "../components/navigation/Toolbar";
 import { ScreenTemplate } from "../components/ScreenTemplate";
 import { BackIcon } from "../themes/icons";
-import { getCalendarMinDate, getLayoutFilterParams } from "../store/selectors";
+import {
+  getCalendarEndDate,
+  getCalendarMinDate,
+  getCalendarStartDate,
+  getLayoutFilterParams,
+} from "../store/selectors";
 import { clearCalendar, setCalendar } from "../store/actions/calendarAction";
 import { getOperationAction } from "../store/actions/apiAction";
 import { FlexibleView } from "../components/FlexibleView";
@@ -45,6 +49,9 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
 
   const filterParams = useSelector(getLayoutFilterParams);
 
+  const startDate = useSelector(getCalendarStartDate);
+  const endDate = useSelector(getCalendarEndDate);
+
   const minDate = useSelector(getCalendarMinDate);
 
   const onNavigateBack = useCallback(() => {
@@ -60,88 +67,78 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
   const selectedPeriodValue = PERIOD_DATA[selectedPeriodIndex.row];
 
   const [period, setPeriod] = useState({
-    startDate: moment(minDate).startOf("year"),
-    endDate: moment(minDate).startOf("year"),
+    startDate: moment(startDate),
+    endDate: moment(endDate),
   });
 
-  const onSelectPeriod = useCallback(
-    (index) => {
-      setSelectedPeriodIndex(index);
+  const onSelectPeriod = useCallback((index) => {
+    setSelectedPeriodIndex(index);
 
-      switch (index.row) {
-        case 0:
-          setPeriod({
-            startDate: moment(),
-            endDate: moment(),
-          });
-          break;
-        case 1:
-          setPeriod({
-            startDate: moment().subtract(1, "days"),
-            endDate: moment().subtract(1, "days"),
-          });
-          break;
-        case 2:
-          setPeriod({
-            startDate: moment().isoWeekday(1).startOf("week").startOf("day"),
-            endDate: moment().isoWeekday(1).endOf("week").startOf("day"),
-          });
-          break;
-        case 3:
-          setPeriod({
-            startDate: moment()
-              .subtract(1, "weeks")
-              .isoWeekday(1)
-              .startOf("week")
-              .startOf("day"),
-            endDate: moment()
-              .subtract(1, "weeks")
-              .isoWeekday(1)
-              .endOf("week")
-              .startOf("day"),
-          });
-          break;
-        case 4:
-          setPeriod({
-            startDate: moment().startOf("month").startOf("day"),
-            endDate: moment().endOf("month").startOf("day"),
-          });
-          break;
-        case 5:
-          setPeriod({
-            startDate: moment()
-              .subtract(1, "months")
-              .startOf("month")
-              .startOf("day"),
-            endDate: moment()
-              .subtract(1, "months")
-              .endOf("month")
-              .startOf("day"),
-          });
-          break;
-        case 6:
-          setPeriod({
-            startDate: moment().startOf("quarter").startOf("day"),
-            endDate: moment().endOf("quarter").startOf("day"),
-          });
-          break;
-        case 7:
-          setPeriod({
-            startDate: moment().startOf("year").startOf("day"),
-            endDate: moment().endOf("year").startOf("day"),
-          });
-          break;
-        default:
-          setPeriod({
-            startDate: moment(minDate).startOf("year"),
-            endDate: moment(minDate).startOf("year"),
-          });
-          break;
-      }
-      setIsDisabled(index.row !== PERIOD_DATA.length - 1);
-    },
-    [minDate]
-  );
+    switch (index.row) {
+      case 0:
+        setPeriod({
+          startDate: moment(),
+          endDate: moment(),
+        });
+        break;
+      case 1:
+        setPeriod({
+          startDate: moment().subtract(1, "days"),
+          endDate: moment().subtract(1, "days"),
+        });
+        break;
+      case 2:
+        setPeriod({
+          startDate: moment().isoWeekday(1).startOf("week").startOf("day"),
+          endDate: moment().isoWeekday(1).endOf("week").startOf("day"),
+        });
+        break;
+      case 3:
+        setPeriod({
+          startDate: moment()
+            .subtract(1, "weeks")
+            .isoWeekday(1)
+            .startOf("week")
+            .startOf("day"),
+          endDate: moment()
+            .subtract(1, "weeks")
+            .isoWeekday(1)
+            .endOf("week")
+            .startOf("day"),
+        });
+        break;
+      case 4:
+        setPeriod({
+          startDate: moment().startOf("month").startOf("day"),
+          endDate: moment().endOf("month").startOf("day"),
+        });
+        break;
+      case 5:
+        setPeriod({
+          startDate: moment()
+            .subtract(1, "months")
+            .startOf("month")
+            .startOf("day"),
+          endDate: moment().subtract(1, "months").endOf("month").startOf("day"),
+        });
+        break;
+      case 6:
+        setPeriod({
+          startDate: moment().startOf("quarter").startOf("day"),
+          endDate: moment().endOf("quarter").startOf("day"),
+        });
+        break;
+      case 7:
+        setPeriod({
+          startDate: moment().startOf("year").startOf("day"),
+          endDate: moment().endOf("year").startOf("day"),
+        });
+        break;
+      default:
+        break;
+    }
+    setIsDisabled(index.row !== PERIOD_DATA.length - 1);
+  }, []);
 
   const memoSelectPeriod = useMemo(
     () =>

@@ -1,6 +1,9 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Text } from "@ui-kitten/components";
-import { View } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { getLayoutFilterParams } from "../../store/selectors";
+import { getOperationAction } from "../../store/actions/apiAction";
 import { splitToDigits } from "../../splitToDigits";
 import {
   CardIcon,
@@ -31,69 +34,105 @@ const IconHOC = (Component, kittenTheme, themeContext, style) => () => (
   />
 );
 
-export const HomeCardItem = memo(({ kittenTheme, themeContext, item }) => {
-  const { name, balance, type, style } = item;
+export const HomeCardItem = memo(
+  ({ kittenTheme, themeContext, item, navigation }) => {
+    const { id, name, balance, type, style } = item;
 
-  const renderIconItem = useMemo(() => {
-    if (avaiableTypes[type]) {
-      const IconComponent = IconHOC(
-        avaiableTypes[type],
-        kittenTheme,
-        themeContext,
-        style
-      );
-      return <IconComponent />;
-    }
+    const isOperation = ["action", "transaction", "transfer"].includes(type);
 
-    return null;
-  }, [kittenTheme, style, themeContext, type]);
+    const dispatch = useDispatch();
+    const selectedFilterParams = useSelector(getLayoutFilterParams);
 
-  const memoBalance = useMemo(
-    () =>
-      type !== "category" && type !== "tag" && `${splitToDigits(balance)} ₽`,
-    [balance, type]
-  );
+    const renderIconItem = useMemo(() => {
+      if (avaiableTypes[type]) {
+        const IconComponent = IconHOC(
+          avaiableTypes[type],
+          kittenTheme,
+          themeContext,
+          style
+        );
+        return <IconComponent />;
+      }
 
-  return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingVertical: 5,
-      }}
-    >
-      {renderIconItem}
-      <Text
+      return null;
+    }, [kittenTheme, style, themeContext, type]);
+
+    const memoBalance = useMemo(
+      () =>
+        type !== "category" && type !== "tag" && `${splitToDigits(balance)} ₽`,
+      [balance, type]
+    );
+
+    const onItemPress = useCallback(() => {
+      if (!isOperation) {
+        navigation.navigate("Operation");
+        const selectedFilters =
+          selectedFilterParams !== null ? selectedFilterParams : {};
+
+        selectedFilters[type] = [
+          {
+            index: 0,
+            text: name,
+            title: name,
+            id,
+          },
+        ];
+
+        dispatch(getOperationAction(selectedFilters));
+      }
+    }, [
+      isOperation,
+      navigation,
+      selectedFilterParams,
+      type,
+      name,
+      id,
+      dispatch,
+    ]);
+
+    return (
+      <TouchableOpacity
         style={{
-          flex: 1,
-          fontSize: 16,
-          marginRight: "auto",
-          marginLeft: 8,
-          color:
-            kittenTheme[
-              style ||
-                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-            ],
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingVertical: 5,
         }}
-        ellipsizeMode="tail"
-        numberOfLines={1}
-        category="s1"
+        onPress={onItemPress}
+        activeOpacity={isOperation ? 1 : 0.2}
       >
-        {name}
-      </Text>
-      <Text
-        style={{
-          fontSize: 16,
-          color:
-            kittenTheme[
-              style ||
-                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-            ],
-        }}
-      >
-        {memoBalance}
-      </Text>
-    </View>
-  );
-});
+        {renderIconItem}
+        <Text
+          style={{
+            flex: 1,
+            fontSize: 16,
+            marginRight: "auto",
+            marginLeft: 8,
+            color:
+              kittenTheme[
+                style ||
+                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              ],
+          }}
+          ellipsizeMode="tail"
+          numberOfLines={1}
+          category="s1"
+        >
+          {name}
+        </Text>
+        <Text
+          style={{
+            fontSize: 16,
+            color:
+              kittenTheme[
+                style ||
+                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              ],
+          }}
+        >
+          {memoBalance}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+);

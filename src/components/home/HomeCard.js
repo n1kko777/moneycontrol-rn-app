@@ -4,9 +4,9 @@ import { StyleSheet, View } from "react-native";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AddSmallIcon, RightIcon } from "../../themes/icons";
-import { HomeCardItem } from "./HomeCardItem";
 
 import { ThemeContext } from "../../themes/theme-context";
+import { HomeCardItem } from "./HomeCardItem";
 
 const { layoutStyle, viewStyle, otherViewStyle } = StyleSheet.create({
   layoutStyle: {
@@ -31,6 +31,8 @@ const { layoutStyle, viewStyle, otherViewStyle } = StyleSheet.create({
 export const HomeCard = memo(({ item, navigation, isNavigate }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
+  const iconFillColor =
+    kittenTheme[`color-primary-${themeContext.theme === "light" ? 800 : 100}`];
 
   const titleNavigationHandler = useCallback(() => {
     navigation.navigate(item.navigate);
@@ -52,38 +54,16 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
             justifyContent: "center",
             alignSelf: "center",
           }}
-          onPress={() => titleNavigationHandler()}
+          onPress={titleNavigationHandler}
         >
           {item.navigate !== "Operation" ? (
-            <AddSmallIcon
-              fill={
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ]
-              }
-              width={24}
-              height={24}
-            />
+            <AddSmallIcon fill={iconFillColor} width={24} height={24} />
           ) : (
-            <RightIcon
-              fill={
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ]
-              }
-              width={30}
-              height={30}
-            />
+            <RightIcon fill={iconFillColor} width={30} height={30} />
           )}
         </TouchableOpacity>
       ),
-    [
-      isNavigate,
-      item.navigate,
-      kittenTheme,
-      themeContext.theme,
-      titleNavigationHandler,
-    ]
+    [iconFillColor, isNavigate, item.navigate, titleNavigationHandler]
   );
 
   const memoHomeCardItem = useMemo(
@@ -93,6 +73,7 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
           <HomeCardItem
             kittenTheme={kittenTheme}
             themeContext={themeContext}
+            navigation={navigation}
             key={elem.last_updated}
             item={elem}
           />
@@ -100,7 +81,7 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
       ) : (
         <Text>Список пуст</Text>
       ),
-    [item.data, kittenTheme, themeContext]
+    [item.data, kittenTheme, navigation, themeContext]
   );
 
   const renderToallItems = useMemo(
