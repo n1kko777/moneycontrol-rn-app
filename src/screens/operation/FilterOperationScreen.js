@@ -207,19 +207,24 @@ export const FilterOperationScreen = memo(({ navigation }) => {
                 placeholder="Укажите тип операции"
               />
             </View>
-            <Button
-              style={{ marginTop: 24, marginHorizontal: 8 }}
-              onPress={onSubmit}
+            <View
+              style={{
+                marginTop: 30,
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
             >
-              Применить
-            </Button>
-            <Button
-              style={{ marginVertical: 16, marginHorizontal: 8 }}
-              onPress={onReset}
-              appearance="outline"
-            >
-              Сбросить
-            </Button>
+              <Button
+                style={{ flex: 1, margin: 10 }}
+                onPress={onReset}
+                appearance="outline"
+              >
+                Сбросить
+              </Button>
+              <Button style={{ flex: 1, margin: 10 }} onPress={onSubmit}>
+                Применить
+              </Button>
+            </View>
           </Layout>
         </Layout>
       </FlexibleView>

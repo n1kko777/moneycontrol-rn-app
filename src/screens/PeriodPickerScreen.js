@@ -258,15 +258,15 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
               justifyContent: "space-between",
             }}
           >
-            <Button style={{ flex: 1, margin: 10 }} onPress={onSubmitPress}>
-              Применить
-            </Button>
             <Button
               style={{ flex: 1, margin: 10 }}
               onPress={onCancelPress}
               appearance="outline"
             >
               Сбросить
+            </Button>
+            <Button style={{ flex: 1, margin: 10 }} onPress={onSubmitPress}>
+              Применить
             </Button>
           </View>
         </Layout>
