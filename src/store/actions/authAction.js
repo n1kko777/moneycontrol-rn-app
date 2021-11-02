@@ -129,62 +129,60 @@ export const authLogin = (email, password) => async (dispatch) => {
   }
 };
 
-export const authSignUp = ({
-  first_name,
-  last_name,
-  email,
-  password1,
-  password2,
-}) => async (dispatch) => {
-  try {
-    dispatch(authStart());
-    return axios
-      .post(`${url}/dj-rest-auth/registration/`, {
-        first_name,
-        last_name,
-        email,
-        password1,
-        password2,
-      })
-      .then((res) => {
-        const authUser = {
-          token: res.data.key,
+export const authSignUp =
+  ({ first_name, last_name, email, password1, password2 }) =>
+  async (dispatch) => {
+    try {
+      dispatch(authStart());
+      return axios
+        .post(`${url}/dj-rest-auth/registration/`, {
           first_name,
           last_name,
           email,
           password1,
-        };
-        dispatch(registerSuccess(authUser));
-      })
-      .catch((error) => {
-        dispatch(failHandler(error, AUTH_FAIL));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, AUTH_FAIL));
-    return Promise.reject();
-  }
-};
-
-export const resetPass = ({ email }, onSuccess) => async (dispatch) => {
-  try {
-    dispatch(authStart());
-    return axios
-      .post(`${url}/dj-rest-auth/password/reset/`, {
-        email,
-      })
-      .then((res) => {
-        onSuccess();
-        const { detail } = res.data;
-        Alert.alert("Проверьте почту", `${detail}`, [{ text: "Закрыть" }], {
-          cancelable: false,
+          password2,
+        })
+        .then((res) => {
+          const authUser = {
+            token: res.data.key,
+            first_name,
+            last_name,
+            email,
+            password1,
+          };
+          dispatch(registerSuccess(authUser));
+        })
+        .catch((error) => {
+          dispatch(failHandler(error, AUTH_FAIL));
         });
-        dispatch({ type: RESET_SUCCESS });
-      })
-      .catch((error) => {
-        dispatch(failHandler(error, AUTH_FAIL));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, AUTH_FAIL));
-    return Promise.reject();
-  }
-};
+    } catch (error) {
+      dispatch(failHandler(error, AUTH_FAIL));
+      return Promise.reject();
+    }
+  };
+
+export const resetPass =
+  ({ email }, onSuccess) =>
+  async (dispatch) => {
+    try {
+      dispatch(authStart());
+      return axios
+        .post(`${url}/dj-rest-auth/password/reset/`, {
+          email,
+        })
+        .then((res) => {
+          onSuccess();
+          const { detail } = res.data;
+          Alert.alert("Проверьте почту", `${detail}`, [{ text: "Закрыть" }], {
+            cancelable: false,
+          });
+          dispatch({ type: RESET_SUCCESS });
+        })
+        .catch((error) => {
+          dispatch(failHandler(error, AUTH_FAIL));
+        });
+    } catch (error) {
+      dispatch(failHandler(error, AUTH_FAIL));
+      return Promise.reject();
+    }
+  };

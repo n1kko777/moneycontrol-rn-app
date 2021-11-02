@@ -79,13 +79,15 @@ const LoginScreen = memo(({ navigation }) => {
     isAuthHandler();
   }, [isAuthHandler]);
 
-  const onNavigateToReset = useCallback(() => navigateToScreen("Reset"), [
-    navigateToScreen,
-  ]);
+  const onNavigateToReset = useCallback(
+    () => navigateToScreen("Reset"),
+    [navigateToScreen]
+  );
 
-  const onNavigateToRegister = useCallback(() => navigateToScreen("Register"), [
-    navigateToScreen,
-  ]);
+  const onNavigateToRegister = useCallback(
+    () => navigateToScreen("Register"),
+    [navigateToScreen]
+  );
 
   const onToggleVisibilityIcon = useCallback(
     () => setIsVisiblePassword(!isVisiblePassword),

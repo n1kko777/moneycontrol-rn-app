@@ -14,9 +14,10 @@ export const AccountScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onNavigateHome = useCallback(() => navigation.navigate("Home"), [
-    navigation,
-  ]);
+  const onNavigateHome = useCallback(
+    () => navigation.navigate("Home"),
+    [navigation]
+  );
 
   const onNavigateCreateAccount = useCallback(
     () => navigation.navigate("CreateAccount"),

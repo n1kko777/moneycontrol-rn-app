@@ -103,41 +103,43 @@ export const createCategory = (category) => async (dispatch) => {
 };
 
 // Update category from server
-export const updateCategory = ({ id, category_name }) => async (dispatch) => {
-  try {
-    dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+export const updateCategory =
+  ({ id, category_name }) =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading());
+      const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return axios
-      .put(
-        `${endpointAPI}/category/${id}/`,
-        {
-          category_name,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
+      return axios
+        .put(
+          `${endpointAPI}/category/${id}/`,
+          {
+            category_name,
           },
-        }
-      )
-      .then((res) => {
-        const updatedCategory = res.data;
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          const updatedCategory = res.data;
 
-        dispatch({
-          type: UPDATE_CATEGORY,
-          payload: updatedCategory,
+          dispatch({
+            type: UPDATE_CATEGORY,
+            payload: updatedCategory,
+          });
+        })
+
+        .catch((error) => {
+          dispatch(failHandler(error, ERROR_CATEGORY));
         });
-      })
-
-      .catch((error) => {
-        dispatch(failHandler(error, ERROR_CATEGORY));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, ERROR_CATEGORY));
-    return Promise.reject();
-  }
-};
+    } catch (error) {
+      dispatch(failHandler(error, ERROR_CATEGORY));
+      return Promise.reject();
+    }
+  };
 
 // Delete category from server
 export const hideCategory = (category) => async (dispatch) => {

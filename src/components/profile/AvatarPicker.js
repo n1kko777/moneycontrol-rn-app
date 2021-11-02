@@ -7,9 +7,8 @@ import DefaultIcon from "../../../assets/icon.png";
 export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
   const getPermissionAsync = useCallback(async () => {
     if (Platform.OS !== "web") {
-      const {
-        status,
-      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (status !== "granted") {
         Alert.alert(

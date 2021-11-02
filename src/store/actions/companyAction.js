@@ -123,81 +123,79 @@ export const updateCompany = (company) => async (dispatch) => {
 };
 
 // Invite Profile To Company
-export const joinProfileToCompany = (profile_id, profile_phone) => async (
-  dispatch
-) => {
-  try {
-    dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+export const joinProfileToCompany =
+  (profile_id, profile_phone) => async (dispatch) => {
+    try {
+      dispatch(setLoading());
+      const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return axios
-      .post(
-        `${endpointAPI}/join-profile-to-company/`,
-        {
-          profile_id,
-          profile_phone,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
+      return axios
+        .post(
+          `${endpointAPI}/join-profile-to-company/`,
+          {
+            profile_id,
+            profile_phone,
           },
-        }
-      )
-      .then((res) => {
-        Alert.alert("Статус запроса", res.data.detail, [{ text: "OK" }], {
-          cancelable: false,
-        });
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          Alert.alert("Статус запроса", res.data.detail, [{ text: "OK" }], {
+            cancelable: false,
+          });
 
-        dispatch({
-          type: JOIN_PROFILE_TO_COMPANY,
+          dispatch({
+            type: JOIN_PROFILE_TO_COMPANY,
+          });
+        })
+        .catch((error) => {
+          dispatch(failHandler(error, ERROR_COMPANY));
         });
-      })
-      .catch((error) => {
-        dispatch(failHandler(error, ERROR_COMPANY));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, ERROR_COMPANY));
-    return Promise.reject();
-  }
-};
+    } catch (error) {
+      dispatch(failHandler(error, ERROR_COMPANY));
+      return Promise.reject();
+    }
+  };
 
 // Remove Profile To Company
-export const removeProfileFromCompany = (profile_id, profile_phone) => async (
-  dispatch
-) => {
-  try {
-    dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+export const removeProfileFromCompany =
+  (profile_id, profile_phone) => async (dispatch) => {
+    try {
+      dispatch(setLoading());
+      const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return axios
-      .post(
-        `${endpointAPI}/remove-profile-from-company/`,
-        {
-          profile_id,
-          profile_phone,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
+      return axios
+        .post(
+          `${endpointAPI}/remove-profile-from-company/`,
+          {
+            profile_id,
+            profile_phone,
           },
-        }
-      )
-      .then((res) => {
-        Alert.alert("Статус запроса", res.data.detail, [{ text: "OK" }], {
-          cancelable: false,
-        });
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          Alert.alert("Статус запроса", res.data.detail, [{ text: "OK" }], {
+            cancelable: false,
+          });
 
-        dispatch({
-          type: REMOVE_PROFILE_FROM_COMPANY,
+          dispatch({
+            type: REMOVE_PROFILE_FROM_COMPANY,
+          });
+        })
+        .catch((error) => {
+          dispatch(failHandler(error, ERROR_COMPANY));
         });
-      })
-      .catch((error) => {
-        dispatch(failHandler(error, ERROR_COMPANY));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, ERROR_COMPANY));
-    return Promise.reject();
-  }
-};
+    } catch (error) {
+      dispatch(failHandler(error, ERROR_COMPANY));
+      return Promise.reject();
+    }
+  };

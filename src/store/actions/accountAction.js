@@ -104,48 +104,48 @@ export const createAccount = (account) => async (dispatch) => {
 };
 
 // Update account from server
-export const updateAccount = ({ id, account_name, balance }) => async (
-  dispatch
-) => {
-  try {
-    dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+export const updateAccount =
+  ({ id, account_name, balance }) =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading());
+      const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return axios
-      .put(
-        `${endpointAPI}/account/${id}/`,
-        {
-          account_name,
-          balance,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
+      return axios
+        .put(
+          `${endpointAPI}/account/${id}/`,
+          {
+            account_name,
+            balance,
           },
-        }
-      )
-      .then((res) => {
-        const updatedAccount = res.data;
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          const updatedAccount = res.data;
 
-        if (updatedAccount.last_updated === undefined) {
-          updatedAccount.last_updated = moment();
-        }
+          if (updatedAccount.last_updated === undefined) {
+            updatedAccount.last_updated = moment();
+          }
 
-        dispatch({
-          type: UPDATE_ACCOUNT,
-          payload: updatedAccount,
+          dispatch({
+            type: UPDATE_ACCOUNT,
+            payload: updatedAccount,
+          });
+        })
+
+        .catch((error) => {
+          dispatch(failHandler(error, ERROR_ACCOUNT));
         });
-      })
-
-      .catch((error) => {
-        dispatch(failHandler(error, ERROR_ACCOUNT));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, ERROR_ACCOUNT));
-    return Promise.reject();
-  }
-};
+    } catch (error) {
+      dispatch(failHandler(error, ERROR_ACCOUNT));
+      return Promise.reject();
+    }
+  };
 
 // Delete account from server
 export const hideAccount = (account) => async (dispatch) => {

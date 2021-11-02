@@ -23,16 +23,17 @@ const avaiableTypes = {
   transfer: ExchangeIcon,
 };
 
-const IconHOC = (Component, kittenTheme, themeContext, style) => () => (
-  <Component
-    style={{ width: 20, height: 20 }}
-    fill={
-      kittenTheme[
-        style || `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-      ]
-    }
-  />
-);
+const IconHOC = (Component, kittenTheme, themeContext, style) => () =>
+  (
+    <Component
+      style={{ width: 20, height: 20 }}
+      fill={
+        kittenTheme[
+          style || `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+        ]
+      }
+    />
+  );
 
 export const HomeCardItem = memo(
   ({ kittenTheme, themeContext, item, navigation }) => {

@@ -91,45 +91,47 @@ export const createTag = (tag) => async (dispatch) => {
 };
 
 // Create tag from server
-export const updateTag = ({ id, tag_name }) => async (dispatch) => {
-  dispatch(setLoading());
-  try {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+export const updateTag =
+  ({ id, tag_name }) =>
+  async (dispatch) => {
+    dispatch(setLoading());
+    try {
+      const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return axios
-      .put(
-        `${endpointAPI}/tag/${id}/`,
-        {
-          tag_name,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
+      return axios
+        .put(
+          `${endpointAPI}/tag/${id}/`,
+          {
+            tag_name,
           },
-        }
-      )
-      .then((res) => {
-        const updatedTag = res.data;
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          const updatedTag = res.data;
 
-        if (updatedTag.last_updated === undefined) {
-          updatedTag.last_updated = moment();
-        }
+          if (updatedTag.last_updated === undefined) {
+            updatedTag.last_updated = moment();
+          }
 
-        dispatch({
-          type: UPDATE_TAG,
-          payload: updatedTag,
+          dispatch({
+            type: UPDATE_TAG,
+            payload: updatedTag,
+          });
+        })
+
+        .catch((error) => {
+          dispatch(failHandler(error, ERROR_TAG));
         });
-      })
-
-      .catch((error) => {
-        dispatch(failHandler(error, ERROR_TAG));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, ERROR_TAG));
-    return Promise.reject();
-  }
-};
+    } catch (error) {
+      dispatch(failHandler(error, ERROR_TAG));
+      return Promise.reject();
+    }
+  };
 
 // Delete tag from server
 export const hideTag = (tag) => async (dispatch) => {

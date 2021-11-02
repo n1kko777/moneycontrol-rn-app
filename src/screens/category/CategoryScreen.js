@@ -14,9 +14,10 @@ export const CategoryScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onNavigateHome = useCallback(() => navigation.navigate("Home"), [
-    navigation,
-  ]);
+  const onNavigateHome = useCallback(
+    () => navigation.navigate("Home"),
+    [navigation]
+  );
 
   const onNavigateCreateCategory = useCallback(
     () => navigation.navigate("CreateCategory"),

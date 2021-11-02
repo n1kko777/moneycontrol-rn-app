@@ -20,46 +20,48 @@ export const setLoading = () => ({
 });
 
 // Get profile from server
-export const getProfile = (onSuccess = null) => async (dispatch) => {
-  try {
-    dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+export const getProfile =
+  (onSuccess = null) =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading());
+      const token = await AsyncStorage.getItem("AUTH_TOKEN");
 
-    return axios
-      .get(`${endpointAPI}/profile/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-      })
-      .then((res) => {
-        const profile = [null];
+      return axios
+        .get(`${endpointAPI}/profile/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+        })
+        .then((res) => {
+          const profile = [null];
 
-        if (res.data.length !== 0) {
-          if (res.data.length > 1) {
-            profile[0] = res.data.find((elem) => elem.is_admin);
-          } else {
-            [profile[0]] = res.data;
+          if (res.data.length !== 0) {
+            if (res.data.length > 1) {
+              profile[0] = res.data.find((elem) => elem.is_admin);
+            } else {
+              [profile[0]] = res.data;
+            }
           }
-        }
 
-        dispatch({
-          type: GET_PROFILE,
-          payload: profile[0],
+          dispatch({
+            type: GET_PROFILE,
+            payload: profile[0],
+          });
+
+          if (onSuccess !== null) {
+            onSuccess(profile[0]);
+          }
+        })
+        .catch((error) => {
+          dispatch(failHandler(error, ERROR_PROFILE));
         });
-
-        if (onSuccess !== null) {
-          onSuccess(profile[0]);
-        }
-      })
-      .catch((error) => {
-        dispatch(failHandler(error, ERROR_PROFILE));
-      });
-  } catch (error) {
-    dispatch(failHandler(error, ERROR_PROFILE));
-    return Promise.reject();
-  }
-};
+    } catch (error) {
+      dispatch(failHandler(error, ERROR_PROFILE));
+      return Promise.reject();
+    }
+  };
 
 // Create profile from server
 export const createProfile = (profile) => async (dispatch) => {

@@ -58,9 +58,8 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
     navigation.goBack();
   }, [navigation]);
 
-  const [selectedPeriodIndex, setSelectedPeriodIndex] = React.useState(
-    initialSelectedItem
-  );
+  const [selectedPeriodIndex, setSelectedPeriodIndex] =
+    React.useState(initialSelectedItem);
 
   const [isDisabled, setIsDisabled] = useState(false);
 

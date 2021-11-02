@@ -146,13 +146,14 @@ export const OperationListItem = memo(({ item, navigation }) => {
   }, [categories, item.category]);
 
   const renderTag = useMemo(() => {
-    const tagList = (item.tags
-      ? item.tags.map((elTag) =>
-          tags.find((tag) => tag.id === elTag)
-            ? `#${tags.find((tag) => tag.id === elTag).tag_name}`
-            : "Удалено"
-        )
-      : [""]
+    const tagList = (
+      item.tags
+        ? item.tags.map((elTag) =>
+            tags.find((tag) => tag.id === elTag)
+              ? `#${tags.find((tag) => tag.id === elTag).tag_name}`
+              : "Удалено"
+          )
+        : [""]
     ).join(", ");
 
     return `${

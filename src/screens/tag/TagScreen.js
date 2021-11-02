@@ -14,9 +14,10 @@ export const TagScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onNavigateToHome = useCallback(() => navigation.navigate("Home"), [
-    navigation,
-  ]);
+  const onNavigateToHome = useCallback(
+    () => navigation.navigate("Home"),
+    [navigation]
+  );
 
   const onNavigateToCreateTag = useCallback(
     () => navigation.navigate("CreateTag"),
