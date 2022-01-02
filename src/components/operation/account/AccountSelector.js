@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { useEffect, memo, useCallback, useMemo } from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { Autocomplete, AutocompleteItem, Icon } from "@ui-kitten/components";
 
@@ -10,6 +10,7 @@ export const AccountSelector = memo(
     accountData,
     isNotEmpty,
     navigation,
+    isCreate = true,
   }) => {
     const accountInput = React.useRef(null);
 
@@ -21,7 +22,11 @@ export const AccountSelector = memo(
       setValue(current !== null ? current.title : "");
     }, [current]);
 
-    const [data, setData] = React.useState(accountData || []);
+    const [data, setData] = React.useState([]);
+
+    useEffect(() => {
+      setData(accountData);
+    }, [accountData]);
 
     const onSelect = useCallback(
       (item) => {
@@ -60,26 +65,30 @@ export const AccountSelector = memo(
 
       if (findIndex !== -1) {
         onSelect(findIndex);
-      } else if (value.trim().length !== 0) {
+      } else if (value?.trim().length !== 0 && isCreate) {
         navigation.navigate("CreateAccount", { account_name: value });
       } else {
         onChangeText("");
       }
-    }, [data, navigation, onChangeText, onSelect, value]);
+    }, [data, navigation, onChangeText, onSelect, value, isCreate]);
 
     const renderIcon = useCallback(
       (props) =>
-        value.trim().length !== 0 && (
+        value?.trim().length !== 0 && (
           <TouchableWithoutFeedback
             onPress={current !== null ? clearInput : addAccount}
           >
-            <Icon
-              {...props}
-              name={current !== null ? "close" : "plus-outline"}
-            />
+            {isCreate ? (
+              <Icon
+                {...props}
+                name={current !== null ? "close" : "plus-outline"}
+              />
+            ) : (
+              <Icon {...props} name="close" />
+            )}
           </TouchableWithoutFeedback>
         ),
-      [addAccount, clearInput, current, value]
+      [addAccount, clearInput, current, isCreate, value]
     );
 
     const renderOption = useMemo(

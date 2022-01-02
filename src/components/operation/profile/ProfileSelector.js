@@ -35,7 +35,7 @@ export const ProfileSelector = memo(
       (query) => {
         setValue(query);
         setData(
-          profileData.filter((item) =>
+          (profileData || []).filter((item) =>
             item.title.toLowerCase().includes(query.toLowerCase())
           )
         );
@@ -61,7 +61,7 @@ export const ProfileSelector = memo(
 
       if (findIndex !== -1) {
         onSelect(findIndex);
-      } else if (value.trim().length !== 0) {
+      } else if (value?.trim().length !== 0) {
         navigation.navigate("CreateProfile", { profile_name: value });
       } else {
         onChangeText("");
@@ -70,7 +70,7 @@ export const ProfileSelector = memo(
 
     const renderIcon = useCallback(
       (props) =>
-        value.trim().length !== 0 && (
+        value?.trim().length !== 0 && (
           <TouchableWithoutFeedback
             onPress={current !== null ? clearInput : addProfile}
           >
@@ -101,7 +101,7 @@ export const ProfileSelector = memo(
         onSelect={onSelect}
         placeholder={placeholder}
         style={{ marginVertical: 10 }}
-        accessoryRight={renderIcon}
+        accessoryRight={value && renderIcon}
         onSubmitEditing={addProfile}
         ref={profileInput}
         status={isNotEmpty ? "success" : "danger"}

@@ -127,7 +127,7 @@ export const getCompanyList = createSelector(
   }
 );
 
-export const getProfilesList = createSelector(
+export const getProfileList = createSelector(
   getProfile,
   getCompany,
   (profile, company) =>
