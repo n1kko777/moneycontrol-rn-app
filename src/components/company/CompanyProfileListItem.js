@@ -11,10 +11,7 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onHandleClick = useCallback(
-    () => item.is_admin && item.balance && onClick(item),
-    [item, onClick]
-  );
+  const onHandleClick = useCallback(() => onClick(item), [item, onClick]);
 
   const renderItemIcon = useCallback(
     () =>
