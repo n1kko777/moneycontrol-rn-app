@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getShortName } from "../../getShortName";
 import { getProfileListData } from "../../store/actions/apiAction";
 import { setFilterParams } from "../../store/actions/layoutAction";
-import { getLayoutFilterParams } from "../../store/selectors";
+import { getProfile, getLayoutFilterParams } from "../../store/selectors";
 import { CompanyProfileListItem } from "./CompanyProfileListItem";
 
 export const CompanyProfileList = memo(
@@ -12,6 +12,7 @@ export const CompanyProfileList = memo(
     const keyExtractor = useCallback((item) => item.id.toString(), []);
 
     const filteredParams = useSelector(getLayoutFilterParams);
+    const profile = useSelector(getProfile);
 
     const dispatch = useDispatch();
 
@@ -40,9 +41,13 @@ export const CompanyProfileList = memo(
 
     const renderItem = useCallback(
       ({ item }) => (
-        <CompanyProfileListItem onClick={onNavigateHandler} item={item} />
+        <CompanyProfileListItem
+          isAdmin={profile?.is_admin}
+          onClick={onNavigateHandler}
+          item={item}
+        />
       ),
-      [onNavigateHandler]
+      [onNavigateHandler, profile?.is_admin]
     );
 
     return (

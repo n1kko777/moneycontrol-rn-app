@@ -7,7 +7,7 @@ import { ThemeContext } from "../../themes/theme-context";
 
 import { splitToDigits } from "../../splitToDigits";
 
-export const CompanyProfileListItem = memo(({ item, onClick }) => {
+export const CompanyProfileListItem = memo(({ item, isAdmin, onClick }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
@@ -63,6 +63,7 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
         paddingVertical: 15,
       }}
       onPress={onHandleClick}
+      disabled={!isAdmin}
     />
   );
 });
