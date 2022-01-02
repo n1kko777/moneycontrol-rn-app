@@ -17,7 +17,7 @@ import {
   getLayoutFilterParams,
   getLayoutOperationTypeData,
   getProfile,
-  getProfilesList,
+  getProfileList,
   getTagsList,
 } from "../../store/selectors";
 import { FlexibleView } from "../../components/FlexibleView";
@@ -56,7 +56,7 @@ export const FilterOperationScreen = memo(({ navigation }) => {
   const filterParams = useSelector(getLayoutFilterParams);
   const operationTypeData = useSelector(getLayoutOperationTypeData);
 
-  const profileData = useSelector(getProfilesList);
+  const profileData = useSelector(getProfileList);
 
   const initProfileList = useCallback(() => {
     if (filterParams !== null && "profile" in filterParams) {
