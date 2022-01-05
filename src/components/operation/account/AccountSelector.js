@@ -3,7 +3,16 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
 
 export const AccountSelector = memo(
-  ({ current, setCurrent, clearCurrent, accountData, isNotEmpty, navigation, isCreate = true }) => {
+  ({
+    current,
+    setCurrent,
+    clearCurrent,
+    accountData,
+    isNotEmpty,
+    navigation,
+    isCreate = true,
+    placeholder = 'Укажите счет',
+  }) => {
     const accountInput = React.useRef(null);
 
     const [value, setValue] = React.useState(current !== null ? current.title : '');
@@ -81,7 +90,7 @@ export const AccountSelector = memo(
         value={value}
         onChangeText={onChangeText}
         onSelect={onSelect}
-        placeholder="Укажите счет"
+        placeholder={placeholder}
         style={{ marginVertical: 10 }}
         accessoryRight={renderIcon}
         onSubmitEditing={addAccount}

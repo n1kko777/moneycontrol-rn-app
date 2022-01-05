@@ -195,6 +195,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
               accountData={accountData}
               isNotEmpty={isNotAccountEmpty}
               navigation={navigation}
+              placeholder="Укажите счет списания"
             />
             {Object.keys(toAccountData).length > 1 ? (
               <ProfileSelector
@@ -214,6 +215,7 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
               isNotEmpty={isNotProfileAccountEmpty}
               navigation={navigation}
               isCreate={false}
+              placeholder="Укажите счет пополнения"
             />
             <Button
               style={{
