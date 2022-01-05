@@ -1,8 +1,8 @@
 export const splitToDigits = (str) => {
-  const parts = `${str || "0"}`.split(".");
+  const parts = `${str || '0'}`.split('.');
   const main = parts[0];
   const len = main.length;
-  let output = "";
+  let output = '';
   let i = len - 1;
 
   while (i >= 0) {
@@ -19,7 +19,7 @@ export const splitToDigits = (str) => {
 
   if (
     parts.length > 1 &&
-    parts[1].split("").reduce((sum, part) => {
+    parts[1].split('').reduce((sum, part) => {
       sum += part;
       return sum;
     }, 0) > 0

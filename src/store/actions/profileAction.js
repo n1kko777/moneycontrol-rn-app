@@ -1,6 +1,6 @@
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import moment from "moment";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 
 import {
   GET_PROFILE,
@@ -8,11 +8,11 @@ import {
   UPDATE_PROFILE,
   LOADING_PROFILE,
   ERROR_PROFILE,
-} from "../types";
+} from '../types';
 
-import { endpointAPI } from "../constants";
-import { logout } from "./authAction";
-import failHandler from "../failHandler";
+import { endpointAPI } from '../constants';
+import { logout } from './authAction';
+import failHandler from '../failHandler';
 
 // Set loading to true
 export const setLoading = () => ({
@@ -25,12 +25,12 @@ export const getProfile =
   async (dispatch) => {
     try {
       dispatch(setLoading());
-      const token = await AsyncStorage.getItem("AUTH_TOKEN");
+      const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
       return axios
         .get(`${endpointAPI}/profile/`, {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Token ${token}`,
           },
         })
@@ -67,7 +67,7 @@ export const getProfile =
 export const createProfile = (profile) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .post(
@@ -77,10 +77,10 @@ export const createProfile = (profile) => async (dispatch) => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Token ${token}`,
           },
-        }
+        },
       )
       .then((res) => {
         const resProfile = res.data;
@@ -104,7 +104,7 @@ export const createProfile = (profile) => async (dispatch) => {
 export const updateProfile = (profile, id) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .put(
@@ -114,10 +114,10 @@ export const updateProfile = (profile, id) => async (dispatch) => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Token ${token}`,
           },
-        }
+        },
       )
       .then((res) => {
         const resProfile = res.data;
@@ -145,12 +145,12 @@ export const updateProfile = (profile, id) => async (dispatch) => {
 export const updateImageProfile = (profile, id) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .put(`${endpointAPI}/profile/${id}/`, profile, {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: `Token ${token}`,
         },
       })
@@ -180,12 +180,12 @@ export const updateImageProfile = (profile, id) => async (dispatch) => {
 export const hideProfile = (id, navigation) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .delete(`${endpointAPI}/profile/${id}/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })

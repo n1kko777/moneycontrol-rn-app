@@ -1,6 +1,6 @@
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 import {
   REGISTER_SUCCESS,
   AUTH_START,
@@ -20,10 +20,10 @@ import {
   CLEAR_OPERATION_DATA,
   CLEAR_PROFILE_DATA,
   CLEAR_LAYOUT,
-} from "../types";
+} from '../types';
 
-import { url } from "../constants";
-import failHandler from "../failHandler";
+import { url } from '../constants';
+import failHandler from '../failHandler';
 
 export const authStart = () => (dispatch) => {
   dispatch({
@@ -33,7 +33,7 @@ export const authStart = () => (dispatch) => {
 
 export const authSuccess = (user) => async (dispatch) => {
   try {
-    await AsyncStorage.setItem("AUTH_TOKEN", user.key);
+    await AsyncStorage.setItem('AUTH_TOKEN', user.key);
 
     dispatch({
       type: AUTH_SUCCESS,
@@ -44,14 +44,9 @@ export const authSuccess = (user) => async (dispatch) => {
   }
 };
 export const registerSuccess = (user) => (dispatch) => {
-  Alert.alert(
-    "Регистрация прошла успешно!",
-    "Войдите в аккаунт.",
-    [{ text: "Закрыть" }],
-    {
-      cancelable: false,
-    }
-  );
+  Alert.alert('Регистрация прошла успешно!', 'Войдите в аккаунт.', [{ text: 'Закрыть' }], {
+    cancelable: false,
+  });
 
   dispatch({
     type: REGISTER_SUCCESS,
@@ -60,7 +55,7 @@ export const registerSuccess = (user) => (dispatch) => {
 };
 
 export const logout = (navigation) => async (dispatch) => {
-  await navigation.navigate("Login");
+  await navigation.navigate('Login');
 
   try {
     await AsyncStorage.clear();
@@ -173,7 +168,7 @@ export const resetPass =
         .then((res) => {
           onSuccess();
           const { detail } = res.data;
-          Alert.alert("Проверьте почту", `${detail}`, [{ text: "Закрыть" }], {
+          Alert.alert('Проверьте почту', `${detail}`, [{ text: 'Закрыть' }], {
             cancelable: false,
           });
           dispatch({ type: RESET_SUCCESS });

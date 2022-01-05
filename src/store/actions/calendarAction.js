@@ -1,4 +1,4 @@
-import { SET_CALENDAR, CLEAR_CALENDAR } from "../types";
+import { SET_CALENDAR, CLEAR_CALENDAR } from '../types';
 
 export const setCalendar = (range) => ({
   type: SET_CALENDAR,

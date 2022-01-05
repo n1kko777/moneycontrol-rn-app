@@ -1,35 +1,30 @@
-import React, { memo, useCallback, useRef } from "react";
-import { View, StyleSheet, Animated, TouchableOpacity } from "react-native";
-import * as Haptics from "expo-haptics";
-import {
-  AddIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
-  ExchangeIcon,
-} from "../../themes/icons";
+import React, { memo, useCallback, useRef } from 'react';
+import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { AddIcon, TrendingUpIcon, TrendingDownIcon, ExchangeIcon } from '../../themes/icons';
 
-import { NavButton } from "./NavButton";
+import { NavButton } from './NavButton';
 
 const styles = StyleSheet.create({
   button: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 60,
     height: 60,
     borderRadius: 30,
     zIndex: 1000,
   },
   plusButton: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#FFC300",
+    backgroundColor: '#FFC300',
   },
   navButton: {
-    position: "absolute",
+    position: 'absolute',
     left: 6,
     top: 6,
   },
@@ -61,22 +56,22 @@ export const AddButton = memo(({ navigation }) => {
         navigation.navigate(navRoute);
       }
     },
-    [navigation, toggleHandler]
+    [navigation, toggleHandler],
   );
 
   const onNavigateToCreateAction = useCallback(() => {
     toggleHandler();
-    navigateHandlePress("CreateAction");
+    navigateHandlePress('CreateAction');
   }, [navigateHandlePress, toggleHandler]);
 
   const onNavigateToCreateTransfer = useCallback(() => {
     toggleHandler();
-    navigateHandlePress("CreateTransfer");
+    navigateHandlePress('CreateTransfer');
   }, [navigateHandlePress, toggleHandler]);
 
   const onNavigateToCreateTransaction = useCallback(() => {
     toggleHandler();
-    navigateHandlePress("CreateTransaction");
+    navigateHandlePress('CreateTransaction');
   }, [navigateHandlePress, toggleHandler]);
 
   const rotation = {
@@ -84,7 +79,7 @@ export const AddButton = memo(({ navigation }) => {
       {
         rotate: animation.interpolate({
           inputRange: [0, 1],
-          outputRange: ["0deg", "45deg"],
+          outputRange: ['0deg', '45deg'],
         }),
       },
     ],

@@ -1,76 +1,56 @@
-import React, { memo, useCallback, useState, useMemo, useEffect } from "react";
-import { ScrollView, View, TouchableWithoutFeedback } from "react-native";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Icon,
-  Layout,
-} from "@ui-kitten/components";
-import { PopoverPlacements } from "@ui-kitten/components/ui/popover/type";
-import { CustomSearchWithSelectItem } from "./CustomSearchWithSelectItem";
-import styles from "./styles";
+import React, { memo, useCallback, useState, useMemo, useEffect } from 'react';
+import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
+import { Autocomplete, AutocompleteItem, Icon, Layout } from '@ui-kitten/components';
+import { PopoverPlacements } from '@ui-kitten/components/ui/popover/type';
+import { CustomSearchWithSelectItem } from './CustomSearchWithSelectItem';
+import styles from './styles';
 
 export const CustomSearchWithSelect = memo(
   ({ datasets = [], dataList, setDataList, enableCreate, ...props }) => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
     const [data, setData] = useState(datasets);
 
     const onChangeText = useCallback(
       (query) => {
         setValue(query);
-        setData(
-          datasets.filter((item) =>
-            item.title.toLowerCase().includes(query.toLowerCase())
-          )
-        );
+        setData(datasets.filter((item) => item.title.toLowerCase().includes(query.toLowerCase())));
       },
-      [datasets]
+      [datasets],
     );
 
     const onSelect = useCallback(
       (item) => {
-        onChangeText("");
+        onChangeText('');
         setDataList((prevState) => [...prevState, data[item]]);
       },
-      [data, onChangeText, setDataList]
+      [data, onChangeText, setDataList],
     );
 
     const onDelete = useCallback(
       (text) => {
         setDataList(dataList.filter((el) => el.title !== text));
       },
-      [dataList, setDataList]
+      [dataList, setDataList],
     );
 
     const memoDataList = useMemo(
       () =>
         dataList.map((el) => (
-          <CustomSearchWithSelectItem
-            key={el.id}
-            text={el.title}
-            onDelete={onDelete}
-          />
+          <CustomSearchWithSelectItem key={el.id} text={el.title} onDelete={onDelete} />
         )),
-      [dataList, onDelete]
+      [dataList, onDelete],
     );
 
     useEffect(() => {
       if (dataList.length) {
-        setValue("");
-        setData(
-          datasets.filter(
-            (el) => !dataList.map((innderEl) => innderEl.id).includes(el.id)
-          )
-        );
+        setValue('');
+        setData(datasets.filter((el) => !dataList.map((innderEl) => innderEl.id).includes(el.id)));
       }
     }, [dataList, datasets]);
 
     const memoAutocompleteData = useMemo(
-      () =>
-        data.map((dataItem) => (
-          <AutocompleteItem key={dataItem.id} title={dataItem.title} />
-        )),
-      [data]
+      () => data.map((dataItem) => <AutocompleteItem key={dataItem.id} title={dataItem.title} />),
+      [data],
     );
 
     const renderIcon = useCallback(
@@ -81,7 +61,7 @@ export const CustomSearchWithSelect = memo(
             <Icon {...iconProps} name="plus-outline" />
           </TouchableWithoutFeedback>
         ),
-      [enableCreate, props.onSubmitEditing, value]
+      [enableCreate, props.onSubmitEditing, value],
     );
 
     return (
@@ -104,5 +84,5 @@ export const CustomSearchWithSelect = memo(
         ) : null}
       </Layout>
     );
-  }
+  },
 );

@@ -1,12 +1,12 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { HomeScreen } from "../screens/HomeScreen";
-import { TeamsScreen } from "../screens/company/TeamsScreen";
-import { MenuScreen } from "../screens/MenuScreen";
+import { HomeScreen } from '../screens/HomeScreen';
+import { TeamsScreen } from '../screens/company/TeamsScreen';
+import { MenuScreen } from '../screens/MenuScreen';
 
-import { BottomTabBar } from "../components/navigation/BottomTabBar";
-import { OperationsScreen } from "../screens/operation/OperationsScreen";
+import { BottomTabBar } from '../components/navigation/BottomTabBar';
+import { OperationsScreen } from '../screens/operation/OperationsScreen';
 
 const BottomTab = createBottomTabNavigator();
 

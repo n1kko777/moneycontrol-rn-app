@@ -4,7 +4,7 @@ import {
   ERROR_TRANSFER,
   CLEAR_TRANSFER,
   DELETE_TRANSFER,
-} from "../types";
+} from '../types';
 
 const initialState = {
   error: null,

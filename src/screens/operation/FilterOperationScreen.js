@@ -1,16 +1,16 @@
-import React, { memo, useCallback } from "react";
-import { useTheme, Button, Layout } from "@ui-kitten/components";
-import { View, StyleSheet } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import "moment/locale/ru";
+import React, { memo, useCallback } from 'react';
+import { useTheme, Button, Layout } from '@ui-kitten/components';
+import { View, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import 'moment/locale/ru';
 
-import { Toolbar } from "../../components/navigation/Toolbar";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { ThemeContext } from "../../themes/theme-context";
-import { BackIcon } from "../../themes/icons";
-import { getOperationAction } from "../../store/actions/apiAction";
-import { CustomSearchWithSelect } from "../../ui/CustomSearchWithSelect";
+import { Toolbar } from '../../components/navigation/Toolbar';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { ThemeContext } from '../../themes/theme-context';
+import { BackIcon } from '../../themes/icons';
+import { getOperationAction } from '../../store/actions/apiAction';
+import { CustomSearchWithSelect } from '../../ui/CustomSearchWithSelect';
 import {
   getAccounts,
   getCategoriesList,
@@ -19,10 +19,10 @@ import {
   getProfile,
   getProfileList,
   getTagsList,
-} from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+} from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
-moment.locale("ru");
+moment.locale('ru');
 
 const viewStyles = { marginHorizontal: 8 };
 
@@ -43,8 +43,7 @@ export const FilterOperationScreen = memo(({ navigation }) => {
 
   const mainLayoutStyles = {
     ...styles.flexOne,
-    backgroundColor:
-      kittenTheme[`color-basic-${themeContext.theme === "light" ? 200 : 900}`],
+    backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
   };
 
   const dispatch = useDispatch();
@@ -59,13 +58,10 @@ export const FilterOperationScreen = memo(({ navigation }) => {
   const profileData = useSelector(getProfileList);
 
   const initProfileList = useCallback(() => {
-    if (filterParams !== null && "profile" in filterParams) {
+    if (filterParams !== null && 'profile' in filterParams) {
       return [...filterParams.profile];
     }
-    if (
-      profile !== null &&
-      profileData.find((prof) => prof.id === profile.id)
-    ) {
+    if (profile !== null && profileData.find((prof) => prof.id === profile.id)) {
       return [profileData.find((prof) => prof.id === profile.id)];
     }
     return [];
@@ -76,18 +72,12 @@ export const FilterOperationScreen = memo(({ navigation }) => {
   const accounts = useSelector(getAccounts);
 
   const accountData = []
-    .concat(
-      ...profileList.map((selProf) =>
-        accounts.filter((acc) => acc.profile === selProf.id)
-      )
-    )
+    .concat(...profileList.map((selProf) => accounts.filter((acc) => acc.profile === selProf.id)))
     .map((elem, index) => {
       const textTitle =
         profileList.length === 1
           ? `${elem.account_name}`
-          : `${elem.account_name} (${
-              profileData.find((prof) => elem.profile === prof.id).text
-            })`;
+          : `${elem.account_name} (${profileData.find((prof) => elem.profile === prof.id).text})`;
 
       return {
         index,
@@ -100,29 +90,23 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     });
 
   const [accountList, setAccountList] = React.useState(
-    filterParams !== null && "account" in filterParams
-      ? [...filterParams.account]
-      : []
+    filterParams !== null && 'account' in filterParams ? [...filterParams.account] : [],
   );
 
   const categoryData = useSelector(getCategoriesList);
 
   const [categoryList, setCategoryList] = React.useState(
-    filterParams !== null && "category" in filterParams
-      ? [...filterParams.category]
-      : []
+    filterParams !== null && 'category' in filterParams ? [...filterParams.category] : [],
   );
 
   const tagData = useSelector(getTagsList);
 
   const [tagList, setTagList] = React.useState(
-    filterParams !== null && "tag" in filterParams ? [...filterParams.tag] : []
+    filterParams !== null && 'tag' in filterParams ? [...filterParams.tag] : [],
   );
 
   const [operationTypeList, setOperationTypeList] = React.useState(
-    filterParams !== null && "type" in filterParams
-      ? [...filterParams.type]
-      : []
+    filterParams !== null && 'type' in filterParams ? [...filterParams.type] : [],
   );
 
   const onReset = () => {
@@ -145,15 +129,7 @@ export const FilterOperationScreen = memo(({ navigation }) => {
     };
 
     dispatch(getOperationAction(selectedFilters, goBack));
-  }, [
-    profileList,
-    accountList,
-    categoryList,
-    tagList,
-    operationTypeList,
-    dispatch,
-    goBack,
-  ]);
+  }, [profileList, accountList, categoryList, tagList, operationTypeList, dispatch, goBack]);
 
   return (
     <ScreenTemplate>
@@ -210,15 +186,11 @@ export const FilterOperationScreen = memo(({ navigation }) => {
             <View
               style={{
                 marginTop: 30,
-                flexDirection: "row",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}
             >
-              <Button
-                style={{ flex: 1, margin: 10 }}
-                onPress={onReset}
-                appearance="outline"
-              >
+              <Button style={{ flex: 1, margin: 10 }} onPress={onReset} appearance="outline">
                 Сбросить
               </Button>
               <Button style={{ flex: 1, margin: 10 }} onPress={onSubmit}>

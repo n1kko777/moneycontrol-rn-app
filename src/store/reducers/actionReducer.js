@@ -1,10 +1,4 @@
-import {
-  CREATE_ACTION,
-  LOADING_ACTION,
-  ERROR_ACTION,
-  CLEAR_ACTION,
-  DELETE_ACTION,
-} from "../types";
+import { CREATE_ACTION, LOADING_ACTION, ERROR_ACTION, CLEAR_ACTION, DELETE_ACTION } from '../types';
 
 const initialState = {
   error: null,

@@ -5,7 +5,7 @@ import {
   LOADING_PROFILE,
   ERROR_PROFILE,
   CLEAR_PROFILE,
-} from "../types";
+} from '../types';
 
 const initialState = {
   profile: null,

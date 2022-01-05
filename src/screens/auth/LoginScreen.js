@@ -1,36 +1,27 @@
-import React, { memo, useCallback, useEffect } from "react";
-import {
-  TouchableOpacity,
-  View,
-  Image,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Clipboard from "expo-clipboard";
-import { Icon, Layout, Button, Text, Input } from "@ui-kitten/components";
+import React, { memo, useCallback, useEffect } from 'react';
+import { TouchableOpacity, View, Image, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Clipboard from 'expo-clipboard';
+import { Icon, Layout, Button, Text, Input } from '@ui-kitten/components';
 
-import { useDispatch, useSelector } from "react-redux";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { useDispatch, useSelector } from 'react-redux';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
 
-import { THEME } from "../../themes/themes";
+import { THEME } from '../../themes/themes';
 
-import {
-  getProfileAction,
-  authLoginAction,
-} from "../../store/actions/apiAction";
-import { APP_VERSION } from "../../store/constants";
-import LogoIcon from "../../../assets/logo.png";
-import { getApiLoading } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { getProfileAction, authLoginAction } from '../../store/actions/apiAction';
+import { APP_VERSION } from '../../store/constants';
+import LogoIcon from '../../../assets/logo.png';
+import { getApiLoading } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 const LoginScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
   const loader = useSelector(getApiLoading);
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   const [isVisiblePassword, setIsVisiblePassword] = React.useState(false);
 
@@ -43,27 +34,27 @@ const LoginScreen = memo(({ navigation }) => {
       Keyboard.dismiss();
       navigation.navigate(name);
     },
-    [navigation]
+    [navigation],
   );
 
   const onSuccess = useCallback(
     (profile) => {
       if (profile !== null) {
         if (profile.company !== null) {
-          navigateToScreen("Home");
+          navigateToScreen('Home');
           return;
         }
 
-        navigateToScreen("CompanyManager");
+        navigateToScreen('CompanyManager');
         return;
       }
-      navigateToScreen("CreateProfile");
+      navigateToScreen('CreateProfile');
     },
-    [navigateToScreen]
+    [navigateToScreen],
   );
 
   const isAuthHandler = useCallback(async () => {
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
     if (token !== null) {
       dispatch(getProfileAction(onSuccess));
     }
@@ -79,31 +70,22 @@ const LoginScreen = memo(({ navigation }) => {
     isAuthHandler();
   }, [isAuthHandler]);
 
-  const onNavigateToReset = useCallback(
-    () => navigateToScreen("Reset"),
-    [navigateToScreen]
-  );
+  const onNavigateToReset = useCallback(() => navigateToScreen('Reset'), [navigateToScreen]);
 
-  const onNavigateToRegister = useCallback(
-    () => navigateToScreen("Register"),
-    [navigateToScreen]
-  );
+  const onNavigateToRegister = useCallback(() => navigateToScreen('Register'), [navigateToScreen]);
 
   const onToggleVisibilityIcon = useCallback(
     () => setIsVisiblePassword(!isVisiblePassword),
-    [isVisiblePassword]
+    [isVisiblePassword],
   );
 
   const renderVisibilityIcon = useCallback(
     (props) => (
       <TouchableWithoutFeedback onPress={onToggleVisibilityIcon}>
-        <Icon
-          {...props}
-          name={isVisiblePassword ? "eye-off-outline" : "eye-outline"}
-        />
+        <Icon {...props} name={isVisiblePassword ? 'eye-off-outline' : 'eye-outline'} />
       </TouchableWithoutFeedback>
     ),
-    [isVisiblePassword, onToggleVisibilityIcon]
+    [isVisiblePassword, onToggleVisibilityIcon],
   );
 
   return (
@@ -112,24 +94,22 @@ const LoginScreen = memo(({ navigation }) => {
         <Layout
           style={{
             flex: 1,
-            justifyContent: "flex-start",
-            alignItems: "center",
+            justifyContent: 'flex-start',
+            alignItems: 'center',
           }}
         >
           <View style={{ marginBottom: 50, marginTop: 70 }}>
             <Image style={{ width: 120, height: 120 }} source={LogoIcon} />
             <TouchableOpacity
-              style={{ marginTop: 10, alignSelf: "center" }}
+              style={{ marginTop: 10, alignSelf: 'center' }}
               onPress={copyToClipboard}
             >
-              <Text style={{ opacity: 0.3, fontSize: 12 }}>
-                Версия: {APP_VERSION}
-              </Text>
+              <Text style={{ opacity: 0.3, fontSize: 12 }}>Версия: {APP_VERSION}</Text>
             </TouchableOpacity>
           </View>
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}
@@ -167,7 +147,7 @@ const LoginScreen = memo(({ navigation }) => {
               style={{
                 marginVertical: 7,
                 borderRadius: THEME.BUTTON_RADIUS,
-                textDecorationLine: "underline",
+                textDecorationLine: 'underline',
               }}
             >
               Забыли пароль?
@@ -178,7 +158,7 @@ const LoginScreen = memo(({ navigation }) => {
               style={{
                 marginVertical: 7,
                 borderRadius: THEME.BUTTON_RADIUS,
-                textDecorationLine: "underline",
+                textDecorationLine: 'underline',
               }}
             >
               Зарегистрироваться

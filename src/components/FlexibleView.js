@@ -1,8 +1,8 @@
-import React, { memo, useCallback, useState } from "react";
-import { ScrollView, Dimensions } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import React, { memo, useCallback, useState } from 'react';
+import { ScrollView, Dimensions } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get('window');
 
 export const FlexibleView = memo(({ children }) => {
   const [screenHeight, setScreenHeight] = useState(0);

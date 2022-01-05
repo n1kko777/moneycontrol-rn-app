@@ -1,28 +1,22 @@
-import React, { memo, useCallback } from "react";
-import { View } from "react-native";
-import { useTheme, Layout, Button } from "@ui-kitten/components";
+import React, { memo, useCallback } from 'react';
+import { View } from 'react-native';
+import { useTheme, Layout, Button } from '@ui-kitten/components';
 
-import { THEME } from "../../themes/themes";
-import { ThemeContext } from "../../themes/theme-context";
+import { THEME } from '../../themes/themes';
+import { ThemeContext } from '../../themes/theme-context';
 
-import { Toolbar } from "../../components/navigation/Toolbar";
-import { TagList } from "../../components/tag/TagList";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { BackIcon } from "../../themes/icons";
+import { Toolbar } from '../../components/navigation/Toolbar';
+import { TagList } from '../../components/tag/TagList';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { BackIcon } from '../../themes/icons';
 
 export const TagScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onNavigateToHome = useCallback(
-    () => navigation.navigate("Home"),
-    [navigation]
-  );
+  const onNavigateToHome = useCallback(() => navigation.navigate('Home'), [navigation]);
 
-  const onNavigateToCreateTag = useCallback(
-    () => navigation.navigate("CreateTag"),
-    [navigation]
-  );
+  const onNavigateToCreateTag = useCallback(() => navigation.navigate('CreateTag'), [navigation]);
 
   return (
     <ScreenTemplate>
@@ -35,16 +29,13 @@ export const TagScreen = memo(({ navigation }) => {
       <Layout
         style={{
           flex: 1,
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <View style={{ marginVertical: 20 }}>
           <Button
             style={{
-              alignSelf: "center",
+              alignSelf: 'center',
               paddingHorizontal: 20,
               borderRadius: THEME.BUTTON_RADIUS,
             }}
@@ -54,9 +45,7 @@ export const TagScreen = memo(({ navigation }) => {
             Добавить тег
           </Button>
         </View>
-        <Layout
-          style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
-        >
+        <Layout style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
           <TagList navigation={navigation} />
         </Layout>
       </Layout>

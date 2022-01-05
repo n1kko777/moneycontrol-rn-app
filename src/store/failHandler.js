@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import { Alert } from 'react-native';
 
 export default (error, ERROR_TYPE) => (dispatch) => {
   const errorObject = {};
@@ -14,13 +14,11 @@ export default (error, ERROR_TYPE) => (dispatch) => {
       error.response.status === 405 ||
       error.response.status === 500
         ? `${error.response.data
-            .replace(regex, "\n")
-            .replace("\n\n", "\n")
-            .replace(/^\n/, "")
-            .replace(/.\n$/, ".")}`
-        : `${keys[0] === "detail" ? "" : `${keys.join(",")}: `}${
-            error.response.data[keys[0]]
-          }`;
+            .replace(regex, '\n')
+            .replace('\n\n', '\n')
+            .replace(/^\n/, '')
+            .replace(/.\n$/, '.')}`
+        : `${keys[0] === 'detail' ? '' : `${keys.join(',')}: `}${error.response.data[keys[0]]}`;
   } else if (error.request) {
     // The request was made but no response was received
     errorObject.title = `Не удалось соединиться с сервером`;
@@ -48,7 +46,7 @@ export default (error, ERROR_TYPE) => (dispatch) => {
     errorObject.message,
     [
       {
-        text: "Закрыть",
+        text: 'Закрыть',
         onPress: () => {
           dispatch({
             type: ERROR_TYPE,
@@ -59,6 +57,6 @@ export default (error, ERROR_TYPE) => (dispatch) => {
     ],
     {
       cancelable: false,
-    }
+    },
   );
 };

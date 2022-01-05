@@ -1,12 +1,12 @@
-import React, { memo, useCallback } from "react";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import React, { memo, useCallback } from 'react';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-import { ListItem, Button, Text } from "@ui-kitten/components";
+import { ListItem, Button, Text } from '@ui-kitten/components';
 
-import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
-import { DeleteIcon, TagIcon } from "../../themes/icons";
-import { hideTagAction } from "../../store/actions/apiAction";
+import { Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { DeleteIcon, TagIcon } from '../../themes/icons';
+import { hideTagAction } from '../../store/actions/apiAction';
 
 export const TagListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
@@ -22,15 +22,15 @@ export const TagListItem = memo(({ item, navigation }) => {
   const deleteHandler = useCallback(() => {
     close();
     Alert.alert(
-      "Удаление тега",
+      'Удаление тега',
       `Вы уверены, что хотите удалить тег ${item.tag_name}?`,
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
         {
-          text: "Удалить",
+          text: 'Удалить',
           onPress: () => {
             dispatch(hideTagAction(item));
           },
@@ -38,23 +38,17 @@ export const TagListItem = memo(({ item, navigation }) => {
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [close, dispatch, item]);
 
   const RightAction = useCallback(
-    () => (
-      <Button
-        onPress={deleteHandler}
-        accessoryLeft={DeleteIcon}
-        status="danger"
-      />
-    ),
-    [deleteHandler]
+    () => <Button onPress={deleteHandler} accessoryLeft={DeleteIcon} status="danger" />,
+    [deleteHandler],
   );
 
   const updateHandler = useCallback(() => {
-    navigation.navigate("UpdateTag", {
+    navigation.navigate('UpdateTag', {
       tag: item,
     });
   }, [item, navigation]);
@@ -65,15 +59,11 @@ export const TagListItem = memo(({ item, navigation }) => {
         {item.tag_name}
       </Text>
     ),
-    [item.tag_name]
+    [item.tag_name],
   );
 
   return (
-    <Swipeable
-      ref={swipeableRow}
-      overshootRight={false}
-      renderRightActions={RightAction}
-    >
+    <Swipeable ref={swipeableRow} overshootRight={false} renderRightActions={RightAction}>
       <ListItem
         onPress={updateHandler}
         title={renderListTitle}

@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Axios from "axios";
-import moment from "moment";
-import { endpointAPI } from "../constants";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from 'axios';
+import moment from 'moment';
+import { endpointAPI } from '../constants';
 
 import {
   SET_HOME_DATA,
@@ -14,11 +14,11 @@ import {
   ERROR_LAYOUT,
   SET_FILTER_PARAMS,
   CLEAR_FILTER_PARAMS,
-} from "../types";
+} from '../types';
 
-import failHandler from "../failHandler";
+import failHandler from '../failHandler';
 
-const FORMAT_MASK = "YYYY-MM-DD";
+const FORMAT_MASK = 'YYYY-MM-DD';
 
 export const setFilterParams = (params) => ({
   type: SET_FILTER_PARAMS,
@@ -37,11 +37,11 @@ export const generateHomeData =
   (profile_id = null) =>
   async (dispatch) => {
     try {
-      const token = await AsyncStorage.getItem("AUTH_TOKEN");
+      const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
       return Axios.get(`${endpointAPI}/home-list/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
         params: {
@@ -81,20 +81,20 @@ export const generateOperationData =
   async (dispatch, getState) => {
     try {
       dispatch(setFilterParams(params));
-      const token = await AsyncStorage.getItem("AUTH_TOKEN");
+      const token = await AsyncStorage.getItem('AUTH_TOKEN');
       const formatedParams = {};
 
       if (params && params !== null) {
         Object.entries(params).forEach(([key, value]) => {
           if (value.length) {
-            formatedParams[key] = value.map((el) => el.id).join(",");
+            formatedParams[key] = value.map((el) => el.id).join(',');
           }
         });
       }
 
       return Axios.get(`${endpointAPI}/operation-list/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
         params: {
@@ -110,18 +110,14 @@ export const generateOperationData =
         },
       })
         .then((res) => {
-          const {
-            total_action,
-            total_transaction,
-            data: operationListData,
-          } = res.data;
+          const { total_action, total_transaction, data: operationListData } = res.data;
           dispatch({
             type: SET_TOTAL_ACTIONS,
-            payload: total_action !== null ? total_action : "0",
+            payload: total_action !== null ? total_action : '0',
           });
           dispatch({
             type: SET_TOTAL_TRANSACTIONS,
-            payload: total_transaction !== null ? total_transaction : "0",
+            payload: total_transaction !== null ? total_transaction : '0',
           });
           dispatch({
             type: SET_OPERATION_DATA,

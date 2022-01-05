@@ -1,12 +1,12 @@
-import React, { memo, useCallback } from "react";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import React, { memo, useCallback } from 'react';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-import { ListItem, Button, Text } from "@ui-kitten/components";
+import { ListItem, Button, Text } from '@ui-kitten/components';
 
-import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
-import { DeleteIcon, CategoryIcon } from "../../themes/icons";
-import { hideCategoryAction } from "../../store/actions/apiAction";
+import { Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { DeleteIcon, CategoryIcon } from '../../themes/icons';
+import { hideCategoryAction } from '../../store/actions/apiAction';
 
 export const CategoryListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
@@ -23,15 +23,15 @@ export const CategoryListItem = memo(({ item, navigation }) => {
     close();
 
     Alert.alert(
-      "Удаление категории",
+      'Удаление категории',
       `Вы уверены, что хотите удалить категорию ${item.category_name}?`,
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
         {
-          text: "Удалить",
+          text: 'Удалить',
           onPress: () => {
             dispatch(hideCategoryAction(item));
           },
@@ -39,23 +39,17 @@ export const CategoryListItem = memo(({ item, navigation }) => {
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [close, dispatch, item]);
 
   const RightAction = useCallback(
-    () => (
-      <Button
-        onPress={deleteHandler}
-        accessoryLeft={DeleteIcon}
-        status="danger"
-      />
-    ),
-    [deleteHandler]
+    () => <Button onPress={deleteHandler} accessoryLeft={DeleteIcon} status="danger" />,
+    [deleteHandler],
   );
 
   const updateHandler = useCallback(() => {
-    navigation.navigate("UpdateCategory", {
+    navigation.navigate('UpdateCategory', {
       category: item,
     });
   }, [item, navigation]);
@@ -66,15 +60,11 @@ export const CategoryListItem = memo(({ item, navigation }) => {
         {item.category_name}
       </Text>
     ),
-    [item.category_name]
+    [item.category_name],
   );
 
   return (
-    <Swipeable
-      ref={swipeableRow}
-      overshootRight={false}
-      renderRightActions={RightAction}
-    >
+    <Swipeable ref={swipeableRow} overshootRight={false} renderRightActions={RightAction}>
       <ListItem
         onPress={updateHandler}
         title={renderListTitle}

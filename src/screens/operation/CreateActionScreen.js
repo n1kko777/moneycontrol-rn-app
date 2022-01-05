@@ -1,32 +1,20 @@
-import React, { memo, useCallback } from "react";
-import { View, Keyboard } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import React, { memo, useCallback } from 'react';
+import { View, Keyboard } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-} from "@ui-kitten/components";
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { createActionAction } from "../../store/actions/apiAction";
-import {
-  clearCurrentAccount,
-  setCurrentAccount,
-} from "../../store/actions/accountAction";
+import { createActionAction } from '../../store/actions/apiAction';
+import { clearCurrentAccount, setCurrentAccount } from '../../store/actions/accountAction';
 
-import { THEME } from "../../themes/themes";
-import { BackIcon } from "../../themes/icons";
+import { THEME } from '../../themes/themes';
+import { BackIcon } from '../../themes/icons';
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { CustomTag } from "../../components/operation/tag/CustomTag";
-import { AccountSelector } from "../../components/operation/account/AccountSelector";
-import { CategorySelector } from "../../components/operation/category/CategorySelector";
-import {
-  clearCurrentCategory,
-  setCurrentCategory,
-} from "../../store/actions/categoryAction";
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { CustomTag } from '../../components/operation/tag/CustomTag';
+import { AccountSelector } from '../../components/operation/account/AccountSelector';
+import { CategorySelector } from '../../components/operation/category/CategorySelector';
+import { clearCurrentCategory, setCurrentCategory } from '../../store/actions/categoryAction';
 import {
   getApiLoading,
   getAccountCurrent,
@@ -34,8 +22,8 @@ import {
   getTagsList,
   getAccountList,
   getCategoriesList,
-} from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+} from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const CreateActionScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -53,7 +41,7 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
 
   // Amount
   const [action_amount, setActionAmount] = React.useState(
-    prevItem !== undefined ? prevItem.balance.toString() : ""
+    prevItem !== undefined ? prevItem.balance.toString() : '',
   );
   const isNotAmountEmpty = parseFloat(action_amount) > 0;
 
@@ -68,7 +56,7 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
     (account) => {
       dispatch(setCurrentAccount(account));
     },
-    [dispatch]
+    [dispatch],
   );
   const onClearCurrentAccount = useCallback(() => {
     dispatch(clearCurrentAccount());
@@ -85,7 +73,7 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
     (category) => {
       dispatch(setCurrentCategory(category));
     },
-    [dispatch]
+    [dispatch],
   );
   const onClearCurrentCategory = useCallback(() => {
     dispatch(clearCurrentCategory());
@@ -95,9 +83,7 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
   const tagData = useSelector(getTagsList);
 
   const [tagList, setTagList] = React.useState(
-    prevItem !== undefined
-      ? tagData.filter((elem) => prevItem.tags.includes(elem.id))
-      : []
+    prevItem !== undefined ? tagData.filter((elem) => prevItem.tags.includes(elem.id)) : [],
   );
 
   const navigateBack = useCallback(() => {
@@ -124,39 +110,27 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
 
       dispatch(createActionAction(newAction, navigateBack));
     }
-  }, [
-    loader,
-    action_amount,
-    currentAccount,
-    currentCategory,
-    tagList,
-    dispatch,
-    navigateBack,
-  ]);
+  }, [loader, action_amount, currentAccount, currentCategory, tagList, dispatch, navigateBack]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
-    [navigateBack]
+    [navigateBack],
   );
 
   return (
     <ScreenTemplate>
       <FlexibleView>
-        <TopNavigation
-          title="Создание дохода"
-          alignment="center"
-          accessoryLeft={BackAction}
-        />
+        <TopNavigation title="Создание дохода" alignment="center" accessoryLeft={BackAction} />
         <Layout
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}
@@ -168,10 +142,8 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
               keyboardType="decimal-pad"
               onChangeText={setActionAmount}
               style={{ marginVertical: 10 }}
-              status={isNotAmountEmpty ? "success" : "danger"}
-              caption={
-                isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
-              }
+              status={isNotAmountEmpty ? 'success' : 'danger'}
+              caption={isNotAmountEmpty ? '' : 'Поле не может быть пустым или меньше 0'}
               selectTextOnFocus
             />
             <AccountSelector
@@ -190,20 +162,14 @@ export const CreateActionScreen = memo(({ route, navigation }) => {
               isNotEmpty={isNotCategoryEmpty}
               navigation={navigation}
             />
-            <CustomTag
-              tagData={tagData}
-              tagList={tagList}
-              setTagList={setTagList}
-            />
+            <CustomTag tagData={tagData} tagList={tagList} setTagList={setTagList} />
             <Button
               style={{
                 marginVertical: 25,
                 borderRadius: THEME.BUTTON_RADIUS,
               }}
               onPress={onSubmit}
-              disabled={
-                !isNotAmountEmpty || !isNotAccountEmpty || !isNotCategoryEmpty
-              }
+              disabled={!isNotAmountEmpty || !isNotAccountEmpty || !isNotCategoryEmpty}
             >
               Создать
             </Button>

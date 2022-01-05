@@ -14,26 +14,26 @@ import {
   CLEAR_LAYOUT,
   SET_FILTER_PARAMS,
   CLEAR_FILTER_PARAMS,
-} from "../types";
+} from '../types';
 
 const operationTypeData = [
   {
     index: 0,
-    text: "Доход",
-    title: "Доход",
-    id: "action",
+    text: 'Доход',
+    title: 'Доход',
+    id: 'action',
   },
   {
     index: 1,
-    text: "Расход",
-    title: "Расход",
-    id: "transaction",
+    text: 'Расход',
+    title: 'Расход',
+    id: 'transaction',
   },
   {
     index: 2,
-    text: "Перевод",
-    title: "Перевод",
-    id: "transfer",
+    text: 'Перевод',
+    title: 'Перевод',
+    id: 'transfer',
   },
 ];
 

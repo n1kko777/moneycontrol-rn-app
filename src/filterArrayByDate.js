@@ -1,6 +1,4 @@
-import moment from "moment";
+import moment from 'moment';
 
 export const filterArrayByDate = (arr, startDate, endDate) =>
-  arr.filter((elem) =>
-    moment(elem.last_updated).isBetween(moment(startDate), moment(endDate))
-  );
+  arr.filter((elem) => moment(elem.last_updated).isBetween(moment(startDate), moment(endDate)));

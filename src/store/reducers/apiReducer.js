@@ -1,4 +1,4 @@
-import { START_LOADER, END_LOADER } from "../types";
+import { START_LOADER, END_LOADER } from '../types';
 
 const initialState = {
   loader: false,

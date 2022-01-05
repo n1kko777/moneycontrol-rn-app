@@ -1,8 +1,8 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   itemWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,

@@ -1,6 +1,6 @@
-import axios from "axios";
-import moment from "moment";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   GET_ACCOUNT,
   CREATE_ACCOUNT,
@@ -10,10 +10,10 @@ import {
   UPDATE_ACCOUNT,
   SET_CURRENT_ACCOUNT,
   CLEAR_CURRENT_ACCOUNT,
-} from "../types";
+} from '../types';
 
-import { endpointAPI } from "../constants";
-import failHandler from "../failHandler";
+import { endpointAPI } from '../constants';
+import failHandler from '../failHandler';
 
 // Set loading to true
 export const setLoading = () => ({
@@ -35,12 +35,12 @@ export const clearCurrentAccount = () => ({
 export const getAccount = () => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .get(`${endpointAPI}/account/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })
@@ -66,7 +66,7 @@ export const getAccount = () => async (dispatch) => {
 export const createAccount = (account) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .post(
@@ -76,10 +76,10 @@ export const createAccount = (account) => async (dispatch) => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Token ${token}`,
           },
-        }
+        },
       )
       .then((res) => {
         const resAccount = res.data;
@@ -109,7 +109,7 @@ export const updateAccount =
   async (dispatch) => {
     try {
       dispatch(setLoading());
-      const token = await AsyncStorage.getItem("AUTH_TOKEN");
+      const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
       return axios
         .put(
@@ -120,10 +120,10 @@ export const updateAccount =
           },
           {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
               Authorization: `Token ${token}`,
             },
-          }
+          },
         )
         .then((res) => {
           const updatedAccount = res.data;
@@ -151,12 +151,12 @@ export const updateAccount =
 export const hideAccount = (account) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .delete(`${endpointAPI}/account/${account.id}/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })

@@ -1,23 +1,20 @@
-import React, { memo, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { memo, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { useTheme, Layout } from "@ui-kitten/components";
-import { View } from "react-native";
-import { ThemeContext } from "../../themes/theme-context";
+import { useTheme, Layout } from '@ui-kitten/components';
+import { View } from 'react-native';
+import { ThemeContext } from '../../themes/theme-context';
 
-import { Toolbar } from "../../components/navigation/Toolbar";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { CustomDatePicker } from "../../components/CustomDatePicker";
+import { Toolbar } from '../../components/navigation/Toolbar';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { CustomDatePicker } from '../../components/CustomDatePicker';
 
-import { OperationList } from "../../components/operation/OperationList";
+import { OperationList } from '../../components/operation/OperationList';
 
-import { getDataDispatcher } from "../../store/actions/apiAction";
-import { FilterIcon, ActiveFilterIcon } from "../../themes/icons";
-import { BalanceComponent } from "../../components/home/BalanceComponent";
-import {
-  getLayoutFilterParams,
-  getLayoutOperationListData,
-} from "../../store/selectors";
+import { getDataDispatcher } from '../../store/actions/apiAction';
+import { FilterIcon, ActiveFilterIcon } from '../../themes/icons';
+import { BalanceComponent } from '../../components/home/BalanceComponent';
+import { getLayoutFilterParams, getLayoutOperationListData } from '../../store/selectors';
 
 export const OperationsScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -29,7 +26,7 @@ export const OperationsScreen = memo(({ navigation }) => {
   const filterParams = useSelector(getLayoutFilterParams);
 
   const navigateFilter = useCallback(() => {
-    navigation.navigate("FilterOperation");
+    navigation.navigate('FilterOperation');
   }, [navigation]);
 
   const onRefreshHandler = useCallback(() => {
@@ -46,10 +43,7 @@ export const OperationsScreen = memo(({ navigation }) => {
       <Layout
         style={{
           flex: 1,
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <BalanceComponent />

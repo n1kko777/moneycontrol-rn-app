@@ -8,8 +8,8 @@ import {
   UPDATE_ACCOUNT,
   SET_CURRENT_ACCOUNT,
   CLEAR_CURRENT_ACCOUNT,
-} from "../types";
-import { getAccountTitle } from "../../getAccountTitle";
+} from '../types';
+import { getAccountTitle } from '../../getAccountTitle';
 
 const initialState = {
   accounts: [],
@@ -52,9 +52,7 @@ export const accountReducer = (state = initialState, action) => {
     case UPDATE_ACCOUNT:
       return {
         ...state,
-        accounts: state.accounts.map((account) =>
-          account.id === payload.id ? payload : account
-        ),
+        accounts: state.accounts.map((account) => (account.id === payload.id ? payload : account)),
         loading: false,
         error: null,
       };

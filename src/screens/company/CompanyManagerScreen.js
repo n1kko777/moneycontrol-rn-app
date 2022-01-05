@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback } from 'react';
 import {
   Layout,
   TopNavigation,
@@ -6,27 +6,24 @@ import {
   Text,
   Button,
   Input,
-} from "@ui-kitten/components";
+} from '@ui-kitten/components';
 
-import { useDispatch, useSelector } from "react-redux";
-import { Alert } from "react-native";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { logout } from "../../store/actions/authAction";
+import { useDispatch, useSelector } from 'react-redux';
+import { Alert } from 'react-native';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { logout } from '../../store/actions/authAction';
 
-import { LogoutIcon, UpdateIcon } from "../../themes/icons";
+import { LogoutIcon, UpdateIcon } from '../../themes/icons';
 
-import {
-  createCompanyAction,
-  getProfileAction,
-} from "../../store/actions/apiAction";
-import { getApiLoading, getProfile } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { createCompanyAction, getProfileAction } from '../../store/actions/apiAction';
+import { getApiLoading, getProfile } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const CompanyManagerScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
   const profile = useSelector(getProfile);
 
-  const [companyName, setCompanyName] = React.useState("");
+  const [companyName, setCompanyName] = React.useState('');
 
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
@@ -34,24 +31,24 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
 
   const navigateLogout = useCallback(() => {
     Alert.alert(
-      "Выход",
-      "Вы уверены, что хотите выйти из учетной записи?",
+      'Выход',
+      'Вы уверены, что хотите выйти из учетной записи?',
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
-        { text: "Выйти", onPress: logoutHandler },
+        { text: 'Выйти', onPress: logoutHandler },
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [logoutHandler]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />,
-    [navigateLogout]
+    [navigateLogout],
   );
 
   const loader = useSelector(getApiLoading);
@@ -60,14 +57,14 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
     (successProfile) => {
       if (successProfile !== null) {
         if (successProfile.company !== null) {
-          navigation.navigate("Home");
+          navigation.navigate('Home');
           return;
         }
         return;
       }
-      navigation.navigate("CreateProfile");
+      navigation.navigate('CreateProfile');
     },
-    [navigation]
+    [navigation],
   );
 
   const updateProfileHandler = useCallback(() => {
@@ -77,19 +74,17 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
   }, [dispatch, loader, onSuccessProfile]);
 
   const RefreshProfileAction = useCallback(
-    () => (
-      <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />
-    ),
-    [updateProfileHandler]
+    () => <TopNavigationAction icon={UpdateIcon} onPress={updateProfileHandler} />,
+    [updateProfileHandler],
   );
 
   const onSuccessCompany = useCallback(
     (successCompany) => {
       if (successCompany !== null) {
-        navigation.navigate("Home");
+        navigation.navigate('Home');
       }
     },
-    [navigation]
+    [navigation],
   );
 
   const createCompanyHandler = useCallback(() => {
@@ -108,11 +103,11 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
         />
         <Layout
           style={{
-            alignSelf: "center",
-            width: "85%",
+            alignSelf: 'center',
+            width: '85%',
             maxWidth: 720,
             flex: 1,
-            justifyContent: "flex-start",
+            justifyContent: 'flex-start',
             marginVertical: 8,
             marginTop: 30,
             marginHorizontal: 16,
@@ -125,7 +120,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
             style={{ marginBottom: 15 }}
           />
           <Button onPress={createCompanyHandler}>Создать компанию</Button>
-          <Text style={{ marginVertical: 20, alignSelf: "center" }}>или</Text>
+          <Text style={{ marginVertical: 20, alignSelf: 'center' }}>или</Text>
 
           <Text style={{ marginBottom: 10 }} category="s1">
             Сообщите руководителю следующие данные:

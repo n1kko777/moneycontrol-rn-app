@@ -1,11 +1,9 @@
-import moment from "moment";
-import { SET_CALENDAR, CLEAR_CALENDAR } from "../types";
+import moment from 'moment';
+import { SET_CALENDAR, CLEAR_CALENDAR } from '../types';
 
 const firstDay =
-  process.env.NODE_ENV === "production"
-    ? moment().startOf("month")
-    : moment().startOf("year");
-const lastDay = moment().endOf("month");
+  process.env.NODE_ENV === 'production' ? moment().startOf('month') : moment().startOf('year');
+const lastDay = moment().endOf('month');
 
 const initialState = {
   startDate: firstDay,

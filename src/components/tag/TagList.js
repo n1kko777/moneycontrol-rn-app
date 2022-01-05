@@ -1,9 +1,9 @@
-import React, { memo, useCallback } from "react";
-import { View, FlatList } from "react-native";
-import { useSelector } from "react-redux";
-import { getTags } from "../../store/selectors";
+import React, { memo, useCallback } from 'react';
+import { View, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
+import { getTags } from '../../store/selectors';
 
-import { TagListItem } from "./TagListItem";
+import { TagListItem } from './TagListItem';
 
 export const TagList = memo(({ navigation }) => {
   const dataList = useSelector(getTags);
@@ -12,7 +12,7 @@ export const TagList = memo(({ navigation }) => {
 
   const renderItem = useCallback(
     ({ item }) => <TagListItem item={item} navigation={navigation} />,
-    [navigation]
+    [navigation],
   );
 
   return (
@@ -21,9 +21,7 @@ export const TagList = memo(({ navigation }) => {
         marginHorizontal: 8,
         marginTop: 15,
       }}
-      ListFooterComponent={
-        <View style={{ marginHorizontal: 16, marginTop: 30 }} />
-      }
+      ListFooterComponent={<View style={{ marginHorizontal: 16, marginTop: 30 }} />}
       ListFooterComponentStyle={{ paddingBottom: 30 }}
       keyExtractor={keyExtractor}
       data={dataList}

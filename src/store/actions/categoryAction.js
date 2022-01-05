@@ -1,6 +1,6 @@
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import moment from "moment";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 import {
   GET_CATEGORY,
   CREATE_CATEGORY,
@@ -10,10 +10,10 @@ import {
   UPDATE_CATEGORY,
   SET_CURRENT_CATEGORY,
   CLEAR_CURRENT_CATEGORY,
-} from "../types";
+} from '../types';
 
-import { endpointAPI } from "../constants";
-import failHandler from "../failHandler";
+import { endpointAPI } from '../constants';
+import failHandler from '../failHandler';
 
 // Set loading to true
 export const setLoading = () => ({
@@ -35,12 +35,12 @@ export const clearCurrentCategory = () => ({
 export const getCategory = () => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .get(`${endpointAPI}/category/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })
@@ -65,7 +65,7 @@ export const getCategory = () => async (dispatch) => {
 export const createCategory = (category) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .post(
@@ -75,10 +75,10 @@ export const createCategory = (category) => async (dispatch) => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Token ${token}`,
           },
-        }
+        },
       )
       .then((res) => {
         const resCategory = res.data;
@@ -108,7 +108,7 @@ export const updateCategory =
   async (dispatch) => {
     try {
       dispatch(setLoading());
-      const token = await AsyncStorage.getItem("AUTH_TOKEN");
+      const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
       return axios
         .put(
@@ -118,10 +118,10 @@ export const updateCategory =
           },
           {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
               Authorization: `Token ${token}`,
             },
-          }
+          },
         )
         .then((res) => {
           const updatedCategory = res.data;
@@ -145,12 +145,12 @@ export const updateCategory =
 export const hideCategory = (category) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .delete(`${endpointAPI}/category/${category.id}/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })

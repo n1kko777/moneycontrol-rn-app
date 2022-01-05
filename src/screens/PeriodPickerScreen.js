@@ -1,5 +1,5 @@
-import React, { memo, useCallback, useMemo, useState } from "react";
-import { View } from "react-native";
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { View } from 'react-native';
 
 import {
   Layout,
@@ -9,36 +9,36 @@ import {
   Text,
   useTheme,
   Button,
-} from "@ui-kitten/components";
+} from '@ui-kitten/components';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import moment from "moment";
-import DatePicker from "../libs/react-native-date-picker";
-import { Toolbar } from "../components/navigation/Toolbar";
-import { ScreenTemplate } from "../components/ScreenTemplate";
-import { BackIcon } from "../themes/icons";
+import moment from 'moment';
+import DatePicker from '../libs/react-native-date-picker';
+import { Toolbar } from '../components/navigation/Toolbar';
+import { ScreenTemplate } from '../components/ScreenTemplate';
+import { BackIcon } from '../themes/icons';
 import {
   getCalendarEndDate,
   getCalendarMinDate,
   getCalendarStartDate,
   getLayoutFilterParams,
-} from "../store/selectors";
-import { clearCalendar, setCalendar } from "../store/actions/calendarAction";
-import { getOperationAction } from "../store/actions/apiAction";
-import { FlexibleView } from "../components/FlexibleView";
-import { displayDate } from "../dispayDate";
+} from '../store/selectors';
+import { clearCalendar, setCalendar } from '../store/actions/calendarAction';
+import { getOperationAction } from '../store/actions/apiAction';
+import { FlexibleView } from '../components/FlexibleView';
+import { displayDate } from '../dispayDate';
 
 const PERIOD_DATA = [
-  "Сегодня",
-  "Вчера",
-  "Текущая неделя",
-  "Прошлая неделя",
-  "Текущий месяц",
-  "Прошлый месяц",
-  "Квартал",
-  "Год",
-  "Произвольный период",
+  'Сегодня',
+  'Вчера',
+  'Текущая неделя',
+  'Прошлая неделя',
+  'Текущий месяц',
+  'Прошлый месяц',
+  'Квартал',
+  'Год',
+  'Произвольный период',
 ];
 
 const initialSelectedItem = new IndexPath(PERIOD_DATA.length - 1);
@@ -58,8 +58,7 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
     navigation.goBack();
   }, [navigation]);
 
-  const [selectedPeriodIndex, setSelectedPeriodIndex] =
-    React.useState(initialSelectedItem);
+  const [selectedPeriodIndex, setSelectedPeriodIndex] = React.useState(initialSelectedItem);
 
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -82,55 +81,44 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
         break;
       case 1:
         setPeriod({
-          startDate: moment().subtract(1, "days"),
-          endDate: moment().subtract(1, "days"),
+          startDate: moment().subtract(1, 'days'),
+          endDate: moment().subtract(1, 'days'),
         });
         break;
       case 2:
         setPeriod({
-          startDate: moment().isoWeekday(1).startOf("week").startOf("day"),
-          endDate: moment().isoWeekday(1).endOf("week").startOf("day"),
+          startDate: moment().isoWeekday(1).startOf('week').startOf('day'),
+          endDate: moment().isoWeekday(1).endOf('week').startOf('day'),
         });
         break;
       case 3:
         setPeriod({
-          startDate: moment()
-            .subtract(1, "weeks")
-            .isoWeekday(1)
-            .startOf("week")
-            .startOf("day"),
-          endDate: moment()
-            .subtract(1, "weeks")
-            .isoWeekday(1)
-            .endOf("week")
-            .startOf("day"),
+          startDate: moment().subtract(1, 'weeks').isoWeekday(1).startOf('week').startOf('day'),
+          endDate: moment().subtract(1, 'weeks').isoWeekday(1).endOf('week').startOf('day'),
         });
         break;
       case 4:
         setPeriod({
-          startDate: moment().startOf("month").startOf("day"),
-          endDate: moment().endOf("month").startOf("day"),
+          startDate: moment().startOf('month').startOf('day'),
+          endDate: moment().endOf('month').startOf('day'),
         });
         break;
       case 5:
         setPeriod({
-          startDate: moment()
-            .subtract(1, "months")
-            .startOf("month")
-            .startOf("day"),
-          endDate: moment().subtract(1, "months").endOf("month").startOf("day"),
+          startDate: moment().subtract(1, 'months').startOf('month').startOf('day'),
+          endDate: moment().subtract(1, 'months').endOf('month').startOf('day'),
         });
         break;
       case 6:
         setPeriod({
-          startDate: moment().startOf("quarter").startOf("day"),
-          endDate: moment().endOf("quarter").startOf("day"),
+          startDate: moment().startOf('quarter').startOf('day'),
+          endDate: moment().endOf('quarter').startOf('day'),
         });
         break;
       case 7:
         setPeriod({
-          startDate: moment().startOf("year").startOf("day"),
-          endDate: moment().endOf("year").startOf("day"),
+          startDate: moment().startOf('year').startOf('day'),
+          endDate: moment().endOf('year').startOf('day'),
         });
         break;
       default:
@@ -144,7 +132,7 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
       Object.keys(PERIOD_DATA).map((elPeriod) => (
         <SelectItem key={PERIOD_DATA[elPeriod]} title={PERIOD_DATA[elPeriod]} />
       )),
-    []
+    [],
   );
 
   const onChangeStartDate = useCallback((newDate) => {
@@ -197,9 +185,9 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
           </Select>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginTop: 24,
             }}
           >
@@ -207,16 +195,16 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
               Начальная дата:
             </Text>
             <Text style={{ marginBottom: 8 }} category="s1">
-              {period.startDate ? displayDate(period.startDate) : ""}
+              {period.startDate ? displayDate(period.startDate) : ''}
             </Text>
           </View>
           {!isDisabled ? (
             <DatePicker
               value={period.startDate}
               onChange={onChangeStartDate}
-              textColor={kittenTheme["text-basic-color"]}
-              markColor={kittenTheme["background-basic-color-2"]}
-              fadeColor={kittenTheme["background-basic-color-1"]}
+              textColor={kittenTheme['text-basic-color']}
+              markColor={kittenTheme['background-basic-color-2']}
+              fadeColor={kittenTheme['background-basic-color-1']}
               startYear={moment(minDate).year()}
               endYear={moment().year()}
               height={160}
@@ -224,9 +212,9 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
           ) : null}
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginTop: 24,
             }}
           >
@@ -234,16 +222,16 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
               Конечная дата:
             </Text>
             <Text style={{ marginBottom: 8 }} category="s1">
-              {period.endDate ? displayDate(period.endDate) : ""}
+              {period.endDate ? displayDate(period.endDate) : ''}
             </Text>
           </View>
           {!isDisabled ? (
             <DatePicker
               value={period.endDate}
               onChange={onChangeEndDate}
-              textColor={kittenTheme["text-basic-color"]}
-              markColor={kittenTheme["background-basic-color-2"]}
-              fadeColor={kittenTheme["background-basic-color-1"]}
+              textColor={kittenTheme['text-basic-color']}
+              markColor={kittenTheme['background-basic-color-2']}
+              fadeColor={kittenTheme['background-basic-color-1']}
               startYear={moment(minDate).year()}
               endYear={moment().year()}
               height={160}
@@ -253,15 +241,11 @@ export const PeriodPickerScreen = memo(({ navigation }) => {
             style={{
               marginTop: 30,
               marginHorizontal: -10,
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}
           >
-            <Button
-              style={{ flex: 1, margin: 10 }}
-              onPress={onCancelPress}
-              appearance="outline"
-            >
+            <Button style={{ flex: 1, margin: 10 }} onPress={onCancelPress} appearance="outline">
               Сбросить
             </Button>
             <Button style={{ flex: 1, margin: 10 }} onPress={onSubmitPress}>

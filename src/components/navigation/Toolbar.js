@@ -1,9 +1,9 @@
-import React, { memo, useCallback } from "react";
-import { TopNavigation, TopNavigationAction } from "@ui-kitten/components";
-import { useSelector } from "react-redux";
-import { TopMenuOptions } from "./TopMenuOptions";
-import { ProfileIcon } from "../../themes/icons";
-import { getToolbarTitle } from "../../store/selectors";
+import React, { memo, useCallback } from 'react';
+import { TopNavigation, TopNavigationAction } from '@ui-kitten/components';
+import { useSelector } from 'react-redux';
+import { TopMenuOptions } from './TopMenuOptions';
+import { ProfileIcon } from '../../themes/icons';
+import { getToolbarTitle } from '../../store/selectors';
 
 export const Toolbar = memo(
   ({
@@ -12,18 +12,18 @@ export const Toolbar = memo(
     style,
     TargetIcon = ProfileIcon,
     onTarget = () => {
-      navigation.navigate("Profile");
+      navigation.navigate('Profile');
     },
     isMenu = true,
   }) => {
     const renderMenuAction = useCallback(
       () => <TopMenuOptions navigation={navigation} />,
-      [navigation]
+      [navigation],
     );
 
     const ProfileAction = useCallback(
       (props) => <TopNavigationAction {...props} icon={TargetIcon} />,
-      [TargetIcon]
+      [TargetIcon],
     );
 
     const renderProfileAction = () => <ProfileAction onPress={onTarget} />;
@@ -33,7 +33,7 @@ export const Toolbar = memo(
       <TopNavigation
         style={{
           ...style,
-          position: "relative",
+          position: 'relative',
           zIndex: 10,
         }}
         title={title || toolbarTitle}
@@ -42,5 +42,5 @@ export const Toolbar = memo(
         accessoryRight={isMenu ? renderMenuAction : null}
       />
     );
-  }
+  },
 );

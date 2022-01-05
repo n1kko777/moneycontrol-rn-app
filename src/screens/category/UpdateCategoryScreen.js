@@ -1,32 +1,24 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-} from "@ui-kitten/components";
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { View, Keyboard } from "react-native";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { THEME } from "../../themes/themes";
-import { BackIcon } from "../../themes/icons";
+import { View, Keyboard } from 'react-native';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { THEME } from '../../themes/themes';
+import { BackIcon } from '../../themes/icons';
 
-import { updateCategoryAction } from "../../store/actions/apiAction";
-import { getApiLoading } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { updateCategoryAction } from '../../store/actions/apiAction';
+import { getApiLoading } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const UpdateCategoryScreen = memo(({ route, navigation }) => {
   const { category } = route.params;
 
   const dispatch = useDispatch();
 
-  const [category_name, setCategoryName] = React.useState(
-    category.category_name
-  );
+  const [category_name, setCategoryName] = React.useState(category.category_name);
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
@@ -43,15 +35,15 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
             id: category.id,
             category_name,
           },
-          navigateBack
-        )
+          navigateBack,
+        ),
       );
     }
   }, [category.id, category_name, dispatch, loader, navigateBack]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
-    [navigateBack]
+    [navigateBack],
   );
 
   const inputRef = React.useRef(null);
@@ -65,21 +57,17 @@ export const UpdateCategoryScreen = memo(({ route, navigation }) => {
   return (
     <ScreenTemplate>
       <FlexibleView>
-        <TopNavigation
-          title="Обновление категории"
-          alignment="center"
-          accessoryLeft={BackAction}
-        />
+        <TopNavigation title="Обновление категории" alignment="center" accessoryLeft={BackAction} />
         <Layout
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}

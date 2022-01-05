@@ -1,22 +1,22 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback } from 'react';
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 
-import { Layout, useTheme } from "@ui-kitten/components";
+import { Layout, useTheme } from '@ui-kitten/components';
 
-import { ScrollView, View, RefreshControl } from "react-native";
-import { ThemeContext } from "../themes/theme-context";
+import { ScrollView, View, RefreshControl } from 'react-native';
+import { ThemeContext } from '../themes/theme-context';
 
-import { ScreenTemplate } from "../components/ScreenTemplate";
+import { ScreenTemplate } from '../components/ScreenTemplate';
 
-import { BalanceComponent } from "../components/home/BalanceComponent";
-import { HomeList } from "../components/home/HomeList";
-import { Toolbar } from "../components/navigation/Toolbar";
+import { BalanceComponent } from '../components/home/BalanceComponent';
+import { HomeList } from '../components/home/HomeList';
+import { Toolbar } from '../components/navigation/Toolbar';
 
-import { CustomDatePicker } from "../components/CustomDatePicker";
+import { CustomDatePicker } from '../components/CustomDatePicker';
 
-import { getDataDispatcher } from "../store/actions/apiAction";
-import { getLayoutHomeListData } from "../store/selectors";
+import { getDataDispatcher } from '../store/actions/apiAction';
+import { getLayoutHomeListData } from '../store/selectors';
 
 export const HomeScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -39,28 +39,18 @@ export const HomeScreen = memo(({ navigation }) => {
     <ScreenTemplate>
       <Layout
         style={{
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <Toolbar navigation={navigation} />
       </Layout>
       <ScrollView
         refreshControl={
-          <RefreshControl
-            refreshing={false}
-            onRefresh={refreshData}
-            tintColor="transparent"
-          />
+          <RefreshControl refreshing={false} onRefresh={refreshData} tintColor="transparent" />
         }
         style={{
           flex: 1,
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <View onStartShouldSetResponder={() => true}>

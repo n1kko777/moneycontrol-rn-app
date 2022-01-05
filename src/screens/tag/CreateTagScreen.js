@@ -1,28 +1,22 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-} from "@ui-kitten/components";
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { View, Keyboard } from "react-native";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { THEME } from "../../themes/themes";
-import { BackIcon } from "../../themes/icons";
+import { View, Keyboard } from 'react-native';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { THEME } from '../../themes/themes';
+import { BackIcon } from '../../themes/icons';
 
-import { createTagAction } from "../../store/actions/apiAction";
-import { getApiLoading } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { createTagAction } from '../../store/actions/apiAction';
+import { getApiLoading } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const CreateTagScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
 
-  const [tag_name, setTagName] = React.useState("");
+  const [tag_name, setTagName] = React.useState('');
 
   const navigateBack = useCallback(() => {
     navigation.goBack(null);
@@ -31,7 +25,7 @@ export const CreateTagScreen = memo(({ navigation }) => {
   const loader = useSelector(getApiLoading);
 
   const onReset = useCallback(() => {
-    setTagName("");
+    setTagName('');
     navigateBack();
   }, [navigateBack]);
 
@@ -44,15 +38,15 @@ export const CreateTagScreen = memo(({ navigation }) => {
           {
             tag_name,
           },
-          onReset
-        )
+          onReset,
+        ),
       );
     }
   }, [loader, dispatch, tag_name, onReset]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
-    [navigateBack]
+    [navigateBack],
   );
 
   const inputRef = React.useRef(null);
@@ -66,21 +60,17 @@ export const CreateTagScreen = memo(({ navigation }) => {
   return (
     <ScreenTemplate>
       <FlexibleView>
-        <TopNavigation
-          title="Создание тега"
-          alignment="center"
-          accessoryLeft={BackAction}
-        />
+        <TopNavigation title="Создание тега" alignment="center" accessoryLeft={BackAction} />
         <Layout
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}
