@@ -1,9 +1,10 @@
-import React, { memo, useCallback, useRef } from 'react';
-import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { AddIcon, TrendingUpIcon, TrendingDownIcon, ExchangeIcon } from '../../themes/icons';
-
+import React, { memo, useCallback, useRef } from 'react';
+import { Animated, Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AddIcon, ExchangeIcon, TrendingDownIcon, TrendingUpIcon } from '../../themes/icons';
 import { NavButton } from './NavButton';
+
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   button: {
@@ -27,6 +28,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 6,
     top: 6,
+  },
+  hiddenView: {
+    position: 'absolute',
+    top: -width,
+    left: 0,
+    right: -height,
+    bottom: 0,
   },
 });
 
@@ -137,44 +145,47 @@ export const AddButton = memo(({ navigation }) => {
   };
 
   return (
-    <View style={{ width: 60, height: 60, marginTop: -35 }}>
-      <Animated.View style={[styles.navButton, earnAnim]}>
-        <NavButton
-          icon={TrendingUpIcon}
-          onPress={onNavigateToCreateAction}
-          opacityValue={toggled ? 1 : 0}
-          status="success"
-          name="Доход"
-        />
-      </Animated.View>
+    <>
+      {toggled && <View style={styles.hiddenView} />}
+      <View style={{ width: 60, height: 60, marginTop: -35 }}>
+        <Animated.View style={[styles.navButton, earnAnim]}>
+          <NavButton
+            icon={TrendingUpIcon}
+            onPress={onNavigateToCreateAction}
+            opacityValue={toggled ? 1 : 0}
+            status="success"
+            name="Доход"
+          />
+        </Animated.View>
 
-      <Animated.View style={[styles.navButton, transferAnim]}>
-        <NavButton
-          icon={ExchangeIcon}
-          onPress={onNavigateToCreateTransfer}
-          opacityValue={toggled ? 1 : 0}
-          status="info"
-          name="Перевод"
-        />
-      </Animated.View>
+        <Animated.View style={[styles.navButton, transferAnim]}>
+          <NavButton
+            icon={ExchangeIcon}
+            onPress={onNavigateToCreateTransfer}
+            opacityValue={toggled ? 1 : 0}
+            status="info"
+            name="Перевод"
+          />
+        </Animated.View>
 
-      <Animated.View style={[styles.navButton, spendAnim]}>
-        <NavButton
-          icon={TrendingDownIcon}
-          onPress={onNavigateToCreateTransaction}
-          opacityValue={toggled ? 1 : 0}
-          status="danger"
-          name="Расход"
-        />
-      </Animated.View>
+        <Animated.View style={[styles.navButton, spendAnim]}>
+          <NavButton
+            icon={TrendingDownIcon}
+            onPress={onNavigateToCreateTransaction}
+            opacityValue={toggled ? 1 : 0}
+            status="danger"
+            name="Расход"
+          />
+        </Animated.View>
 
-      <TouchableOpacity onPress={toggleHandler} activeOpacity={1}>
-        <View style={styles.plusButton}>
-          <Animated.View style={[styles.button, rotation]}>
-            <AddIcon fill="#6B0848" />
-          </Animated.View>
-        </View>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={toggleHandler} activeOpacity={1}>
+          <View style={styles.plusButton}>
+            <Animated.View style={[styles.button, rotation]}>
+              <AddIcon fill="#6B0848" />
+            </Animated.View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 });
