@@ -1,26 +1,20 @@
-import React, { useState, useRef, useEffect, memo, useCallback } from "react";
+import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-} from "@ui-kitten/components";
+import { useDispatch, useSelector } from 'react-redux';
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { View } from "react-native";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { THEME } from "../../themes/themes";
-import { BackIcon } from "../../themes/icons";
+import { View } from 'react-native';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { THEME } from '../../themes/themes';
+import { BackIcon } from '../../themes/icons';
 
-import { resetPassAction } from "../../store/actions/apiAction";
-import { getApiLoading } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { resetPassAction } from '../../store/actions/apiAction';
+import { getApiLoading } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const ResetPassword = memo(({ navigation }) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const loader = useSelector(getApiLoading);
 
   const navigateBack = useCallback(() => {
@@ -28,7 +22,7 @@ export const ResetPassword = memo(({ navigation }) => {
   }, [navigation]);
 
   const onReset = useCallback(() => {
-    setEmail("");
+    setEmail('');
     navigateBack();
   }, [navigateBack]);
 
@@ -39,15 +33,15 @@ export const ResetPassword = memo(({ navigation }) => {
           {
             email,
           },
-          onReset
-        )
+          onReset,
+        ),
       );
     }
   }, [dispatch, email, loader, onReset]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
-    [navigateBack]
+    [navigateBack],
   );
 
   const inputRef = useRef(null);
@@ -61,21 +55,17 @@ export const ResetPassword = memo(({ navigation }) => {
   return (
     <ScreenTemplate>
       <FlexibleView>
-        <TopNavigation
-          title="Сброс пароля"
-          alignment="center"
-          accessoryLeft={BackAction}
-        />
+        <TopNavigation title="Сброс пароля" alignment="center" accessoryLeft={BackAction} />
         <Layout
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}

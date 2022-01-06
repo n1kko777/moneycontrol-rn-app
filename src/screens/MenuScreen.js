@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-import { useTheme, Layout } from "@ui-kitten/components";
+import React, { memo } from 'react';
+import { useTheme, Layout } from '@ui-kitten/components';
 
 import {
   TeamIcon,
@@ -8,12 +8,12 @@ import {
   TagIcon,
   OoperationIcon,
   ProfileIcon,
-} from "../themes/icons";
-import { ThemeContext } from "../themes/theme-context";
+} from '../themes/icons';
+import { ThemeContext } from '../themes/theme-context';
 
-import { Toolbar } from "../components/navigation/Toolbar";
-import { MenuList } from "../components/menu/MenuList";
-import { ScreenTemplate } from "../components/ScreenTemplate";
+import { Toolbar } from '../components/navigation/Toolbar';
+import { MenuList } from '../components/menu/MenuList';
+import { ScreenTemplate } from '../components/ScreenTemplate';
 
 export const MenuScreen = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -21,33 +21,33 @@ export const MenuScreen = memo(({ navigation }) => {
 
   const menuListData = [
     {
-      title: "Профиль",
-      navLink: () => navigation.navigate("Profile"),
+      title: 'Профиль',
+      navLink: () => navigation.navigate('Profile'),
       icon: ProfileIcon,
     },
     {
-      title: "Команда",
-      navLink: () => navigation.navigate("Team"),
+      title: 'Команда',
+      navLink: () => navigation.navigate('Team'),
       icon: TeamIcon,
     },
     {
-      title: "Счета",
-      navLink: () => navigation.navigate("Account"),
+      title: 'Счета',
+      navLink: () => navigation.navigate('Account'),
       icon: CardIcon,
     },
     {
-      title: "Категории",
-      navLink: () => navigation.navigate("Category"),
+      title: 'Категории',
+      navLink: () => navigation.navigate('Category'),
       icon: CategoryIcon,
     },
     {
-      title: "Теги",
-      navLink: () => navigation.navigate("Tag"),
+      title: 'Теги',
+      navLink: () => navigation.navigate('Tag'),
       icon: TagIcon,
     },
     {
-      title: "Операции",
-      navLink: () => navigation.navigate("Operation"),
+      title: 'Операции',
+      navLink: () => navigation.navigate('Operation'),
       icon: OoperationIcon,
     },
   ];
@@ -58,10 +58,7 @@ export const MenuScreen = memo(({ navigation }) => {
       <Layout
         style={{
           flex: 1,
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <Layout

@@ -1,12 +1,12 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { Layout, Text, useTheme } from "@ui-kitten/components";
-import { StyleSheet, View } from "react-native";
+import React, { memo, useCallback, useMemo } from 'react';
+import { Layout, Text, useTheme } from '@ui-kitten/components';
+import { StyleSheet, View } from 'react-native';
 
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { AddSmallIcon, RightIcon } from "../../themes/icons";
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { AddSmallIcon, RightIcon } from '../../themes/icons';
 
-import { ThemeContext } from "../../themes/theme-context";
-import { HomeCardItem } from "./HomeCardItem";
+import { ThemeContext } from '../../themes/theme-context';
+import { HomeCardItem } from './HomeCardItem';
 
 const { layoutStyle, viewStyle, otherViewStyle } = StyleSheet.create({
   layoutStyle: {
@@ -18,12 +18,12 @@ const { layoutStyle, viewStyle, otherViewStyle } = StyleSheet.create({
     paddingTop: 8,
   },
   viewStyle: {
-    justifyContent: "space-between",
-    flexDirection: "row",
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     marginBottom: 20,
   },
   otherViewStyle: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginTop: 10,
   },
 });
@@ -31,15 +31,14 @@ const { layoutStyle, viewStyle, otherViewStyle } = StyleSheet.create({
 export const HomeCard = memo(({ item, navigation, isNavigate }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
-  const iconFillColor =
-    kittenTheme[`color-primary-${themeContext.theme === "light" ? 800 : 100}`];
+  const iconFillColor = kittenTheme[`color-primary-${themeContext.theme === 'light' ? 800 : 100}`];
 
   const titleNavigationHandler = useCallback(() => {
     navigation.navigate(item.navigate);
   }, [item.navigate, navigation]);
 
   const navigateToAll = useCallback(() => {
-    navigation.navigate(item.navigate.replace("Create", ""));
+    navigation.navigate(item.navigate.replace('Create', ''));
   }, [item.navigate, navigation]);
 
   const renderAdditionalButton = useMemo(
@@ -50,20 +49,20 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
             marginTop: 5,
             width: 24,
             height: 24,
-            alignItems: "center",
-            justifyContent: "center",
-            alignSelf: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
           }}
           onPress={titleNavigationHandler}
         >
-          {item.navigate !== "Operation" ? (
+          {item.navigate !== 'Operation' ? (
             <AddSmallIcon fill={iconFillColor} width={24} height={24} />
           ) : (
             <RightIcon fill={iconFillColor} width={30} height={30} />
           )}
         </TouchableOpacity>
       ),
-    [iconFillColor, isNavigate, item.navigate, titleNavigationHandler]
+    [iconFillColor, isNavigate, item.navigate, titleNavigationHandler],
   );
 
   const memoHomeCardItem = useMemo(
@@ -81,7 +80,7 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
       ) : (
         <Text>Список пуст</Text>
       ),
-    [item.data, kittenTheme, navigation, themeContext]
+    [item.data, kittenTheme, navigation, themeContext],
   );
 
   const renderToallItems = useMemo(
@@ -90,18 +89,15 @@ export const HomeCard = memo(({ item, navigation, isNavigate }) => {
         <TouchableOpacity onPress={navigateToAll}>
           <Text
             style={{
-              fontWeight: "bold",
-              color:
-                kittenTheme[
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-                ],
+              fontWeight: 'bold',
+              color: kittenTheme[`color-primary-${themeContext.theme === 'light' ? 800 : 100}`],
             }}
           >
             Смотреть все
           </Text>
         </TouchableOpacity>
       ),
-    [isNavigate, kittenTheme, navigateToAll, themeContext.theme]
+    [isNavigate, kittenTheme, navigateToAll, themeContext.theme],
   );
 
   return (

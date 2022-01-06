@@ -1,9 +1,9 @@
-import React, { memo, useCallback } from "react";
-import { ListItem, Text, useTheme } from "@ui-kitten/components";
-import { FlatList } from "react-native";
+import React, { memo, useCallback } from 'react';
+import { ListItem, Text, useTheme } from '@ui-kitten/components';
+import { FlatList } from 'react-native';
 
-import { RightIcon } from "../../themes/icons";
-import { ThemeContext } from "../../themes/theme-context";
+import { RightIcon } from '../../themes/icons';
+import { ThemeContext } from '../../themes/theme-context';
 
 export const MenuList = memo(({ data }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -21,11 +21,7 @@ export const MenuList = memo(({ data }) => {
 
       const renderItemAccessory = () => (
         <RightIcon
-          fill={
-            kittenTheme[
-              `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-            ]
-          }
+          fill={kittenTheme[`color-primary-${themeContext.theme === 'light' ? 800 : 100}`]}
           style={{
             width: 30,
             height: 30,
@@ -46,7 +42,7 @@ export const MenuList = memo(({ data }) => {
         />
       );
     },
-    [kittenTheme, themeContext.theme]
+    [kittenTheme, themeContext.theme],
   );
 
   return (

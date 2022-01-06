@@ -1,37 +1,40 @@
-import React, { memo, useCallback, useRef } from "react";
-import { View, StyleSheet, Animated, TouchableOpacity } from "react-native";
-import * as Haptics from "expo-haptics";
-import {
-  AddIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
-  ExchangeIcon,
-} from "../../themes/icons";
+import * as Haptics from 'expo-haptics';
+import React, { memo, useCallback, useRef } from 'react';
+import { Animated, Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AddIcon, ExchangeIcon, TrendingDownIcon, TrendingUpIcon } from '../../themes/icons';
+import { NavButton } from './NavButton';
 
-import { NavButton } from "./NavButton";
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   button: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 60,
     height: 60,
     borderRadius: 30,
     zIndex: 1000,
   },
   plusButton: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#FFC300",
+    backgroundColor: '#FFC300',
   },
   navButton: {
-    position: "absolute",
+    position: 'absolute',
     left: 6,
     top: 6,
+  },
+  hiddenView: {
+    position: 'absolute',
+    top: -width,
+    left: 0,
+    right: -height,
+    bottom: 0,
   },
 });
 
@@ -61,22 +64,22 @@ export const AddButton = memo(({ navigation }) => {
         navigation.navigate(navRoute);
       }
     },
-    [navigation, toggleHandler]
+    [navigation, toggleHandler],
   );
 
   const onNavigateToCreateAction = useCallback(() => {
     toggleHandler();
-    navigateHandlePress("CreateAction");
+    navigateHandlePress('CreateAction');
   }, [navigateHandlePress, toggleHandler]);
 
   const onNavigateToCreateTransfer = useCallback(() => {
     toggleHandler();
-    navigateHandlePress("CreateTransfer");
+    navigateHandlePress('CreateTransfer');
   }, [navigateHandlePress, toggleHandler]);
 
   const onNavigateToCreateTransaction = useCallback(() => {
     toggleHandler();
-    navigateHandlePress("CreateTransaction");
+    navigateHandlePress('CreateTransaction');
   }, [navigateHandlePress, toggleHandler]);
 
   const rotation = {
@@ -84,7 +87,7 @@ export const AddButton = memo(({ navigation }) => {
       {
         rotate: animation.interpolate({
           inputRange: [0, 1],
-          outputRange: ["0deg", "45deg"],
+          outputRange: ['0deg', '45deg'],
         }),
       },
     ],
@@ -142,44 +145,47 @@ export const AddButton = memo(({ navigation }) => {
   };
 
   return (
-    <View style={{ width: 60, height: 60, marginTop: -35 }}>
-      <Animated.View style={[styles.navButton, earnAnim]}>
-        <NavButton
-          icon={TrendingUpIcon}
-          onPress={onNavigateToCreateAction}
-          opacityValue={toggled ? 1 : 0}
-          status="success"
-          name="Доход"
-        />
-      </Animated.View>
+    <>
+      {toggled && <View style={styles.hiddenView} />}
+      <View style={{ width: 60, height: 60, marginTop: -35 }}>
+        <Animated.View style={[styles.navButton, earnAnim]}>
+          <NavButton
+            icon={TrendingUpIcon}
+            onPress={onNavigateToCreateAction}
+            opacityValue={toggled ? 1 : 0}
+            status="success"
+            name="Доход"
+          />
+        </Animated.View>
 
-      <Animated.View style={[styles.navButton, transferAnim]}>
-        <NavButton
-          icon={ExchangeIcon}
-          onPress={onNavigateToCreateTransfer}
-          opacityValue={toggled ? 1 : 0}
-          status="info"
-          name="Перевод"
-        />
-      </Animated.View>
+        <Animated.View style={[styles.navButton, transferAnim]}>
+          <NavButton
+            icon={ExchangeIcon}
+            onPress={onNavigateToCreateTransfer}
+            opacityValue={toggled ? 1 : 0}
+            status="info"
+            name="Перевод"
+          />
+        </Animated.View>
 
-      <Animated.View style={[styles.navButton, spendAnim]}>
-        <NavButton
-          icon={TrendingDownIcon}
-          onPress={onNavigateToCreateTransaction}
-          opacityValue={toggled ? 1 : 0}
-          status="danger"
-          name="Расход"
-        />
-      </Animated.View>
+        <Animated.View style={[styles.navButton, spendAnim]}>
+          <NavButton
+            icon={TrendingDownIcon}
+            onPress={onNavigateToCreateTransaction}
+            opacityValue={toggled ? 1 : 0}
+            status="danger"
+            name="Расход"
+          />
+        </Animated.View>
 
-      <TouchableOpacity onPress={toggleHandler} activeOpacity={1}>
-        <View style={styles.plusButton}>
-          <Animated.View style={[styles.button, rotation]}>
-            <AddIcon fill="#6B0848" />
-          </Animated.View>
-        </View>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={toggleHandler} activeOpacity={1}>
+          <View style={styles.plusButton}>
+            <Animated.View style={[styles.button, rotation]}>
+              <AddIcon fill="#6B0848" />
+            </Animated.View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 });

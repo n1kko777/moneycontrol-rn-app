@@ -1,24 +1,18 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-} from "@ui-kitten/components";
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { View, Keyboard } from "react-native";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { THEME } from "../../themes/themes";
-import { BackIcon } from "../../themes/icons";
+import { View, Keyboard } from 'react-native';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { THEME } from '../../themes/themes';
+import { BackIcon } from '../../themes/icons';
 
-import { createAccountAction } from "../../store/actions/apiAction";
-import { clearCurrentAccount } from "../../store/actions/accountAction";
-import { getApiLoading } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { createAccountAction } from '../../store/actions/apiAction';
+import { clearCurrentAccount } from '../../store/actions/accountAction';
+import { getApiLoading } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const CreateAccountScreen = memo(({ navigation, route }) => {
   const prevItem = route.params;
@@ -27,9 +21,9 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
   const loader = useSelector(getApiLoading);
 
   const [account_name, setAccountName] = React.useState(
-    prevItem !== undefined ? prevItem.account_name : ""
+    prevItem !== undefined ? prevItem.account_name : '',
   );
-  const [balance, setBalance] = React.useState("0");
+  const [balance, setBalance] = React.useState('0');
 
   const navigateBack = useCallback(() => {
     if (prevItem === undefined) {
@@ -39,8 +33,8 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
   }, [dispatch, navigation, prevItem]);
 
   const onReset = useCallback(() => {
-    setAccountName("");
-    setBalance("");
+    setAccountName('');
+    setBalance('');
     navigateBack();
   }, [navigateBack]);
 
@@ -54,15 +48,15 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
             account_name,
             balance,
           },
-          onReset
-        )
+          onReset,
+        ),
       );
     }
   }, [account_name, balance, dispatch, loader, onReset]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
-    [navigateBack]
+    [navigateBack],
   );
 
   const inputRef = React.useRef(null);
@@ -76,21 +70,17 @@ export const CreateAccountScreen = memo(({ navigation, route }) => {
   return (
     <ScreenTemplate>
       <FlexibleView>
-        <TopNavigation
-          title="Создание счета"
-          alignment="center"
-          accessoryLeft={BackAction}
-        />
+        <TopNavigation title="Создание счета" alignment="center" accessoryLeft={BackAction} />
         <Layout
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}

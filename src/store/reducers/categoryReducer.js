@@ -8,7 +8,7 @@ import {
   UPDATE_CATEGORY,
   SET_CURRENT_CATEGORY,
   CLEAR_CURRENT_CATEGORY,
-} from "../types";
+} from '../types';
 
 const initialState = {
   categories: [],
@@ -52,7 +52,7 @@ export const categoryReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: state.categories.map((category) =>
-          category.id === payload.id ? payload : category
+          category.id === payload.id ? payload : category,
         ),
         loading: false,
         error: null,
@@ -60,9 +60,7 @@ export const categoryReducer = (state = initialState, action) => {
     case DELETE_CATEGORY:
       return {
         ...state,
-        categories: state.categories.filter(
-          (category) => category.id !== payload
-        ),
+        categories: state.categories.filter((category) => category.id !== payload),
         loading: false,
         error: null,
       };

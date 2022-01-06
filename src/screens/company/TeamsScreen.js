@@ -1,19 +1,19 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { memo, useCallback, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { useTheme, Layout, Button } from "@ui-kitten/components";
-import { View } from "react-native";
-import { ThemeContext } from "../../themes/theme-context";
+import { useTheme, Layout, Button } from '@ui-kitten/components';
+import { View } from 'react-native';
+import { ThemeContext } from '../../themes/theme-context';
 
-import { Toolbar } from "../../components/navigation/Toolbar";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { Toolbar } from '../../components/navigation/Toolbar';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
 
-import { CompanyProfileList } from "../../components/company/CompanyProfileList";
+import { CompanyProfileList } from '../../components/company/CompanyProfileList';
 
-import { THEME } from "../../themes/themes";
-import { EditIcon, ProfileIcon } from "../../themes/icons";
-import { getDataDispatcher } from "../../store/actions/apiAction";
-import { getCompanyList, getProfile } from "../../store/selectors";
+import { THEME } from '../../themes/themes';
+import { EditIcon, ProfileIcon } from '../../themes/icons';
+import { getDataDispatcher } from '../../store/actions/apiAction';
+import { getCompanyList, getProfile } from '../../store/selectors';
 
 export const TeamsScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -29,44 +29,34 @@ export const TeamsScreen = memo(({ navigation }) => {
   }, [dispatch, navigation]);
 
   const inviteToTeam = useCallback(() => {
-    navigation.navigate("InviteMember");
+    navigation.navigate('InviteMember');
   }, [navigation]);
 
   const onEditCompanyName = useCallback(() => {
-    navigation.navigate("ChangeCompanyName");
+    navigation.navigate('ChangeCompanyName');
   }, [navigation]);
 
   const onNavigateToProfile = useCallback(() => {
-    navigation.navigate("Profile");
+    navigation.navigate('Profile');
   }, [navigation]);
 
   const memoTargetIcon = useMemo(
     () => (profile !== null && profile.is_admin ? EditIcon : ProfileIcon),
-    [profile]
+    [profile],
   );
 
   const onTargetIconPress = useCallback(
-    () =>
-      profile !== null && profile.is_admin
-        ? onEditCompanyName()
-        : onNavigateToProfile(),
-    [onEditCompanyName, onNavigateToProfile, profile]
+    () => (profile !== null && profile.is_admin ? onEditCompanyName() : onNavigateToProfile()),
+    [onEditCompanyName, onNavigateToProfile, profile],
   );
 
   return (
     <ScreenTemplate>
-      <Toolbar
-        navigation={navigation}
-        TargetIcon={memoTargetIcon}
-        onTarget={onTargetIconPress}
-      />
+      <Toolbar navigation={navigation} TargetIcon={memoTargetIcon} onTarget={onTargetIconPress} />
       <Layout
         style={{
           flex: 1,
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <View
@@ -79,7 +69,7 @@ export const TeamsScreen = memo(({ navigation }) => {
             <Button
               onPress={inviteToTeam}
               style={{
-                alignSelf: "center",
+                alignSelf: 'center',
                 paddingHorizontal: 20,
                 borderRadius: THEME.BUTTON_RADIUS,
               }}
@@ -89,9 +79,7 @@ export const TeamsScreen = memo(({ navigation }) => {
             </Button>
           )}
         </View>
-        <Layout
-          style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
-        >
+        <Layout style={{ flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
           <CompanyProfileList
             onCompanyRefresh={onCompanyRefresh}
             dataList={companyList}

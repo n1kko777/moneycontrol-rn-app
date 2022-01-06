@@ -1,27 +1,25 @@
-import React, { memo, useCallback } from "react";
-import { Button, Image, View, Alert, Platform } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import DefaultIcon from "../../../assets/icon.png";
+import React, { memo, useCallback } from 'react';
+import { Button, Image, View, Alert, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import DefaultIcon from '../../../assets/icon.png';
 
 export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
   const getPermissionAsync = useCallback(async () => {
-    if (Platform.OS !== "web") {
-      const {
-        status,
-      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      if (status !== "granted") {
+      if (status !== 'granted') {
         Alert.alert(
-          "Доступ к камере",
-          "Извините, нам нужны разрешения на фотопленку, чтобы это сработало!",
+          'Доступ к камере',
+          'Извините, нам нужны разрешения на фотопленку, чтобы это сработало!',
           [
             {
-              text: "Отмена",
-              style: "cancel",
+              text: 'Отмена',
+              style: 'cancel',
             },
             {
-              text: "Разрешить",
+              text: 'Разрешить',
               onPress: () => {
                 getPermissionAsync();
               },
@@ -29,7 +27,7 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
           ],
           {
             cancelable: false,
-          }
+          },
         );
       }
     }
@@ -52,15 +50,15 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
       }
     } catch (E) {
       Alert.alert(
-        "Произошла ошибка",
-        "Что-то пошло не так, попробуйте еще раз.",
+        'Произошла ошибка',
+        'Что-то пошло не так, попробуйте еще раз.',
         [
           {
-            text: "Отмена",
-            style: "cancel",
+            text: 'Отмена',
+            style: 'cancel',
           },
           {
-            text: "Повторить",
+            text: 'Повторить',
             onPress: () => {
               pickImage();
             },
@@ -68,7 +66,7 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
         ],
         {
           cancelable: false,
-        }
+        },
       );
     }
   }, [setImageUrl]);
@@ -76,15 +74,15 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
   const clearImage = useCallback(() => {
     if (imageUrl !== null) {
       Alert.alert(
-        "Удаление аватар",
-        "Вы уверены, что хотите удалить аватар?",
+        'Удаление аватар',
+        'Вы уверены, что хотите удалить аватар?',
         [
           {
-            text: "Отмена",
-            style: "cancel",
+            text: 'Отмена',
+            style: 'cancel',
           },
           {
-            text: "Удалить",
+            text: 'Удалить',
             onPress: () => {
               setImageUrl(null);
             },
@@ -92,13 +90,13 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
         ],
         {
           cancelable: false,
-        }
+        },
       );
     }
   }, [imageUrl, setImageUrl]);
 
   return (
-    <View style={{ alignItems: "center", justifyContent: "center" }}>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity onPress={clearImage} disabled={!isEdit}>
         <Image
           source={

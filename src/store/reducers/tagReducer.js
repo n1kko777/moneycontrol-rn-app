@@ -6,7 +6,7 @@ import {
   CLEAR_TAG,
   DELETE_TAG,
   UPDATE_TAG,
-} from "../types";
+} from '../types';
 
 const initialState = {
   tags: [],

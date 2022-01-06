@@ -1,25 +1,20 @@
-import React, { memo, useCallback, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
-import { Button, Text, useTheme } from "@ui-kitten/components";
+import React, { memo, useCallback, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Button, Text, useTheme } from '@ui-kitten/components';
 
-import { useSelector } from "react-redux";
-import { THEME } from "../../themes/themes";
-import { ThemeContext } from "../../themes/theme-context";
+import { useSelector } from 'react-redux';
+import { THEME } from '../../themes/themes';
+import { ThemeContext } from '../../themes/theme-context';
 
-import { splitToDigits } from "../../splitToDigits";
+import { splitToDigits } from '../../splitToDigits';
 
-import {
-  HideIconBalance,
-  ShowIconBalance,
-  IncreaseIcon,
-  DecreaseIcon,
-} from "../../themes/icons";
+import { HideIconBalance, ShowIconBalance, IncreaseIcon, DecreaseIcon } from '../../themes/icons';
 import {
   getLayoutTotalActions,
   getLayoutTotalBalance,
   getLayoutTotalTransactions,
   getProfile,
-} from "../../store/selectors";
+} from '../../store/selectors';
 
 let FONT_SIZE = 22;
 const styles = StyleSheet.create({
@@ -36,9 +31,9 @@ const styles = StyleSheet.create({
     height: 4,
   },
   creaseItem: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
   },
   creaseButton: {
@@ -81,22 +76,16 @@ export const BalanceComponent = memo(({ isBalance }) => {
     <View
       style={{
         ...styles.balanceContainer,
-        backgroundColor:
-          kittenTheme[
-            `color-basic-${themeContext.theme === "light" ? 100 : 800}`
-          ],
+        backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 100 : 800}`],
       }}
     >
       {isBalance ? (
-        <View style={{ alignItems: "center" }}>
-          <Text style={{ fontSize: 12, textAlign: "center" }}>{`Баланс ${
-            isAdmin ? "компании" : "счетов"
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 12, textAlign: 'center' }}>{`Баланс ${
+            isAdmin ? 'компании' : 'счетов'
           }`}</Text>
           {isVisibleBalance ? (
-            <Text
-              style={{ fontWeight: "600", textAlign: "center" }}
-              category="h2"
-            >
+            <Text style={{ fontWeight: '600', textAlign: 'center' }} category="h2">
               {balance} ₽
             </Text>
           ) : (
@@ -105,35 +94,29 @@ export const BalanceComponent = memo(({ isBalance }) => {
                 ...styles.hideBalance,
                 marginVertical: 20,
                 width: 100,
-                backgroundColor: kittenTheme["color-basic-600"],
+                backgroundColor: kittenTheme['color-basic-600'],
               }}
             />
           )}
           <Button
             size="large"
             appearance="ghost"
-            accessoryLeft={
-              !isVisibleBalance ? ShowIconBalance : HideIconBalance
-            }
+            accessoryLeft={!isVisibleBalance ? ShowIconBalance : HideIconBalance}
             onPress={toggleVisibleBalance}
           />
         </View>
       ) : null}
 
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <View style={styles.creaseItem}>
-          <Button
-            status="success"
-            style={styles.creaseButton}
-            accessoryLeft={IncreaseIcon}
-          />
+          <Button status="success" style={styles.creaseButton} accessoryLeft={IncreaseIcon} />
           <View>
             <Text style={{ fontSize: 12 }}>Доход</Text>
             {isVisibleBalance ? (
               <Text
                 style={{
-                  fontWeight: "600",
-                  color: kittenTheme["color-success-600"],
+                  fontWeight: '600',
+                  color: kittenTheme['color-success-600'],
                   fontSize: FONT_SIZE,
                   lineHeight: FONT_SIZE * 1.45,
                 }}
@@ -146,25 +129,21 @@ export const BalanceComponent = memo(({ isBalance }) => {
                   ...styles.hideBalance,
                   width: 70,
                   marginVertical: 11,
-                  backgroundColor: kittenTheme["color-basic-600"],
+                  backgroundColor: kittenTheme['color-basic-600'],
                 }}
               />
             )}
           </View>
         </View>
         <View style={styles.creaseItem}>
-          <Button
-            status="danger"
-            style={styles.creaseButton}
-            accessoryLeft={DecreaseIcon}
-          />
+          <Button status="danger" style={styles.creaseButton} accessoryLeft={DecreaseIcon} />
           <View>
             <Text style={{ fontSize: 12 }}>Расход</Text>
             {isVisibleBalance ? (
               <Text
                 style={{
-                  fontWeight: "600",
-                  color: kittenTheme["color-danger-600"],
+                  fontWeight: '600',
+                  color: kittenTheme['color-danger-600'],
                   fontSize: FONT_SIZE,
                   lineHeight: FONT_SIZE * 1.45,
                 }}
@@ -177,7 +156,7 @@ export const BalanceComponent = memo(({ isBalance }) => {
                   ...styles.hideBalance,
                   width: 70,
                   marginVertical: 11,
-                  backgroundColor: kittenTheme["color-basic-600"],
+                  backgroundColor: kittenTheme['color-basic-600'],
                 }}
               />
             )}

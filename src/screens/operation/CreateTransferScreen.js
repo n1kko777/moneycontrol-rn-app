@@ -1,39 +1,28 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { Keyboard, View } from "react-native";
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { Keyboard, View } from 'react-native';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-  Select,
-  SelectGroup,
-  SelectItem,
-  IndexPath,
-} from "@ui-kitten/components";
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { ScreenTemplate } from '../../components/ScreenTemplate';
 
-import { THEME } from "../../themes/themes";
-import { BackIcon } from "../../themes/icons";
+import { THEME } from '../../themes/themes';
+import { BackIcon } from '../../themes/icons';
 
-import { createTransferAction } from "../../store/actions/apiAction";
+import { createTransferAction } from '../../store/actions/apiAction';
 
-import {
-  clearCurrentAccount,
-  setCurrentAccount,
-} from "../../store/actions/accountAction";
-import { AccountSelector } from "../../components/operation/account/AccountSelector";
+import { clearCurrentAccount, setCurrentAccount } from '../../store/actions/accountAction';
+import { AccountSelector } from '../../components/operation/account/AccountSelector';
+import { ProfileSelector } from '../../components/operation/profile/ProfileSelector';
 import {
   getAccountCurrent,
   getAccountList,
   getApiLoading,
   getToAccountList,
-} from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+  getProfileList,
+} from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const CreateTransferScreen = memo(({ route, navigation }) => {
   const prevItem = route.params;
@@ -42,7 +31,12 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
   const loader = useSelector(getApiLoading);
 
   const currentAccount = useSelector(getAccountCurrent);
+
   const accountData = useSelector(getAccountList);
+  const profileData = useSelector(getProfileList);
+
+  const toAccountData = useSelector(getToAccountList);
+  const [profileAccountData, setProfileAccountData] = useState([]);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -50,12 +44,27 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
     }, 100);
   }, []);
 
+  React.useEffect(() => {
+    if (Object.keys(toAccountData).length === 1) {
+      setProfileAccountData(
+        Object.keys(toAccountData[0].items).map((el) => {
+          const { id, text } = toAccountData[0].items[el];
+
+          return {
+            id,
+            index: el,
+            text,
+            title: text,
+          };
+        }),
+      );
+    }
+  }, [toAccountData]);
+
   const dispatch = useDispatch();
 
-  const toAccountData = useSelector(getToAccountList);
-
   const [transfer_amount, setTransferAmount] = React.useState(
-    prevItem !== undefined ? prevItem.balance.toString() : ""
+    prevItem !== undefined ? prevItem.balance.toString() : '',
   );
 
   const isNotAmountEmpty = parseFloat(transfer_amount) > 0;
@@ -67,55 +76,59 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
     (account) => {
       dispatch(setCurrentAccount(account));
     },
-    [dispatch]
+    [dispatch],
   );
   const onClearCurrentAccount = useCallback(() => {
     dispatch(clearCurrentAccount());
   }, [dispatch]);
 
-  const copyToProfile = prevItem
-    ? Object.keys(toAccountData).find((profileKey) =>
-        Object.keys(toAccountData[profileKey].items).find(
-          (accountKey) =>
-            parseInt(toAccountData[profileKey].items[accountKey].id, 10) ===
-            parseInt(prevItem.to_account_id, 10)
-        )
-      )
-    : prevItem;
+  // To Profile
+  const [selectedProfile, seSelectedProfile] = useState(null);
 
-  const copyToAccount = copyToProfile
-    ? Object.keys(toAccountData[copyToProfile].items).find(
-        (accountKey) =>
-          parseInt(toAccountData[copyToProfile].items[accountKey].id, 10) ===
-          parseInt(prevItem.to_account_id, 10)
-      )
-    : copyToProfile;
+  const isNotProfileEmpty = useMemo(() => selectedProfile !== null, [selectedProfile]);
 
-  const [selectedToAccountOption, setSelectedToAccountOption] = React.useState(
-    copyToProfile && copyToAccount
-      ? new IndexPath(parseInt(copyToAccount, 10), parseInt(copyToProfile, 10))
-      : undefined
-  );
+  const onSelectCurrentProfile = useCallback(
+    (profile) => {
+      setProfileAccountData(
+        Object.keys(toAccountData[profile.index].items).map((el) => {
+          const { id, text } = toAccountData[profile.index].items[el];
 
-  const [selectedToAccountValue, setSelectedToAccountValue] = React.useState(
-    copyToProfile && copyToAccount
-      ? toAccountData[copyToProfile].items[copyToAccount].text
-      : ""
-  );
-
-  const onToSelectAccount = useCallback(
-    (index) => {
-      const profile = index.section;
-      const account = index.row;
-
-      setSelectedToAccountOption(index);
-      setSelectedToAccountValue(toAccountData[profile].items[account].text);
+          return {
+            id,
+            index: el,
+            text,
+            title: text,
+          };
+        }),
+      );
+      seSelectedProfile(profile);
     },
-    [toAccountData]
+    [toAccountData],
+  );
+  const onClearCurrentProfile = useCallback(() => {
+    setProfileAccountData([]);
+    seSelectedProfile(null);
+  }, []);
+
+  // To Profile Account
+  const [selectedProfileAccount, seSelectedProfileAccount] = useState(null);
+
+  const isNotProfileAccountEmpty = useMemo(
+    () => selectedProfileAccount !== null,
+    [selectedProfileAccount],
   );
 
-  const isNotToAccountEmpty =
-    selectedToAccountOption && selectedToAccountOption !== null;
+  const onSelectCurrentProfileAccount = useCallback((account) => {
+    seSelectedProfileAccount(account);
+  }, []);
+  const onClearCurrentProfileAccount = useCallback(() => {
+    seSelectedProfileAccount(null);
+  }, []);
+
+  const isNotToAccountEmpty = useMemo(
+    () => selectedProfileAccount !== null,
+    [selectedProfileAccount],
+  );
 
   const navigateBack = useCallback(() => {
     if (currentAccount !== null) {
@@ -128,70 +141,38 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
   const onSubmit = useCallback(() => {
     if (!loader) {
       Keyboard.dismiss();
-      if (selectedToAccountOption) {
-        const toProfile = selectedToAccountOption.section;
-        const toAccount = selectedToAccountOption.row;
 
+      if (currentAccount && selectedProfileAccount && transfer_amount) {
         const newTransfer = {
           transfer_amount: parseFloat(transfer_amount),
-          from_account: currentAccount !== null ? currentAccount.id : null,
-          to_account: toAccountData[toProfile].items[toAccount].id,
-          is_active: true,
+          from_account: Number(currentAccount.id),
+          to_account: Number(selectedProfileAccount.id),
         };
+
         dispatch(createTransferAction(newTransfer, navigateBack));
       }
     }
-  }, [
-    loader,
-    selectedToAccountOption,
-    transfer_amount,
-    currentAccount,
-    toAccountData,
-    dispatch,
-    navigateBack,
-  ]);
+  }, [currentAccount, dispatch, loader, navigateBack, selectedProfileAccount, transfer_amount]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
-    [navigateBack]
-  );
-
-  const memoToAccountList = useMemo(
-    () =>
-      Object.keys(toAccountData).map((profile) => (
-        <SelectGroup
-          key={toAccountData[profile].text}
-          title={toAccountData[profile].text}
-        >
-          {Object.keys(toAccountData[profile].items).map((account) => (
-            <SelectItem
-              key={toAccountData[profile].items[account].id}
-              title={toAccountData[profile].items[account].text}
-            />
-          ))}
-        </SelectGroup>
-      )),
-    [toAccountData]
+    [navigateBack],
   );
 
   return (
     <ScreenTemplate>
       <FlexibleView>
-        <TopNavigation
-          title="Создание перевода"
-          alignment="center"
-          accessoryLeft={BackAction}
-        />
+        <TopNavigation title="Создание перевода" alignment="center" accessoryLeft={BackAction} />
         <Layout
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}
@@ -203,10 +184,8 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
               keyboardType="decimal-pad"
               onChangeText={setTransferAmount}
               style={{ marginVertical: 10 }}
-              status={isNotAmountEmpty ? "success" : "danger"}
-              caption={
-                isNotAmountEmpty ? "" : "Поле не может быть пустым или меньше 0"
-              }
+              status={isNotAmountEmpty ? 'success' : 'danger'}
+              caption={isNotAmountEmpty ? '' : 'Поле не может быть пустым или меньше 0'}
               selectTextOnFocus
             />
             <AccountSelector
@@ -216,29 +195,35 @@ export const CreateTransferScreen = memo(({ route, navigation }) => {
               accountData={accountData}
               isNotEmpty={isNotAccountEmpty}
               navigation={navigation}
+              placeholder="Укажите счет списания"
             />
-
-            <Select
-              value={selectedToAccountValue}
-              selectedIndex={selectedToAccountOption}
-              onSelect={onToSelectAccount}
+            {Object.keys(toAccountData).length > 1 ? (
+              <ProfileSelector
+                current={selectedProfile}
+                setCurrent={onSelectCurrentProfile}
+                clearCurrent={onClearCurrentProfile}
+                profileData={profileData}
+                isNotEmpty={isNotProfileEmpty}
+                navigation={navigation}
+              />
+            ) : null}
+            <AccountSelector
+              current={selectedProfileAccount}
+              setCurrent={onSelectCurrentProfileAccount}
+              clearCurrent={onClearCurrentProfileAccount}
+              accountData={profileAccountData}
+              isNotEmpty={isNotProfileAccountEmpty}
+              navigation={navigation}
+              isCreate={false}
               placeholder="Укажите счет пополнения"
-              style={{ marginVertical: 10 }}
-              status={isNotToAccountEmpty ? "success" : "danger"}
-              caption={isNotToAccountEmpty ? "" : "Поле не может быть пустым"}
-            >
-              {memoToAccountList}
-            </Select>
-
+            />
             <Button
               style={{
                 marginVertical: 25,
                 borderRadius: THEME.BUTTON_RADIUS,
               }}
               onPress={onSubmit}
-              disabled={
-                !isNotAmountEmpty || !isNotAccountEmpty || !isNotToAccountEmpty
-              }
+              disabled={!isNotAmountEmpty || !isNotAccountEmpty || !isNotToAccountEmpty}
             >
               Создать
             </Button>

@@ -1,16 +1,16 @@
-import React, { memo, useCallback } from "react";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import React, { memo, useCallback } from 'react';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-import { ListItem, Text, useTheme, Button } from "@ui-kitten/components";
+import { ListItem, Text, useTheme, Button } from '@ui-kitten/components';
 
-import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
-import { CardIcon, DeleteIcon } from "../../themes/icons";
-import { ThemeContext } from "../../themes/theme-context";
+import { Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { CardIcon, DeleteIcon } from '../../themes/icons';
+import { ThemeContext } from '../../themes/theme-context';
 
-import { splitToDigits } from "../../splitToDigits";
+import { splitToDigits } from '../../splitToDigits';
 
-import { hideAccountAction } from "../../store/actions/apiAction";
+import { hideAccountAction } from '../../store/actions/apiAction';
 
 export const AccountListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
@@ -32,29 +32,28 @@ export const AccountListItem = memo(({ item, navigation }) => {
           fontSize: 16,
           color:
             kittenTheme[
-              item.style ||
-                `color-primary-${themeContext.theme === "light" ? 800 : 100}`
+              item.style || `color-primary-${themeContext.theme === 'light' ? 800 : 100}`
             ],
         }}
       >
         {splitToDigits(item.balance)} ₽
       </Text>
     ),
-    [item.balance, item.style, kittenTheme, themeContext.theme]
+    [item.balance, item.style, kittenTheme, themeContext.theme],
   );
 
   const deleteHandler = useCallback(() => {
     close();
     Alert.alert(
-      "Удаление счета",
+      'Удаление счета',
       `Вы уверены, что хотите удалить счет ${item.account_name}?`,
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
         {
-          text: "Удалить",
+          text: 'Удалить',
           onPress: () => {
             dispatch(hideAccountAction(item));
           },
@@ -62,23 +61,17 @@ export const AccountListItem = memo(({ item, navigation }) => {
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [close, dispatch, item]);
 
   const RightAction = useCallback(
-    () => (
-      <Button
-        onPress={deleteHandler}
-        accessoryLeft={DeleteIcon}
-        status="danger"
-      />
-    ),
-    [deleteHandler]
+    () => <Button onPress={deleteHandler} accessoryLeft={DeleteIcon} status="danger" />,
+    [deleteHandler],
   );
 
   const updateHandler = useCallback(() => {
-    navigation.navigate("UpdateAccount", {
+    navigation.navigate('UpdateAccount', {
       account: item,
     });
   }, [item, navigation]);
@@ -89,15 +82,11 @@ export const AccountListItem = memo(({ item, navigation }) => {
         {item.account_name}
       </Text>
     ),
-    [item.account_name]
+    [item.account_name],
   );
 
   return (
-    <Swipeable
-      ref={swipeableRow}
-      overshootRight={false}
-      renderRightActions={RightAction}
-    >
+    <Swipeable ref={swipeableRow} overshootRight={false} renderRightActions={RightAction}>
       <ListItem
         onPress={updateHandler}
         title={renderListTitle}

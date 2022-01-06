@@ -1,23 +1,17 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-} from "@ui-kitten/components";
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { View, Keyboard } from "react-native";
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { THEME } from "../../themes/themes";
-import { BackIcon } from "../../themes/icons";
+import { View, Keyboard } from 'react-native';
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { THEME } from '../../themes/themes';
+import { BackIcon } from '../../themes/icons';
 
-import { updateCompanyAction } from "../../store/actions/apiAction";
-import { getApiLoading, getCompany } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { updateCompanyAction } from '../../store/actions/apiAction';
+import { getApiLoading, getCompany } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const ChangeCompanyNameScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -44,15 +38,15 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
             id: companyId,
             company_name,
           },
-          onReset
-        )
+          onReset,
+        ),
       );
     }
   }, [companyId, company_name, dispatch, loader, onReset]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />,
-    [navigateBack]
+    [navigateBack],
   );
 
   const inputRef = React.useRef(null);
@@ -75,12 +69,12 @@ export const ChangeCompanyNameScreen = memo(({ navigation }) => {
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}

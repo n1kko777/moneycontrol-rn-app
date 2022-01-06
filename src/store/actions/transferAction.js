@@ -1,15 +1,10 @@
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {
-  CREATE_TRANSFER,
-  LOADING_TRANSFER,
-  ERROR_TRANSFER,
-  DELETE_TRANSFER,
-} from "../types";
+import { CREATE_TRANSFER, LOADING_TRANSFER, ERROR_TRANSFER, DELETE_TRANSFER } from '../types';
 
-import { endpointAPI } from "../constants";
-import failHandler from "../failHandler";
+import { endpointAPI } from '../constants';
+import failHandler from '../failHandler';
 
 // Set loading to true
 export const setLoading = () => ({
@@ -20,7 +15,7 @@ export const setLoading = () => ({
 export const createTransfer = (transfer) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .post(
@@ -30,10 +25,10 @@ export const createTransfer = (transfer) => async (dispatch) => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Token ${token}`,
           },
-        }
+        },
       )
       .then(() => {
         dispatch({
@@ -53,12 +48,12 @@ export const createTransfer = (transfer) => async (dispatch) => {
 export const hideTransfer = (transfer) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .delete(`${endpointAPI}/transfer/${transfer}/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })

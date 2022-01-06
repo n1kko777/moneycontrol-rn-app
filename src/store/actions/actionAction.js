@@ -1,14 +1,9 @@
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  CREATE_ACTION,
-  LOADING_ACTION,
-  ERROR_ACTION,
-  DELETE_ACTION,
-} from "../types";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CREATE_ACTION, LOADING_ACTION, ERROR_ACTION, DELETE_ACTION } from '../types';
 
-import { endpointAPI } from "../constants";
-import failHandler from "../failHandler";
+import { endpointAPI } from '../constants';
+import failHandler from '../failHandler';
 
 // Set loading to true
 export const setLoading = () => ({
@@ -19,7 +14,7 @@ export const setLoading = () => ({
 export const createAction = (action) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .post(
@@ -29,10 +24,10 @@ export const createAction = (action) => async (dispatch) => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Token ${token}`,
           },
-        }
+        },
       )
       .then(() => {
         dispatch({
@@ -53,12 +48,12 @@ export const createAction = (action) => async (dispatch) => {
 export const hideAction = (action) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const token = await AsyncStorage.getItem("AUTH_TOKEN");
+    const token = await AsyncStorage.getItem('AUTH_TOKEN');
 
     return axios
       .delete(`${endpointAPI}/action/${action}/`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Token ${token}`,
         },
       })

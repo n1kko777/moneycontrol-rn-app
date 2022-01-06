@@ -1,20 +1,17 @@
-import React, { memo, useCallback } from "react";
-import { ListItem, useTheme, Avatar, Text } from "@ui-kitten/components";
-import { getShortName } from "../../getShortName";
-import { ProfileIcon } from "../../themes/icons";
+import React, { memo, useCallback } from 'react';
+import { ListItem, useTheme, Avatar, Text } from '@ui-kitten/components';
+import { getShortName } from '../../getShortName';
+import { ProfileIcon } from '../../themes/icons';
 
-import { ThemeContext } from "../../themes/theme-context";
+import { ThemeContext } from '../../themes/theme-context';
 
-import { splitToDigits } from "../../splitToDigits";
+import { splitToDigits } from '../../splitToDigits';
 
-export const CompanyProfileListItem = memo(({ item, onClick }) => {
+export const CompanyProfileListItem = memo(({ item, isAdmin, onClick }) => {
   const themeContext = React.useContext(ThemeContext);
   const kittenTheme = useTheme();
 
-  const onHandleClick = useCallback(
-    () => item.is_admin && item.balance && onClick(item),
-    [item, onClick]
-  );
+  const onHandleClick = useCallback(() => onClick(item), [item, onClick]);
 
   const renderItemIcon = useCallback(
     () =>
@@ -28,33 +25,28 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
         />
       ) : (
         <ProfileIcon
-          fill={
-            kittenTheme[
-              `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-            ]
-          }
+          fill={kittenTheme[`color-primary-${themeContext.theme === 'light' ? 800 : 100}`]}
           style={{
             width: 30,
             height: 30,
           }}
         />
       ),
-    [item.image, kittenTheme, themeContext.theme]
+    [item.image, kittenTheme, themeContext.theme],
   );
 
   const renderItemAccessory = useCallback(
     () => <Text category="s1">{`${splitToDigits(item.balance)} ₽`}</Text>,
-    [item.balance]
+    [item.balance],
   );
 
   const renderListTitle = useCallback(
     (evaProps) => (
       <Text {...evaProps} style={[evaProps.style, { fontSize: 16 }]}>
-        {getShortName(`${item.first_name} ${item.last_name}`)}{" "}
-        {item.is_admin ? "⭐️" : ""}
+        {getShortName(`${item.first_name} ${item.last_name}`)} {item.is_admin ? '⭐️' : ''}
       </Text>
     ),
-    [item.first_name, item.is_admin, item.last_name]
+    [item.first_name, item.is_admin, item.last_name],
   );
 
   return (
@@ -66,6 +58,7 @@ export const CompanyProfileListItem = memo(({ item, onClick }) => {
         paddingVertical: 15,
       }}
       onPress={onHandleClick}
+      disabled={!isAdmin}
     />
   );
 });

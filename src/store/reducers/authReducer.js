@@ -5,7 +5,7 @@ import {
   AUTH_START,
   AUTH_SUCCESS,
   REMIND_ME,
-} from "../types";
+} from '../types';
 
 const initialState = {
   user: {},

@@ -1,83 +1,65 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
-import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const styles = StyleSheet.create({
   picker: {
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
   },
   block: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
   },
   scroll: {
-    width: "100%",
+    width: '100%',
   },
   digit: {
     fontSize: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   mark: {
-    position: "absolute",
+    position: 'absolute',
     borderRadius: 10,
   },
   gradient: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
   },
 });
 
 const hex2rgba = (hex, alpha) => {
-  hex = hex.replace("#", "");
+  hex = hex.replace('#', '');
 
-  const r = parseInt(
-    hex.length === 3 ? hex.slice(0, 1).repeat(2) : hex.slice(0, 2),
-    16
-  );
-  const g = parseInt(
-    hex.length === 3 ? hex.slice(1, 2).repeat(2) : hex.slice(2, 4),
-    16
-  );
-  const b = parseInt(
-    hex.length === 3 ? hex.slice(2, 3).repeat(2) : hex.slice(4, 6),
-    16
-  );
+  const r = parseInt(hex.length === 3 ? hex.slice(0, 1).repeat(2) : hex.slice(0, 2), 16);
+  const g = parseInt(hex.length === 3 ? hex.slice(1, 2).repeat(2) : hex.slice(2, 4), 16);
+  const b = parseInt(hex.length === 3 ? hex.slice(2, 3).repeat(2) : hex.slice(4, 6), 16);
 
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
 const getOrder = (format, date, days, months, years) =>
-  (format || "dd-mm-yyyy").split("-").map((type, index) => {
+  (format || 'dd-mm-yyyy').split('-').map((type, index) => {
     switch (type) {
-      case "dd":
-        return { name: "day", digits: days, value: date.getDate() };
-      case "mm":
-        return { name: "month", digits: months, value: date.getMonth() + 1 };
-      case "yyyy":
-        return { name: "year", digits: years, value: date.getFullYear() };
+      case 'dd':
+        return { name: 'day', digits: days, value: date.getDate() };
+      case 'mm':
+        return { name: 'month', digits: months, value: date.getMonth() + 1 };
+      case 'yyyy':
+        return { name: 'year', digits: years, value: date.getFullYear() };
       default:
         console.warn(
-          `Invalid date picker format prop: found "${type}" in ${format}. Please read documentation!`
+          `Invalid date picker format prop: found "${type}" in ${format}. Please read documentation!`,
         );
         return {
-          name: ["day", "month", "year"][index],
+          name: ['day', 'month', 'year'][index],
           digits: [days, months, years][index],
-          value: [date.getDate(), date.getMonth() + 1, date.getFullYear()][
-            index
-          ],
+          value: [date.getDate(), date.getMonth() + 1, date.getFullYear()][index],
         };
     }
   });
@@ -114,22 +96,20 @@ const DatePicker = ({
     setYears(_years);
   }, [endYear, startYear]);
 
-  const pickerHeight = Math.round(
-    height || Dimensions.get("window").height / 3.5
-  );
+  const pickerHeight = Math.round(height || Dimensions.get('window').height / 3.5);
 
   const unexpectedDate = new Date(years[0], 0, 1);
   const date = new Date(value || unexpectedDate);
 
   const changeHandle = (type, digit) => {
     switch (type) {
-      case "day":
+      case 'day':
         date.setDate(digit);
         break;
-      case "month":
+      case 'month':
         date.setMonth(digit - 1);
         break;
-      case "year":
+      case 'year':
         date.setFullYear(digit);
         break;
       default:
@@ -177,10 +157,10 @@ const DateBlock = ({
   const dHeight = Math.round(height / 4);
 
   const mHeight = markHeight || Math.min(dHeight, 65);
-  const mWidth = markWidth || "70%";
+  const mWidth = markWidth || '70%';
 
-  const fadeFilled = hex2rgba(fadeColor || "#ffffff", 1);
-  const fadeTransparent = hex2rgba(fadeColor || "#ffffff", 0);
+  const fadeFilled = hex2rgba(fadeColor || '#ffffff', 1);
+  const fadeTransparent = hex2rgba(fadeColor || '#ffffff', 0);
 
   const scrollRef = useRef(null);
   useEffect(() => {
@@ -207,7 +187,7 @@ const DateBlock = ({
           styles.mark,
           {
             top: (height - mHeight) / 2,
-            backgroundColor: markColor || "rgba(0, 0, 0, 0.05)",
+            backgroundColor: markColor || 'rgba(0, 0, 0, 0.05)',
             height: mHeight,
             width: mWidth,
           },
@@ -236,9 +216,8 @@ const DateBlock = ({
                 styles.digit,
                 {
                   fontSize: fontSize || 22,
-                  color: textColor || "#000000",
-                  marginBottom:
-                    index === digits.length - 1 ? height / 2 - dHeight / 2 : 0,
+                  color: textColor || '#000000',
+                  marginBottom: index === digits.length - 1 ? height / 2 - dHeight / 2 : 0,
                   marginTop: index === 0 ? height / 2 - dHeight / 2 : 0,
                   lineHeight: dHeight,
                   height: dHeight,

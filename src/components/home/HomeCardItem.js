@@ -1,10 +1,10 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { Text } from "@ui-kitten/components";
-import { TouchableOpacity } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { getLayoutFilterParams } from "../../store/selectors";
-import { getOperationAction } from "../../store/actions/apiAction";
-import { splitToDigits } from "../../splitToDigits";
+import React, { memo, useCallback, useMemo } from 'react';
+import { Text } from '@ui-kitten/components';
+import { TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getLayoutFilterParams } from '../../store/selectors';
+import { getOperationAction } from '../../store/actions/apiAction';
+import { splitToDigits } from '../../splitToDigits';
 import {
   CardIcon,
   ExchangeIcon,
@@ -12,7 +12,7 @@ import {
   DecreaseIcon,
   CategoryIcon,
   TagIcon,
-} from "../../themes/icons";
+} from '../../themes/icons';
 
 const avaiableTypes = {
   account: CardIcon,
@@ -23,116 +23,90 @@ const avaiableTypes = {
   transfer: ExchangeIcon,
 };
 
-const IconHOC = (Component, kittenTheme, themeContext, style) => () => (
-  <Component
-    style={{ width: 20, height: 20 }}
-    fill={
-      kittenTheme[
-        style || `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-      ]
+const IconHOC = (Component, kittenTheme, themeContext, style) => () =>
+  (
+    <Component
+      style={{ width: 20, height: 20 }}
+      fill={kittenTheme[style || `color-primary-${themeContext.theme === 'light' ? 800 : 100}`]}
+    />
+  );
+
+export const HomeCardItem = memo(({ kittenTheme, themeContext, item, navigation }) => {
+  const { id, name, balance, type, style } = item;
+
+  const isOperation = ['action', 'transaction', 'transfer'].includes(type);
+
+  const dispatch = useDispatch();
+  const selectedFilterParams = useSelector(getLayoutFilterParams);
+
+  const renderIconItem = useMemo(() => {
+    if (avaiableTypes[type]) {
+      const IconComponent = IconHOC(avaiableTypes[type], kittenTheme, themeContext, style);
+      return <IconComponent />;
     }
-  />
-);
 
-export const HomeCardItem = memo(
-  ({ kittenTheme, themeContext, item, navigation }) => {
-    const { id, name, balance, type, style } = item;
+    return null;
+  }, [kittenTheme, style, themeContext, type]);
 
-    const isOperation = ["action", "transaction", "transfer"].includes(type);
+  const memoBalance = useMemo(
+    () => type !== 'category' && type !== 'tag' && `${splitToDigits(balance)} ₽`,
+    [balance, type],
+  );
 
-    const dispatch = useDispatch();
-    const selectedFilterParams = useSelector(getLayoutFilterParams);
+  const onItemPress = useCallback(() => {
+    if (!isOperation) {
+      navigation.navigate('Operation');
+      const selectedFilters = selectedFilterParams !== null ? selectedFilterParams : {};
 
-    const renderIconItem = useMemo(() => {
-      if (avaiableTypes[type]) {
-        const IconComponent = IconHOC(
-          avaiableTypes[type],
-          kittenTheme,
-          themeContext,
-          style
-        );
-        return <IconComponent />;
-      }
+      selectedFilters[type] = [
+        {
+          index: 0,
+          text: name,
+          title: name,
+          id,
+        },
+      ];
 
-      return null;
-    }, [kittenTheme, style, themeContext, type]);
+      dispatch(getOperationAction(selectedFilters));
+    }
+  }, [isOperation, navigation, selectedFilterParams, type, name, id, dispatch]);
 
-    const memoBalance = useMemo(
-      () =>
-        type !== "category" && type !== "tag" && `${splitToDigits(balance)} ₽`,
-      [balance, type]
-    );
-
-    const onItemPress = useCallback(() => {
-      if (!isOperation) {
-        navigation.navigate("Operation");
-        const selectedFilters =
-          selectedFilterParams !== null ? selectedFilterParams : {};
-
-        selectedFilters[type] = [
-          {
-            index: 0,
-            text: name,
-            title: name,
-            id,
-          },
-        ];
-
-        dispatch(getOperationAction(selectedFilters));
-      }
-    }, [
-      isOperation,
-      navigation,
-      selectedFilterParams,
-      type,
-      name,
-      id,
-      dispatch,
-    ]);
-
-    return (
-      <TouchableOpacity
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 5,
+      }}
+      onPress={onItemPress}
+      activeOpacity={isOperation ? 1 : 0.2}
+    >
+      {renderIconItem}
+      <Text
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingVertical: 5,
+          flex: 1,
+          fontSize: 16,
+          marginRight: 'auto',
+          marginLeft: 8,
+          color:
+            kittenTheme[style || `color-primary-${themeContext.theme === 'light' ? 800 : 100}`],
         }}
-        onPress={onItemPress}
-        activeOpacity={isOperation ? 1 : 0.2}
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        category="s1"
       >
-        {renderIconItem}
-        <Text
-          style={{
-            flex: 1,
-            fontSize: 16,
-            marginRight: "auto",
-            marginLeft: 8,
-            color:
-              kittenTheme[
-                style ||
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-              ],
-          }}
-          ellipsizeMode="tail"
-          numberOfLines={1}
-          category="s1"
-        >
-          {name}
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            color:
-              kittenTheme[
-                style ||
-                  `color-primary-${themeContext.theme === "light" ? 800 : 100}`
-              ],
-          }}
-        >
-          {memoBalance}
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-);
+        {name}
+      </Text>
+      <Text
+        style={{
+          fontSize: 16,
+          color:
+            kittenTheme[style || `color-primary-${themeContext.theme === 'light' ? 800 : 100}`],
+        }}
+      >
+        {memoBalance}
+      </Text>
+    </TouchableOpacity>
+  );
+});

@@ -7,7 +7,7 @@ import {
   UPDATE_COMPANY,
   JOIN_PROFILE_TO_COMPANY,
   REMOVE_PROFILE_FROM_COMPANY,
-} from "../types";
+} from '../types';
 
 const initialState = {
   company: null,

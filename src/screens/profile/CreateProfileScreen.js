@@ -1,24 +1,18 @@
-import React, { memo, useCallback } from "react";
-import { Alert, View } from "react-native";
-import {
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Input,
-  Button,
-} from "@ui-kitten/components";
+import React, { memo, useCallback } from 'react';
+import { Alert, View } from 'react-native';
+import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../store/actions/authAction";
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/actions/authAction';
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
-import { THEME } from "../../themes/themes";
+import { ScreenTemplate } from '../../components/ScreenTemplate';
+import { THEME } from '../../themes/themes';
 
-import { LogoutIcon } from "../../themes/icons";
+import { LogoutIcon } from '../../themes/icons';
 
-import { createProfileAction } from "../../store/actions/apiAction";
-import { getApiLoading } from "../../store/selectors";
-import { FlexibleView } from "../../components/FlexibleView";
+import { createProfileAction } from '../../store/actions/apiAction';
+import { getApiLoading } from '../../store/selectors';
+import { FlexibleView } from '../../components/FlexibleView';
 
 export const CreateProfileScreen = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -30,17 +24,17 @@ export const CreateProfileScreen = memo(({ navigation }) => {
     }, 100);
   }, []);
 
-  const [first_name, setFirstName] = React.useState("");
-  const [last_name, setLastName] = React.useState("");
-  const [phone, setPhone] = React.useState("");
+  const [first_name, setFirstName] = React.useState('');
+  const [last_name, setLastName] = React.useState('');
+  const [phone, setPhone] = React.useState('');
 
   const loader = useSelector(getApiLoading);
 
   const onSuccess = useCallback(
     (profile) => {
-      navigation.navigate(profile.company !== null ? "Home" : "CompanyManager");
+      navigation.navigate(profile.company !== null ? 'Home' : 'CompanyManager');
     },
-    [navigation]
+    [navigation],
   );
 
   const onSubmit = useCallback(() => {
@@ -60,24 +54,24 @@ export const CreateProfileScreen = memo(({ navigation }) => {
 
   const navigateLogout = useCallback(() => {
     Alert.alert(
-      "Выход",
-      "Вы уверены, что хотите выйти из учетной записи?",
+      'Выход',
+      'Вы уверены, что хотите выйти из учетной записи?',
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
-        { text: "Выйти", onPress: logoutHandler },
+        { text: 'Выйти', onPress: logoutHandler },
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [logoutHandler]);
 
   const BackAction = useCallback(
     () => <TopNavigationAction icon={LogoutIcon} onPress={navigateLogout} />,
-    [navigateLogout]
+    [navigateLogout],
   );
 
   return (
@@ -92,12 +86,12 @@ export const CreateProfileScreen = memo(({ navigation }) => {
           style={{
             flex: 1,
             marginTop: 30,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <View
             style={{
-              width: "85%",
+              width: '85%',
               maxWidth: 720,
               manrginBottom: 25,
             }}

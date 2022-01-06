@@ -1,23 +1,14 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { TouchableWithoutFeedback } from "react-native";
-import { Autocomplete, AutocompleteItem, Icon } from "@ui-kitten/components";
+import React, { memo, useCallback, useMemo } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
+import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
 
 export const CategorySelector = memo(
-  ({
-    current,
-    setCurrent,
-    clearCurrent,
-    categoryData,
-    isNotEmpty,
-    navigation,
-  }) => {
+  ({ current, setCurrent, clearCurrent, categoryData, isNotEmpty, navigation }) => {
     const categoryInput = React.useRef(null);
-    const [value, setValue] = React.useState(
-      current !== null ? current.title : ""
-    );
+    const [value, setValue] = React.useState(current !== null ? current.title : '');
 
     React.useEffect(() => {
-      setValue(current !== null ? current.title : "");
+      setValue(current !== null ? current.title : '');
     }, [current]);
 
     const [data, setData] = React.useState(categoryData || []);
@@ -26,67 +17,54 @@ export const CategorySelector = memo(
       (item) => {
         setCurrent(data[item]);
       },
-      [data, setCurrent]
+      [data, setCurrent],
     );
 
     const onChangeText = useCallback(
       (query) => {
         setValue(query);
         setData(
-          categoryData.filter((item) =>
-            item.title.toLowerCase().includes(query.toLowerCase())
-          )
+          categoryData.filter((item) => item.title.toLowerCase().includes(query.toLowerCase())),
         );
-        if (
-          query.trim().length === 0 ||
-          (current !== null && query !== current.title)
-        ) {
+        if (query.trim().length === 0 || (current !== null && query !== current.title)) {
           clearCurrent();
         }
       },
-      [categoryData, clearCurrent, current]
+      [categoryData, clearCurrent, current],
     );
 
     const clearInput = useCallback(() => {
-      onChangeText("");
+      onChangeText('');
     }, [onChangeText]);
 
     const addCategory = useCallback(() => {
       categoryInput.current.blur();
       const findIndex = data.findIndex((elAcc) =>
-        new RegExp(value.toLowerCase(), "i").test(elAcc.title.toLowerCase())
+        new RegExp(value.toLowerCase(), 'i').test(elAcc.title.toLowerCase()),
       );
 
       if (findIndex !== -1) {
         onSelect(findIndex);
       } else if (value.trim().length !== 0) {
-        navigation.navigate("CreateCategory", { category_name: value });
+        navigation.navigate('CreateCategory', { category_name: value });
       } else {
-        onChangeText("");
+        onChangeText('');
       }
     }, [data, navigation, onChangeText, onSelect, value]);
 
     const renderIcon = useCallback(
       (props) =>
         value.trim().length !== 0 && (
-          <TouchableWithoutFeedback
-            onPress={current !== null ? clearInput : addCategory}
-          >
-            <Icon
-              {...props}
-              name={current !== null ? "close" : "plus-outline"}
-            />
+          <TouchableWithoutFeedback onPress={current !== null ? clearInput : addCategory}>
+            <Icon {...props} name={current !== null ? 'close' : 'plus-outline'} />
           </TouchableWithoutFeedback>
         ),
-      [addCategory, clearInput, current, value]
+      [addCategory, clearInput, current, value],
     );
 
     const renderOption = useMemo(
-      () =>
-        data.map((item) => (
-          <AutocompleteItem key={item.id} title={item.title} />
-        )),
-      [data]
+      () => data.map((item) => <AutocompleteItem key={item.id} title={item.title} />),
+      [data],
     );
 
     return (
@@ -99,10 +77,10 @@ export const CategorySelector = memo(
         accessoryRight={renderIcon}
         onSubmitEditing={addCategory}
         ref={categoryInput}
-        status={isNotEmpty ? "success" : "danger"}
+        status={isNotEmpty ? 'success' : 'danger'}
       >
         {renderOption}
       </Autocomplete>
     );
-  }
+  },
 );

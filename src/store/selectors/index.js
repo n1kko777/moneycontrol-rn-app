@@ -1,8 +1,8 @@
-import { createSelector } from "reselect";
-import moment from "moment";
-import { getAccountTitle } from "../../getAccountTitle";
-import { getShortName } from "../../getShortName";
-import { displayDate } from "../../dispayDate";
+import { createSelector } from 'reselect';
+import moment from 'moment';
+import { getAccountTitle } from '../../getAccountTitle';
+import { getShortName } from '../../getShortName';
+import { displayDate } from '../../dispayDate';
 
 /* Account */
 export const getAccounts = (state) => state.account.accounts;
@@ -42,16 +42,13 @@ export const getCompanyLoading = (state) => state.company.loading;
 
 /* Layout */
 export const getLayoutHomeListData = (state) => state.layout.homeListData;
-export const getLayoutOperationListData = (state) =>
-  state.layout.operationListData;
-export const getLayoutOperationTypeData = (state) =>
-  state.layout.operationTypeData;
+export const getLayoutOperationListData = (state) => state.layout.operationListData;
+export const getLayoutOperationTypeData = (state) => state.layout.operationTypeData;
 export const getLayoutProfileData = (state) => state.layout.profileData;
 export const getLayoutFilterParams = (state) => state.layout.filterParams;
 export const getLayoutTotalBalance = (state) => state.layout.totalBalance;
 export const getLayoutTotalActions = (state) => state.layout.totalActions;
-export const getLayoutTotalTransactions = (state) =>
-  state.layout.totalTransactions;
+export const getLayoutTotalTransactions = (state) => state.layout.totalTransactions;
 
 /* Profile */
 export const getProfile = (state) => state.profile.profile;
@@ -72,26 +69,18 @@ export const getTransferError = (state) => state.transfer.error;
 export const getTransferLoading = (state) => state.transfer.loading;
 
 /* Reselect */
-export const getAccountDataList = createSelector(
-  getProfile,
-  getAccounts,
-  (profile, accounts) =>
-    accounts.filter((acc) => profile !== null && acc.profile === profile.id)
+export const getAccountDataList = createSelector(getProfile, getAccounts, (profile, accounts) =>
+  accounts.filter((acc) => profile !== null && acc.profile === profile.id),
 );
 
-export const getToolbarTitle = createSelector(
-  getProfile,
-  getCompany,
-  (profile, company) =>
-    profile !== null && company !== null
-      ? `${profile.is_admin ? "⭐️ " : ""}${company.company_name}`
-      : ""
+export const getToolbarTitle = createSelector(getProfile, getCompany, (profile, company) =>
+  profile !== null && company !== null
+    ? `${profile.is_admin ? '⭐️ ' : ''}${company.company_name}`
+    : '',
 );
 
 export const getCalendarMinDate = createSelector(getProfile, (profile) =>
-  profile !== null
-    ? moment(profile.created)
-    : moment().subtract(1, "years").startOf("year")
+  profile !== null ? moment(profile.created) : moment().subtract(1, 'years').startOf('year'),
 );
 
 export const getCompanyList = createSelector(
@@ -100,7 +89,7 @@ export const getCompanyList = createSelector(
   getCompany,
   (profile, accounts, company) => {
     const innerListData = () => {
-      if (company !== null && "profiles" in company) {
+      if (company !== null && 'profiles' in company) {
         if (profile !== null && profile.is_admin) {
           return company.profiles.map((elem) => ({
             ...elem,
@@ -124,22 +113,17 @@ export const getCompanyList = createSelector(
 
       return 1;
     });
-  }
+  },
 );
 
-export const getProfilesList = createSelector(
-  getProfile,
-  getCompany,
-  (profile, company) =>
-    (profile !== null && profile.is_admin ? company.profiles : [profile]).map(
-      (elem, index) => ({
-        index,
-        text: getShortName(`${elem.first_name} ${elem.last_name}`),
-        title: getShortName(`${elem.first_name} ${elem.last_name}`),
-        id: elem.id,
-        is_admin: elem.is_admin,
-      })
-    )
+export const getProfileList = createSelector(getProfile, getCompany, (profile, company) =>
+  (profile !== null && profile.is_admin ? company.profiles : [profile]).map((elem, index) => ({
+    index,
+    text: getShortName(`${elem.first_name} ${elem.last_name}`),
+    title: getShortName(`${elem.first_name} ${elem.last_name}`),
+    id: elem.id,
+    is_admin: elem.is_admin,
+  })),
 );
 
 export const getAccountList = createSelector(getAccounts, (accounts) =>
@@ -148,7 +132,7 @@ export const getAccountList = createSelector(getAccounts, (accounts) =>
     text: getAccountTitle(elem),
     title: getAccountTitle(elem),
     id: elem.id,
-  }))
+  })),
 );
 
 export const getCategoriesList = createSelector(getCategories, (categories) =>
@@ -157,7 +141,7 @@ export const getCategoriesList = createSelector(getCategories, (categories) =>
     text: elem.category_name,
     title: elem.category_name,
     id: elem.id,
-  }))
+  })),
 );
 
 export const getTagsList = createSelector(getTags, (tags) =>
@@ -166,45 +150,35 @@ export const getTagsList = createSelector(getTags, (tags) =>
     text: elem.tag_name,
     title: elem.tag_name,
     id: elem.id,
-  }))
+  })),
 );
 
-export const getToAccountList = createSelector(
-  getCompany,
-  getProfile,
-  (company, profile) =>
-    profile !== null
-      ? company.profiles.reduce((profileObj, nextProfile, profileIndex) => {
-          profileObj[profileIndex] = {
-            text: `${nextProfile.is_admin ? "⭐️ " : ""}${
-              nextProfile.first_name
-            } ${nextProfile.last_name} ${
-              nextProfile.id === profile.id ? "👈" : ""
-            }`,
-            id: nextProfile.id,
-            items: nextProfile.accounts.reduce(
-              (accountObj, nextAccount, accountIndex) => {
-                accountObj[accountIndex] = {
-                  text: nextAccount.split("(pk=")[0],
-                  id: nextAccount.split("(pk=")[1].replace(")", ""),
-                };
+export const getToAccountList = createSelector(getCompany, getProfile, (company, profile) =>
+  profile !== null
+    ? company.profiles.reduce((profileObj, nextProfile, profileIndex) => {
+        profileObj[profileIndex] = {
+          text: `${nextProfile.is_admin ? '⭐️ ' : ''}${nextProfile.first_name} ${
+            nextProfile.last_name
+          } ${nextProfile.id === profile.id ? '👈' : ''}`,
+          id: nextProfile.id,
+          items: nextProfile.accounts.reduce((accountObj, nextAccount, accountIndex) => {
+            accountObj[accountIndex] = {
+              text: nextAccount.split('(pk=')[0],
+              id: nextAccount.split('(pk=')[1].replace(')', ''),
+            };
 
-                return accountObj;
-              },
-              {}
-            ),
-          };
+            return accountObj;
+          }, {}),
+        };
 
-          return profileObj;
-        }, {})
-      : []
+        return profileObj;
+      }, {})
+    : [],
 );
 
 export const getDisplayDate = createSelector(
   getCalendarStartDate,
   getCalendarEndDate,
   (startDate, endDate) =>
-    `${displayDate(startDate)} – ${displayDate(
-      endDate !== null ? endDate : startDate
-    )}`
+    `${displayDate(startDate)} – ${displayDate(endDate !== null ? endDate : startDate)}`,
 );

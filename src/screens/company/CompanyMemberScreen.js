@@ -1,27 +1,27 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 
-import { Layout, useTheme, Button } from "@ui-kitten/components";
-import { ScrollView, View, RefreshControl, Alert } from "react-native";
+import { Layout, useTheme, Button } from '@ui-kitten/components';
+import { ScrollView, View, RefreshControl, Alert } from 'react-native';
 
-import { ThemeContext } from "../../themes/theme-context";
+import { ThemeContext } from '../../themes/theme-context';
 
-import { ScreenTemplate } from "../../components/ScreenTemplate";
+import { ScreenTemplate } from '../../components/ScreenTemplate';
 
-import { HomeList } from "../../components/home/HomeList";
-import { Toolbar } from "../../components/navigation/Toolbar";
+import { HomeList } from '../../components/home/HomeList';
+import { Toolbar } from '../../components/navigation/Toolbar';
 import {
   clearProfileListData,
   getDataDispatcher,
   getProfileListData,
   removeProfileFromCompanyAction,
-} from "../../store/actions/apiAction";
-import { BackIcon } from "../../themes/icons";
-import { splitToDigits } from "../../splitToDigits";
-import { getLayoutProfileData } from "../../store/selectors";
-import { logout } from "../../store/actions/authAction";
-import { clearFilterParams } from "../../store/actions/layoutAction";
+} from '../../store/actions/apiAction';
+import { BackIcon } from '../../themes/icons';
+import { splitToDigits } from '../../splitToDigits';
+import { getLayoutProfileData } from '../../store/selectors';
+import { logout } from '../../store/actions/authAction';
+import { clearFilterParams } from '../../store/actions/layoutAction';
 
 export const CompanyMemberScreen = memo(({ navigation, route }) => {
   const { profile } = route.params;
@@ -64,29 +64,27 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
 
   const onDeleteMember = useCallback(() => {
     Alert.alert(
-      "Удаление сотрудника",
+      'Удаление сотрудника',
       `Вы уверены, что хотите удалить сотрудника ${`${profile.first_name} ${profile.last_name}`}?`,
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
         {
-          text: "Удалить",
+          text: 'Удалить',
           onPress: () => {
             if (totalBalance === null || totalBalance === 0) {
               navigation.goBack(null);
-              dispatch(
-                removeProfileFromCompanyAction(profile, onSuccessDelete)
-              );
+              dispatch(removeProfileFromCompanyAction(profile, onSuccessDelete));
             } else {
               Alert.alert(
-                "Невозможно удалить сотрудника",
-                "Баланс сотрудника должен быть равен 0!",
-                [{ text: "OK" }],
+                'Невозможно удалить сотрудника',
+                'Баланс сотрудника должен быть равен 0!',
+                [{ text: 'OK' }],
                 {
                   cancelable: false,
-                }
+                },
               );
             }
           },
@@ -94,12 +92,12 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [dispatch, navigation, onSuccessDelete, profile, totalBalance]);
 
   const onBackHandler = useCallback(() => {
-    navigation.navigate("Home");
+    navigation.navigate('Home');
     dispatch(clearFilterParams());
     dispatch(clearProfileListData());
   }, [dispatch, navigation]);
@@ -108,17 +106,14 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
     <ScreenTemplate>
       <Layout
         style={{
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <Toolbar
           navigation={navigation}
-          title={`${profile.first_name} ${
-            profile.last_name
-          } (Баланс: ${splitToDigits(totalBalance)} ₽)`}
+          title={`${profile.first_name} ${profile.last_name} (Баланс: ${splitToDigits(
+            totalBalance,
+          )} ₽)`}
           TargetIcon={BackIcon}
           onTarget={onBackHandler}
           isMenu={false}
@@ -126,28 +121,17 @@ export const CompanyMemberScreen = memo(({ navigation, route }) => {
       </Layout>
       <ScrollView
         refreshControl={
-          <RefreshControl
-            refreshing={false}
-            onRefresh={refreshData}
-            tintColor="transparent"
-          />
+          <RefreshControl refreshing={false} onRefresh={refreshData} tintColor="transparent" />
         }
         style={{
           flex: 1,
-          backgroundColor:
-            kittenTheme[
-              `color-basic-${themeContext.theme === "light" ? 200 : 900}`
-            ],
+          backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 200 : 900}`],
         }}
       >
         <View onStartShouldSetResponder={() => true}>
           <HomeList navigation={navigation} dataList={homeListData} />
           {!profile.is_admin && (
-            <Button
-              onPress={onDeleteMember}
-              style={{ margin: 8 }}
-              status="danger"
-            >
+            <Button onPress={onDeleteMember} style={{ margin: 8 }} status="danger">
               Удалить сотрудника
             </Button>
           )}

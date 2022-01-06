@@ -1,22 +1,18 @@
-import React, { memo, useCallback } from "react";
-import {
-  TopNavigationAction,
-  OverflowMenu,
-  MenuItem,
-} from "@ui-kitten/components";
-import { Alert } from "react-native";
+import React, { memo, useCallback } from 'react';
+import { TopNavigationAction, OverflowMenu, MenuItem } from '@ui-kitten/components';
+import { Alert } from 'react-native';
 
-import { useDispatch } from "react-redux";
-import { ThemeContext } from "../../themes/theme-context";
+import { useDispatch } from 'react-redux';
+import { ThemeContext } from '../../themes/theme-context';
 import {
   MoreIconHorizontal,
   LogoutIcon,
   LightIcon,
   DarkIcon,
   UpdateIcon,
-} from "../../themes/icons";
-import { logout } from "../../store/actions/authAction";
-import { getDataDispatcher } from "../../store/actions/apiAction";
+} from '../../themes/icons';
+import { logout } from '../../store/actions/authAction';
+import { getDataDispatcher } from '../../store/actions/apiAction';
 
 export const TopMenuOptions = memo(({ navigation }) => {
   const dispatch = useDispatch();
@@ -38,26 +34,24 @@ export const TopMenuOptions = memo(({ navigation }) => {
 
   const navigateLogout = useCallback(() => {
     Alert.alert(
-      "Выход",
-      "Вы уверены, что хотите выйти из учетной записи?",
+      'Выход',
+      'Вы уверены, что хотите выйти из учетной записи?',
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
-        { text: "Выйти", onPress: logoutHandler },
+        { text: 'Выйти', onPress: logoutHandler },
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [logoutHandler]);
 
   const renderAnchor = useCallback(
-    () => (
-      <TopNavigationAction icon={MoreIconHorizontal} onPress={toggleMenu} />
-    ),
-    [toggleMenu]
+    () => <TopNavigationAction icon={MoreIconHorizontal} onPress={toggleMenu} />,
+    [toggleMenu],
   );
 
   const onUpdatePress = useCallback(() => {
@@ -82,21 +76,13 @@ export const TopMenuOptions = memo(({ navigation }) => {
       onBackdropPress={toggleMenu}
       style={{ width: 180 }}
     >
+      <MenuItem title="Обновить" accessoryLeft={UpdateIcon} onPress={onUpdatePress} />
       <MenuItem
-        title="Обновить"
-        accessoryLeft={UpdateIcon}
-        onPress={onUpdatePress}
-      />
-      <MenuItem
-        title={`${themeContext.theme === "light" ? "Темная" : "Светлая"} тема`}
-        accessoryLeft={themeContext.theme === "light" ? DarkIcon : LightIcon}
+        title={`${themeContext.theme === 'light' ? 'Темная' : 'Светлая'} тема`}
+        accessoryLeft={themeContext.theme === 'light' ? DarkIcon : LightIcon}
         onPress={onChangeThemePress}
       />
-      <MenuItem
-        title="Выйти"
-        accessoryLeft={LogoutIcon}
-        onPress={onExitPress}
-      />
+      <MenuItem title="Выйти" accessoryLeft={LogoutIcon} onPress={onExitPress} />
     </OverflowMenu>
   );
 });

@@ -1,8 +1,8 @@
-import React, { memo, useMemo } from "react";
-import { View } from "react-native";
+import React, { memo, useMemo } from 'react';
+import { View } from 'react-native';
 
-import { Text } from "@ui-kitten/components";
-import { HomeCard } from "./HomeCard";
+import { Text } from '@ui-kitten/components';
+import { HomeCard } from './HomeCard';
 
 export const HomeList = memo(({ navigation, dataList }) => {
   const renderHomeList = useMemo(
@@ -16,7 +16,7 @@ export const HomeList = memo(({ navigation, dataList }) => {
           isNavigate={dataList.isNavigate}
         />
       )),
-    [dataList, navigation]
+    [dataList, navigation],
   );
 
   return (
@@ -26,7 +26,7 @@ export const HomeList = memo(({ navigation, dataList }) => {
       ) : (
         <Text
           style={{
-            textAlign: "center",
+            textAlign: 'center',
             marginTop: 30,
           }}
         >

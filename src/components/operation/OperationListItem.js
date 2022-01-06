@@ -1,18 +1,18 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Alert } from "react-native";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import React, { memo, useCallback, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Alert } from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-import { Text, Layout, useTheme, Button, Card } from "@ui-kitten/components";
-import { DeleteIcon, CopyIcon } from "../../themes/icons";
-import { ThemeContext } from "../../themes/theme-context";
+import { Text, Layout, useTheme, Button, Card } from '@ui-kitten/components';
+import { DeleteIcon, CopyIcon } from '../../themes/icons';
+import { ThemeContext } from '../../themes/theme-context';
 
-import { splitToDigits } from "../../splitToDigits";
-import { hideOperationAction } from "../../store/actions/apiAction";
-import { getAccounts, getCategories, getTags } from "../../store/selectors";
-import { setCurrentAccount } from "../../store/actions/accountAction";
-import { getAccountTitle } from "../../getAccountTitle";
-import { setCurrentCategory } from "../../store/actions/categoryAction";
+import { splitToDigits } from '../../splitToDigits';
+import { hideOperationAction } from '../../store/actions/apiAction';
+import { getAccounts, getCategories, getTags } from '../../store/selectors';
+import { setCurrentAccount } from '../../store/actions/accountAction';
+import { getAccountTitle } from '../../getAccountTitle';
+import { setCurrentCategory } from '../../store/actions/categoryAction';
 
 export const OperationListItem = memo(({ item, navigation }) => {
   const dispatch = useDispatch();
@@ -33,15 +33,15 @@ export const OperationListItem = memo(({ item, navigation }) => {
   const deleteHandler = useCallback(() => {
     close();
     Alert.alert(
-      "Удаление категории",
+      'Удаление категории',
       `Вы уверены, что хотите удалить операцию?`,
       [
         {
-          text: "Отмена",
-          style: "cancel",
+          text: 'Отмена',
+          style: 'cancel',
         },
         {
-          text: "Удалить",
+          text: 'Удалить',
           onPress: () => {
             dispatch(hideOperationAction(item));
           },
@@ -49,14 +49,14 @@ export const OperationListItem = memo(({ item, navigation }) => {
       ],
       {
         cancelable: false,
-      }
+      },
     );
   }, [close, dispatch, item]);
 
   const copyHandler = useCallback(() => {
     close();
     const copyAccount = accounts.find(
-      (accEl) => accEl.id === (item.account || item.from_account_id)
+      (accEl) => accEl.id === (item.account || item.from_account_id),
     );
     const copyCategory = categories.find((catEl) => catEl.id === item.category);
     dispatch(
@@ -66,12 +66,12 @@ export const OperationListItem = memo(({ item, navigation }) => {
               title: getAccountTitle(copyAccount),
               id: copyAccount.id,
             }
-          : null
-      )
+          : null,
+      ),
     );
 
     switch (item.type) {
-      case "transaction":
+      case 'transaction':
         dispatch(
           setCurrentCategory(
             copyCategory
@@ -79,13 +79,13 @@ export const OperationListItem = memo(({ item, navigation }) => {
                   title: copyCategory.category_name,
                   id: copyCategory.id,
                 }
-              : null
-          )
+              : null,
+          ),
         );
 
-        navigation.navigate("CreateTransaction", item);
+        navigation.navigate('CreateTransaction', item);
         break;
-      case "action":
+      case 'action':
         dispatch(
           setCurrentCategory(
             copyCategory
@@ -93,20 +93,17 @@ export const OperationListItem = memo(({ item, navigation }) => {
                   title: copyCategory.category_name,
                   id: copyCategory.id,
                 }
-              : null
-          )
+              : null,
+          ),
         );
 
-        navigation.navigate("CreateAction", item);
+        navigation.navigate('CreateAction', item);
         break;
-      case "transfer":
+      case 'transfer':
         if (!accounts.map((acc) => acc.id).includes(item.from_account_id)) {
-          Alert.alert(
-            "Невозможно скопировать",
-            `Вы не являетесь собственником операции.`
-          );
+          Alert.alert('Невозможно скопировать', `Вы не являетесь собственником операции.`);
         } else {
-          navigation.navigate("CreateTransfer", item);
+          navigation.navigate('CreateTransfer', item);
         }
         break;
 
@@ -116,21 +113,13 @@ export const OperationListItem = memo(({ item, navigation }) => {
   }, [accounts, categories, close, dispatch, item, navigation]);
 
   const LeftAction = useCallback(
-    () => (
-      <Button onPress={copyHandler} accessoryLeft={CopyIcon} status="info" />
-    ),
-    [copyHandler]
+    () => <Button onPress={copyHandler} accessoryLeft={CopyIcon} status="info" />,
+    [copyHandler],
   );
 
   const RightAction = useCallback(
-    () => (
-      <Button
-        onPress={deleteHandler}
-        accessoryLeft={DeleteIcon}
-        status="danger"
-      />
-    ),
-    [deleteHandler]
+    () => <Button onPress={deleteHandler} accessoryLeft={DeleteIcon} status="danger" />,
+    [deleteHandler],
   );
 
   const renderCategory = useMemo(() => {
@@ -139,25 +128,24 @@ export const OperationListItem = memo(({ item, navigation }) => {
         return categories.find((cat) => cat.id === item.category).category_name;
       }
 
-      return "Удалено";
+      return 'Удалено';
     }
 
-    return "";
+    return '';
   }, [categories, item.category]);
 
   const renderTag = useMemo(() => {
-    const tagList = (item.tags
-      ? item.tags.map((elTag) =>
-          tags.find((tag) => tag.id === elTag)
-            ? `#${tags.find((tag) => tag.id === elTag).tag_name}`
-            : "Удалено"
-        )
-      : [""]
-    ).join(", ");
+    const tagList = (
+      item.tags
+        ? item.tags.map((elTag) =>
+            tags.find((tag) => tag.id === elTag)
+              ? `#${tags.find((tag) => tag.id === elTag).tag_name}`
+              : 'Удалено',
+          )
+        : ['']
+    ).join(', ');
 
-    return `${
-      tagList.length > 17 ? `${tagList.substring(0, 17)}...` : tagList
-    }`;
+    return `${tagList.length > 17 ? `${tagList.substring(0, 17)}...` : tagList}`;
   }, [item.tags, tags]);
 
   return (
@@ -177,14 +165,14 @@ export const OperationListItem = memo(({ item, navigation }) => {
         >
           <Layout
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}
           >
             <Text
               style={{
                 fontSize: 16,
-                fontWeight: "600",
+                fontWeight: '600',
                 flex: 1,
               }}
               ellipsizeMode="tail"
@@ -195,13 +183,10 @@ export const OperationListItem = memo(({ item, navigation }) => {
             <Text
               style={{
                 fontSize: 16,
-                fontWeight: "600",
+                fontWeight: '600',
                 color:
                   kittenTheme[
-                    item.style ||
-                      `color-primary-${
-                        themeContext.theme === "light" ? 800 : 100
-                      }`
+                    item.style || `color-primary-${themeContext.theme === 'light' ? 800 : 100}`
                   ],
               }}
             >
@@ -210,18 +195,15 @@ export const OperationListItem = memo(({ item, navigation }) => {
           </Layout>
           <Layout
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               marginTop: 8,
             }}
           >
             <Text
               style={{
                 fontSize: 14,
-                color:
-                  kittenTheme[
-                    `color-basic-${themeContext.theme === "light" ? 700 : 600}`
-                  ],
+                color: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 700 : 600}`],
                 flex: 1,
               }}
               ellipsizeMode="tail"
@@ -232,10 +214,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
             <Text
               style={{
                 fontSize: 14,
-                color:
-                  kittenTheme[
-                    `color-basic-${themeContext.theme === "light" ? 700 : 600}`
-                  ],
+                color: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 700 : 600}`],
               }}
             >
               {renderTag}
