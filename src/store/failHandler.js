@@ -4,7 +4,7 @@ export default (error, ERROR_TYPE) => (dispatch) => {
   const errorObject = {};
   const regex = /(<([^>]+)>)/gi;
 
-  if (error.response) {
+  if (error.response && error.response.status !== 503) {
     // The request was made and the server responded with a status code
     const keys = [...Object.keys(error.response.data)];
 
