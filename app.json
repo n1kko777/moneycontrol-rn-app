@@ -4,8 +4,12 @@
     "slug": "moneycontrol-rn-app",
     "description": "Corporate Money Control – мобильное приложение для автоматизации профессиональной деятельности, существенно облегчает и автоматизирует экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
     "privacy": "public",
-    "platforms": ["ios", "android"],
-    "version": "1.1.2",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.2.0",
+    "userInterfaceStyle": "automatic",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -14,23 +18,34 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/52b6d6e2-c121-43f0-b4fa-78b055e07f59"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ru.mncntrl.n1kko777",
-      "buildNumber": "1.1.2"
+      "buildNumber": "1.2.0"
     },
     "android": {
       "package": "ru.mncntrl.n1kko777",
-      "versionCode": 112,
+      "versionCode": 120,
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "VIBRATE",
         "WRITE_EXTERNAL_STORAGE"
       ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "52b6d6e2-c121-43f0-b4fa-78b055e07f59"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
