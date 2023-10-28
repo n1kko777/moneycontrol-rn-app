@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.2.0",
+    "version": "1.2.3",
     "userInterfaceStyle": "automatic",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -27,16 +27,17 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ru.mncntrl.n1kko777",
-      "buildNumber": "1.2.0"
+      "buildNumber": "1.2.3"
     },
     "android": {
       "package": "ru.mncntrl.n1kko777",
-      "versionCode": 120,
+      "versionCode": 123,
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "VIBRATE",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "REQUEST_INSTALL_PACKAGES"
       ]
     },
     "extra": {
