@@ -9,6 +9,11 @@ export const CustomSearchWithSelect = memo(
   ({ datasets = [], dataList, setDataList, enableCreate, ...props }) => {
     const [value, setValue] = useState('');
     const [data, setData] = useState(datasets);
+    const [width, setWidth] = React.useState(400);
+    const handleWidth = (event) => {
+      const { width } = event.nativeEvent.layout;
+      setWidth(width);
+    };
 
     const onChangeText = useCallback(
       (query) => {
@@ -66,17 +71,20 @@ export const CustomSearchWithSelect = memo(
 
     return (
       <Layout style={styles.container}>
-        <Autocomplete
-          placement={PopoverPlacements.TOP}
-          onChangeText={onChangeText}
-          onSelect={onSelect}
-          value={value}
-          accessoryRight={renderIcon}
-          ref={props.forwardedRef}
-          {...props}
-        >
-          {memoAutocompleteData}
-        </Autocomplete>
+        <View onLayout={handleWidth}>
+          <Autocomplete
+            placement={PopoverPlacements.TOP}
+            onChangeText={onChangeText}
+            onSelect={onSelect}
+            value={value}
+            accessoryRight={renderIcon}
+            ref={props.forwardedRef}
+            style={{ width }}
+            {...props}
+          >
+            {memoAutocompleteData}
+          </Autocomplete>
+        </View>
         {memoDataList.length ? (
           <ScrollView style={styles.scrollView}>
             <View style={styles.view}>{memoDataList}</View>

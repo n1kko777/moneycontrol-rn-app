@@ -1,5 +1,5 @@
 import React, { useEffect, memo, useCallback, useMemo } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
 
 export const AccountSelector = memo(
@@ -16,6 +16,11 @@ export const AccountSelector = memo(
     const accountInput = React.useRef(null);
 
     const [value, setValue] = React.useState(current !== null ? current.title : '');
+    const [width, setWidth] = React.useState(400);
+    const handleWidth = (event) => {
+      const { width } = event.nativeEvent.layout;
+      setWidth(width);
+    };
 
     React.useEffect(() => {
       setValue(current !== null ? current.title : '');
@@ -86,19 +91,21 @@ export const AccountSelector = memo(
     );
 
     return (
-      <Autocomplete
-        value={value}
-        onChangeText={onChangeText}
-        onSelect={onSelect}
-        placeholder={placeholder}
-        style={{ marginVertical: 10 }}
-        accessoryRight={renderIcon}
-        onSubmitEditing={addAccount}
-        ref={accountInput}
-        status={isNotEmpty ? 'success' : 'danger'}
-      >
-        {renderOption}
-      </Autocomplete>
+      <View onLayout={handleWidth}>
+        <Autocomplete
+          value={value}
+          onChangeText={onChangeText}
+          onSelect={onSelect}
+          placeholder={placeholder}
+          style={{ width, marginVertical: 10 }}
+          accessoryRight={renderIcon}
+          onSubmitEditing={addAccount}
+          ref={accountInput}
+          status={isNotEmpty ? 'success' : 'danger'}
+        >
+          {renderOption}
+        </Autocomplete>
+      </View>
     );
   },
 );
