@@ -1,11 +1,16 @@
 import React, { memo, useCallback, useMemo } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
 
 export const CategorySelector = memo(
   ({ current, setCurrent, clearCurrent, categoryData, isNotEmpty, navigation }) => {
     const categoryInput = React.useRef(null);
     const [value, setValue] = React.useState(current !== null ? current.title : '');
+    const [width, setWidth] = React.useState(400);
+    const handleWidth = (event) => {
+      const { width } = event.nativeEvent.layout;
+      setWidth(width);
+    };
 
     React.useEffect(() => {
       setValue(current !== null ? current.title : '');
@@ -68,19 +73,21 @@ export const CategorySelector = memo(
     );
 
     return (
-      <Autocomplete
-        value={value}
-        onChangeText={onChangeText}
-        onSelect={onSelect}
-        placeholder="Укажите категорию"
-        style={{ marginVertical: 10 }}
-        accessoryRight={renderIcon}
-        onSubmitEditing={addCategory}
-        ref={categoryInput}
-        status={isNotEmpty ? 'success' : 'danger'}
-      >
-        {renderOption}
-      </Autocomplete>
+      <View onLayout={handleWidth}>
+        <Autocomplete
+          value={value}
+          onChangeText={onChangeText}
+          onSelect={onSelect}
+          placeholder="Укажите категорию"
+          style={{ width, marginVertical: 10 }}
+          accessoryRight={renderIcon}
+          onSubmitEditing={addCategory}
+          ref={categoryInput}
+          status={isNotEmpty ? 'success' : 'danger'}
+        >
+          {renderOption}
+        </Autocomplete>
+      </View>
     );
   },
 );

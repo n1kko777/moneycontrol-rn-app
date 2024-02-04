@@ -143,14 +143,16 @@ export const FilterOperationScreen = memo(({ navigation }) => {
         />
         <Layout style={mainLayoutStyles}>
           <Layout style={secondaryLayoutStyles}>
-            <View style={viewStyles}>
-              <CustomSearchWithSelect
-                datasets={profileData}
-                dataList={profileList}
-                setDataList={setProfileList}
-                placeholder="Укажите сотрудников"
-              />
-            </View>
+            {profileData?.length > 1 ? (
+              <View style={viewStyles}>
+                <CustomSearchWithSelect
+                  datasets={profileData}
+                  dataList={profileList}
+                  setDataList={setProfileList}
+                  placeholder="Укажите сотрудников"
+                />
+              </View>
+            ) : null}
             <View style={viewStyles}>
               <CustomSearchWithSelect
                 datasets={accountData}
