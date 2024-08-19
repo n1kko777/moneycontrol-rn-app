@@ -1,8 +1,8 @@
 import { ListItem, Button, Text } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { Alert } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { useDispatch } from 'react-redux';
+import { alert } from 'utils';
 
 import { hideTagAction } from '../../store/actions/apiAction';
 import { DeleteIcon, TagIcon } from '../../themes/icons';
@@ -20,7 +20,7 @@ export const TagListItem = memo(({ item, navigation }) => {
 
   const deleteHandler = useCallback(() => {
     close();
-    Alert.alert(
+    alert(
       'Удаление тега',
       `Вы уверены, что хотите удалить тег ${item.tag_name}?`,
       [

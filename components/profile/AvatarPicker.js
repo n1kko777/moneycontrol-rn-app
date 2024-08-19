@@ -1,8 +1,9 @@
 import DefaultIcon from 'assets/icon.png';
 import * as ImagePicker from 'expo-image-picker';
 import React, { memo, useCallback } from 'react';
-import { Button, Image, View, Alert, Platform } from 'react-native';
+import { Button, Image, View, Platform } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { alert } from 'utils';
 
 export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
   const getPermissionAsync = useCallback(async () => {
@@ -10,7 +11,7 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (status !== 'granted') {
-        Alert.alert(
+        alert(
           'Доступ к камере',
           'Извините, нам нужны разрешения на фотопленку, чтобы это сработало!',
           [
@@ -48,8 +49,8 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
       if (!result.cancelled) {
         setImageUrl(result.uri);
       }
-    } catch (E) {
-      Alert.alert(
+    } catch (error) {
+      alert(
         'Произошла ошибка',
         'Что-то пошло не так, попробуйте еще раз.',
         [
@@ -73,7 +74,7 @@ export const AvatarPicker = memo(({ isEdit, imageUrl, setImageUrl }) => {
 
   const clearImage = useCallback(() => {
     if (imageUrl !== null) {
-      Alert.alert(
+      alert(
         'Удаление аватар',
         'Вы уверены, что хотите удалить аватар?',
         [

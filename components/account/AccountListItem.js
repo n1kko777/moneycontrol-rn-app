@@ -1,9 +1,8 @@
 import { ListItem, Text, useTheme, Button } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { Alert } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { useDispatch } from 'react-redux';
-import { splitToDigits } from 'utils';
+import { alert, splitToDigits } from 'utils';
 
 import { hideAccountAction } from '../../store/actions/apiAction';
 import { CardIcon, DeleteIcon } from '../../themes/icons';
@@ -40,7 +39,7 @@ export const AccountListItem = memo(({ item, navigation }) => {
 
   const deleteHandler = useCallback(() => {
     close();
-    Alert.alert(
+    alert(
       'Удаление счета',
       `Вы уверены, что хотите удалить счет ${item.account_name}?`,
       [

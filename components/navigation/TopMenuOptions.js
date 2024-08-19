@@ -1,7 +1,7 @@
 import { TopNavigationAction, OverflowMenu, MenuItem } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { alert } from 'utils';
 
 import { getDataDispatcher } from '../../store/actions/apiAction';
 import { logout } from '../../store/actions/authAction';
@@ -33,7 +33,7 @@ export const TopMenuOptions = memo(({ navigation }) => {
   }, [menuVisible]);
 
   const navigateLogout = useCallback(() => {
-    Alert.alert(
+    alert(
       'Выход',
       'Вы уверены, что хотите выйти из учетной записи?',
       [

@@ -1,7 +1,8 @@
 import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { alert } from 'utils';
 
 import { FlexibleView } from '../../components/FlexibleView';
 import { ScreenTemplate } from '../../components/ScreenTemplate';
@@ -111,7 +112,7 @@ export const ProfileScreen = memo(({ navigation }) => {
   );
 
   const deleteProfileHandler = useCallback(() => {
-    Alert.alert(
+    alert(
       'Удаление профиля',
       profile.is_admin
         ? 'Вы уверены, что хотите удалить компанию и все данные принадлежащие ей, а также удалить текущий профиль?'

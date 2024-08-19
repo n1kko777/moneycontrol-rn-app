@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { Alert } from 'react-native';
+import { alert } from 'utils';
 
 import { url } from '../constants';
 import failHandler from '../failHandler';
@@ -44,7 +44,7 @@ export const authSuccess = (user) => async (dispatch) => {
   }
 };
 export const registerSuccess = (user) => (dispatch) => {
-  Alert.alert('Регистрация прошла успешно!', 'Войдите в аккаунт.', [{ text: 'Закрыть' }], {
+  alert('Регистрация прошла успешно!', 'Войдите в аккаунт.', [{ text: 'Закрыть' }], {
     cancelable: false,
   });
 
@@ -168,7 +168,7 @@ export const resetPass =
         .then((res) => {
           onSuccess();
           const { detail } = res.data;
-          Alert.alert('Проверьте почту', `${detail}`, [{ text: 'Закрыть' }], {
+          alert('Проверьте почту', `${detail}`, [{ text: 'Закрыть' }], {
             cancelable: false,
           });
           dispatch({ type: RESET_SUCCESS });

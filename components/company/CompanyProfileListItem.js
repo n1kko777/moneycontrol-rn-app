@@ -1,8 +1,7 @@
 import { ListItem, useTheme, Avatar, Text } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { splitToDigits } from 'utils';
+import { splitToDigits, getShortName } from 'utils';
 
-import { getShortName } from 'utils';
 import { ProfileIcon } from '../../themes/icons';
 import { ThemeContext } from '../../themes/theme-context';
 

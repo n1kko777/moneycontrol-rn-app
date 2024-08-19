@@ -1,4 +1,4 @@
-import { Alert } from 'react-native';
+import { alert } from 'utils';
 
 export default (error, ERROR_TYPE) => (dispatch) => {
   const errorObject = {};
@@ -41,7 +41,7 @@ export default (error, ERROR_TYPE) => (dispatch) => {
     payload: error,
   });
 
-  Alert.alert(
+  alert(
     errorObject.title,
     errorObject.message,
     [

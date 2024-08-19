@@ -1,9 +1,8 @@
 import { Text, Layout, useTheme, Button, Card } from '@ui-kitten/components';
 import React, { memo, useCallback, useMemo } from 'react';
-import { Alert } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { useSelector, useDispatch } from 'react-redux';
-import { splitToDigits, getAccountTitle } from 'utils';
+import { alert, splitToDigits, getAccountTitle } from 'utils';
 
 import { setCurrentAccount } from '../../store/actions/accountAction';
 import { hideOperationAction } from '../../store/actions/apiAction';
@@ -30,7 +29,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
 
   const deleteHandler = useCallback(() => {
     close();
-    Alert.alert(
+    alert(
       'Удаление категории',
       `Вы уверены, что хотите удалить операцию?`,
       [
@@ -99,7 +98,7 @@ export const OperationListItem = memo(({ item, navigation }) => {
         break;
       case 'transfer':
         if (!accounts.map((acc) => acc.id).includes(item.from_account_id)) {
-          Alert.alert('Невозможно скопировать', `Вы не являетесь собственником операции.`);
+          alert('Невозможно скопировать', `Вы не являетесь собственником операции.`);
         } else {
           navigation.navigate('CreateTransfer', item);
         }

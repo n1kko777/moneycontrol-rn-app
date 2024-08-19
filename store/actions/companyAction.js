@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { Alert } from 'react-native';
+import { alert } from 'utils';
 
 import { endpointAPI } from '../constants';
 import failHandler from '../failHandler';
@@ -143,7 +143,7 @@ export const joinProfileToCompany = (profile_id, profile_phone) => async (dispat
         }
       )
       .then((res) => {
-        Alert.alert('Статус запроса', res.data.detail, [{ text: 'OK' }], {
+        alert('Статус запроса', res.data.detail, [{ text: 'OK' }], {
           cancelable: false,
         });
 
@@ -181,7 +181,7 @@ export const removeProfileFromCompany = (profile_id, profile_phone) => async (di
         }
       )
       .then((res) => {
-        Alert.alert('Статус запроса', res.data.detail, [{ text: 'OK' }], {
+        alert('Статус запроса', res.data.detail, [{ text: 'OK' }], {
           cancelable: false,
         });
 

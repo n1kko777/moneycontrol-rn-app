@@ -1,9 +1,9 @@
 import React, { memo, useCallback } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { getShortName } from 'utils';
 
 import { CompanyProfileListItem } from './CompanyProfileListItem';
-import { getShortName } from 'utils';
 import { getProfileListData } from '../../store/actions/apiAction';
 import { setFilterParams } from '../../store/actions/layoutAction';
 import { getProfile, getLayoutFilterParams } from '../../store/selectors';

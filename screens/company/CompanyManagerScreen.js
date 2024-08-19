@@ -7,8 +7,8 @@ import {
   Input,
 } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { alert } from 'utils';
 
 import { FlexibleView } from '../../components/FlexibleView';
 import { ScreenTemplate } from '../../components/ScreenTemplate';
@@ -28,7 +28,7 @@ export const CompanyManagerScreen = memo(({ navigation }) => {
   }, [dispatch, navigation]);
 
   const navigateLogout = useCallback(() => {
-    Alert.alert(
+    alert(
       'Выход',
       'Вы уверены, что хотите выйти из учетной записи?',
       [

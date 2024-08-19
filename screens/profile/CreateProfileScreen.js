@@ -1,7 +1,8 @@
 import { Layout, TopNavigation, TopNavigationAction, Input, Button } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { alert } from 'utils';
 
 import { FlexibleView } from '../../components/FlexibleView';
 import { ScreenTemplate } from '../../components/ScreenTemplate';
@@ -50,7 +51,7 @@ export const CreateProfileScreen = memo(({ navigation }) => {
   }, [dispatch, navigation]);
 
   const navigateLogout = useCallback(() => {
-    Alert.alert(
+    alert(
       'Выход',
       'Вы уверены, что хотите выйти из учетной записи?',
       [
