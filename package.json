@@ -1,6 +1,6 @@
 {
   "name": "mncntrl-rn-app",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "scripts": {
     "android": "expo start --android",
     "ios": "expo start --ios",
