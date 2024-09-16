@@ -1,6 +1,6 @@
 {
   "cesVersion": "2.11.14",
-  "projectName": "mncntrl-rn-app",
+  "projectName": "moneycontrol-rn-app",
   "packages": [
     {
       "name": "react-navigation",

@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "CMC",
-    "slug": "mncntrl-rn-app",
+    "slug": "moneycontrol-rn-app",
     "description": "Corporate Money Control – мобильное приложение для автоматизации профессиональной деятельности, существенно облегчает и автоматизирует экономические, технические, аналитические процессы, повышая скорость и снижая время и средства на проведение различного рода операций.",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "1.5.1",
+    "version": "1.5.2",
     "userInterfaceStyle": "automatic",
     "orientation": "portrait",
     "icon": "./assets/favicon.png",
@@ -22,11 +22,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ru.mncntrl.n1kko777",
-      "buildNumber": "1.5.1"
+      "buildNumber": "1.5.2"
     },
     "android": {
       "package": "ru.mncntrl.n1kko777",
-      "versionCode": 151,
+      "versionCode": 152,
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
