@@ -45,6 +45,7 @@
     },
     "runtimeVersion": {
       "policy": "appVersion"
-    }
+    },
+    "plugins": ["expo-font"]
   }
 }
