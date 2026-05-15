@@ -1,6 +1,9 @@
 node_modules/
 .expo/
 dist/
+.env
+.env.local
+.env.*.local
 npm-debug.*
 *.jks
 *.p8
@@ -9,6 +12,9 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+playwright-report/
+test-results/
+.npm-cache/
 
 
 
