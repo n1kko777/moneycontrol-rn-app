@@ -1,6 +1,6 @@
-import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
+import { Autocomplete, AutocompleteItem, Icon, Input } from '@ui-kitten/components';
 import React, { memo, useCallback, useMemo } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { Platform, TouchableWithoutFeedback, View } from 'react-native';
 
 export const CategorySelector = memo(
   ({ current, setCurrent, clearCurrent, categoryData, isNotEmpty, navigation }) => {
@@ -17,6 +17,10 @@ export const CategorySelector = memo(
     }, [current]);
 
     const [data, setData] = React.useState(categoryData || []);
+
+    React.useEffect(() => {
+      setData(categoryData || []);
+    }, [categoryData]);
 
     const onSelect = useCallback(
       (item) => {
@@ -44,18 +48,19 @@ export const CategorySelector = memo(
 
     const addCategory = useCallback(() => {
       categoryInput.current.blur();
-      const findIndex = data.findIndex((elAcc) =>
-        new RegExp(value.toLowerCase(), 'i').test(elAcc.title.toLowerCase())
+      const normalizedValue = value.trim().toLowerCase();
+      const match = categoryData.find((elAcc) =>
+        elAcc.title.toLowerCase().includes(normalizedValue)
       );
 
-      if (findIndex !== -1) {
-        onSelect(findIndex);
+      if (match !== undefined) {
+        setCurrent(match);
       } else if (value.trim().length !== 0) {
         navigation.navigate('CreateCategory', { category_name: value });
       } else {
         onChangeText('');
       }
-    }, [data, navigation, onChangeText, onSelect, value]);
+    }, [categoryData, navigation, onChangeText, setCurrent, value]);
 
     const renderIcon = useCallback(
       (props) =>
@@ -74,18 +79,31 @@ export const CategorySelector = memo(
 
     return (
       <View onLayout={handleWidth}>
-        <Autocomplete
-          value={value}
-          onChangeText={onChangeText}
-          onSelect={onSelect}
-          placeholder="Укажите категорию"
-          style={{ width, marginVertical: 10 }}
-          accessoryRight={renderIcon}
-          onSubmitEditing={addCategory}
-          ref={categoryInput}
-          status={isNotEmpty ? 'success' : 'danger'}>
-          {renderOption}
-        </Autocomplete>
+        {Platform.OS === 'web' ? (
+          <Input
+            value={value}
+            onChangeText={onChangeText}
+            placeholder="Укажите категорию"
+            style={{ width, marginVertical: 10 }}
+            accessoryRight={renderIcon}
+            onSubmitEditing={addCategory}
+            ref={categoryInput}
+            status={isNotEmpty ? 'success' : 'danger'}
+          />
+        ) : (
+          <Autocomplete
+            value={value}
+            onChangeText={onChangeText}
+            onSelect={onSelect}
+            placeholder="Укажите категорию"
+            style={{ width, marginVertical: 10 }}
+            accessoryRight={renderIcon}
+            onSubmitEditing={addCategory}
+            ref={categoryInput}
+            status={isNotEmpty ? 'success' : 'danger'}>
+            {renderOption}
+          </Autocomplete>
+        )}
       </View>
     );
   }

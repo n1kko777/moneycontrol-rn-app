@@ -1,7 +1,7 @@
-import { Autocomplete, AutocompleteItem, Icon, Layout } from '@ui-kitten/components';
+import { Autocomplete, AutocompleteItem, Icon, Input, Layout } from '@ui-kitten/components';
 import { PopoverPlacements } from '@ui-kitten/components/ui/popover/type';
 import React, { memo, useCallback, useState, useMemo, useEffect } from 'react';
-import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
+import { Platform, ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 
 import { CustomSearchWithSelectItem } from './CustomSearchWithSelectItem';
 import styles from './styles';
@@ -48,9 +48,10 @@ export const CustomSearchWithSelect = memo(
     );
 
     useEffect(() => {
+      const selectedIds = dataList.map((innerEl) => innerEl.id);
+      setData(datasets.filter((el) => !selectedIds.includes(el.id)));
       if (dataList.length) {
         setValue('');
-        setData(datasets.filter((el) => !dataList.map((innderEl) => innderEl.id).includes(el.id)));
       }
     }, [dataList, datasets]);
 
@@ -73,17 +74,28 @@ export const CustomSearchWithSelect = memo(
     return (
       <Layout style={styles.container}>
         <View onLayout={handleWidth}>
-          <Autocomplete
-            placement={PopoverPlacements.TOP}
-            onChangeText={onChangeText}
-            onSelect={onSelect}
-            value={value}
-            accessoryRight={renderIcon}
-            ref={props.forwardedRef}
-            style={{ width }}
-            {...props}>
-            {memoAutocompleteData}
-          </Autocomplete>
+          {Platform.OS === 'web' ? (
+            <Input
+              onChangeText={onChangeText}
+              value={value}
+              accessoryRight={renderIcon}
+              ref={props.forwardedRef}
+              style={{ width }}
+              {...props}
+            />
+          ) : (
+            <Autocomplete
+              placement={PopoverPlacements.TOP}
+              onChangeText={onChangeText}
+              onSelect={onSelect}
+              value={value}
+              accessoryRight={renderIcon}
+              ref={props.forwardedRef}
+              style={{ width }}
+              {...props}>
+              {memoAutocompleteData}
+            </Autocomplete>
+          )}
         </View>
         {memoDataList.length ? (
           <ScrollView style={styles.scrollView}>
