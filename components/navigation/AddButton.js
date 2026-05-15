@@ -179,7 +179,11 @@ export const AddButton = memo(({ navigation }) => {
           />
         </Animated.View>
 
-        <TouchableOpacity onPress={toggleHandler} activeOpacity={1}>
+        <TouchableOpacity
+          accessibilityLabel="Добавить операцию"
+          accessibilityRole="button"
+          onPress={toggleHandler}
+          activeOpacity={1}>
           <View style={styles.plusButton}>
             <Animated.View style={[styles.button, rotation]}>
               <AddIcon fill="#6B0848" />
