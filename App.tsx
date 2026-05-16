@@ -7,6 +7,7 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import { useDisableBack } from 'hooks';
 import React, { useCallback } from 'react';
 import { Appearance } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { AssetIconsPack } from 'themes/AssetIconsPack';
 import appTheme from 'themes/custom-theme.json';
@@ -32,13 +33,15 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <IconRegistry icons={[EvaIconsPack, AssetIconsPack]} />
-      <ThemeContext.Provider value={{ theme: theme ?? '', toggleTheme }}>
-        <ApplicationProvider mapping={mapping} theme={currentTheme}>
-          <LoadingSpinner />
-          <RootStack />
-        </ApplicationProvider>
-      </ThemeContext.Provider>
+      <SafeAreaProvider>
+        <IconRegistry icons={[EvaIconsPack, AssetIconsPack]} />
+        <ThemeContext.Provider value={{ theme: theme ?? '', toggleTheme }}>
+          <ApplicationProvider mapping={mapping} theme={currentTheme}>
+            <LoadingSpinner />
+            <RootStack />
+          </ApplicationProvider>
+        </ThemeContext.Provider>
+      </SafeAreaProvider>
     </Provider>
   );
 }

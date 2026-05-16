@@ -21,7 +21,7 @@ test.describe('auth screens', () => {
     await page.goto('/');
 
     await expect(page).toHaveTitle('Login');
-    await expect(page.getByText('Версия: 1.6.1')).toBeVisible();
+    await expect(page.getByText('Версия: 1.6.2')).toBeVisible();
     await expect(inputByPlaceholder(page, 'Почта')).toBeVisible();
     await expect(inputByPlaceholder(page, 'Пароль')).toBeVisible();
     await expect(page.getByText('Войти')).toBeVisible();

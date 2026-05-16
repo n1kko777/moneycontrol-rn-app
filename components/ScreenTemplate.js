@@ -1,5 +1,6 @@
 import React, { memo, useCallback } from 'react';
-import { SafeAreaView, StatusBar, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StatusBar, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemeContext } from '../themes/theme-context';
 import { THEME } from '../themes/themes';
