@@ -1,5 +1,7 @@
-import { TopNavigationAction, OverflowMenu, MenuItem } from '@ui-kitten/components';
+import { MenuItem, TopNavigationAction, useTheme } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import { alert } from 'utils';
 
@@ -16,6 +18,8 @@ import { ThemeContext } from '../../themes/theme-context';
 
 export const TopMenuOptions = memo(({ navigation }) => {
   const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
+  const kittenTheme = useTheme();
 
   const getData = useCallback(() => {
     dispatch(getDataDispatcher(navigation));
@@ -24,13 +28,17 @@ export const TopMenuOptions = memo(({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
   const [menuVisible, setMenuVisible] = React.useState(false);
 
+  const openMenu = useCallback(() => {
+    setMenuVisible(true);
+  }, []);
+
+  const closeMenu = useCallback(() => {
+    setMenuVisible(false);
+  }, []);
+
   const logoutHandler = useCallback(() => {
     dispatch(logout(navigation));
   }, [dispatch, navigation]);
-
-  const toggleMenu = useCallback(() => {
-    setMenuVisible(!menuVisible);
-  }, [menuVisible]);
 
   const navigateLogout = useCallback(() => {
     alert(
@@ -49,39 +57,68 @@ export const TopMenuOptions = memo(({ navigation }) => {
     );
   }, [logoutHandler]);
 
-  const renderAnchor = useCallback(
-    () => <TopNavigationAction icon={MoreIconHorizontal} onPress={toggleMenu} />,
-    [toggleMenu]
-  );
-
   const onUpdatePress = useCallback(() => {
+    closeMenu();
     getData();
-    toggleMenu();
-  }, [getData, toggleMenu]);
+  }, [closeMenu, getData]);
 
   const onChangeThemePress = useCallback(() => {
+    closeMenu();
     themeContext.toggleTheme();
-    toggleMenu();
-  }, [themeContext, toggleMenu]);
+  }, [closeMenu, themeContext]);
 
   const onExitPress = useCallback(() => {
+    closeMenu();
     navigateLogout();
-    toggleMenu();
-  }, [navigateLogout, toggleMenu]);
+  }, [closeMenu, navigateLogout]);
 
   return (
-    <OverflowMenu
-      visible={menuVisible}
-      anchor={renderAnchor}
-      onBackdropPress={toggleMenu}
-      style={{ width: 180 }}>
-      <MenuItem title="Обновить" accessoryLeft={UpdateIcon} onPress={onUpdatePress} />
-      <MenuItem
-        title={`${themeContext.theme === 'light' ? 'Темная' : 'Светлая'} тема`}
-        accessoryLeft={themeContext.theme === 'light' ? DarkIcon : LightIcon}
-        onPress={onChangeThemePress}
-      />
-      <MenuItem title="Выйти" accessoryLeft={LogoutIcon} onPress={onExitPress} />
-    </OverflowMenu>
+    <>
+      <TopNavigationAction icon={MoreIconHorizontal} onPress={openMenu} />
+      <Modal animationType="fade" transparent visible={menuVisible} onRequestClose={closeMenu}>
+        <View style={styles.modalRoot}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={closeMenu} />
+          <View
+            style={[
+              styles.menu,
+              {
+                top: insets.top + 56,
+                right: Math.max(insets.right, 8),
+                backgroundColor: kittenTheme['background-basic-color-1'],
+                borderColor: kittenTheme['border-basic-color-3'],
+              },
+            ]}>
+            <MenuItem title="Обновить" accessoryLeft={UpdateIcon} onPress={onUpdatePress} />
+            <MenuItem
+              title={`${themeContext.theme === 'light' ? 'Темная' : 'Светлая'} тема`}
+              accessoryLeft={themeContext.theme === 'light' ? DarkIcon : LightIcon}
+              onPress={onChangeThemePress}
+            />
+            <MenuItem title="Выйти" accessoryLeft={LogoutIcon} onPress={onExitPress} />
+          </View>
+        </View>
+      </Modal>
+    </>
   );
+});
+
+const styles = StyleSheet.create({
+  modalRoot: {
+    flex: 1,
+  },
+  menu: {
+    position: 'absolute',
+    width: 190,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 4,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    elevation: 8,
+  },
 });

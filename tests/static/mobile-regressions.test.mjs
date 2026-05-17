@@ -41,3 +41,13 @@ test('primary transparent theme tokens are valid RGBA values based on primary-50
     assert.equal(theme[`color-primary-transparent-${level}`], `rgba(66, 108, 148, ${alpha})`);
   }
 });
+
+test('top menu avoids UI Kitten popover measurement and respects safe area', () => {
+  const topMenu = read('components/navigation/TopMenuOptions.js');
+
+  assert.doesNotMatch(topMenu, /OverflowMenu/);
+  assert.match(topMenu, /Modal/);
+  assert.match(topMenu, /useSafeAreaInsets/);
+  assert.match(topMenu, /top: insets\.top \+ 56/);
+  assert.match(topMenu, /right: Math\.max\(insets\.right, 8\)/);
+});
