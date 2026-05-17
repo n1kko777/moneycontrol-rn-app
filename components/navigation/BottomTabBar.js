@@ -1,6 +1,6 @@
 import { BottomNavigation, BottomNavigationTab, useTheme, Divider } from '@ui-kitten/components';
 import React, { memo, useCallback } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AddButton } from './AddButton';
 import { HomeIcon, OoperationIcon, TeamIcon, MoreIconHorizontal } from '../../themes/icons';
@@ -19,6 +19,7 @@ export const BottomTabBar = memo(({ navigation, state }) => {
 
   return (
     <SafeAreaView
+      edges={['bottom', 'left', 'right']}
       style={{
         backgroundColor: kittenTheme[`color-basic-${themeContext.theme === 'light' ? 100 : 800}`],
       }}>

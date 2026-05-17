@@ -1,6 +1,6 @@
-import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
+import { Autocomplete, AutocompleteItem, Icon, Input } from '@ui-kitten/components';
 import React, { useEffect, memo, useCallback, useMemo } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { Platform, TouchableWithoutFeedback, View } from 'react-native';
 
 export const AccountSelector = memo(
   ({
@@ -58,18 +58,19 @@ export const AccountSelector = memo(
 
     const addAccount = useCallback(() => {
       accountInput.current.blur();
-      const findIndex = data.findIndex((elAcc) =>
-        new RegExp(value.toLowerCase(), 'i').test(elAcc.title.toLowerCase())
+      const normalizedValue = value.trim().toLowerCase();
+      const match = accountData.find((elAcc) =>
+        elAcc.title.toLowerCase().includes(normalizedValue)
       );
 
-      if (findIndex !== -1) {
-        onSelect(findIndex);
+      if (match !== undefined) {
+        setCurrent(match);
       } else if (value?.trim().length !== 0 && isCreate) {
         navigation.navigate('CreateAccount', { account_name: value });
       } else {
         onChangeText('');
       }
-    }, [data, navigation, onChangeText, onSelect, value, isCreate]);
+    }, [accountData, isCreate, navigation, onChangeText, setCurrent, value]);
 
     const renderIcon = useCallback(
       (props) =>
@@ -92,18 +93,31 @@ export const AccountSelector = memo(
 
     return (
       <View onLayout={handleWidth}>
-        <Autocomplete
-          value={value}
-          onChangeText={onChangeText}
-          onSelect={onSelect}
-          placeholder={placeholder}
-          style={{ width, marginVertical: 10 }}
-          accessoryRight={renderIcon}
-          onSubmitEditing={addAccount}
-          ref={accountInput}
-          status={isNotEmpty ? 'success' : 'danger'}>
-          {renderOption}
-        </Autocomplete>
+        {Platform.OS === 'web' ? (
+          <Input
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            style={{ width, marginVertical: 10 }}
+            accessoryRight={renderIcon}
+            onSubmitEditing={addAccount}
+            ref={accountInput}
+            status={isNotEmpty ? 'success' : 'danger'}
+          />
+        ) : (
+          <Autocomplete
+            value={value}
+            onChangeText={onChangeText}
+            onSelect={onSelect}
+            placeholder={placeholder}
+            style={{ width, marginVertical: 10 }}
+            accessoryRight={renderIcon}
+            onSubmitEditing={addAccount}
+            ref={accountInput}
+            status={isNotEmpty ? 'success' : 'danger'}>
+            {renderOption}
+          </Autocomplete>
+        )}
       </View>
     );
   }

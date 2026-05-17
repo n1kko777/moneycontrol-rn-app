@@ -1,6 +1,6 @@
-import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
+import { Autocomplete, AutocompleteItem, Icon, Input } from '@ui-kitten/components';
 import React, { memo, useCallback, useMemo } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { Platform, TouchableWithoutFeedback, View } from 'react-native';
 
 export const ProfileSelector = memo(
   ({
@@ -26,6 +26,10 @@ export const ProfileSelector = memo(
     }, [current]);
 
     const [data, setData] = React.useState(profileData || []);
+
+    React.useEffect(() => {
+      setData(profileData || []);
+    }, [profileData]);
 
     const onSelect = useCallback(
       (item) => {
@@ -55,18 +59,19 @@ export const ProfileSelector = memo(
 
     const addProfile = useCallback(() => {
       profileInput.current.blur();
-      const findIndex = data.findIndex((elAcc) =>
-        new RegExp(value.toLowerCase(), 'i').test(elAcc.title.toLowerCase())
+      const normalizedValue = value.trim().toLowerCase();
+      const match = (profileData || []).find((elAcc) =>
+        elAcc.title.toLowerCase().includes(normalizedValue)
       );
 
-      if (findIndex !== -1) {
-        onSelect(findIndex);
+      if (match !== undefined) {
+        setCurrent(match);
       } else if (value?.trim().length !== 0) {
         navigation.navigate('CreateProfile', { profile_name: value });
       } else {
         onChangeText('');
       }
-    }, [data, navigation, onChangeText, onSelect, value]);
+    }, [navigation, onChangeText, profileData, setCurrent, value]);
 
     const renderIcon = useCallback(
       (props) =>
@@ -88,18 +93,31 @@ export const ProfileSelector = memo(
 
     return (
       <View onLayout={handleWidth}>
-        <Autocomplete
-          value={value}
-          onChangeText={onChangeText}
-          onSelect={onSelect}
-          placeholder={placeholder}
-          style={{ width, marginVertical: 10 }}
-          accessoryRight={value && renderIcon}
-          onSubmitEditing={addProfile}
-          ref={profileInput}
-          status={isNotEmpty ? 'success' : 'danger'}>
-          {renderOption}
-        </Autocomplete>
+        {Platform.OS === 'web' ? (
+          <Input
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            style={{ width, marginVertical: 10 }}
+            accessoryRight={value && renderIcon}
+            onSubmitEditing={addProfile}
+            ref={profileInput}
+            status={isNotEmpty ? 'success' : 'danger'}
+          />
+        ) : (
+          <Autocomplete
+            value={value}
+            onChangeText={onChangeText}
+            onSelect={onSelect}
+            placeholder={placeholder}
+            style={{ width, marginVertical: 10 }}
+            accessoryRight={value && renderIcon}
+            onSubmitEditing={addProfile}
+            ref={profileInput}
+            status={isNotEmpty ? 'success' : 'danger'}>
+            {renderOption}
+          </Autocomplete>
+        )}
       </View>
     );
   }
